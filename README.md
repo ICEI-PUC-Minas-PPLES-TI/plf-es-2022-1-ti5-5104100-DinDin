@@ -1,18 +1,19 @@
 # DinDin
 
-[Escreva um ou dois  parágrafo resumindo o objetivo do seu projeto.]
+Aplicação para controle de finanças.
 
 ## Alunos integrantes da equipe
 
-* [Nome completo do aluno 1]
-* [Nome completo do aluno 2]
-* [Nome completo do aluno 3]
-* [Nome completo do aluno 4]
+* Guilherme Gabriel Silva Pereira
+* Henrique Penna Forte Monteiro
+* Lucas Ângelo Oliveira Martins Rocha
+* Victor Boaventura Goés Campos
+* Vinícius Marini Costa e Oliveira
 
 ## Professores responsáveis
 
-* [Nome completo do professor 1]
-* [Nome completo do professor 2]
+* Cleiton Silva Tavares
+* Pedro Alves De Oliveira
 
 ## Instruções de utilização
 
