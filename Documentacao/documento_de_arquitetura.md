@@ -1,20 +1,23 @@
-# TITULO DO PROJETO
+# DinDin
 
 
-**Nome completo do Aluno 1, email do aluno 1**
+**Guilherme Gabriel Silva Pereira, ggspereira@sga.pucminas.br**
 
-**Nome completo do Aluno 2, email do aluno 2**
+**Henrique Penna Forte Monteiro, henrique.forte@sga.pucminas.br**
 
-**Nome completo do Aluno 3, email do aluno 3**
+**Lucas Ângelo Oliveira Martins Rocha, laomrocha@sga.pucminas.br**
+
+**Victor Boaventura Góes Campos, vbgcampos@sga.pucminas.br**
+
+**Vinícius Marini Costa e Oliveira, vinicius.marini@sga.pucminas.br**
 
 ---
 
 Professores:
 
-**Prof. Nome do Prof 1**
+**Prof. Cleiton Silva Tavares**
 
-**Prof. Nome do Prof 2**
-
+**Prof. Pedro Alves De Oliveira**
 
 ---
 
@@ -24,8 +27,7 @@ _Instituto de Informática e Ciências Exatas – Pontifícia Universidade de Mi
 
 ---
 
-_**Resumo**. Escrever aqui o resumo. O resumo deve contextualizar rapidamente o trabalho, descrever seu objetivo e, ao final, 
-mostrar algum resultado relevante do trabalho (até 10 linhas)._
+_**Resumo**. Para não perder o controle financeiro pessoal ou familiar, algumas estratégias ou ferramentas são necessárias para administrar as finanças, a plataforma DinDin foi desenvolvida como ferramenta para acabar ou mitigar a questão da perda de controle financeiro._
 
 ---
 
@@ -67,98 +69,97 @@ mostrar algum resultado relevante do trabalho (até 10 linhas)._
 <a name="apresentacao"></a>
 # 1. Apresentação
 
-_Faça uma introdução ao projeto, apresentando o contexto onde o projeto se situa. É importante deixar claro para o leitor os aspectos que configuram o problema que será apresentado na sequência. Apresente, se possível, números reais que demonstram a relevância do problema apresentado._
-
+A falta de controle de finanças é motivo de estresse em 58,4% das famílias brasileiras. Em um contexto de pandemia, esse problema tem se agravado consideravelmente. Nesse sentido, para não perder o controle financeiro pessoal ou familiar, é necessário alguma estratégia ou ferramenta para gerenciar finanças. Aliando o contexto tecnológico com o problema supracitado, a plataforma DinDin foi desenvolvida para fazer esse papel de ferramenta para acabar com ou atenuar o problema da perda de controle financeiro.
 
 ## 1.1. Problema
 
-_Nesse momento você deve apresentar o problema que a sua aplicação deve resolver. No entanto, não é a hora de comentar sobre a aplicação._
+Os problemas financeiros estão presentes diariamente na vida dos brasileiros. Dívidas surgem todos os dias, sejam elas pequenas e repentinas como um lanche vespertino ou grandes e planejadas como uma conta de aluguel. Devido a isso, fica difícil manter o controle sobre quanto se tem, quanto se gastou, e quanto se pode gastar. Nesse contexto, a falta do gerenciamento do dinheiro causa endividamentos, estresse e ocasiona a não realização de sonhos e objetivos pessoais.
 
 ## 1.2. Objetivos do trabalho
 
-_Aqui você deve descrever os objetivos do trabalho indicando que o objetivo geral é apresentar a descrição do projeto arquitetural da aplicação escolhida. Apresente também os objetivos específicos do projeto, descrevendo onde você vai concentrar sua atenção na descrição arquitetural, ou seja, os pontos onde você vai aprofundar no seu trabalho._
+O objetivo principal do trabalho é desenvolver uma aplicação distribuída de controle de finanças pessoais, que possibilite aos seus usuários uma forma mais prática de regularem seus custos.
+Os objetivos específicos são:
+- Permitir o usuário dividir suas despesas em categorias;
+- Permitir o usuário lançar suas despesas e receitas diárias;
+- Permitir o usuário, junto de outros usuários, lançar despesas e receitas de modo compartilhado.
+- Permitir que o usuário controle de onde o dinheiro está saindo ou entrando.
 
 ## 1.3. Definições e Abreviaturas
 
-Coloque aqui as definições, siglas e abreviaturas utilizadas no trabalho._
+_N/A_
 
 <a name="requisitos"></a>
 # 2. Requisitos
 
-_Esta seção descreve os requisitos comtemplados nesta descrição arquitetural, divididos em dois grupos: funcionais e não funcionais._
-
 ## 2.1. Requisitos Funcionais
-
-_Enumere os requisitos funcionais previstos para a sua aplicação. Concentre-se nos requisitos funcionais que sejam críticos para a definição arquitetural. Lembre-se de listar todos os requisitos que são necessários para garantir cobertura arquitetural. Esta seção deve conter uma lista de requisitos ainda sem modelagem. Na coluna Prioridade utilize uma escala (do mais prioritário para o menos): Essencial, Desejável, Opcional._
 
 | **ID** | **Descrição** | **Prioridade** |
 | --- | --- | --- |
-| RF001 | | |
-| RF002 | | |
-| | | |
-| | | |
-| | | |
-
-Obs: acrescente mais linhas, se necessário.
+| RF001 | O usuário deve poder realizar um cadastro de conta | Alta |
+| RF002 | O usuário deve poder fazer CRUD de seus lançamentos (recorrentes ou não) | Alta |
+| RF003 | O usuário deve poder cadastrar categorias para seus lançamentos | Média |
+| RF004 | O usuário deve conseguir convidar outro usuário para uma conta conjunta de lançamentos | Média |
+| RF005 | O usuário pode cadastrar quais bancos ele possui conta e o respectivo valor que possui nessas contas | Baixa |
+| RF006 | O usuário pode selecionar qual o banco de origem de uma transação | Baixa |
+| RF007 | O usuário deve possuir uma tela de gráficos para um visão geral de seus gastos | Média |
+| RF018 | O usuário deve conseguir comunicar com a alexa sobre seus lançamentos | Baixa |
+| RF009 | O usuário deve conseguir criar um objetivo financeiro | Média |
+| RF010 | O usuário deve conseguir visualizar estatísticas informando médias entre despesas em dias, semanas ou meses, detalhando média diária e realizando comparações com outros períodos | Baixa |
 
 ## 2.2. Requisitos Não-Funcionais
 
-_Enumere os requisitos não-funcionais previstos para a sua aplicação. Entre os requisitos não funcionais, inclua todos os requisitos que julgar importante do ponto de vista arquitetural ou seja os requisitos que terão impacto na definição da arquitetura. Os requisitos devem ser descritos de forma completa e preferencialmente quantitativa._
-
 | **ID** | **Descrição** |
 | --- | --- |
-| RNF001 | |
-| RNF002 | |
-| | |
-| | |
-| | |
-
-Obs: acrescente mais linhas, se necessário.
+| RNF001 | O sistema web deve ser responsivo para proporcionar o uso de todas as funcionalidades providas pelos requisitos funcionais para dispositivos móveis e web |
+| RNF002 | O sistema deve ser aprovado nos testes unitários |
+| RNF003 | O sistema deve possuir uma interface que seja objetiva para o usuário, com no máximo quatro funcionalidades por página |
+| RNF004 | O sistema deve ser compatível com sistema operacional Linux, com o objetivo de proporcionar a disponibilidade em nuvem de pelo menos 98% do tempo de atividade (uptime) |
+| RNF005 | O sistema deve ser dimensionado para suportar até 100 usuários conectados ao mesmo tempo com delay máximo de 3 segundos de carregamento |
+| RNF006 | O sistema deve garantir a segurança das senhas dos usuários, criptografando-as em SHA256 ao serem inseridas no banco de dados |
+| RNF007 | A aplicação deve estar disponível nos modos claro e escuro, possibilitando maior conforto para o usuário |
 
 ## 2.3. Restrições Arquiteturais
 
-_Enumere as restrições arquiteturais. Lembre-se de que as restrições arquiteturais geralmente não são consideradas requisitos uma vez que limitam a solução candidata. Os requisitos não impõem restrição, mas precisam ser satisfeitos._
-
-As restrições impostas ao projeto que afetam sua arquitetura são (por exemplo):
-
-- O software deverá ser desenvolvido em Python/Django;
-- A comunicação da API deve seguir o padrão RESTful.
+As restrições impostas ao projeto que afetam sua arquitetura são:
+- A aplicação frontend deverá ser desenvolvida em VueJs com Vuetify;
+- A aplicação mobile deverá ser desenvolvida com Flutter usando Sqlite;
+- O sistema backend deverá utilizar NodeJS com ORM Sequelize;
+- O aplicativo seguirá o padrão MVC;
+- A comunicação da API deve seguir o padrão RESTful;
+- O ambiente de desenvolvimento será no docker;
+- O ambiente de produção estará na nuvem.
 
 ## 2.4. Mecanismos Arquiteturais
 
-_Visão geral dos mecanismos que compõem a arquitetura do sosftware baseando-se em três estados: (1) análise, (2) design e (3) implementação. Em termos de Análise devem ser listados os aspectos gerais que compõem a arquitetura do software como: persistência, integração com sistemas legados, geração de logs do sistema, ambiente de front end, tratamento de exceções, formato dos testes, formato de distribuição/implantação (deploy), entre outros. Em Design deve-se identificar o padrão tecnológico a seguir para cada mecanismo identificado na análise. Em Implementação, deve-se identificar o produto a ser utilizado na solução.
- Ex: Análise (Persistência), Design (ORM), Implementação (Hibernate)._
-
 | **Análise** | **Design** | **Implementação** |
 | --- | --- | --- |
-| Persistência | | |
-| Front end | | |
-| Back end | | |
-| Integração | | |
-| Log do sistema | | |
-| Teste de Software | | |
-| Deploy | | |
+| Persistência | Relacional/SQL | Sequelize |
+| Front end | Em componentes | Flutter/Vuejs |
+| Back end | Orientado à casos de uso | NodeJs |
+| Integração | Api Rest / MVC | Github |
+| Log do sistema | Log de erros | Nodejs |
+| Teste de Software | Orientado a casos de uso | Jest |
+| Deploy | Pipeline | AWS |
 
 <a name="modelagem"></a>
 # 3. Modelagem e projeto arquitetural
 
-_Apresente uma visão geral da solução proposta para o projeto e explique brevemente esse diagrama de visão geral, de forma textual. Esse diagrama não precisa seguir os padrões da UML, e deve ser completo e tão simples quanto possível, apresentando a macroarquitetura da solução._
-
 ![Visão Geral da Solução](imagens/visao.png "Visão Geral da Solução")
 
-**Figura 1 - Visão Geral da Solução (fonte: https://medium.com)**
-
-Obs: substitua esta imagem por outra, adequada ao seu projeto (cada arquitetura é única).
+**Figura 1 - Visão Geral da Solução**
 
 ## 3.1. Visão de Negócio (Funcionalidades)
 
-_Apresente uma lista simples com as funcionalidades previstas no projeto (escopo do produto)._
-
-1. O sistema deve...
-2. O sistema deve...
-3. ...
-
-Obs: a quantidade e o escopo das funcionalidades deve ser negociado com os professores/orientadores do trabalho.
+1. O sistema deve controlar todo e qualquer tipo de renda (contas bancárias, salário, rendas informais, comércio, etc).
+2. O sistema deve controlar todo e qualquer tipo de despesas e receitas (parceladas, fixas e variáveis).
+3. O sistema deve permitir uma categorização e subcategorização de receitas e despesas para organizar bem as finanças e ter consciência com o quê está gastando e ganhando mais.
+4. O sistema deve fornecer multicategorias para despesas: Informe as divisões para uma despesa.
+5. O sistema deve fornecer diversos gráficos para exibição de evolução de despesas e/ou receitas em forma de gráficos de linhas, barras ou pizza.
+7. O sistema deve permitir exportação de dados para Excel, PDF, CSV e HTML.
+8. O sistema deve fornecer um calendário disponível para que seja possível ver no mês inteiro como estão distribuídas suas finanças no mês.
+9. O sistema deve possuir uma integração com a Alexa para que o usuário registre sua despesa/receita comunicando com a Alexa.
+10. O sistema deve fornecer estatísticas informando médias entre despesas em dias, semanas ou meses, detalhando média diária e realizando comparações com outros períodos para fornecer um pleno conhecimento sobre como o usuário está economizando em relação aos seus hábitos passados.
+11. O sistema deve possuir um filtro do histórico de receitas e despesas por conta, categorias e subcategorias.
 
 ### Descrição resumida dos Casos de Uso / Histórias de Usuário
 
@@ -188,37 +189,31 @@ Exemplos de Histórias de Usuário:
 
 - Como Fulano eu quero poder convidar meus amigos para que a gente possa se reunir...
 
-- Como Cicrano eu quero poder organizar minhas tarefas diárias, para que...
-
-- Como gerente eu quero conseguir entender o progresso do trabalho do meu time, para que eu possa ter relatórios periódicos dos nossos acertos e falhas.
-
 ## 3.2. Visão Lógica
-
-_Apresente os artefatos que serão utilizados descrevendo em linhas gerais as motivações que levaram a equipe a utilizar estes diagramas._
 
 ### Diagrama de Classes
 
 ![Diagrama de classes](imagens/classes.gif "Diagrama de classes")
 
-
-**Figura 2 – Diagrama de classes (exemplo). Fonte: o próprio autor.**
+**Figura 2 – Diagrama de classes. Fonte: o próprio autor.**
 
 Obs: Acrescente uma breve descrição sobre o diagrama apresentado na Figura 3.
 
 ### Diagrama de componentes
 
-_Apresente o diagrama de componentes da aplicação, indicando, os elementos da arquitetura e as interfaces entre eles. Liste os estilos/padrões arquiteturais utilizados e faça uma descrição sucinta dos componentes indicando o papel de cada um deles dentro da arquitetura/estilo/padrão arquitetural. Indique também quais componentes serão reutilizados (navegadores, SGBDs, middlewares, etc), quais componentes serão adquiridos por serem proprietários e quais componentes precisam ser desenvolvidos._
-
 ![Diagrama de componentes](imagens/componentes.png "Diagrama de componentes")
 
-**Figura 3 – Diagrama de Componentes (exemplo). Fonte: o próprio autor.**
+**Figura 3 – Diagrama de Componentes. Fonte: o próprio autor.**
 
-_Apresente uma descrição detalhada dos artefatos que constituem o diagrama de implantação._
-
-Ex: conforme diagrama apresentado na Figura X, as entidades participantes da solução são:
-
-- **Componente 1** - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras nunc magna, accumsan eget porta a, tincidunt sed mauris. Suspendisse orci nulla, sagittis a lorem laoreet, tincidunt imperdiet ipsum. Morbi malesuada pretium suscipit.
-- **Componente 2** - Praesent nec nisi hendrerit, ullamcorper tortor non, rutrum sem. In non lectus tortor. Nulla vel tincidunt eros.
+- **Componente Geral** - Componente onde se encontram os outros componentes, o sistema de maneira geral.
+- **Componente TelaLogin** - Tela onde o usuário realiza o login.
+- **Componente TelaCadastro** - Tela onde o usuário realiza o cadastro na aplicação.
+- **Componente Autenticação** - Para acessar o sistema o usuário deve ser autenticado para garantir a segurança.
+- **Componente TelaHome** - Tela principal do sistema, onde o usuário acessa as outras funcionalidades.
+- **Componente Dashboard** - Tela onde o usuário vê seu extrato de maneira gráfica categorizada.
+- **Componente TelaInsereValor** - Tela onde o usuário cadastra seus gastos e receitas.
+- **Componente TelaRendaCompartilhada** - Tela onde o usuário consegue compartilhar.
+- **Componente BancoDeDados** - Banco de dados do sistema.
 
 ## 3.3. Modelo de dados (opcional)
 
