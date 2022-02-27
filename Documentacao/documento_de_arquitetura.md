@@ -37,10 +37,9 @@ _**Resumo**. Para não perder o controle financeiro pessoal ou familiar, algumas
 | --- | --- | --- | --- |
 | **[26/02/2022]** | [Guilherme Gabriel] | [Artefato 1 criado] | [1] |
 | **[26/02/2022]** | [Henrique Penna] | [Artefato 2  criado] | [2] |
-| **[26/02/2022]** | [Victor Boaventura] | [Artefato 3.1 criado] | [2] |
-| **[26/02/2022]** | [Victor Boaventura] | [Artefatos 3.2 e 3.3 criado] | [2] |
-| **[26/02/2022]** | [Lucas Ângelo] | [Artefatos 1, 2 e 3 em markdown] | [1] |
-| | | | |
+| **[26/02/2022]** | [Victor Boaventura] | [Artefatos 3.1 e 3.2 criado] | [3] |
+| **[26/02/2022]** | [Victor Boaventura] | [Artefatos 3.3 e 3.4 criado] | [4] |
+| **[26/02/2022]** | [Lucas Ângelo] | [Artefatos 1, 2 e 3 em markdown] | [4.1] |
 | | | | |
 
 ## SUMÁRIO
@@ -90,7 +89,11 @@ Os objetivos específicos são:
 
 ## 1.3. Definições e Abreviaturas
 
-_N/A_
+RF: Requisito Funcional
+
+RNF: Requisito não funcional
+
+UC: Use Case (Caso de Uso)
 
 <a name="requisitos"></a>
 # 2. Requisitos
@@ -106,7 +109,7 @@ _N/A_
 | RF005 | O usuário pode cadastrar quais bancos ele possui conta e o respectivo valor que possui nessas contas | Baixa |
 | RF006 | O usuário pode selecionar qual o banco de origem de uma transação | Baixa |
 | RF007 | O usuário deve possuir uma tela de gráficos para um visão geral de seus gastos | Média |
-| RF018 | O usuário deve conseguir comunicar com a alexa sobre seus lançamentos | Baixa |
+| RF008 | O usuário deve conseguir comunicar com a alexa sobre seus lançamentos | Baixa |
 | RF009 | O usuário deve conseguir criar um objetivo financeiro | Média |
 | RF010 | O usuário deve conseguir visualizar estatísticas informando médias entre despesas em dias, semanas ou meses, detalhando média diária e realizando comparações com outros períodos | Baixa |
 
@@ -128,7 +131,7 @@ As restrições impostas ao projeto que afetam sua arquitetura são:
 - A aplicação frontend deverá ser desenvolvida em VueJs com Vuetify;
 - A aplicação mobile deverá ser desenvolvida com Flutter usando Sqlite;
 - O sistema backend deverá utilizar NodeJS com ORM Sequelize;
-- O aplicativo seguirá o padrão MVC;
+- O aplicativo seguirá o padrão MVC com arquitetura guiada a caso de uso;
 - A comunicação da API deve seguir o padrão RESTful;
 - O ambiente de desenvolvimento será no docker;
 - O ambiente de produção estará na nuvem.
@@ -238,7 +241,7 @@ Casos de uso:
 | **Atores** | Usuário |
 | **Prioridade** | Baixa |
 | **Requisitos associados** | RF010 |
-| **Fluxo Principal** | Entrar no aplicativo e conversar com a alexa |
+| **Fluxo Principal** | Vincular conta do aplicativo com Alexa e informar valor para a Alexa |
 
 #### UC09 – Criar objetivo financeiro
 
@@ -307,15 +310,21 @@ Obs: Acrescente uma breve descrição sobre o diagrama apresentado na Figura 3.
 - **Componente TelaRendaCompartilhada** - Tela onde o usuário consegue compartilhar.
 - **Componente BancoDeDados** - Banco de dados do sistema.
 
-## 3.3. Modelo de dados (opcional)
-
-_Caso julgue necessário para explicar a arquitetura, apresente o diagrama de classes ou diagrama de Entidade/Relacionamentos ou tabelas do banco de dados. Este modelo pode ser essencial caso a arquitetura utilize uma solução de banco de dados distribuídos ou um banco NoSQL._
+## 3.3. Modelo de dados
 
 ![Diagrama de Entidade Relacionamento (ER) ](imagens/der.png "Diagrama de Entidade Relacionamento (ER) ")
 
-**Figura 4 – Diagrama de Entidade Relacionamento (ER) - exemplo. Fonte: o próprio autor.**
+**Figura 4 – Diagrama de Entidade Relacionamento (ER) . Fonte: o próprio autor.**
 
-Obs: Acrescente uma breve descrição sobre o diagrama apresentado na Figura 3.
+Diagrama de Entidade Relacionamento desenvolvido para garantir melhor visualização da persistência e integração dos dados utilizados no sistema.
+
+## 3.4. Diagrama de Caso de Uso
+
+![Diagrama de Caso de Uso ](imagens/casodeuso.png "Diagrama de Caso de Uso ")
+
+**Figura 5 – Diagrama de Caso de Uso. Fonte: o próprio autor.**
+
+Nosso sistema tem apenas um ator, o Cliente Online (Usuário conectado a internet), porém este ator tem um subator, o Cliente Offline (Usuário sem conexão com a internet). Tais diferenças de atores foram criadas para apresentar o que usuário poderam fazer quando estiverem conectado na internet e o que não poderam fazer (Casos de Uso).
 
 <a name="avaliacao"></a>
 # 4. Avaliação da Arquitetura
