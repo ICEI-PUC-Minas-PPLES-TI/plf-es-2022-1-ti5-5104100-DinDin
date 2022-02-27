@@ -285,7 +285,7 @@ Histórias de Usuário:
 
 ### Diagrama de Classes
 
-![Diagrama de classes](imagens/classes.gif "Diagrama de classes")
+![Diagrama de Classes](imagens/classes.png "Diagrama de Classes")
 
 **Figura 2 – Diagrama de classes. Fonte: o próprio autor.**
 
