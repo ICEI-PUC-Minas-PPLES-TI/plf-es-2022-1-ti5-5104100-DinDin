@@ -35,7 +35,11 @@ _**Resumo**. Para não perder o controle financeiro pessoal ou familiar, algumas
 
 | **Data** | **Autor** | **Descrição** | **Versão** |
 | --- | --- | --- | --- |
-| **[dd/mm/aaaa]** | [Nome do autor] | [Descrever as principais alterações realizadas no documento, evidenciando as seções ou capítulos alterados] | [X] |
+| **[26/02/2022]** | [Guilherme Gabriel] | [Artefato 1 criado] | [1] |
+| **[26/02/2022]** | [Henrique Penna] | [Artefato 2  criado] | [2] |
+| **[26/02/2022]** | [Victor Boaventura] | [Artefato 3.1 criado] | [2] |
+| **[26/02/2022]** | [Victor Boaventura] | [Artefatos 3.2 e 3.3 criado] | [2] |
+| **[26/02/2022]** | [Lucas Ângelo] | [Artefatos 1, 2 e 3 em markdown] | [1] |
 | | | | |
 | | | | |
 
@@ -163,31 +167,119 @@ As restrições impostas ao projeto que afetam sua arquitetura são:
 
 ### Descrição resumida dos Casos de Uso / Histórias de Usuário
 
-_Nesta seção, os casos de uso devem ser resumidos. Esse detalhamento pode ser na forma de um texto sintético ou, alternativamente, você pode optar por descrever estórias de usuários seguindo os métodos ágeis. Neste caso a seção deve chamar &quot;Histórias de usuários&quot;. Lembre-se das características de qualidade das estórias de usuários, ou seja, o que é preciso para descrever boas histórias de usuários._
+Casos de uso:
+#### UC01 – Lançar Receitas
 
-Exemplos de resumo de Casos de Uso:
-
-#### UC01 – NOME DO CASO DE USO 01
-
-| **Descrição** | |
+| **Descrição** | Eu como usuário quero lançar minhas receitas pessoais |
 | --- | --- |
-| **Atores** | |
-| **Prioridade** | |
-| **Requisitos associados** | |
-| **Fluxo Principal** | |
+| **Atores** | Usuário |
+| **Prioridade** | Alta |
+| **Requisitos associados** | RF001 |
+| **Fluxo Principal** | Entrar no aplicativo e cadastrar uma receita. |
 
-#### UC02 – NOME DO CASO DE USO 02
+#### UC02 – Lançar Despesas
 
-| **Descrição** | |
+| **Descrição** | Eu como usuário quero lançar minhas despesas pessoais |
 | --- | --- |
-| **Atores** | |
-| **Prioridade** | |
-| **Requisitos associados** | |
-| **Fluxo Principal** | |
+| **Atores** | Usuário |
+| **Prioridade** | Alta |
+| **Requisitos associados** | RF001 |
+| **Fluxo Principal** | Entrar no aplicativo e cadastrar uma despesa |
 
-Exemplos de Histórias de Usuário:
+#### UC03 – Criar Conta Conjunta
 
-- Como Fulano eu quero poder convidar meus amigos para que a gente possa se reunir...
+| **Descrição** | Eu como usuário quero criar uma conta conjunta |
+| --- | --- |
+| **Atores** | Usuário |
+| **Prioridade** | Média |
+| **Requisitos associados** | RF004 |
+| **Fluxo Principal** | Entrar no aplicativo e cadastrar uma conta conjunta e adicionar outros usuários |
+
+#### UC04 – Categorizar Despesa
+
+| **Descrição** | Eu como usuário quero categorizar minhas despesas |
+| --- | --- |
+| **Atores** | Usuário |
+| **Prioridade** | Alta |
+| **Requisitos associados** | RF005 |
+| **Fluxo Principal** | Entrar no aplicativo, criar uma categoria e categorizar uma ou mais despesa |
+
+#### UC05 – Categorizar Receita
+
+| **Descrição** | Eu como usuário quero categorizar minhas receitas |
+| --- | --- |
+| **Atores** | Usuário |
+| **Prioridade** | Alta |
+| **Requisitos associados** | RF006 |
+| **Fluxo Principal** | Entrar no aplicativo, criar uma categoria e categorizar uma ou mais receita |
+
+#### UC06 – Cadastrar Banco
+
+| **Descrição** | Eu como usuário quero cadastrar banco |
+| --- | --- |
+| **Atores** | Usuário |
+| **Prioridade** | Média |
+| **Requisitos associados** | RF007 e RF008 |
+| **Fluxo Principal** | Entrar no aplicativo cadastrar no banco |
+
+#### UC07 – Acessar relatório
+
+| **Descrição** | Eu como usuário quero acessar relatórios |
+| --- | --- |
+| **Atores** | Usuário |
+| **Prioridade** | Média |
+| **Requisitos associados** | RF009 e  RF012 |
+| **Fluxo Principal** | Entrar no aplicativo e acessar os relatórios |
+
+#### UC08 – Inserir lançamento via Alexa
+
+| **Descrição** | Eu como usuário quero inserir lançamentos via Alexa |
+| --- | --- |
+| **Atores** | Usuário |
+| **Prioridade** | Baixa |
+| **Requisitos associados** | RF010 |
+| **Fluxo Principal** | Entrar no aplicativo e conversar com a alexa |
+
+#### UC09 – Criar objetivo financeiro
+
+| **Descrição** | Eu como usuário quero criar um objetivo financeiro |
+| --- | --- |
+| **Atores** | Usuário |
+| **Prioridade** | Baixa |
+| **Requisitos associados** | RF011 |
+| **Fluxo Principal** | Entrar no aplicativo e cadastrar um objetivo financeiro |
+
+#### UC10 – Consultar extrato
+
+| **Descrição** | Eu como usuário quero consultar extrato |
+| --- | --- |
+| **Atores** | Usuário |
+| **Prioridade** | Média |
+| **Requisitos associados** | RF009 |
+| **Fluxo Principal** | Entrar no aplicativo e consultar o extrato |
+
+Histórias de Usuário:
+
+- Como usuário eu quero lançar minhas receitas pessoais para ter controle sobre meus ganhos.
+
+- Como usuário eu quero lançar minhas despesas pessoais para ter controle sobre meus gastos.
+
+- Como usuário eu quero criar uma conta conjunta para gerenciar lançamentos meus e dos meus familiares.
+
+- Como usuário eu quero categorizar minhas despesas para saber em qual categoria é responsável pelos maiores gastos. 
+
+- Como usuário eu quero categorizar minhas receitas para saber em qual categoria é responsável pelos maiores ganhos. 
+
+- Como usuário eu quero conseguir cadastrar meus bancos para poder gerenciar qual é meu capital em cada um deles.
+
+- Como usuário eu quero acessar relatórios para ver gráficos e estatísticas de médias entre despesas e receitas em dias, semanas ou meses, e realizar comparações com outros períodos para fornecer um pleno conhecimento sobre como está  a economia em relação ao passado.
+
+- Como usuário eu quero inserir lançamentos via comandos de voz da Alexa para uma maior comodidade em usar o aplicativo para gerenciar meu capital.
+
+- Como usuário eu quero criar um objetivo financeiro para poder acompanhar como estão minhas metas pessoas de ganho, econômica ou despesa.
+
+- Como usuário eu quero poder consultar extratos no aplicativo ou gerar para poder verificar meus lançamentos e exportar para outras pessoas caso necessário.
+
 
 ## 3.2. Visão Lógica
 
