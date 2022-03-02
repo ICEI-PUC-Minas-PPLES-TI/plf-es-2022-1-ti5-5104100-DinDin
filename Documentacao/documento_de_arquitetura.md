@@ -318,6 +318,16 @@ Obs: Acrescente uma breve descrição sobre o diagrama apresentado na Figura 3.
 
 Diagrama de Entidade Relacionamento desenvolvido para garantir melhor visualização da persistência e integração dos dados utilizados no sistema.
 
+- user: Dados de usuários para autenticação.
+- wallet: Grupo que engloba várias transações. Ex: Conta do Banco Nubank, Conta conjunta de Ful e Ane
+- user_has_wallet: Vinculo entre usuário e contas
+- wallet_invites: Convites enviados de um usuário para outro usuário participar de conta conjunta
+- transaction: Lançamentos monetários de gastos ou receitas
+- category: Categoria de cada lançamento. Ex: Despesas com alimentação, Salário
+- transaction_recurrencies: Tabela de lançamentos que ocorrem mais de uma vez. Ex: Assinatura Netflix, Mensalidade PUC, Parcela 1 de 3 de TV
+- goal: Meta de economia em um determinado período
+
+
 ## 3.4. Diagrama de Caso de Uso
 
 ![Diagrama de Caso de Uso ](imagens/casodeuso.png "Diagrama de Caso de Uso ")
