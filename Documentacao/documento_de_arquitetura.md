@@ -40,6 +40,7 @@ _**Resumo**. Para não perder o controle financeiro pessoal ou familiar, algumas
 | **[26/02/2022]** | [Victor Boaventura] | [Artefatos 3.1 e 3.2 criado] | [3] |
 | **[26/02/2022]** | [Victor Boaventura] | [Artefatos 3.3 e 3.4 criado] | [4] |
 | **[26/02/2022]** | [Lucas Ângelo] | [Artefatos 1, 2 e 3 em markdown] | [4.1] |
+| **[03/03/2022]** | [Guilherme Gabriel] | [Descrição Artefato 3.2] | [5] |
 | | | | |
 
 ## SUMÁRIO
@@ -72,7 +73,7 @@ _**Resumo**. Para não perder o controle financeiro pessoal ou familiar, algumas
 <a name="apresentacao"></a>
 # 1. Apresentação
 
-A falta de controle de finanças é motivo de estresse em 58,4% das famílias brasileiras. Em um contexto de pandemia, esse problema tem se agravado consideravelmente. Nesse sentido, para não perder o controle financeiro pessoal ou familiar, é necessário alguma estratégia ou ferramenta para gerenciar finanças. Aliando o contexto tecnológico com o problema supracitado, a plataforma DinDin foi desenvolvida para fazer esse papel de ferramenta para acabar com ou atenuar o problema da perda de controle financeiro.
+A falta de controle de finanças é motivo de estresse em 58,4% das famílias brasileiras[6]. Em um contexto de pandemia, esse problema tem se agravado consideravelmente. Nesse sentido, para não perder o controle financeiro pessoal ou familiar, é necessário alguma estratégia ou ferramenta para gerenciar finanças. Aliando o contexto tecnológico com o problema supracitado, a plataforma DinDin foi desenvolvida para fazer esse papel de ferramenta para acabar com ou atenuar o problema da perda de controle financeiro.
 
 ## 1.1. Problema
 
@@ -82,9 +83,9 @@ Os problemas financeiros estão presentes diariamente na vida dos brasileiros. D
 
 O objetivo principal do trabalho é desenvolver uma aplicação distribuída de controle de finanças pessoais, que possibilite aos seus usuários uma forma mais prática de regularem seus custos.
 Os objetivos específicos são:
-- Permitir o usuário dividir suas despesas em categorias;
-- Permitir o usuário lançar suas despesas e receitas diárias;
-- Permitir o usuário, junto de outros usuários, lançar despesas e receitas de modo compartilhado.
+- Permitir ao usuário dividir suas despesas em categorias;
+- Permitir ao usuário lançar suas despesas e receitas diárias;
+- Permitir ao usuário, junto de outros usuários, lançar despesas e receitas de modo compartilhado.
 - Permitir que o usuário controle de onde o dinheiro está saindo ou entrando.
 
 ## 1.3. Definições e Abreviaturas
@@ -292,7 +293,12 @@ Histórias de Usuário:
 
 **Figura 2 – Diagrama de classes. Fonte: o próprio autor.**
 
-Obs: Acrescente uma breve descrição sobre o diagrama apresentado na Figura 3.
+- Usuario: cliente do sistema, representa a instância de um usuário do aplicativo.
+- Carteira: Agrupamento de lançamentos, usuários e metas. Pode ser conjunta (possuir mais de um usuário).
+- Lancamento: Lançamentos monetários de gastos ou receitas, viculado a uma carteira.
+- Categoria: Categoria de um lançamento. É vinculado a carteira, para poder ser atribuído à qualquer lançamento desta carteira.
+- LancamentoPeriodico: Registro de um lancamento mensal, que se efetua e gera um lancamento quando atinge o dia registrado.
+- Meta: Objetivo de economia em um determinado período de uma carteira.
 
 ### Diagrama de componentes
 
@@ -397,6 +403,8 @@ http://www.pucminas.br/imagedb/documento/DOC\_DSC\_NOME\_ARQUI20160217102425.pdf
 **[4]** - _SUTHERLAND, Jeffrey Victor. **Scrum: a arte de fazer o dobro do trabalho na metade do tempo**. 2. ed. rev. São Paulo, SP: Leya, 2016. 236, [4] p. ISBN 9788544104514._
 
 **[5]** - _RUSSELL, Stuart J.; NORVIG, Peter. **Inteligência artificial**. Rio de Janeiro: Elsevier, c2013. xxi, 988 p. ISBN 9788535237016._
+
+**[6]** - _MELLO, Daniel **Finanças são motivo de estresse em 58,4% das famílias**. Acesso em 03/03/2022 https://agenciabrasil.ebc.com.br/economia/noticia/2021-07/financas-sao-motivo-de-estresse-em-584-das-familias?amp._
 
 
 <a name="apendices"></a>
