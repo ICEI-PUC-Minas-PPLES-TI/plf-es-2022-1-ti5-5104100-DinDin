@@ -153,6 +153,16 @@ As restrições impostas ao projeto que afetam sua arquitetura são:
 
 ![Visão Geral da Solução](imagens/visao.png "Visão Geral da Solução")
 
+O usuário web, vai enviar uma requisição HTTP com conteúdo JSON e ao receber o retorno também em JSON o framework responsivo vai representar via manipulaçao do HTML.
+
+O usuário mobile vai utilizar a API REST para executar os comandos e o framework Flutter vai realizar a apresentação visual no aparelho.
+
+O Firebase foi escolhido como serviço de mensageria pois o serviço de FCM (Firebase Cloud Messaging), encaixa no orçamento do projeto universitário, e possui uma forte integração com o aplicativo android.
+
+O "API Gateway" é uma representação do redirecionamento por DNS para cada serviço da nossa aplicação 
+
+O banco local que estará presente na aplicação mobile será utilizado para caso usuário não possua conexão com a internet, os dados fiquem salvos até haja sincronizaçao com a nuvem.
+
 **Figura 1 - Visão Geral da Solução**
 
 ## 3.1. Visão de Negócio (Funcionalidades)
