@@ -131,10 +131,8 @@ Definir as tecnologias a serem utilizadas no desenvolvimento da aplicação.
 | Nome | Papel no projeto | Assinatura |
 | --- | --- | --- |
 | Guilherme Gabriel Silva Pereira | Desenvolvedor Mobile | Guilherme Gabriel |
-| Henrique Penna Forte Monteiro | Desenvolvedor
-Frontend | Henrique Penna |
-| Lucas Ângelo Oliveira Martins Rocha | Desenvolvedor
-Backend | Lucas Ângelo |
+| Henrique Penna Forte Monteiro | Desenvolvedor Frontend | Henrique Penna |
+| Lucas Ângelo Oliveira Martins Rocha | Desenvolvedor Backend | Lucas Ângelo |
 | Victor Boaventura Góes Campos | Product Owner | Victor Boaventura |
 | Vinícius Marini Costa e Oliveira | QA | Vinícius Marini |
 
