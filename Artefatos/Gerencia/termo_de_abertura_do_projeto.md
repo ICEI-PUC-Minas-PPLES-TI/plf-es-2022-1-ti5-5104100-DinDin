@@ -50,7 +50,7 @@ _Instituto de Informática e Ciências Exatas – Pontifícia Universidade de Mi
 
 **1.5 Objetivo do projeto:**
 
-Desenvolver uma aplicação de controle de finanças pessoal.
+Desenvolver uma aplicação distribuída de controle de finanças pessoais, que possibilite aos seus usuários uma forma mais prática de regularem seus custos.
 
 **1.6 Benefícios que justificam o projeto:**
 
