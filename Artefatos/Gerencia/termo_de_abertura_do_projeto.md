@@ -50,7 +50,7 @@ _Instituto de Informática e Ciências Exatas – Pontifícia Universidade de Mi
 
 **1.5 Objetivo do projeto:**
 
-Desenvolver uma aplicação de controle de finanças pessoal.
+Desenvolver uma aplicação distribuída de controle de finanças pessoais, que possibilite aos seus usuários uma forma mais prática de controlar suas despesas e receitas.
 
 **1.6 Benefícios que justificam o projeto:**
 
@@ -131,10 +131,8 @@ Definir as tecnologias a serem utilizadas no desenvolvimento da aplicação.
 | Nome | Papel no projeto | Assinatura |
 | --- | --- | --- |
 | Guilherme Gabriel Silva Pereira | Desenvolvedor Mobile | Guilherme Gabriel |
-| Henrique Penna Forte Monteiro | Desenvolvedor
-Frontend | Henrique Penna |
-| Lucas Ângelo Oliveira Martins Rocha | Desenvolvedor
-Backend | Lucas Ângelo |
+| Henrique Penna Forte Monteiro | Desenvolvedor Frontend | Henrique Penna |
+| Lucas Ângelo Oliveira Martins Rocha | Desenvolvedor Backend | Lucas Ângelo |
 | Victor Boaventura Góes Campos | Product Owner | Victor Boaventura |
 | Vinícius Marini Costa e Oliveira | QA | Vinícius Marini |
 
