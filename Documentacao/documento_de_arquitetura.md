@@ -299,12 +299,18 @@ Histórias de Usuário:
 
 **Figura 2 – Diagrama de classes. Fonte: o próprio autor.**
 
-- Usuario: cliente do sistema, representa a instância de um usuário do aplicativo.
-- Carteira: Agrupamento de lançamentos, usuários e metas. Pode ser conjunta (possuir mais de um usuário).
-- Lancamento: Lançamentos monetários de gastos ou receitas, viculado a uma carteira.
-- Categoria: Categoria de um lançamento. É vinculado a carteira, para poder ser atribuído à qualquer lançamento desta carteira.
-- LancamentoPeriodico: Registro de um lancamento mensal, que se efetua e gera um lancamento quando atinge o dia registrado.
-- Meta: Objetivo de economia em um determinado período de uma carteira.
+Entities:
+- User: cliente do sistema, representa a instância de um usuário do aplicativo.
+- Wallet: Agrupamento de lançamentos, usuários e metas. Pode ser conjunta (possuir mais de um usuário).
+- WalletIvite: Convite de um usuário para participar de uma carteira.
+- Transaction: Lançamentos monetários de gastos ou receitas, viculado a uma carteira.
+- Category: Categoria de um lançamento. É vinculado a carteira, para poder ser atribuído à qualquer lançamento desta carteira.
+- TransactionRecurency: Registro de um lancamento mensal, que se efetua e gera um lancamento quando atinge o dia registrado.
+- Goal: Objetivo de economia em um determinado período de uma carteira.
+
+UseCases: Cada caso de uso do sistema possui uma classe UseCase ( regra de negócio ) e uma classe Controller ( handle de requests da API ), que toda Controller implementa a interface IController.
+
+Repositories: As entidades do sistema possuem um respectiva interface repositório para recuperar os dados, sem depender de implementação. A implementação é especificada na DBxRepository.
 
 ### Diagrama de componentes
 
