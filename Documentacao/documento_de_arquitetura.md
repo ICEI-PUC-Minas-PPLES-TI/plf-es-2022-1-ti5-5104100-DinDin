@@ -81,7 +81,7 @@ Os problemas financeiros estão presentes diariamente na vida dos brasileiros. D
 
 ## 1.2. Objetivos do trabalho
 
-O objetivo principal do trabalho é desenvolver uma aplicação distribuída de controle de finanças pessoais, que possibilite aos seus usuários uma forma mais prática de regularem seus custos.
+Desenvolver uma aplicação distribuída de controle de finanças pessoais, que possibilite aos seus usuários uma forma mais prática de controlar suas despesas e receitas.   
 Os objetivos específicos são:
 - Permitir ao usuário dividir suas despesas em categorias;
 - Permitir ao usuário lançar suas despesas e receitas diárias;
