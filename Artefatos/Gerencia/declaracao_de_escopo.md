@@ -8,7 +8,6 @@
 
 ## Objetivo do projeto
 
----
 
 Desenvolver uma aplicação distribuída de controle de finanças pessoais, que possibilite aos
 seus usuários uma forma mais prática de controlar suas despesas e receitas.
@@ -17,7 +16,6 @@ seus usuários uma forma mais prática de controlar suas despesas e receitas.
 
 ## Escopo do projeto/produto 
 
----
 
 ### Escopo do projeto:
 - 2 Criar o TAP (Termo de Abertura do Projeto);
@@ -50,7 +48,6 @@ economizando em relação aos seus hábitos passados;
 
 ## Limites do projeto
 
----
 
 ### Contra escopo de produto:
 - Integração com instituições financeiras;
@@ -63,7 +60,6 @@ economizando em relação aos seus hábitos passados;
 
 ## Restrições
 
----
 
 - O projeto deverá ser entregue em no máximo 3 meses;
 - O projeto deverá contar com um sistema de mensageria;
@@ -72,7 +68,6 @@ economizando em relação aos seus hábitos passados;
 
 --- 
 ## Premissas
----
 
 - Escolha da arquitetura de software;
 - Escolha das tecnologias aplicadas;
@@ -81,7 +76,6 @@ economizando em relação aos seus hábitos passados;
 
 --- 
 ## Marcos agendados e entregas
----
 
 | Id. do Marco | Entregáveis Previstos | 
 | --- | --- | 
