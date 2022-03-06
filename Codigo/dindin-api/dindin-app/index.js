@@ -28,6 +28,7 @@ app.use(function(error, request, response, next) {
   
   if (error instanceof AppError) {
     return response.status(error.statusCode).json({
+      status: "Error",
       message: error.message,
       error: error.error
     });
@@ -36,6 +37,7 @@ app.use(function(error, request, response, next) {
   // Any other error type
   if (process.env.APP_DEBUG)
     return response.status(500).json({
+      status: "Error",
       status: "Internal server error",
       message: error.message,
       stack: error.stack,
@@ -44,8 +46,7 @@ app.use(function(error, request, response, next) {
   else
     return response.status(500).json({
       status: "Error",
-      message: `Internal server error ${error.message}`,
-      error: error
+      message: `Internal server error ${error.message}`
     });
 
 });
