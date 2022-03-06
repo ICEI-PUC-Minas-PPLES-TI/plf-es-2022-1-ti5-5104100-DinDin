@@ -8,7 +8,7 @@ const app = express();
 
 // Require API routes
 // const routes = require("./routes");
-const AppError = require("./errors/AppError");
+const AppError = require("./app/errors/AppError");
 // const db = require("./database");
 
 // Define cors origin
@@ -53,9 +53,13 @@ app.use(function(error, request, response, next) {
 // Export express app
 module.exports = app;
 
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to DinDin application API." });
+});
+
 // Start standalone server if directly running
 if (require.main === module) {
-  const port = process.env.NODE_DOCKER_PORT || 8181;
+  const port = process.env.NODE_DOCKER_PORT || 3001;
   app.listen(port, () => {
     // eslint-disable-next-line no-console
     console.log(`API server listening on port ${port}`);
