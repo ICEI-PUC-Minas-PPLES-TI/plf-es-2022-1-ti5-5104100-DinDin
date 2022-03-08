@@ -42,6 +42,8 @@ class User extends Model {
       },
       {
         tableName: "user",
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_bin',
         timestamps: true, // deletedAt and updatedAt need this
         paranoid: true, // deletedAt need this
         createdAt: true,

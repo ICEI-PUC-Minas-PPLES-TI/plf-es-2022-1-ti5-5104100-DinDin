@@ -4,6 +4,10 @@
   "description": "Node.js Rest Apis with Express, Sequelize and MySQL for DinDin application.",
   "main": "index.js",
   "scripts": {
+    "undomigrations": "npx sequelize-cli db:migrate:undo:all --env 'development'",
+    "migrations": "npx sequelize-cli db:migrate --env 'development'",
+    "seeds": "npx sequelize-cli db:seed:all --env 'development'",
+    "config": "npm run undomigrations && npm run migrations && npm run seeds",
     "start": "echo \"----------------> Starting the DinDin API WITH auto-reloading <----------------\" && nodemon -L index.js",
     "start:prod": "echo \"----------------> Starting the DinDin API WITHOUT auto-reloading <----------------\" && node index.js"
   },

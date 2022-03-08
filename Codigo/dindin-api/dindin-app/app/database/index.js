@@ -1,4 +1,5 @@
 require("dotenv").config();
+const mysql = require('mysql2/promise');
 const { Sequelize } = require("sequelize");
 
 // It uses dbConfig instead of .env to work both locally and in docker and Sequelize migrations and seeds need the config/config.js file
@@ -29,8 +30,7 @@ const sequelize = new Sequelize(dbConfig.production.database, dbConfig.productio
 
   define: {
     underscored: true,
-    freezeTableName: true,
-    syncOnAssociation: true,
+    freezeTableName: true, // To not change table names in plural or model class name
     charset: 'utf8mb4',
     dialectOptions: {
       collate: 'utf8mb4_bin'
@@ -39,7 +39,7 @@ const sequelize = new Sequelize(dbConfig.production.database, dbConfig.productio
   },
 
   // similar for sync: you can define this to always force sync for models
-  sync: { force: true },
+  sync: { alter: true },
 
   // sync after each association (see below). If set to false, you need to sync manually after setting all associations. Default: true
   syncOnAssociation: true,
@@ -50,21 +50,28 @@ const sequelize = new Sequelize(dbConfig.production.database, dbConfig.productio
 
 module.exports = {
 
+  async createDatabase() {
+    const connection = await mysql.createConnection({ host: dbConfig.production.host, port: dbConfig.production.port, user: dbConfig.production.username, password: dbConfig.production.password });
+    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbConfig.production.database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;`);
+    await connection.end();
+  },
+
   async connect() {
     try {
-        await sequelize.sync({ alter: true }); // force: true to drop and re-create
-
       // Start Models here
       User.init(sequelize);
 
       // Configure Associations here
 
 
+      await sequelize.sync({ alter: true }); // force: true to drop and re-create
+
       if (process.env.APP_DEBUG) {
         console.log(
           `\n--> Connection with '${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}' established. Check and re-sync all models with the database completed successfully!`
         );
       }
+
     } catch (error) {
       console.log(
         `\nUnable to establish, check or re-sync connection with '${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME} with user '${process.env.DB_USER}' and password '${process.env.DB_PASSWORD}.'`

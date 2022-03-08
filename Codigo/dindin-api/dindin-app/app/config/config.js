@@ -63,6 +63,9 @@ module.exports = {
   }
 };
 
+// Directory for commands: ./dindin-api/dindin-app
+
 // Create migration: npx sequelize-cli model:generate --name user --attributes name:string
 
-// Create seed: npx sequelize-cli seed:generate --name demo-user
+// Create seed: npx sequelize-cli seed:generate --name demo-user-01
+// Run all seeds: npx sequelize-cli db:seed:all --env 'development'

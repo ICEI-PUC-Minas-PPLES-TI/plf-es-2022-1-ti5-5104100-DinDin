@@ -22,8 +22,12 @@ app.use(express.json());
 // Import API Routes
 // app.use(routes);
 
-// Connect and sync to the database
-sequelizeDatabase.connect();
+async function databaseInitialization() {
+  await sequelizeDatabase.createDatabase();
+  await sequelizeDatabase.connect();
+  // do something else
+}
+databaseInitialization();
 
 app.use(function(error, request, response, next) {
 
