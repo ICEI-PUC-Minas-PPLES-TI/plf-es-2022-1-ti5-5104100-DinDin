@@ -4,21 +4,19 @@ const { Sequelize } = require("sequelize");
 // It uses dbConfig instead of .env to work both locally and in docker and Sequelize migrations and seeds need the config/config.js file
 const dbConfig = require("../config/config.js");
 
-let mysqlDebug = false;
-if (process.env.APP_DEBUG)
-  mysqlDebug = false;
+const User = require("../models/User.js");
 
 const sequelize = new Sequelize(dbConfig.production.database, dbConfig.production.username, dbConfig.production.password, {
   host: dbConfig.production.host,
   port: dbConfig.production.port,
-  logging: console.log,
+  logging: process.env.APP_DEBUG ? console.log : false,
 
   dialect: dbConfig.production.dialect,
   dialectOptions: {
     supportBigNumbers: true,
     bigNumberStrings: true,
     connectTimeout: 60000,
-    debug: mysqlDebug
+    debug: false
   },
 
   // use pooling in order to reduce db connection overload and to increase speed
@@ -31,7 +29,7 @@ const sequelize = new Sequelize(dbConfig.production.database, dbConfig.productio
 
   define: {
     underscored: true,
-    freezeTableName: false,
+    freezeTableName: true,
     syncOnAssociation: true,
     charset: 'utf8mb4',
     dialectOptions: {
@@ -51,21 +49,25 @@ const sequelize = new Sequelize(dbConfig.production.database, dbConfig.productio
 });
 
 module.exports = {
+
   async connect() {
     try {
-      await sequelize.authenticate();
+        await sequelize.sync({ alter: true }); // force: true to drop and re-create
+
       // Start Models here
+      User.init(sequelize);
 
       // Configure Associations here
 
+
       if (process.env.APP_DEBUG) {
         console.log(
-          `\n --> Connection with '${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}' established.`
+          `\n--> Connection with '${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}' established. Check and re-sync all models with the database completed successfully!`
         );
       }
     } catch (error) {
       console.log(
-        `Unable to establish connection with '${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME} with user '${process.env.DB_USER}' and password '${process.env.DB_PASSWORD}.'`
+        `\nUnable to establish, check or re-sync connection with '${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME} with user '${process.env.DB_USER}' and password '${process.env.DB_PASSWORD}.'`
       );
       console.log(error);
     }

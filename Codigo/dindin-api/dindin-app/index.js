@@ -22,7 +22,7 @@ app.use(express.json());
 // Import API Routes
 // app.use(routes);
 
-// Connect to the database
+// Connect and sync to the database
 sequelizeDatabase.connect();
 
 app.use(function(error, request, response, next) {
