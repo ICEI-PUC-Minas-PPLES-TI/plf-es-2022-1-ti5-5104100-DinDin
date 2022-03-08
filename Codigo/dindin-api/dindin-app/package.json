@@ -4,8 +4,8 @@
   "description": "Node.js Rest Apis with Express, Sequelize and MySQL for DinDin application.",
   "main": "index.js",
   "scripts": {
-    "start": "echo \"Starting the DinDin API WITHOUT auto-reloading\" && node index.js",
-    "api": "echo \"Starting the DinDin API WITH auto-reloading\" && nodemon index.js"
+    "start": "echo \"----------------> Starting the DinDin API WITH auto-reloading <----------------\" && nodemon -L index.js",
+    "start:prod": "echo \"----------------> Starting the DinDin API WITHOUT auto-reloading <----------------\" && node index.js"
   },
   "keywords": [
     "nodejs",

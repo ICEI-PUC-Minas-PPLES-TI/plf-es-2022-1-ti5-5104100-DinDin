@@ -9,7 +9,7 @@ const app = express();
 // Require API routes
 // const routes = require("./routes");
 const AppError = require("./app/errors/AppError");
-// const db = require("./database");
+const sequelizeDatabase = require("./app/database/index");
 
 // Define cors origin
 var corsOptions = {
@@ -22,10 +22,11 @@ app.use(express.json());
 // Import API Routes
 // app.use(routes);
 
-// db.connect();
+// Connect to the database
+sequelizeDatabase.connect();
 
 app.use(function(error, request, response, next) {
-  
+
   if (error instanceof AppError) {
     return response.status(error.statusCode).json({
       status: "Error",

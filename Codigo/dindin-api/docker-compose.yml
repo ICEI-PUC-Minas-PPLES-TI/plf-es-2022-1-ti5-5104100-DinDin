@@ -3,6 +3,8 @@ version: '3.8'
 services:
   mysqldb:
     image: mysql:5.7
+    networks:
+      - db-net
     restart: unless-stopped
     env_file: ./.env
     environment:
@@ -16,8 +18,16 @@ services:
     depends_on:
       - mysqldb
     build: ./dindin-app
-    restart: unless-stopped
+    networks:
+      - db-net
+    links:
+      - 'mysqldb:mysql'
+    working_dir: /usr/src/dindin-api
+    restart: always
     env_file: ./.env
+    volumes:
+      - ./dindin-app:/usr/src/dindin-api
+      - node_modules:/usr/src/dindin-api/node_modules
     ports:
       - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
     environment:
@@ -30,5 +40,9 @@ services:
     tty: true
     command: bash -c "/usr/wait-for-it.sh --timeout=0 mysqldb:3306 && npm run start"
 
-volumes: 
+volumes:
   db:
+  node_modules:
+
+networks:
+    db-net:
