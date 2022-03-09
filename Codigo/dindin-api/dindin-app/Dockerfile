@@ -22,7 +22,7 @@ RUN npm install
 # Bundle app source
 COPY . .
 # convert from windows to linux
-RUN find /usr/src/dindin-api -type f -print0 | xargs -0 dos2unix
+RUN find /usr/src/dindin-api -type f -print0 | xargs -0 -n 1 -P 4 dos2unix
 
 # to wait database image
 COPY wait-for-it.sh /usr/wait-for-it.sh
