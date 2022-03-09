@@ -2,7 +2,7 @@
 const yup = require("yup");
 
 const AppError = require("../../errors/AppError");
-const UserCreateUseCase = require("./UserCreateUseCase")
+const UserCreateAccountUseCase = require("./UserCreateAccountUseCase")
 
 class UserCreateAccountController {
 
@@ -21,8 +21,8 @@ class UserCreateAccountController {
 
     const { name, email, password } = request.body;
 
-    const userCreateUseCase = new UserCreateUseCase();
-    const user = await userCreateUseCase.create(
+    const userCreateAccountUseCase = new UserCreateAccountUseCase();
+    const user = await userCreateAccountUseCase.create(
       name,
       email,
       password

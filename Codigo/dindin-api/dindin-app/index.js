@@ -20,7 +20,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Import API Routes
-app.use(routes);
+app.use('/api', routes);
 
 async function databaseInitialization() {
   await sequelizeDatabase.createDatabase();
