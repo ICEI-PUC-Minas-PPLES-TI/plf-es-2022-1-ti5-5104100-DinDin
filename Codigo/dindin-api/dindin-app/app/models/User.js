@@ -23,13 +23,10 @@ class User extends Model {
           field: 'email',
           type: DataTypes.STRING(150),
           notEmpty: true,
+          unique: true,
           allowNull: false,
           validate: {
             isEmail: true
-          },
-          unique: {
-            args: 'email',
-            msg: 'Email address already in use!'
           }
         },
         password: {
@@ -44,11 +41,11 @@ class User extends Model {
         tableName: "user",
         charset: 'utf8mb4',
         collate: 'utf8mb4_bin',
-        timestamps: true, // deletedAt and updatedAt need this
-        paranoid: true, // deletedAt need this
-        createdAt: true,
-        updatedAt: true,
-        deletedAt: true, // .destroy() and .destroy(); to softdelete
+        timestamps: true, // deleted_at and updatedAt need this
+        paranoid: true, // deleted_at need this
+        createdAt: "createdAt",
+        updatedAt: "updatedAt",
+        deleted_at: "deleted_at", // .destroy() and .destroy(); to softdelete
         sequelize,
         defaultScope: {
           attributes: {

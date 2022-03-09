@@ -39,7 +39,7 @@ const sequelize = new Sequelize(dbConfig.production.database, dbConfig.productio
   },
 
   // similar for sync: you can define this to always force sync for models
-  sync: { alter: true },
+  sync: { alter: false },
 
   // sync after each association (see below). If set to false, you need to sync manually after setting all associations. Default: true
   syncOnAssociation: true,
@@ -64,7 +64,8 @@ module.exports = {
       // Configure Associations here
 
 
-      await sequelize.sync({ alter: true }); // force: true to drop and re-create
+      // await sequelize.sync({ alter: false }); // force: true to drop and re-create
+      await sequelize.authenticate();
 
       if (process.env.APP_DEBUG) {
         console.log(

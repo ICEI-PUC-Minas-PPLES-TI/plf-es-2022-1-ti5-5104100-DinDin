@@ -38,7 +38,7 @@ services:
       - DB_PORT=$MYSQLDB_DOCKER_PORT
     stdin_open: true
     tty: true
-    command: bash -c "/usr/wait-for-it.sh --timeout=0 mysqldb:3306 && npm run start"
+    command: bash -c "/usr/wait-for-it.sh --timeout=0 mysqldb:3306 && npm run $NPM_DOCKER_CMD"
 
 volumes:
   db:
