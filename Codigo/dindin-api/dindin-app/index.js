@@ -7,7 +7,7 @@ require("dotenv").config();
 const app = express();
 
 // Require API routes
-// const routes = require("./routes");
+const routes = require("./app/routes/index");
 const AppError = require("./app/errors/AppError");
 const sequelizeDatabase = require("./app/database/index");
 
@@ -20,7 +20,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Import API Routes
-// app.use(routes);
+app.use(routes);
 
 async function databaseInitialization() {
   await sequelizeDatabase.createDatabase();
@@ -28,30 +28,21 @@ async function databaseInitialization() {
 }
 databaseInitialization();
 
-app.use(function(error, request, response, next) {
-
+app.use(function (error, request, response, next) {
   if (error instanceof AppError) {
+    console.error(error)
     return response.status(error.statusCode).json({
       status: "Error",
       message: error.message,
-      error: error.error
+      error: error.error.errors[0].message
     });
   }
-
-  // Any other error type
-  if (process.env.APP_DEBUG)
+  if(error) {
+    console.error(error)
     return response.status(500).json({
       status: "Error",
-      status: "Internal server error",
-      message: error.message,
-      stack: error.stack,
-      error: error
     });
-  else
-    return response.status(500).json({
-      status: "Error",
-      message: `Internal server error ${error.message}`
-    });
+  }
 
 });
 

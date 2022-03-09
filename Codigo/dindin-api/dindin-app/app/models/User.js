@@ -17,7 +17,10 @@ class User extends Model {
           field: 'name',
           type: DataTypes.STRING(100),
           notEmpty: true,
-          allowNull: false
+          allowNull: false,
+          validate: {
+            notEmpty: true,
+          }
         },
         email: {
           field: 'email',
@@ -26,6 +29,7 @@ class User extends Model {
           unique: true,
           allowNull: false,
           validate: {
+            notEmpty: true,
             isEmail: true
           }
         },
@@ -34,7 +38,13 @@ class User extends Model {
           type: DataTypes.STRING(64),
           notEmpty: true,
           allowNull: false,
-          comment: 'Encrypted with 64 digits'
+          validate: {
+            notEmpty: true,
+          },
+          comment: 'Encrypted with 64 digits',
+          get() {
+            return undefined;
+          }
         }
       },
       {
@@ -43,8 +53,8 @@ class User extends Model {
         collate: 'utf8mb4_bin',
         timestamps: true, // deleted_at and updatedAt need this
         paranoid: true, // deleted_at need this
-        createdAt: "createdAt",
-        updatedAt: "updatedAt",
+        createdAt: "created_at",
+        updatedAt: "updated_at",
         deleted_at: "deleted_at", // .destroy() and .destroy(); to softdelete
         sequelize,
         defaultScope: {

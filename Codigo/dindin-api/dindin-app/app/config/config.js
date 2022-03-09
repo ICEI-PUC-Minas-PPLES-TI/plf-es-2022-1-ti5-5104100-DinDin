@@ -13,7 +13,7 @@ module.exports = {
     port: process.env.DB_PORT,
     underscored: true,
     freezeTableName: true,
-
+    logging: logging,
     dialect: 'mysql',
     charset: "utf8mb4",
     timestamps: true,
@@ -36,7 +36,7 @@ module.exports = {
     port: process.env.DB_PORT,
     underscored: true,
     freezeTableName: true,
-
+    logging: logging,
     dialect: 'mysql',
     charset: "utf8mb4",
     timestamps: true,
