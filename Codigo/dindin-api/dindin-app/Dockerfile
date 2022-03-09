@@ -9,8 +9,10 @@ RUN apk update && apk upgrade
 RUN apk add git
 # docker-compose bash command dependency
 RUN apk add bash
-# Nodemon file changing detector dependency
+# nodemon file changing detector dependency
 RUN apk add inotify-tools
+# convert endline to linux
+RUN apk add dos2unix
 
 # Install app dependencies
 COPY ./package.json .
@@ -19,6 +21,8 @@ RUN npm install
 
 # Bundle app source
 COPY . .
+# convert from windows to linux
+RUN find /usr/src/dindin-api -type f -print0 | xargs -0 dos2unix
 
 # to wait database image
 COPY wait-for-it.sh /usr/wait-for-it.sh
