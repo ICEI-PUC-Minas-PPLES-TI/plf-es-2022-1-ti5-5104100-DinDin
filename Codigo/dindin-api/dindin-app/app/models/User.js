@@ -41,10 +41,7 @@ class User extends Model {
           validate: {
             notEmpty: true,
           },
-          comment: 'Encrypted with 64 digits',
-          get() {
-            return undefined;
-          }
+          comment: 'Encrypted with 64 digits'
         }
       },
       {
