@@ -73,7 +73,7 @@ _**Resumo**. Para não perder o controle financeiro pessoal ou familiar, algumas
 <a name="apresentacao"></a>
 # 1. Apresentação
 
-A falta de controle de finanças é motivo de estresse em 58,4% das famílias brasileiras[6]. Em um contexto de pandemia, esse problema tem se agravado consideravelmente. Nesse sentido, para não perder o controle financeiro pessoal ou familiar, é necessário alguma estratégia ou ferramenta para gerenciar finanças. Aliando o contexto tecnológico com o problema supracitado, a plataforma DinDin foi desenvolvida para fazer esse papel de ferramenta para acabar com ou atenuar o problema da perda de controle financeiro.
+A falta de controle de finanças é motivo de estresse em 58,4% das famílias brasileiras[1]. Em um contexto de pandemia, esse problema tem se agravado consideravelmente. Nesse sentido, para não perder o controle financeiro pessoal ou familiar, é necessário alguma estratégia ou ferramenta para gerenciar finanças. Aliando o contexto tecnológico com o problema supracitado, a plataforma DinDin foi desenvolvida para fazer esse papel de ferramenta para acabar com ou atenuar o problema da perda de controle financeiro.
 
 ## 1.1. Problema
 
@@ -399,24 +399,7 @@ _Apresente imagens, descreva os testes de tal forma que se comprove a realizaç�
 <a name="referencias"></a>
 # 5. REFERÊNCIAS
 
-_Como um projeto da arquitetura de uma aplicação não requer revisão bibliográfica, a inclusão das referências não é obrigatória. No entanto, caso você deseje incluir referências relacionadas às tecnologias, padrões, ou metodologias que serão usadas no seu trabalho, relacione-as de acordo com a ABNT._
-
-Verifique no link abaixo como devem ser as referências no padrão ABNT:
-
-http://www.pucminas.br/imagedb/documento/DOC\_DSC\_NOME\_ARQUI20160217102425.pdf
-
-
-**[1]** - _ELMASRI, Ramez; NAVATHE, Sham. **Sistemas de banco de dados**. 7. ed. São Paulo: Pearson, c2019. E-book. ISBN 9788543025001._
-
-**[2]** - _COPPIN, Ben. **Inteligência artificial**. Rio de Janeiro, RJ: LTC, c2010. E-book. ISBN 978-85-216-2936-8._
-
-**[3]** - _CORMEN, Thomas H. et al. **Algoritmos: teoria e prática**. Rio de Janeiro, RJ: Elsevier, Campus, c2012. xvi, 926 p. ISBN 9788535236996._
-
-**[4]** - _SUTHERLAND, Jeffrey Victor. **Scrum: a arte de fazer o dobro do trabalho na metade do tempo**. 2. ed. rev. São Paulo, SP: Leya, 2016. 236, [4] p. ISBN 9788544104514._
-
-**[5]** - _RUSSELL, Stuart J.; NORVIG, Peter. **Inteligência artificial**. Rio de Janeiro: Elsevier, c2013. xxi, 988 p. ISBN 9788535237016._
-
-**[6]** - _MELLO, Daniel **Finanças são motivo de estresse em 58,4% das famílias**. Acesso em 03/03/2022 https://agenciabrasil.ebc.com.br/economia/noticia/2021-07/financas-sao-motivo-de-estresse-em-584-das-familias?amp._
+**[1]** - _MELLO, Daniel **Finanças são motivo de estresse em 58,4% das famílias**. Acesso em 03/03/2022 https://agenciabrasil.ebc.com.br/economia/noticia/2021-07/financas-sao-motivo-de-estresse-em-584-das-familias?amp._
 
 
 <a name="apendices"></a>
