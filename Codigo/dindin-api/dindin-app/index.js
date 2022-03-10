@@ -59,5 +59,6 @@ if (require.main === module) {
   app.listen(port, () => {
     // eslint-disable-next-line no-console
     console.log(`API server listening on port ${port}`);
+    console.log(`---> http://${process.env.NODE_APP_HOST}:${port}`)
   });
 }
