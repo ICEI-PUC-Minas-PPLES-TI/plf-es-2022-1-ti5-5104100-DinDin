@@ -11,7 +11,10 @@ class UserFindUseCase {
     }).catch(error => {
       throw new AppError(error.message, 500, error);
     });
-    return user;
+    if(user)
+      return user;
+    else
+      throw new AppError('User not found!', 404)
   }
 
 }

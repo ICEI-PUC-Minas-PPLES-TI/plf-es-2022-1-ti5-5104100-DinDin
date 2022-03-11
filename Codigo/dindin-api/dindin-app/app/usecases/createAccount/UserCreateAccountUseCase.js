@@ -15,7 +15,7 @@ class UserCreateUseCase {
     }).catch(error => {
       throw new AppError(error.message, 500, error);
     });
-    return user;
+    return {'id': user.id};
   }
 
 }

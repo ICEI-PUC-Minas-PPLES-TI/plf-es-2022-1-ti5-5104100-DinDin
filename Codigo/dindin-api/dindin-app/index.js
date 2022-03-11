@@ -29,21 +29,19 @@ async function databaseInitialization() {
 databaseInitialization();
 
 app.use(function (error, request, response, next) {
-  if (error instanceof AppError) {
-    console.error(error)
+  console.log(error)
+  if(process.env.DEBUG) {
     return response.status(error.statusCode).json({
       status: "Error",
       message: error.message,
-      error: error.error.errors[0].message
+      error: error
     });
-  }
-  if(error) {
-    console.error(error)
-    return response.status(500).json({
+  } else {
+    return response.status(error.statusCode).json({
       status: "Error",
+      message: error.message,
     });
   }
-
 });
 
 // Export express app
