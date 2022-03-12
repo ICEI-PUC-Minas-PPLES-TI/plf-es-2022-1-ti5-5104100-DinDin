@@ -1,0 +1,83 @@
+{
+  "name": "nodejs-express-sequelize-mysql",
+  "version": "1.0.0",
+  "description": "Node.js Rest Apis with Express, Sequelize and MySQL for DinDin application.",
+  "main": "index.js",
+  "scripts": {
+    "undomigrations": "npx sequelize-cli db:migrate:undo:all --env 'production'",
+    "migrations": "npx sequelize-cli db:migrate --env 'production'",
+    "seeds": "npx sequelize-cli db:seed:all --env 'production'",
+    "config": "npm run undomigrations && npm run migrations && npm run seeds",
+    "start": "echo \"----------------> Starting the DinDin API WITH auto-reloading <----------------\" && nodemon -L index.js",
+    "start:reset": "echo \"----------------> Starting the DinDin API WITH auto-reloading <----------------\" && npm run config && nodemon -L index.js",
+    "start:prod": "echo \"----------------> Starting the DinDin API WITHOUT auto-reloading <----------------\" && node index.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "restful",
+    "api",
+    "sequelize",
+    "sequelize-cli",
+    "migrations",
+    "seeds",
+    "yup",
+    "dotenv",
+    "editorconfig",
+    "wait-for-it.sh",
+    "mysql",
+    "docker",
+    "docker-compose",
+    "dockerfile",
+    "dindin"
+  ],
+  "license": "CC-BY-4.0",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.17.0",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "sequelize-cli": "^6.4.1"
+  },
+  "homepage": "https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin",
+  "bugs": "https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin.git"
+  },
+  "contributors": [
+    {
+      "name": "Guilherme Gabriel Silva Pereira",
+      "email": "ggspereira@sga.pucminas.br",
+      "url": "https://github.com/guizombas"
+    },
+    {
+      "name": "Henrique Penna Forte Monteiro",
+      "email": "henrique.forte@sga.pucminas.br",
+      "url": "https://github.com/Henrikkee"
+    },
+    {
+      "name": "Lucas Ângelo Oliveira Martins Rocha",
+      "email": "laomrocha@sga.pucminas.br",
+      "url": "https://lucasangelo.com"
+    },
+    {
+      "name": "Victor Boaventura Góes Campos",
+      "email": "vbgcampos@sga.pucminas.br",
+      "url": "https://github.com/777-victor"
+    },
+    {
+      "name": "Vinícius Marini Costa e Oliveira",
+      "email": "vinicius.marini@sga.pucminas.br",
+      "url": "https://github.com/marinisz"
+    }
+  ]
+}

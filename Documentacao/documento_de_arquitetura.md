@@ -406,3 +406,4 @@ _Apresente imagens, descreva os testes de tal forma que se comprove a realizaç�
 # 6. APÊNDICES
 
 _Inclua o URL do repositório (Github, Bitbucket, etc) onde você armazenou o código da sua prova de conceito/protótipo arquitetural da aplicação como anexos. A inclusão da URL desse repositório de código servirá como base para garantir a autenticidade dos trabalhos._
+>>>>>>> 9fcf23331636e2d17f1fa8cd0b12989c59c03096
