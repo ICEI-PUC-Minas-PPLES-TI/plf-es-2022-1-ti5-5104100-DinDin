@@ -22,3 +22,25 @@ it('should create a new user', async () => {
   expect(response.statusCode).toEqual(201);
   expect(response.body).toHaveProperty('user.id');
 })
+
+it('should authenticate a created user', async () => {
+  const mockmail = `${Math.random()}@protonmail.com`;
+  const mockPassword = `${Math.random()}@ultrapassword`;
+
+  await supertest(apiUrl)
+      .post('/api/user')
+      .send({
+          name: 'Lcs',
+          email: `${Math.random()}@protonmail.com`,
+          password: 'mySuperSecretPassword'
+      });
+
+  const response = await supertest(apiUrl)
+      .post('/api/auth')
+      .send({
+        email: `${Math.random()}@protonmail.com`,
+        password: 'mySuperSecretPassword'
+      });
+     
+  expect(response.statusCode).toEqual(201);
+})
