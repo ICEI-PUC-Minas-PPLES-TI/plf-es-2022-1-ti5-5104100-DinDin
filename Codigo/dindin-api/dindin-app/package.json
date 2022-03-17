@@ -1,11 +1,11 @@
 {
-  "name": "nodejs-express-sequelize-mysql",
+  "name": "dindin-api",
   "version": "1.0.0",
   "description": "Node.js Rest Apis with Express, Sequelize and MySQL for DinDin application.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Jest: running all tests\" && jest",
-
+    "preteste": "npm run reset",
     "undomigrations": "npx sequelize-cli db:migrate:undo:all --env 'production'",
     "migrations": "npx sequelize-cli db:migrate --env 'production'",
     "seeds": "npx sequelize-cli db:seed:all --env 'production'",
