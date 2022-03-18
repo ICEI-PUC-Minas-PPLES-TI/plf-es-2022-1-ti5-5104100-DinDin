@@ -49,9 +49,6 @@ app.use(function (error, request, response, next) {
   }
 });
 
-// Export express app
-module.exports = app;
-
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to DinDin application API." });
 });
