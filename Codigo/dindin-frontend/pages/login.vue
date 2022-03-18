@@ -1,38 +1,36 @@
 <template>
-  <b-row class="vh-100 vw-100">
-    <b-col>
-      <div class="container">
-        <form class="formLogin" @submit.prevent="handleSubmit">
-          <img src="@/static/logoComEscrito.svg" />
-          <div class="form-group">
-            <input
-              type="text"
-              v-model="email"
-              name="email"
-              class="form-control"
-              placeholder="Email"
-            />
-          </div>
-          <div class="form-group">
-            <input
-              type="password"
-              v-model="password"
-              name="password"
-              class="form-control"
-              placeholder="Password"
-            />
-          </div>
-          <div class="buttonArea">
-            <button class="btn btn-primary">Login</button>
-          </div>
-          <div>
-            <input type="checkbox" id="checkbox" v-model="rememberPass" />
-            <span>LEMBRAR SENHA</span>
-          </div>
-        </form>
+  <div class="container">
+    <form class="formLogin" @submit.prevent="handleSubmit">
+      <img src="@/static/logoComEscrito.svg" />
+      <div class="form-group">
+        <input
+          type="text"
+          v-model="email"
+          name="email"
+          class="form-control"
+          placeholder="EMAIL"
+        />
       </div>
-    </b-col>
-  </b-row>
+      <div class="form-group">
+        <input
+          type="password"
+          v-model="senha"
+          name="senha"
+          class="form-control"
+          placeholder="SENHA"
+        />
+      </div>
+      <div class="buttonArea">
+        <button v-on:click="handleSubmit()" class="btn btn-primary">
+          Acessar
+        </button>
+      </div>
+      <div>
+        <input type="checkbox" id="checkbox" v-model="rememberPass" />
+        <span>LEMBRAR SENHA</span>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -43,29 +41,37 @@ export default {
   data() {
     return {
       email: "",
-      password: "",
+      senha: "",
       rememberPass: false,
       submitted: false,
     };
+  },
+  methods: {
+    handleSubmit() {
+      console.log("email:" + this.email);
+      console.log("senha:" + this.senha);
+    },
   },
 };
 </script>
 
 <style lang="css" scoped>
-  .container{
-    background-color: black;
-  }
-  .formLogin {
-    background-color: white;
-  }
-  .form-group input{
-    width:80%;
-    margin-bottom:10px;
-  }
-  button{
-    width:80%;
-    margin-bottom:10px;
-    border:0px;
-    height:30px;
-  }
+.container {
+  background-color: black;
+}
+.formLogin {
+  background-color: white;
+}
+.form-group input {
+  width: 80%;
+  margin-bottom: 10px;
+}
+button {
+  width: 80%;
+  margin-bottom: 10px;
+  border: 0px;
+  height: 30px;
+  background-color: #5bd098;
+  color: white;
+}
 </style>
