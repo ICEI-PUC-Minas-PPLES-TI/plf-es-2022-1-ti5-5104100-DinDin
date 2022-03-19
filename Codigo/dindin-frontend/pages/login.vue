@@ -1,53 +1,84 @@
 <template>
-  <div class="container">
-    <form class="formLogin" @submit.prevent="handleSubmit">
-      <div class="imgPlace">
-        <img src="@/static/logoComEscrito.svg" />
-      </div>
-      <div class="formActions">
-        <div class="form-group">
-          <input
-            type="text"
-            v-model="email"
-            name="email"
-            class="form-control"
-            placeholder="EMAIL"
-          />
-        </div>
-        <div class="form-group">
-          <input
-            type="password"
-            v-model="senha"
-            name="senha"
-            class="form-control"
-            placeholder="SENHA"
-          />
-        </div>
-        <div class="buttonArea">
-          <button v-on:click="handleSubmit()" class="btn btn-primary">
-            ACESSAR
-          </button>
-        </div>
-        <div class="check">
-          <input type="checkbox" id="checkbox" v-model="rememberPass" />
-          <span>LEMBRAR SENHA</span>
-        </div>
-      </div>
-    </form>
-  </div>
+  <v-app>
+    <v-main>
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center" dense>
+          <v-col cols="12" sm="10" md="5" lg="5">
+            <v-card class="py-0" elevation="0">
+              <v-row class="py-4" align="center" justify="center">
+                <v-img max-width="40%" :src="image" alt="dindin"></v-img>
+                <v-text id="title">DinDin</v-text>
+              </v-row>
+
+              <v-card-text>
+                <v-form
+                  ref="formulario"
+                  v-on:submit.prevent="handleSubmit"
+                >
+                  <v-text-field
+                    label="Login"
+                    name="email"
+                    prepend-inner-icon="mdi-account-circle"
+                    type="email"
+                    class="rounded-0"
+                    outlined
+                    placeholder="email@email.com"
+                    v-model="email"
+                  ></v-text-field>
+
+                  <v-text-field
+                    ref="password"
+                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    label="Senha"
+                    name="senha"
+                    prepend-inner-icon="mdi-lock"
+                    :type="show1 ? 'text' : 'password'"
+                    outlined
+                    class="rounded-0"
+                    v-model="senha"
+                    @click:append="show1 = !show1"
+                  ></v-text-field>
+
+                  <v-btn
+                    @click.native="handleSubmit"
+                    class="rounded-0 mt-2"
+                    color="#5BD098"
+                    x-large
+                    block
+                    dark
+                  >
+                    Acessar
+                  </v-btn>
+
+                  <v-card-actions class="text--secondary">
+                    Ainda não se registrou?<a
+                      href="/medico/cadastro"
+                      class="pl-2"
+                      style="color: #25baae"
+                      >Registre-se</a
+                    >
+                  </v-card-actions>
+                </v-form>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
 import image from "/static/logo.svg";
 export default {
   name: "login",
-  layout: "clear",
   data() {
     return {
       email: "",
       senha: "",
-      rememberPass: false,
-      submitted: false,
+      image: image,
+      tipo: "",
+      show1: false, //mostrar a senha
     };
   },
   methods: {
@@ -60,48 +91,11 @@ export default {
 </script>
 
 <style lang="css" scoped>
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap");
-html, body {
- overflow: hidden;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+#title{
+  font-size:300%;
+  font-family:'Roboto';
+  color:#5BD098;
+  font-weight: 100;
 }
-.container {
-  width: 50%;
-  height: 50%;
-  margin: auto;
-  padding: 5%;
-}
-.formLogin {
-  background-color: white;
-  font-family: "Roboto", sans-serif;
-}
-.imgPlace {
-  display: flex;
-  justify-content: center;
-}
-.imgPlace img {
-  width: 60%;
-}
-.formActions{
-  display:grid;
-}
-
-.form-group input {
-  width: 99%;
-  margin-bottom: 10px;
-  border: 1px solid grey;
-  height: 5vh;
-}
-button {
-  width: 100%;
-  margin-bottom: 10px;
-  border: none;
-  height: 5vh;
-  background-color: #5bd098;
-  color: white;
-  font-family: "Roboto", sans-serif;
-  font-weight: bold;
-}
-.check{
-  display:flex;
-}
-</style>
+</style> 
