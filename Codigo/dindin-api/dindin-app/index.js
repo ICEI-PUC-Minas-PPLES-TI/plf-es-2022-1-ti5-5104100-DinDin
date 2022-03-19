@@ -13,7 +13,7 @@ const sequelizeDatabase = require("./app/database/index");
 
 // Define cors origin
 var corsOptions = {
-  origin: `${process.env.NODE_APP_HOST}:${process.env.NODE_CORS_PORT}`
+  origin: "*"
 };
 
 app.use(cors(corsOptions));
@@ -30,7 +30,7 @@ databaseInitialization();
 
 app.use(function (error, request, response, next) {
   console.log(error)
-  if(process.env.DEBUG) {
+  if(process.env.APP_DEBUG) {
     return response.status(error.statusCode).json({
       status: "Error",
       message: error.message,
