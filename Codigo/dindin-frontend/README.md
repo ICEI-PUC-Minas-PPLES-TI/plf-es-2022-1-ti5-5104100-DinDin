@@ -18,7 +18,7 @@ $ npm run generate
 
 # docker build & run
 $ docker build -t dindin-frontend .
-$ docker run -dp 3000:3000 dindin-frontend
+$ docker run -dp 80:80 dindin-frontend
 ```
 
 For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
