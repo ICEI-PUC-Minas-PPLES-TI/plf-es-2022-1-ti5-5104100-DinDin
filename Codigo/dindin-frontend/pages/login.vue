@@ -61,6 +61,9 @@ export default {
 
 <style lang="css" scoped>
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap");
+html, body {
+ overflow: hidden;
+}
 .container {
   width: 50%;
   height: 50%;
@@ -83,24 +86,22 @@ export default {
 }
 
 .form-group input {
-  grid-row:1;
-  width: 100%;
+  width: 99%;
   margin-bottom: 10px;
   border: 1px solid grey;
   height: 5vh;
 }
-
-.check{
-  display:flex;
-}
 button {
   width: 100%;
   margin-bottom: 10px;
-  border: 0px;
+  border: none;
   height: 5vh;
   background-color: #5bd098;
   color: white;
   font-family: "Roboto", sans-serif;
   font-weight: bold;
+}
+.check{
+  display:flex;
 }
 </style>

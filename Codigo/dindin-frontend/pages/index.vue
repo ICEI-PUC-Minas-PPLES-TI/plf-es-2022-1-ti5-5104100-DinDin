@@ -1,5 +1,11 @@
 <template>
-  <Tutorial/>
+  <div>
+    <Tutorial/>
+    <v-text-field
+      label="Main input"
+      hide-details="auto"
+    />
+  </div>
 </template>
 
 <script>
