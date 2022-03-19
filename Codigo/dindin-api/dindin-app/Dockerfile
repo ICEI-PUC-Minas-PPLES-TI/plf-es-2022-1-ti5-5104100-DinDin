@@ -14,6 +14,9 @@ RUN apk add inotify-tools
 # convert endline to linux
 RUN apk add dos2unix
 
+RUN rm -rf ./node_modules
+RUN rm -rf package-lock.json
+
 # Install app dependencies
 COPY ./package.json .
 RUN npm install -g nodemon

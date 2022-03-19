@@ -29,7 +29,7 @@ services:
       - ./dindin-app:/usr/src/dindin-api
       - node_modules:/usr/src/dindin-api/node_modules
     ports:
-      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+      - $NODE_LOCAL_PORT:$NODE_PUBLIC_PORT
     environment:
       - DB_HOST=mysqldb
       - DB_USER=$MYSQLDB_USER
@@ -38,7 +38,7 @@ services:
       - DB_PORT=$MYSQLDB_DOCKER_PORT
     stdin_open: true
     tty: true
-    command: /bin/bash -c "/usr/wait-for-it.sh --timeout=0 mysqldb:3306 && npm run $NPM_DOCKER_CMD"
+    command: /bin/bash -c "/usr/wait-for-it.sh --timeout=0 mysqldb:3306 && npm install && npm run $NPM_DOCKER_CMD"
 
 volumes:
   db:
