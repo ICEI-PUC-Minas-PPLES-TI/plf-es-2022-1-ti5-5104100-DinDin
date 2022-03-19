@@ -52,7 +52,6 @@
 
                   <v-card-actions class="text--secondary">
                     Ainda não se registrou?<a
-                      href="/medico/cadastro"
                       class="pl-2"
                       style="color: #25baae"
                       >Registre-se</a
