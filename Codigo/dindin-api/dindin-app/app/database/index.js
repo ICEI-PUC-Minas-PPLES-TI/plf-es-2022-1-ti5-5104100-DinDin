@@ -1,4 +1,6 @@
-require("dotenv").config();
+require('dotenv').config({  
+  path: process.env.NODE_ENV === "test" ? ".env.testing" : ".env"
+})
 const mysql = require('mysql2/promise');
 const { Sequelize } = require("sequelize");
 
@@ -7,12 +9,13 @@ const dbConfig = require("../config/config.js");
 
 const User = require("../models/User.js");
 
-const sequelize = new Sequelize(dbConfig.production.database, dbConfig.production.username, dbConfig.production.password, {
-  host: dbConfig.production.host,
-  port: dbConfig.production.port,
+const dbConfigEnviroment = process.env.NODE_ENV === "test" ? dbConfig.test : dbConfig.production;
+const sequelize = new Sequelize(dbConfigEnviroment.database, dbConfigEnviroment.username, dbConfigEnviroment.password, {
+  host: dbConfigEnviroment.host,
+  port: dbConfigEnviroment.port,
   logging: process.env.APP_DEBUG ? console.log : false,
 
-  dialect: dbConfig.production.dialect,
+  dialect: dbConfigEnviroment.dialect,
   dialectOptions: {
     supportBigNumbers: true,
     bigNumberStrings: true,
@@ -22,10 +25,10 @@ const sequelize = new Sequelize(dbConfig.production.database, dbConfig.productio
 
   // use pooling in order to reduce db connection overload and to increase speed
   pool: {
-    max: dbConfig.production.pool.max,
-    min: dbConfig.production.pool.min,
-    acquire: dbConfig.production.pool.acquire,
-    idle: dbConfig.production.pool.idle
+    max: dbConfigEnviroment.pool.max,
+    min: dbConfigEnviroment.pool.min,
+    acquire: dbConfigEnviroment.pool.acquire,
+    idle: dbConfigEnviroment.pool.idle
   },
 
   define: {
@@ -51,8 +54,10 @@ const sequelize = new Sequelize(dbConfig.production.database, dbConfig.productio
 module.exports = {
 
   async createDatabase() {
-    const connection = await mysql.createConnection({ host: dbConfig.production.host, port: dbConfig.production.port, user: dbConfig.production.username, password: dbConfig.production.password });
-    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbConfig.production.database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;`);
+    const connection = await mysql.createConnection({ host: dbConfigEnviroment.host, port: dbConfigEnviroment.port, user: dbConfigEnviroment.username, password: dbConfigEnviroment.password });
+    if (process.env.NODE_ENV === "test")
+      await connection.query(`DROP DATABASE IF EXISTS \`${dbConfigEnviroment.database}\``);
+    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbConfigEnviroment.database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;`);
     await connection.end();
   },
 
@@ -83,5 +88,16 @@ module.exports = {
 
   async close() {
     await sequelize.close();
+  },
+
+  /**
+   * This method literally drop the database, use it
+   * only on test enviroment
+   */
+  async __drop__(){
+    const connection = await mysql.createConnection({ host: dbConfigEnviroment.host, port: dbConfigEnviroment.port, user: dbConfigEnviroment.username, password: dbConfigEnviroment.password });
+    if (process.env.NODE_ENV === "test")
+      await connection.query(`DROP DATABASE IF EXISTS \`${dbConfigEnviroment.database}\``);
+    await connection.end();
   }
 };

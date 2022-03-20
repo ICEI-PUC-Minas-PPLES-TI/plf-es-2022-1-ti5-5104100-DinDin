@@ -1,18 +1,18 @@
 const supertest = require('supertest'); // "requester"
 require("dotenv").config();
 
-const apiUrl = `${process.env.NODE_APP_HOST}:${process.env.NODE_PUBLIC_PORT}`;
+const app = require('../../');
 
 describe('User API', () => {
   it('should show a user /api/user/1', async () => {
-    const response = await supertest(apiUrl).get('/api/user/1');
+    const response = await supertest(app).get('/api/user/1');
     expect(response.statusCode).toEqual(200);
     expect(response.body).toHaveProperty('id');
   })
 })
 
 it('should create a new user', async () => {
-  const response = await supertest(apiUrl)
+  const response = await supertest(app)
       .post('/api/user')
       .send({
           name: 'Lcs',
@@ -23,24 +23,88 @@ it('should create a new user', async () => {
   expect(response.body).toHaveProperty('user.id');
 })
 
-it('should authenticate a created user', async () => {
-  const mockmail = `${Math.random()}@protonmail.com`;
-  const mockPassword = `${Math.random()}@ultrapassword`;
+describe('authenticate: testing /user/auth route', ()=>{
+  it('should authenticate a created user', async () => {
+    const mockmail = `${Math.random()}@protonmail.net`;
+    const mockPassword = `${Math.random()}@ultrapassword`;
+  
+    await supertest(app)
+        .post('/api/user/auth')
+        .send({
+            name: 'Username da Silva',
+            email: mockmail,
+            password: mockPassword
+        });
+  
+    const response = await supertest(app)
+        .post('/api/auth')
+        .send({
+          email: mockmail,
+          password: mockPassword
+        });
+       
+    expect(response.body).toBeInstanceOf(typeof string);
+    expect(response.statusCode).toEqual(201);
+  });
 
-  await supertest(apiUrl)
-      .post('/api/user')
-      .send({
-          name: 'Lcs',
-          email: `${Math.random()}@protonmail.com`,
-          password: 'mySuperSecretPassword'
-      });
+  it('should not authenticate a created user with wrong password', async () => {
+    const mockmail = `${Math.random()}@protonmail.br`;
+    const mockPassword = `${Math.random()}@ultrapassword`;
+    const mockWrongPassword = `wrong@ultrapassword`;
+  
+    await supertest(app)
+        .post('/api/user/auth')
+        .send({
+            name: 'Username dos Santos',
+            email: mockmail,
+            password: mockPassword
+        });
+  
+    const response = await supertest(app)
+        .post('/api/auth')
+        .send({
+          email: mockmail,
+          password: mockWrongPassword
+        });
+       
+    expect(response.statusCode).toEqual(401);
+  });
 
-  const response = await supertest(apiUrl)
-      .post('/api/auth')
-      .send({
-        email: `${Math.random()}@protonmail.com`,
-        password: 'mySuperSecretPassword'
-      });
-     
-  expect(response.statusCode).toEqual(201);
+  it('should not authenticate a created user with wrong email', async () => {
+    const mockmail = `${Math.random()}@protonmail.com.br`;
+    const mockPassword = `${Math.random()}@ultrapassword`;
+    const mockWrongMail = `${Math.random()}@protonmail.com.br`;
+  
+    await supertest(app)
+        .post('/api/user/auth')
+        .send({
+            name: 'Username dos Santos',
+            email: mockmail,
+            password: mockPassword
+        });
+  
+    const response = await supertest(app)
+        .post('/api/auth')
+        .send({
+          email: mockWrongMail,
+          password: mockWrongPassword
+        });
+       
+    expect(response.statusCode).toEqual(401);
+  });
+
+  it('should fail validation', async () => {
+    const failValidationObjects = [{ email: "notAnEmail" }, { password: 'justAPassword' }];
+
+    await Promise.all( 
+      failValidationObjects.map(async (body) => {
+        const response = await supertest(app)
+            .post('/api/auth')
+            .send(body);
+          
+        expect(response.statusCode).toEqual(422);
+      })
+    )
+    
+  });
 })
