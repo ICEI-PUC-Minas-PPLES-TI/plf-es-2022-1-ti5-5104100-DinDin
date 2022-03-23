@@ -8,14 +8,18 @@ class AuthenticateUseCase {
 
   async execute(email, password) {
     const user = await User.findOne({
-        where: { email }
+        where: { email },
+        attributes: {
+          include: "password"
+        }
     })
+    
     if (!user)
         throw new AppError("Não existe usuário com esse e-mail cadastrado o sistema", 401);
 
-    const hashedPassword = bcrypt.hash(password, 8);
-    if (hashedPassword !== user.password)
-        throw new AppError("Não existe usuário com esse e-mail cadastrado o sistema", 401);
+    const arePasswordsEqual = await bcrypt.compare(password, user.password);
+    if (!arePasswordsEqual)
+        throw new AppError("Senha incorreta!", 401);
 
     // gerar jwt
     return jwt.sign(user.id, "segredo");

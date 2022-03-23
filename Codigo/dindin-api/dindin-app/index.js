@@ -1,4 +1,5 @@
 require("dotenv").config();
+const sequelizeDatabase = require("./app/database/index");
 
 // Create express instance
 const app = require("./app");
@@ -8,7 +9,7 @@ async function databaseInitialization() {
   await sequelizeDatabase.connect();
 }
 
-databaseInitialization()
+//databaseInitialization()
 
 // Start standalone server if directly running
 if (require.main === module) {

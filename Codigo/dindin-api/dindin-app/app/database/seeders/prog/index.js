@@ -2,7 +2,7 @@ const {exec} = require('child_process');
 console.log("importseeder")
 const seeder = () => new Promise((resolve, reject) => {
     const seeder = exec(
-      `sequelize-cli db:seed:all  --env 'test'`,
+      `npx sequelize-cli db:seed:all  --env 'test'`,
       {env: process.env},
       err => (err ? reject(err): resolve())
     );

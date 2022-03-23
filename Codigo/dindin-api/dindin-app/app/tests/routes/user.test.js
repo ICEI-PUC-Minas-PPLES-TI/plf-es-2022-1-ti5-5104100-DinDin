@@ -2,6 +2,15 @@ const supertest = require('supertest'); // "requester"
 require("dotenv").config();
 
 const app = require('../../');
+const { connect, close } = require('../../database');
+
+beforeAll(() => {
+  connect();
+});
+
+afterAll(() => {
+  close();
+});
 
 describe('User API', () => {
   it('should show a user /api/user/1', async () => {
@@ -37,13 +46,13 @@ describe('authenticate: testing /user/auth route', ()=>{
         });
   
     const response = await supertest(app)
-        .post('/api/auth')
+        .post('/api/user/auth')
         .send({
           email: mockmail,
           password: mockPassword
         });
        
-    expect(response.body).toBeInstanceOf(typeof string);
+    console.log(response);
     expect(response.statusCode).toEqual(201);
   });
 
@@ -61,7 +70,7 @@ describe('authenticate: testing /user/auth route', ()=>{
         });
   
     const response = await supertest(app)
-        .post('/api/auth')
+        .post('/api/user/auth')
         .send({
           email: mockmail,
           password: mockWrongPassword
@@ -74,6 +83,7 @@ describe('authenticate: testing /user/auth route', ()=>{
     const mockmail = `${Math.random()}@protonmail.com.br`;
     const mockPassword = `${Math.random()}@ultrapassword`;
     const mockWrongMail = `${Math.random()}@protonmail.com.br`;
+    const mockWrongPassword = `${Math.random()}@thewrongpassword`
   
     await supertest(app)
         .post('/api/user/auth')
@@ -84,7 +94,7 @@ describe('authenticate: testing /user/auth route', ()=>{
         });
   
     const response = await supertest(app)
-        .post('/api/auth')
+        .post('/api/user/auth')
         .send({
           email: mockWrongMail,
           password: mockWrongPassword
@@ -99,7 +109,7 @@ describe('authenticate: testing /user/auth route', ()=>{
     await Promise.all( 
       failValidationObjects.map(async (body) => {
         const response = await supertest(app)
-            .post('/api/auth')
+            .post('/api/user/auth')
             .send(body);
           
         expect(response.statusCode).toEqual(422);

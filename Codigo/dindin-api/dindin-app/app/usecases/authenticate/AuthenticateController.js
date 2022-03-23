@@ -19,15 +19,13 @@ class AuthenticateController {
     }
     const { email, password } = request.body;
 
-    const AuthenticateUseCase = new AuthenticateUseCase();
-    const user = await AuthenticateUseCase.create(
+    const authenticateUseCase = new AuthenticateUseCase();
+    const token = await authenticateUseCase.execute(
       email,
       password
     );
 
-    return response.status(201).json({
-      user
-    });
+    return response.status(201).json(token);
   }
 
 }
