@@ -9,7 +9,6 @@ const app = express();
 
 // Require API routes
 const routes = require("./routes/index");
-const { connect, close } = require("./database");
 
 // Define cors origin
 var corsOptions = {
@@ -22,7 +21,7 @@ app.use(express.urlencoded({extended: true}));
 
 if(process.env.APP_DEBUG)
   app.use(logger('dev'));
-  
+
 // Import API Routes
 app.use('/api', routes);
 
