@@ -95,9 +95,7 @@ export default {
             d.setTime(d.getTime() + 1 * 24 * 60 * 60 * 1000);
             document.cookie = "token= ";
             document.cookie = "token=" + res.data;
-          })
-          .then(() => {
-            console.log("Estou indo para a rota dashboard");
+            this.$router.push('/dashboard')
           })
           .catch((err) => {
             this.erroLogin = "User not Found";
