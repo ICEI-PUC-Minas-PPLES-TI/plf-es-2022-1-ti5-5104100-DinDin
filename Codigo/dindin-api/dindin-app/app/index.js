@@ -21,7 +21,7 @@ app.use(express.urlencoded({extended: true}));
 
 if(process.env.APP_DEBUG)
   app.use(logger('dev'));
-  
+
 // Import API Routes
 app.use('/api', routes);
 
