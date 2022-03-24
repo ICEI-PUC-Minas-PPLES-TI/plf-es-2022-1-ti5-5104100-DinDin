@@ -51,10 +51,10 @@
                   </v-btn>
 
                   <v-card-actions class="text--secondary">
-                    Not registered?<a
+                    Not registered yet?<a
                       class="pl-2"
                       style="color: #25baae"
-                      >Create account</a
+                      >Create an account</a
                     >
                   </v-card-actions>
                 </v-form>
