@@ -12,7 +12,7 @@ const routes = require("./routes/index");
 
 // Define cors origin
 var corsOptions = {
-  origin: `${process.env.NODE_APP_HOST}:${process.env.NODE_CORS_PORT}`
+  origin: "*"
 };
 
 app.use(cors(corsOptions));
