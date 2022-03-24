@@ -6,7 +6,7 @@
           <v-col cols="12" sm="10" md="5" lg="5">
             <v-card class="py-0" elevation="0">
               <v-row class="py-4" align="center" justify="center">
-                <v-img max-width="40%" :src="image" alt="dindin"></v-img>
+                <v-img max-width="25%" :src="image" alt="dindin"></v-img>
                 <v-text id="title">DinDin</v-text>
               </v-row>
 
@@ -51,9 +51,7 @@
                   </v-btn>
 
                   <v-card-actions class="text--secondary">
-                    Not registered yet?<a
-                      class="pl-2"
-                      style="color: #25baae"
+                    Not registered yet?<a class="pl-2" style="color: #25baae"
                       >Create an account</a
                     >
                   </v-card-actions>
@@ -68,7 +66,7 @@
 </template>
 
 <script>
-import image from "/static/logo.svg";
+import image from "/static/logoEstreito.svg";
 export default {
   name: "login",
   data() {
@@ -79,7 +77,7 @@ export default {
       show1: false,
       erroLogin: null,
       rules: {
-        required: (value) => !!value || "Required."
+        required: (value) => !!value || "Required.",
       },
     };
   },
@@ -97,8 +95,9 @@ export default {
             d.setTime(d.getTime() + 1 * 24 * 60 * 60 * 1000);
             document.cookie = "token= ";
             document.cookie = "token=" + res.data;
-          }).then(()=>{
-            console.log('Estou indo para a rota dashboard')
+          })
+          .then(() => {
+            console.log("Estou indo para a rota dashboard");
           })
           .catch((err) => {
             this.erroLogin = "User not Found";
