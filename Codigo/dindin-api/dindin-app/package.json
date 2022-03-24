@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Jest: running all tests\" && jest",
+    "test:watch": "jest --watch",
     "preteste": "npm run reset",
     "undomigrations": "npx sequelize-cli db:migrate:undo:all --env 'production'",
     "migrations": "npx sequelize-cli db:migrate --env 'production'",
@@ -20,7 +21,10 @@
       "node_modules",
       ".tmp",
       ".cache"
-    ]
+    ],
+    "roots": ["<rootDir>"],
+    "globalSetup": "<rootDir>/app/tests/global-setup.js",
+    "globalTeardown": "<rootDir>/app/tests/global-teardown.js"
   },
   "keywords": [
     "nodejs",
