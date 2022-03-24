@@ -20,12 +20,15 @@
                     class="rounded-0"
                     outlined
                     placeholder="email@email.com"
+                    :rules="[rules.required]"
                     v-model="email"
                   ></v-text-field>
 
                   <v-text-field
                     ref="password"
+                    :error-messages="erroLogin"
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="[rules.required]"
                     label="Password"
                     name="password"
                     prepend-inner-icon="mdi-lock"
@@ -44,14 +47,14 @@
                     block
                     dark
                   >
-                    Acessar
+                    Login
                   </v-btn>
 
                   <v-card-actions class="text--secondary">
-                    Ainda não se registrou?<a
+                    Not registered?<a
                       class="pl-2"
                       style="color: #25baae"
-                      >Registre-se</a
+                      >Create account</a
                     >
                   </v-card-actions>
                 </v-form>
@@ -73,7 +76,11 @@ export default {
       email: "",
       password: "",
       image: image,
-      show1: false, //show the password
+      show1: false,
+      erroLogin: null,
+      rules: {
+        required: (value) => !!value || "Required."
+      },
     };
   },
   methods: {
@@ -93,7 +100,7 @@ export default {
               "token=" + res.data;
           })
           .catch((err) => {
-            this.erroLogin = "Dados não encontrados";
+            this.erroLogin = "User not Found";
           });
       }
     },
