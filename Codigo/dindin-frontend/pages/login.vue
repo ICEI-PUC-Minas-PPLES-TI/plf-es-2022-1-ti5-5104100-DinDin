@@ -98,6 +98,8 @@ export default {
             let expires = "expires=" + d.toUTCString();
             document.cookie =
               "token=" + res.data;
+          }).then(()=>{
+            console.log('Estou indo para a rota dashboard')
           })
           .catch((err) => {
             this.erroLogin = "User not Found";
