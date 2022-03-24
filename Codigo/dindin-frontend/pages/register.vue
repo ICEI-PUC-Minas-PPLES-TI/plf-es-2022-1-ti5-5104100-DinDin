@@ -8,23 +8,6 @@
 
       <v-card-text style="padding: 10vh">
         <v-form ref="usuario" lazy-validation autocomplete="off">
-          <v-row>
-            <v-col cols="6">
-              <v-btn align="center" large block elevation="2"> GOOGLE </v-btn>
-            </v-col>
-            <v-col cols="6">
-              <v-btn align="center" large block elevation="2"> FACEBOOK </v-btn>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-spacer />
-            or
-            <v-spacer />
-          </v-row>
-
-          <br />
-          <br />
 
           <v-row>
             <v-col cols="12" sm="12" md="12">
@@ -170,8 +153,8 @@ export default {
   },
   methods: {
     createUsuario() {
-      console.log('oi');
-      console.log(this.$refs.usuario.validate());
+     // console.log('oi');
+      //console.log(this.$refs.usuario.validate());
       if (this.$refs.usuario.validate()) {
         this.$axios
           .post("/user", this.usuario)
