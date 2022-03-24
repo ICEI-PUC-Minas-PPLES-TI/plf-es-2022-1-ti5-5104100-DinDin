@@ -9,7 +9,6 @@ const app = express();
 
 // Require API routes
 const routes = require("./routes/index");
-const { connect, close } = require("./database");
 
 // Define cors origin
 var corsOptions = {

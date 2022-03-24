@@ -11,10 +11,7 @@
               </v-row>
 
               <v-card-text>
-                <v-form
-                  ref="formulario"
-                  v-on:submit.prevent="handleSubmit"
-                >
+                <v-form ref="formulario" v-on:submit.prevent="handleSubmit">
                   <v-text-field
                     label="Login"
                     name="email"
@@ -29,13 +26,13 @@
                   <v-text-field
                     ref="password"
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    label="Senha"
-                    name="senha"
+                    label="Password"
+                    name="password"
                     prepend-inner-icon="mdi-lock"
                     :type="show1 ? 'text' : 'password'"
                     outlined
                     class="rounded-0"
-                    v-model="senha"
+                    v-model="password"
                     @click:append="show1 = !show1"
                   ></v-text-field>
 
@@ -74,27 +71,42 @@ export default {
   data() {
     return {
       email: "",
-      senha: "",
+      password: "",
       image: image,
-      tipo: "",
-      show1: false, //mostrar a senha
+      show1: false, //show the password
     };
   },
   methods: {
     handleSubmit() {
-      console.log("email:" + this.email);
-      console.log("senha:" + this.senha);
+      if (this.$refs.formulario.validate()) {
+        document.cookie = `token=`;
+        this.$axios
+          .post("/api/user/auth", {
+            email: this.email,
+            password: this.password,
+          })
+          .then((res) => {
+            let d = new Date();
+            d.setTime(d.getTime() + 1 * 24 * 60 * 60 * 1000);
+            let expires = "expires=" + d.toUTCString();
+            document.cookie =
+              "token=" + res.data;
+          })
+          .catch((err) => {
+            this.erroLogin = "Dados não encontrados";
+          });
+      }
     },
   },
 };
 </script>
 
 <style lang="css" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
-#title{
-  font-size:300%;
-  font-family:'Roboto';
-  color:#5BD098;
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap");
+#title {
+  font-size: 300%;
+  font-family: "Roboto";
+  color: #5bd098;
   font-weight: 100;
 }
-</style> 
+</style>
