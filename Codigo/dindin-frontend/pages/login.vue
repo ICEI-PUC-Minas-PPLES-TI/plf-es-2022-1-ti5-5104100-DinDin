@@ -86,7 +86,7 @@ export default {
       if (this.$refs.formulario.validate()) {
         document.cookie = `token=`;
         this.$axios
-          .post("/api/user/auth", {
+          .post("/user/auth", {
             email: this.email,
             password: this.password,
           })
