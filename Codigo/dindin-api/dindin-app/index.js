@@ -1,6 +1,7 @@
 const express = require("express");
 require("express-async-errors");
 const cors = require("cors");
+const logger = require('morgan');
 require("dotenv").config();
 
 // Create express instance
@@ -18,6 +19,10 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+if(process.env.APP_DEBUG)
+  app.use(logger('dev'));
 
 // Import API Routes
 app.use('/api', routes);
@@ -30,7 +35,7 @@ databaseInitialization();
 
 app.use(function (error, request, response, next) {
   console.log(error)
-  if(process.env.DEBUG) {
+  if(process.env.APP_DEBUG) {
     return response.status(error.statusCode).json({
       status: "Error",
       message: error.message,
@@ -44,19 +49,18 @@ app.use(function (error, request, response, next) {
   }
 });
 
-// Export express app
-module.exports = app;
-
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to DinDin application API." });
 });
 
 // Start standalone server if directly running
 if (require.main === module) {
-  const port = process.env.NODE_DOCKER_PORT || 3001;
+  const port = process.env.NODE_PUBLIC_PORT || 3001;
   app.listen(port, () => {
     // eslint-disable-next-line no-console
     console.log(`API server listening on port ${port}`);
     console.log(`---> http://${process.env.NODE_APP_HOST}:${port}`)
   });
 }
+
+module.exports = app;
