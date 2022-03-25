@@ -51,7 +51,7 @@
                   </v-btn>
 
                   <v-card-actions class="text--secondary">
-                    Not registered yet?<a class="pl-2" style="color: #25baae"
+                    Not registered yet?<a href="/register" class="pl-2" style="color: #25baae"
                       >Create an account</a
                     >
                   </v-card-actions>
@@ -86,7 +86,7 @@ export default {
       if (this.$refs.formulario.validate()) {
         document.cookie = `token=`;
         this.$axios
-          .post("/api/user/auth", {
+          .post("/user/auth", {
             email: this.email,
             password: this.password,
           })
