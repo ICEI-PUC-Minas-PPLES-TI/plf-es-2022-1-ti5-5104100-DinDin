@@ -52,7 +52,7 @@ describe('authenticate: testing /user/auth route', ()=>{
           password: mockPassword
         });
        
-    expect(response.statusCode).toEqual(201);
+    expect(response.statusCode).toEqual(200);
     expect(response.body).toHaveProperty("token");
   });
 

@@ -25,7 +25,7 @@ class AuthenticateController {
       password
     );
 
-    return response.status(201).json({
+    return response.status(200).json({
       token
     });
   }

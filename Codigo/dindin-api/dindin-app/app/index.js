@@ -9,11 +9,10 @@ const app = express();
 
 // Require API routes
 const routes = require("./routes/index");
-const { connect, close } = require("./database");
 
 // Define cors origin
 var corsOptions = {
-  origin: `${process.env.NODE_APP_HOST}:${process.env.NODE_CORS_PORT}`
+  origin: "*"
 };
 
 app.use(cors(corsOptions));
@@ -22,7 +21,7 @@ app.use(express.urlencoded({extended: true}));
 
 if(process.env.APP_DEBUG)
   app.use(logger('dev'));
-  
+
 // Import API Routes
 app.use('/api', routes);
 

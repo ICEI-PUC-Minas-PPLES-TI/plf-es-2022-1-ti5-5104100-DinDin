@@ -9,7 +9,7 @@ async function databaseInitialization() {
   await sequelizeDatabase.connect();
 }
 
-//databaseInitialization()
+databaseInitialization();
 
 // Start standalone server if directly running
 if (require.main === module) {
