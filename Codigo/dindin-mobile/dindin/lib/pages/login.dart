@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
             ],
           ),
           SizedBox(height: 80),
-          Container(
+          SizedBox(
             height: 40,
             child: TextField(
               onChanged: (text) {
@@ -50,7 +50,7 @@ class _LoginState extends State<Login> {
             ),
           ),
           SizedBox(height: 10),
-          Container(
+          SizedBox(
             height: 40,
             child: TextField(
               onChanged: (text) {
