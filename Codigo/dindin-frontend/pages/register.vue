@@ -1,6 +1,6 @@
 <template>
   <!--Container-->
-  <v-container fluid style="overflow: auto; padding: 10vh">
+  <v-container class="fill-height" fluid style="overflow: auto;">
     <v-card width="100%" style="padding: 2vh">
       <v-card-title
         ><h2><b>Register</b></h2></v-card-title
