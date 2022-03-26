@@ -1,8 +1,8 @@
 <template>
-  <v-app>
+  <v-app id="dindin-app">
     <v-main>
       <v-row>
-        <v-col md="3" class="parent d-none d-md-block">
+        <v-col md="3" xl="2" class="parent d-none d-md-block">
           <div class="menu">
             <img src="logo.svg" alt="DinDin Logo" class="menu-logo">
             <h1 class="menu-title">DinDin</h1>
@@ -10,10 +10,10 @@
               <li v-for="(m,midx) in menus" :key="midx" :class="currentMenu == m.url ? 'menu-list-active': ''">
                 <router-link :to="m.url">
                   <v-row>
-                    <v-col md="3" xl="2">
+                    <v-col md="3">
                       <i class="menu-list-icon" :class="m.icon"></i>
                     </v-col>
-                    <v-col md="9" xl="10">
+                    <v-col md="9">
                       <span class="menu-list-text">
                         {{ m.name }}
                       </span>
@@ -50,7 +50,7 @@
             </ul>
           </div>
         </v-col>
-        <v-col md="9">
+        <v-col md="9" xl="10">
           <v-app-bar
             class="d-block d-md-none"
             color="#5BD098"
