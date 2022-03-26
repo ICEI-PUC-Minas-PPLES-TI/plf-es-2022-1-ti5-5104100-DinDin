@@ -1,17 +1,17 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col md="9">
+      <v-col cols="12" md="9">
         <v-row>
           <v-col>
             Welcome Back Name
           </v-col>
         </v-row>
-        <v-row>
+        <v-row class="dash-welcome-main">
           <v-col md="3">
             <v-row>
               <v-col md="3">
-
+                <i class="dash-welcome-icon dash-welcome-icon-blue fa-solid fa-money-bill-1-wave"></i>
               </v-col>
               <v-col md="9">
                 Current
@@ -23,7 +23,7 @@
           <v-col md="3">
             <v-row>
               <v-col md="3">
-
+                <i class="dash-welcome-icon dash-welcome-icon-green fa-solid fa-arrow-up-long"></i>
               </v-col>
               <v-col md="9">
                 Incomes
@@ -35,7 +35,7 @@
           <v-col md="3">
             <v-row>
               <v-col md="3">
-
+                <i class="dash-welcome-icon dash-welcome-icon-red fa-solid fa-arrow-down-long"></i>
               </v-col>
               <v-col md="9">
                 Expenses
@@ -46,8 +46,8 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col md="3">
-        <div style="width: 250px; height: 250px">
+      <v-col cols="12" md="3">
+        <div style="width: 200px; height: 200px">
           <canvas id="chartMain"></canvas>
         </div>
       </v-col>
@@ -67,25 +67,37 @@
             </thead>
             <tbody>
               <tr>
-                <td>Be biquinis</td>
+                <td>
+                  <i class="dash-table-icon fa-solid fa-utensils"></i>
+                  Be biquinis
+                </td>
                 <td>01/01/1111 23:59</td>
                 <td>+ R$1000</td>
                 <td>Wallet X</td>
               </tr>
               <tr>
-                <td>Cinemark</td>
+                <td>
+                  <i class="dash-table-icon fa-solid fa-utensils"></i>
+                  Cinemark
+                </td>
                 <td>01/01/1111 23:59</td>
                 <td>+ R$2000</td>
                 <td>Wallet X</td>
               </tr>
               <tr>
-                <td>Uber Monthly</td>
+                <td>
+                  <i class="dash-table-icon fa-solid fa-utensils"></i>
+                  Uber Monthly
+                </td>
                 <td>01/01/1111 23:59</td>
                 <td>- R$460</td>
                 <td>Wallet Y</td>
               </tr>
               <tr>
-                <td>Verdemar</td>
+                <td>
+                  <i class="dash-table-icon fa-solid fa-utensils"></i>
+                  Verdemar
+                </td>
                 <td>01/01/1111 23:59</td>
                 <td>- R$240</td>
                 <td>Wallet X</td>
@@ -323,5 +335,40 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+ .dash{
+    &-welcome{
+      &-main{
+        margin-top: 30px;
+      }
+      &-icon{
+        margin-top: 10px;
+        color: #fff;
+        padding: 9px 5px 5px 5px;
+        border-radius: 100%;
+        height: 35px;
+        width: 35px;
+        text-align: center;
+        &-blue{
+          background: #59A6ED;
+        }
+        &-green{
+          background: #60AB6C;
+        }
+        &-red{
+          background: #E15151;
+        }
+      }
+    }
+    &-table-icon{
+      font-size: .7rem;
+      border-radius: 100%;
+      height: 25px;
+      width: 25px;
+      background: #60AB6C;
+      text-align: center;
+      color: #fff;
+      padding: 5px 5px 3px 5px;
+    }
+  }
 </style>
