@@ -51,11 +51,62 @@
           </div>
         </v-col>
         <v-col md="9">
+          <v-app-bar
+            class="d-block d-md-none"
+            color="#5BD098"
+            dark
+          >
+            <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+
+            <v-toolbar-title>DinDin</v-toolbar-title>
+            <v-spacer></v-spacer>
+
+            <v-btn icon @click="$router.push('/dashboard')">
+              <img src="logo.svg" alt="DinDin Logo" width="50px">
+            </v-btn>
+          </v-app-bar>
           <div class="content">
             <Nuxt />
           </div>
         </v-col>
       </v-row>
+      <v-navigation-drawer
+        v-model="drawer"
+        absolute
+        left
+        temporary
+      >
+        <v-list
+          nav
+          dense
+        >
+          <v-list-item-group
+            active-class="light-green lighten-3 text--accent-4"
+            :value="currentMenu"
+          >
+            <v-subheader>Menus</v-subheader>
+            <v-list-item v-for="(m,midx) in menus" :key="midx" :class="currentMenu == m.url ? 'a': ''" :to="m.url">
+              <v-list-item-icon>
+                <i style="margin-top:3px" :class="m.icon"></i>
+              </v-list-item-icon>
+              <v-list-item-title>{{ m.name }}</v-list-item-title>
+            </v-list-item>
+            <v-subheader>User</v-subheader>
+            <v-list-item to="/user">
+              <v-list-item-icon>
+                <i class="fa-solid fa-user"></i>
+              </v-list-item-icon>
+              <v-list-item-title>My Account</v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-icon>
+                <i class="fa-solid fa-right-from-bracket"></i>
+              </v-list-item-icon>
+              <v-list-item-title>Logout</v-list-item-title>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-navigation-drawer>
     </v-main>
   </v-app>
 </template>
@@ -64,6 +115,7 @@
 export default {
   data(){
     return {
+      drawer: false,
       menus: [{
         name: 'Dashboard',
         icon: 'fa-solid fa-house',

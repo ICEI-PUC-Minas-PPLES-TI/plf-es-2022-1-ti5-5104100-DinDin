@@ -8,36 +8,36 @@
           </v-col>
         </v-row>
         <v-row class="dash-welcome-main">
-          <v-col md="3">
+          <v-col cols="4">
             <v-row>
-              <v-col md="3">
+              <v-col cols="12" md="3">
                 <i class="dash-welcome-icon dash-welcome-icon-blue fa-solid fa-money-bill-1-wave"></i>
               </v-col>
-              <v-col md="9">
+              <v-col cols="12" md="9">
                 Current
                 <br>
                 <b>R$2000,00</b>
               </v-col>
             </v-row>
           </v-col>
-          <v-col md="3">
+          <v-col cols="4">
             <v-row>
-              <v-col md="3">
+              <v-col cols="12" md="3">
                 <i class="dash-welcome-icon dash-welcome-icon-green fa-solid fa-arrow-up-long"></i>
               </v-col>
-              <v-col md="9">
+              <v-col cols="12" md="9">
                 Incomes
                 <br>
                 <b>R$2400,00</b>
               </v-col>
             </v-row>
           </v-col>
-          <v-col md="3">
+          <v-col cols="4">
             <v-row>
-              <v-col md="3">
+              <v-col cols="12" md="3">
                 <i class="dash-welcome-icon dash-welcome-icon-red fa-solid fa-arrow-down-long"></i>
               </v-col>
-              <v-col md="9">
+              <v-col cols="12" md="9">
                 Expenses
                 <br>
                 <b>R$400,00</b>
@@ -46,8 +46,8 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col cols="12" md="3">
-        <div style="width: 200px; height: 200px">
+      <v-col cols="6" offset="3" offset-md="0" md="3">
+        <div class="dash-welcome-dash">
           <canvas id="chartMain"></canvas>
         </div>
       </v-col>
@@ -124,17 +124,17 @@
         <v-row>
           <v-col md="4">
             <br><br><br>
-            <div style="width: 250px; height: 250px">
+            <div class="dash-chart">
               <canvas id="chart1"></canvas>
             </div>
           </v-col>
           <v-col md="4">
-            <div style="width: 250px; height: 250px">
+            <div class="dash-chart">
               <canvas id="chart2"></canvas>
             </div>
           </v-col>
           <v-col md="4">
-            <div style="width: 250px; height: 250px">
+            <div class="dash-chart">
               <canvas id="chart3"></canvas>
             </div>
           </v-col>
@@ -359,6 +359,11 @@ export default {
           background: #E15151;
         }
       }
+      &-chart{
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+      }
     }
     &-table-icon{
       font-size: .7rem;
@@ -369,6 +374,11 @@ export default {
       text-align: center;
       color: #fff;
       padding: 5px 5px 3px 5px;
+    }
+    &-chart{
+      width: 250px;
+      height: 250px;
+      margin: 0 auto;
     }
   }
 </style>
