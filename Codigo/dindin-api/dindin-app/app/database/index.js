@@ -1,6 +1,4 @@
-require('dotenv').config({  
-  path: process.env.NODE_ENV === "test" ? ".env.testing" : ".env"
-})
+require('dotenv').config();
 const mysql = require('mysql2/promise');
 const { Sequelize } = require("sequelize");
 
