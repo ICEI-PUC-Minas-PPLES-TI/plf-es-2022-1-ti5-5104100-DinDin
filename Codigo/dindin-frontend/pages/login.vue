@@ -94,7 +94,7 @@ export default {
             let d = new Date();
             d.setTime(d.getTime() + 1 * 24 * 60 * 60 * 1000);
             document.cookie = "token= ";
-            document.cookie = "token=" + res.data;
+            document.cookie = "token=" + res.data.token;
             this.$router.push('/dashboard')
           })
           .catch((err) => {
