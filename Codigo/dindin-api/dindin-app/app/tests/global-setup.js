@@ -1,4 +1,4 @@
-console.log("init global-setup")
+console.log("init test global-setup")
 const { connect, close, createDatabase } = require('../database/index');
 const migrate = require('../database/migrations/prog');
 const seeder = require('../database/seeders/prog');
@@ -21,8 +21,7 @@ module.exports = async () => {
     try {
       await createDatabase()
       await seedTestDatabase()
-      console.log('Test database created successfully')
-      console.log("banana")
+      console.log('Test database created successfully');
       await connect();
     } catch (error) {
       console.log(error)
