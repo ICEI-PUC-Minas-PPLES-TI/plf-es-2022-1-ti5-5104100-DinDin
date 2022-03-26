@@ -2,13 +2,13 @@
   <!--Container-->
   <v-container fluid style="overflow: auto; padding: 10vh">
     <v-row align="center" justify="center" dense>
-      <v-col cols="12" sm="12" md="10" lg="10">
+      <v-col cols="12" sm="12" md="10" lg="6">
         <v-card width="100%" style="padding: 5vh">
           <v-card-title
             ><h2><b>Register</b></h2></v-card-title
           >
 
-          <v-card-text style="padding: 10vh">
+          <v-card-text style="padding: 7vh">
             <v-form ref="user" lazy-validation autocomplete="off">
               <v-row>
                 <v-col cols="12" sm="12" md="12">
