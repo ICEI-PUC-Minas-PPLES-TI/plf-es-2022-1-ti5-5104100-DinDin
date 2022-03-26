@@ -22,7 +22,8 @@ module.exports = async () => {
       await createDatabase()
       await seedTestDatabase()
       console.log('Test database created successfully')
-      //await connect();
+      console.log("banana")
+      await connect();
     } catch (error) {
       console.log(error)
       process.exit(1)

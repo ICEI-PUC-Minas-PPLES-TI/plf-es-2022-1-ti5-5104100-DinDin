@@ -1,8 +1,7 @@
-const { __drop__, close } = require("../database")
+const { __drop__ } = require("../database")
 
 module.exports = async () => {
     try {
-        //close();
         __drop__();
     } catch (error) {
       console.log(error)
