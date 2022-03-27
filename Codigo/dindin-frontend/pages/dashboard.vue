@@ -1,132 +1,172 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col md="9">
-        <v-row>
-          <v-col>
-            Welcome Back Name
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col md="3">
-            <v-row>
-              <v-col md="3">
-
-              </v-col>
-              <v-col md="9">
-                Current
-                <br>
-                <b>R$2000,00</b>
-              </v-col>
-            </v-row>
-          </v-col>
-          <v-col md="3">
-            <v-row>
-              <v-col md="3">
-
-              </v-col>
-              <v-col md="9">
-                Incomes
-                <br>
-                <b>R$2400,00</b>
-              </v-col>
-            </v-row>
-          </v-col>
-          <v-col md="3">
-            <v-row>
-              <v-col md="3">
-
-              </v-col>
-              <v-col md="9">
-                Expenses
-                <br>
-                <b>R$400,00</b>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col md="3">
-        <div style="width: 250px; height: 250px">
-          <canvas id="chartMain"></canvas>
-        </div>
+      <v-col>
+        <v-card elevation="0" class="p-20">
+          <v-row>
+            <v-col cols="12" md="9">
+              <v-row>
+                <v-col>
+                  <b>Welcome Back Name</b> 
+                </v-col>
+              </v-row>
+              <v-row class="dash-welcome-main">
+                <v-col cols="4">
+                  <v-row>
+                    <v-col cols="12" md="3">
+                      <i class="dash-welcome-icon dash-welcome-icon-blue fa-solid fa-money-bill-1-wave"></i>
+                    </v-col>
+                    <v-col cols="12" md="9">
+                      Current
+                      <br>
+                      <b>R$2000,00</b>
+                    </v-col>
+                  </v-row>
+                </v-col>
+                <v-col cols="4">
+                  <v-row>
+                    <v-col cols="12" md="3">
+                      <i class="dash-welcome-icon dash-welcome-icon-green fa-solid fa-arrow-up-long"></i>
+                    </v-col>
+                    <v-col cols="12" md="9">
+                      Incomes
+                      <br>
+                      <b>R$2400,00</b>
+                    </v-col>
+                  </v-row>
+                </v-col>
+                <v-col cols="4">
+                  <v-row>
+                    <v-col cols="12" md="3">
+                      <i class="dash-welcome-icon dash-welcome-icon-red fa-solid fa-arrow-down-long"></i>
+                    </v-col>
+                    <v-col cols="12" md="9">
+                      Expenses
+                      <br>
+                      <b>R$400,00</b>
+                    </v-col>
+                  </v-row>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="6" offset="3" offset-md="0" md="3">
+              <div class="dash-welcome-dash">
+                <canvas id="chartMain"></canvas>
+              </div>
+            </v-col>
+          </v-row>
+        </v-card>
       </v-col>
     </v-row>
     <!-- Transações Recentes -->
     <v-row>
       <v-col>
-        <v-simple-table>
-          <template v-slot:default>
-            <thead>
-              <tr>
-                <th class="text-left">Name</th>
-                <th class="text-left">Date</th>
-                <th class="text-left">Amount</th>
-                <th class="text-left">Wallet</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Be biquinis</td>
-                <td>01/01/1111 23:59</td>
-                <td>+ R$1000</td>
-                <td>Wallet X</td>
-              </tr>
-              <tr>
-                <td>Cinemark</td>
-                <td>01/01/1111 23:59</td>
-                <td>+ R$2000</td>
-                <td>Wallet X</td>
-              </tr>
-              <tr>
-                <td>Uber Monthly</td>
-                <td>01/01/1111 23:59</td>
-                <td>- R$460</td>
-                <td>Wallet Y</td>
-              </tr>
-              <tr>
-                <td>Verdemar</td>
-                <td>01/01/1111 23:59</td>
-                <td>- R$240</td>
-                <td>Wallet X</td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
+        <v-card elevation="0" class="p-20">
+          <v-row>
+            <v-col>
+              <b>Last transactions </b>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-simple-table>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">Name</th>
+                      <th class="text-left">Date</th>
+                      <th class="text-left">Amount</th>
+                      <th class="text-left">Wallet</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <i class="dash-table-icon fa-solid fa-utensils"></i>
+                        Be biquinis
+                      </td>
+                      <td>01/01/1111 23:59</td>
+                      <td>+ R$1000</td>
+                      <td>Wallet X</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <i class="dash-table-icon fa-solid fa-utensils"></i>
+                        Cinemark
+                      </td>
+                      <td>01/01/1111 23:59</td>
+                      <td>+ R$2000</td>
+                      <td>Wallet X</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <i class="dash-table-icon fa-solid fa-utensils"></i>
+                        Uber Monthly
+                      </td>
+                      <td>01/01/1111 23:59</td>
+                      <td>- R$460</td>
+                      <td>Wallet Y</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <i class="dash-table-icon fa-solid fa-utensils"></i>
+                        Verdemar
+                      </td>
+                      <td>01/01/1111 23:59</td>
+                      <td>- R$240</td>
+                      <td>Wallet X</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-col>
+          </v-row>
+        </v-card>
       </v-col>
     </v-row>
     <!-- Gráficos de entrada/saida, saida por categoria -->
     <v-row>
       <v-col>
-        <v-row>
-          <v-col>
-            <v-tabs v-model="tabWallets" align-with-title>
-              <v-tabs-slider color="#85DFB4"></v-tabs-slider>
+        <v-card elevation="0" class="p-20">
+          <v-row>
+            <v-col>
+              <b>Wallet Overview</b>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-row>
+                <v-col>
+                  <v-tabs v-model="tabWallets" align-with-title>
+                    <v-tabs-slider color="#85DFB4"></v-tabs-slider>
 
-              <v-tab> Wallet X </v-tab>
-              <v-tab> Wallet Y </v-tab>
-              <v-tab> Wallet Z </v-tab>
-            </v-tabs>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col md="4">
-            <br><br><br>
-            <div style="width: 250px; height: 250px">
-              <canvas id="chart1"></canvas>
-            </div>
-          </v-col>
-          <v-col md="4">
-            <div style="width: 250px; height: 250px">
-              <canvas id="chart2"></canvas>
-            </div>
-          </v-col>
-          <v-col md="4">
-            <div style="width: 250px; height: 250px">
-              <canvas id="chart3"></canvas>
-            </div>
-          </v-col>
-        </v-row>
+                    <v-tab> Wallet X </v-tab>
+                    <v-tab> Wallet Y </v-tab>
+                    <v-tab> Wallet Z </v-tab>
+                  </v-tabs>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col md="4">
+                  <br><br><br>
+                  <div class="dash-chart">
+                    <canvas id="chart1"></canvas>
+                  </div>
+                </v-col>
+                <v-col md="4">
+                  <div class="dash-chart">
+                    <canvas id="chart2"></canvas>
+                  </div>
+                </v-col>
+                <v-col md="4">
+                  <div class="dash-chart">
+                    <canvas id="chart3"></canvas>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -323,5 +363,50 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+ .dash{
+    &-welcome{
+      &-main{
+        margin-top: 30px;
+      }
+      &-icon{
+        margin-top: 10px;
+        color: #fff;
+        padding: 9px 5px 5px 5px;
+        border-radius: 100%;
+        height: 35px;
+        width: 35px;
+        text-align: center;
+        &-blue{
+          background: #59A6ED;
+        }
+        &-green{
+          background: #60AB6C;
+        }
+        &-red{
+          background: #E15151;
+        }
+      }
+      &-chart{
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+      }
+    }
+    &-table-icon{
+      font-size: .7rem;
+      border-radius: 100%;
+      height: 25px;
+      width: 25px;
+      background: #60AB6C;
+      text-align: center;
+      color: #fff;
+      padding: 5px 5px 3px 5px;
+    }
+    &-chart{
+      width: 250px;
+      height: 250px;
+      margin: 0 auto;
+    }
+  }
 </style>
