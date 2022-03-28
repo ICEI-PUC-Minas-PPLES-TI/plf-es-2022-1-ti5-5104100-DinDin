@@ -79,6 +79,7 @@
               <v-select
               prepend-inner-icon="mdi-wallet"
                 outlined
+                hide-details="auto"
                 :items="[
                   { text: 'Personal', value: 1 },
                   { text: 'Public', value: 2 },
@@ -90,7 +91,7 @@
         </v-container>
       </v-card-text>
       <v-card-actions>
-        <v-row>
+        <v-row >
           <v-col cols="3">
             <v-btn text color="black" flat @click.stop="show = false"
               >Cancel</v-btn
