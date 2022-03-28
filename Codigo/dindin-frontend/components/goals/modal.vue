@@ -103,7 +103,7 @@
             >
             </v-col
           >
-          <v-col >
+          <v-col class="mr-2">
             <v-btn block color="primary" @click.stop="saveGoal()"
               >Save</v-btn
             >
