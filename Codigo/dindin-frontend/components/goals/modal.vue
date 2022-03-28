@@ -21,6 +21,7 @@
               <v-text-field
                 prepend-inner-icon="mdi-tag"
                 outlined
+                v-model="goal.description"
                 hide-details="auto"
                 :clearable="true"
                 label="Description"
@@ -29,8 +30,10 @@
             </v-row>
             <v-row class="pb-2">
               <v-text-field
+                v-model="goal.value"
                 prepend-inner-icon="mdi-currency-usd"
                 outlined
+                type="number"
                 hide-details="auto"
                 :clearable="true"
                 label="0,00"
@@ -50,14 +53,14 @@
                     outlined
                     hide-details="auto"
                     type="text"
-                    v-model="date"
+                    v-model="goal.date"
                     v-bind="attrs"
                     v-on="on"
                     label="Date"
                   />
                 </template>
                 <v-date-picker
-                  v-model="date"
+                  v-model="goal.date"
                   @input="menu = false"
                 ></v-date-picker>
               </v-menu>
@@ -65,6 +68,7 @@
             <v-row class="mb-0 pb-2">
               <v-select
               prepend-inner-icon="mdi-bullseye"
+              v-model="goal.type"
                 hide-details="auto"
                 outlined
                 :items="[
@@ -76,6 +80,7 @@
             </v-row>
             <v-row class="mt-0 pt-0">
               <v-select
+              v-model="goal.walletId"
               prepend-inner-icon="mdi-wallet"
                 outlined
                 hide-details="auto"
@@ -93,13 +98,13 @@
         <v-row >
           <v-col cols="4" align="center">
 
-            <v-btn text color="black" flat @click.stop="show = false"
+            <v-btn text color="black" @click.stop="show = false"
               >Cancel</v-btn
             >
             </v-col
           >
           <v-col >
-            <v-btn block color="primary" flat @click.stop="show = false"
+            <v-btn block color="primary" @click.stop="saveGoal()"
               >Save</v-btn
             >
           </v-col>
@@ -111,6 +116,18 @@
 
 <script>
 export default {
+  data () {
+    return {
+      goal:{
+        description:"",
+        date:"",
+        value:"",
+        type:0,
+        walletId:0
+      },
+      menu:false,
+    }
+  },
   props: {
     value: Boolean,
   },
@@ -123,6 +140,14 @@ export default {
         this.$emit("input", value);
       },
     },
+  },
+  methods: {
+    saveGoal(){
+      console.log(this.goal)
+    },
+    editGoal(){
+      
+    }
   },
 };
 </script>
