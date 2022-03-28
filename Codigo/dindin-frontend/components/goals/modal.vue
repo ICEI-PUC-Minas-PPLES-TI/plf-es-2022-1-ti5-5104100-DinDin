@@ -20,6 +20,7 @@
           <v-form>
             <v-row class="pb-2">
               <v-text-field
+                prepend-inner-icon="mdi-tag"
                 outlined
                 hide-details="auto"
                 :clearable="true"
@@ -29,6 +30,7 @@
             </v-row>
             <v-row class="pb-2">
               <v-text-field
+                prepend-inner-icon="mdi-currency-usd"
                 outlined
                 hide-details="auto"
                 :clearable="true"
@@ -37,31 +39,49 @@
               />
             </v-row>
             <v-row class="pb-2">
-              <v-text-field
-                outlined
-                hide-details="auto"
-                label="Date"
-                type="date"
-                max="3000-01-01"
+              <v-menu
+                v-model="menu"
+                :close-on-content-click="true"
+                offset-y
+                min-width="290px"
               >
-              </v-text-field>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                   prepend-inner-icon="mdi-calendar-range"
+                    outlined
+                    hide-details="auto"
+                    type="text"
+                    v-model="date"
+                    v-bind="attrs"
+                    v-on="on"
+                    label="Date"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="date"
+                  @input="menu = false"
+                ></v-date-picker>
+              </v-menu>
             </v-row>
-            <v-row class="mb-0 pb-0">
-               <v-select
-               outlined
+            <v-row class="mb-0 pb-2">
+              <v-select
+              prepend-inner-icon="mdi-bullseye"
+                hide-details="auto"
+                outlined
                 :items="[
-                  {text: 'Saving', value: 1},
-                  {text: 'Achievement', value: 2},
+                  { text: 'Saving', value: 1 },
+                  { text: 'Achievement', value: 2 },
                 ]"
                 label="Goal Type"
               />
             </v-row>
             <v-row class="mt-0 pt-0">
-               <v-select
-               outlined
+              <v-select
+              prepend-inner-icon="mdi-wallet"
+                outlined
                 :items="[
-                  {text: 'Personal', value: 1},
-                  {text: 'Public', value: 2},
+                  { text: 'Personal', value: 1 },
+                  { text: 'Public', value: 2 },
                 ]"
                 label="Wallet"
               />
@@ -72,12 +92,16 @@
       <v-card-actions>
         <v-row>
           <v-col cols="3">
-          <v-btn text color="black" flat @click.stop="show = false">Cancel</v-btn></v-col>
+            <v-btn text color="black" flat @click.stop="show = false"
+              >Cancel</v-btn
+            ></v-col
+          >
           <v-col>
-          <v-btn block color="primary" flat @click.stop="show = false">Save</v-btn>
+            <v-btn block color="primary" flat @click.stop="show = false"
+              >Save</v-btn
+            >
           </v-col>
         </v-row>
-        
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -115,5 +139,4 @@ export default {
   background: #fff;
   padding: 0 10px;
 }
-
 </style>
