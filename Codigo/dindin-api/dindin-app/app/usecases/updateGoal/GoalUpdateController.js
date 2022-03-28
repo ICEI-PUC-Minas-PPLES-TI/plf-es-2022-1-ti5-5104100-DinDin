@@ -1,13 +1,20 @@
 const yup = require("yup");
 
 const AppError = require("../../errors/AppError");
-const GoalCreateUseCase = require("./GoalCreateUseCase");
-
+const GoalUpdateUseCase = require("./GoalUpdateUseCase");
+const GoalFindUseCase = require("../findGoal/GoalFindUseCase");
 const statusEnum = ["FINISHED", "LOST", "PENDING"];
 const typeEnum = ["A", "B"];
 
-class GoalCreateController {
-  async create(request, response) {
+class GoalUpdateController {
+  async update(request, response) {
+    const id = request.params.id;
+    //check if goal exists...
+    const goalFindUseCase = new GoalFindUseCase();
+    let findGoal = await goalFindUseCase.find(id);//throw execption if not found
+    findGoal = null;
+    goalFindUseCase = null;
+    
     const scheme = yup.object().shape({
       description: yup.string().required().max(30),
       value: yup.number("'value' must be numeric!").required(),
@@ -28,12 +35,13 @@ class GoalCreateController {
     } catch (error) {
       throw new AppError(error.name, 422, error.errors);
     }
-    //console.log(request);
+    
 
     const { description, value, status, type, expire_at, wallet_id } = request.body;
     
-    const goalCreateUseCase = new GoalCreateUseCase();
-    const goal = await goalCreateUseCase.create(
+    const goalUpdateUseCase = new GoalUpdateUseCase();
+    const goal = await goalUpdateUseCase.update(
+      id,
       description,
       value,
       status,
@@ -48,4 +56,4 @@ class GoalCreateController {
   }
 }
 
-module.exports = GoalCreateController;
+module.exports = GoalUpdateController;
