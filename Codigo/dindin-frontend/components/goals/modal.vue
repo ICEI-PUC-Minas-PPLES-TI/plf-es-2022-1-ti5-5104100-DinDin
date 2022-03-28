@@ -2,11 +2,10 @@
   <v-dialog
     v-model="show"
     max-width="600px"
-    transition="dialog-bottom-transition"
     @click:outside="$emit('input', false)"
     @keydown.esc="$emit('input', false)"
   >
-    <v-card>
+    <v-card height="490px">
       <v-card-title class="text-h5 goals-modal-title">
         <h4>
           <span> Goals</span>
@@ -92,12 +91,14 @@
       </v-card-text>
       <v-card-actions>
         <v-row >
-          <v-col cols="3">
+          <v-col cols="4" align="center">
+
             <v-btn text color="black" flat @click.stop="show = false"
               >Cancel</v-btn
-            ></v-col
+            >
+            </v-col
           >
-          <v-col>
+          <v-col >
             <v-btn block color="primary" flat @click.stop="show = false"
               >Save</v-btn
             >
