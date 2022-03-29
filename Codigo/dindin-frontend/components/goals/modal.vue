@@ -19,6 +19,7 @@
           <v-form>
             <v-row class="pb-2">
               <v-text-field
+              :rules="[rules.required]"
                 prepend-inner-icon="mdi-tag"
                 outlined
                 v-model="goal.description"
@@ -30,6 +31,7 @@
             </v-row>
             <v-row class="pb-2">
               <v-text-field
+              :rules="[rules.required]"
                 v-model="goal.value"
                 prepend-inner-icon="mdi-currency-usd"
                 outlined
@@ -42,6 +44,7 @@
             </v-row>
             <v-row class="pb-2">
               <v-menu
+              
                 v-model="menu"
                 :close-on-content-click="true"
                 offset-y
@@ -49,6 +52,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
+                  :rules="[rules.required]"
                    prepend-inner-icon="mdi-calendar-range"
                     outlined
                     hide-details="auto"
@@ -67,6 +71,7 @@
             </v-row>
             <v-row class="mb-0 pb-2">
               <v-select
+              :rules="[rules.required]"
               prepend-inner-icon="mdi-bullseye"
               v-model="goal.type"
                 hide-details="auto"
@@ -80,6 +85,7 @@
             </v-row>
             <v-row class="mt-0 pt-0">
               <v-select
+              :rules="[rules.required]"
               v-model="goal.walletId"
               prepend-inner-icon="mdi-wallet"
                 outlined
@@ -104,7 +110,7 @@
             </v-col
           >
           <v-col class="mr-2">
-            <v-btn block color="primary" @click.stop="saveGoal()"
+            <v-btn block color="primary" @click.stop="saveGoal(),show = false"
               >Save</v-btn
             >
           </v-col>
@@ -126,6 +132,9 @@ export default {
         walletId:0
       },
       menu:false,
+      rules: {
+        required: (value) => !!value || "Required.",
+      },
     }
   },
   props: {
