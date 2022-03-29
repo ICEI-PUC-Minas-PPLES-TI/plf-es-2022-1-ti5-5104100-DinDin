@@ -1,6 +1,6 @@
-const GoalFindUseCase = require("./GoalFindUseCase")
+const GoalFindUseCase = require("./FindGoalUseCase")
 
-class GoalFindController {
+class FindGoalController {
 
   async find(request, response) {
     const id = request.params.id;
@@ -13,4 +13,4 @@ class GoalFindController {
 
 }
 
-module.exports = GoalFindController;
+module.exports = FindGoalController;

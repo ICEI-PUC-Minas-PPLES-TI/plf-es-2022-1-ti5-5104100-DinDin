@@ -1,7 +1,7 @@
-const AppError = require("../../errors/AppError");
-const Goal = require("../../models/Goal");
+const AppError = require("../../../errors/AppError");
+const Goal = require("../../../models/Goal");
 
-class GoalFindUseCase {
+class FindGoalUseCase {
 
   async find(id) {
     const goal = await Goal.findOne({
@@ -19,4 +19,4 @@ class GoalFindUseCase {
 
 }
 
-module.exports = GoalFindUseCase;
+module.exports = FindGoalUseCase;

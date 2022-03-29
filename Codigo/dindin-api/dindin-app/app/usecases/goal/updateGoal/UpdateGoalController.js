@@ -1,12 +1,12 @@
 const yup = require("yup");
 
 const AppError = require("../../errors/AppError");
-const GoalUpdateUseCase = require("./GoalUpdateUseCase");
+const GoalUpdateUseCase = require("./UpdateGoalUseCase");
 const GoalFindUseCase = require("../findGoal/GoalFindUseCase");
 const statusEnum = ["FINISHED", "LOST", "PENDING"];
 const typeEnum = ["A", "B"];
 
-class GoalUpdateController {
+class UpdateGoalController {
   async update(request, response) {
     const id = request.params.id;
     //check if goal exists...
@@ -56,4 +56,4 @@ class GoalUpdateController {
   }
 }
 
-module.exports = GoalUpdateController;
+module.exports = UpdateGoalController;

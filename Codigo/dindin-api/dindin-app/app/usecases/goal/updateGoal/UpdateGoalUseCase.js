@@ -1,7 +1,7 @@
-const AppError = require("../../errors/AppError");
-const Goal = require("../../models/Goal");
+const AppError = require("../../../errors/AppError");
+const Goal = require("../../../models/Goal");
 
-class GoalUpdateUseCase {
+class UpdateGoalUseCase {
   async update( id, description, value, status, type, expire_at, wallet_id) {
 
     const goal = await Goal.update({
@@ -22,4 +22,4 @@ class GoalUpdateUseCase {
   }
 }
 
-module.exports = GoalUpdateUseCase;
+module.exports = UpdateGoalUseCase;

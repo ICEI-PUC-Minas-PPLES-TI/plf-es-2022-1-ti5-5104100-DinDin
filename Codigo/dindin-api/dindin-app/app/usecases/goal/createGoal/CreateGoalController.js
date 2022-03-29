@@ -6,7 +6,7 @@ const GoalCreateUseCase = require("./GoalCreateUseCase");
 const statusEnum = ["FINISHED", "LOST", "PENDING"];
 const typeEnum = ["A", "B"];
 
-class GoalCreateController {
+class CreateGoalController {
   async create(request, response) {
     const scheme = yup.object().shape({
       description: yup.string().required().max(30),
@@ -48,4 +48,4 @@ class GoalCreateController {
   }
 }
 
-module.exports = GoalCreateController;
+module.exports = CreateGoalController;

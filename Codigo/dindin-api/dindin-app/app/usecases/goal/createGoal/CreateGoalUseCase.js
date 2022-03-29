@@ -1,7 +1,7 @@
-const AppError = require("../../errors/AppError");
-const Goal = require("../../models/Goal");
+const AppError = require("../../../errors/AppError");
+const Goal = require("../../../models/Goal");
 
-class GoalCreateUseCase {
+class CreateGoalUseCase {
   async create(description, value, status, type, expire_at, wallet_id) {
     const goal = await Goal.create({
       description,
@@ -17,4 +17,4 @@ class GoalCreateUseCase {
   }
 }
 
-module.exports = GoalCreateUseCase;
+module.exports = CreateGoalUseCase;
