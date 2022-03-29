@@ -96,9 +96,14 @@ class _LoginState extends State<Login> {
                   Row(
                     children: [
                       Text(
-                        "REGISTER  ->",
-                        style: TextStyle(color: Colors.green[800]),
-                      ),
+                              "REGISTER ",
+                              style: TextStyle(color: Colors.green[800]),
+                            ),
+                            Icon(
+                              Icons.arrow_forward,
+                              color: Colors.green,
+                              size: 30.0,
+                            ),
                     ],
                   ),
                 ],
