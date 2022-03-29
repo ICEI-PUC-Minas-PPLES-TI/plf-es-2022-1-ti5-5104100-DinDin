@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, unnecessary_new
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -46,6 +46,9 @@ class _LoginState extends State<Login> {
               decoration: InputDecoration(
                 labelText: 'Enter Email Adress',
                 border: OutlineInputBorder(),
+                focusedBorder: new OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green),
+                ),
               ),
             ),
           ),
@@ -58,7 +61,11 @@ class _LoginState extends State<Login> {
               },
               obscureText: true,
               decoration: InputDecoration(
-                  labelText: 'Password', border: OutlineInputBorder()),
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                  focusedBorder: new OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.green),
+                  )),
             ),
           ),
           SizedBox(height: 45),
