@@ -64,9 +64,12 @@ class _LoginState extends State<Login2> {
                                 },
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
-                                  labelText: 'Enter Email Adress',
-                                  border: OutlineInputBorder(),
-                                ),
+                                    labelText: 'Enter Email Adress',
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    )),
                               ),
                               SizedBox(height: 20),
                               TextField(
@@ -76,7 +79,11 @@ class _LoginState extends State<Login2> {
                                 obscureText: true,
                                 decoration: InputDecoration(
                                     labelText: 'Password',
-                                    border: OutlineInputBorder()),
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    )),
                               ),
                             ],
                           )),
@@ -104,27 +111,27 @@ class _LoginState extends State<Login2> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
-            children: [
-                Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text("Don't have an account?"),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "REGISTER  ->",
-                        style: TextStyle(color: Colors.green[800]),
-                      ),
-                    ],
-                  ),
-                ],
-                )
-            ],
-          ),
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text("Don't have an account?"),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "REGISTER  ->",
+                              style: TextStyle(color: Colors.green[800]),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ))
         ],
       ),
