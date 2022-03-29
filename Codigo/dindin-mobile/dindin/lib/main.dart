@@ -1,3 +1,4 @@
+import 'package:dindin/view/goal/index.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -101,6 +102,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
+            ),
+            ElevatedButton(
+              child: const Text('Open goals'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Goals()),
+                );
+              },
             ),
           ],
         ),
