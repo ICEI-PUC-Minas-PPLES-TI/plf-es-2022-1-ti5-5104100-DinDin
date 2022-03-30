@@ -1,28 +1,31 @@
 FROM node:16.14.0-alpine3.15
 
 # create destination directory
-RUN mkdir -p /usr/src/nuxt-app
-WORKDIR /usr/src/nuxt-app
+RUN mkdir -p /usr/src/dindin-frontend
+WORKDIR /usr/src/dindin-frontend
 
 # update and install dependency
 RUN apk update && apk upgrade
-RUN apk add git
+# docker-compose bash command dependency
+RUN apk add bash
+# nodemon file changing detector dependency
+RUN apk add inotify-tools
+# convert endline to linux
+RUN apk add dos2unix
 
-# copy the app, note .dockerignore
-COPY . /usr/src/nuxt-app/
+RUN rm -rf ./node_modules
+RUN rm -rf package-lock.json
+
+# Install app dependencies
+COPY ./package.json .
 RUN npm install
 
-# build necessary, even if no static files are needed,
-# since it builds the server as well
-RUN npm run build
-
-# expose 80 on container
-EXPOSE 80
+# copy the app, note .dockerignore, bundle app source
+COPY . .
+# convert from windows to linux
+RUN find /usr/src/dindin-api -type f -print0 | xargs -0 -n 1 -P 4 dos2unix
 
 # set app serving to permissive / assigned
 ENV NUXT_HOST=0.0.0.0
 # set app port
 ENV NUXT_PORT=80
-
-# start the app
-CMD [ "npm", "start" ]
