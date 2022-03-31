@@ -5,7 +5,7 @@
     @click:outside="$emit('input', false)"
     @keydown.esc="$emit('input', false)"
   >
-    <v-card height="490px">
+    <v-card height="130%" class="pa-2">
       <v-card-title class="text-h5 goals-modal-title">
         <h4>
           <span> Goals</span>
@@ -19,7 +19,7 @@
           <v-form>
             <v-row class="pb-2">
               <v-text-field
-              :rules="[rules.required]"
+                :rules="[rules.required]"
                 prepend-inner-icon="mdi-tag"
                 outlined
                 v-model="goal.description"
@@ -31,7 +31,7 @@
             </v-row>
             <v-row class="pb-2">
               <v-text-field
-              :rules="[rules.required]"
+                :rules="[rules.required]"
                 v-model="goal.value"
                 prepend-inner-icon="mdi-currency-usd"
                 outlined
@@ -44,7 +44,6 @@
             </v-row>
             <v-row class="pb-2">
               <v-menu
-              
                 v-model="menu"
                 :close-on-content-click="true"
                 offset-y
@@ -52,12 +51,12 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                  :rules="[rules.required]"
-                   prepend-inner-icon="mdi-calendar-range"
+                    :rules="[rules.required]"
+                    prepend-inner-icon="mdi-calendar-range"
                     outlined
                     hide-details="auto"
                     type="text"
-                    v-model="goal.date"
+                    :value="date"
                     v-bind="attrs"
                     v-on="on"
                     label="Date"
@@ -71,9 +70,9 @@
             </v-row>
             <v-row class="mb-0 pb-2">
               <v-select
-              :rules="[rules.required]"
-              prepend-inner-icon="mdi-bullseye"
-              v-model="goal.type"
+                :rules="[rules.required]"
+                prepend-inner-icon="mdi-bullseye"
+                v-model="goal.type"
                 hide-details="auto"
                 outlined
                 :items="[
@@ -85,9 +84,9 @@
             </v-row>
             <v-row class="mt-0 pt-0">
               <v-select
-              :rules="[rules.required]"
-              v-model="goal.walletId"
-              prepend-inner-icon="mdi-wallet"
+                :rules="[rules.required]"
+                v-model="goal.walletId"
+                prepend-inner-icon="mdi-wallet"
                 outlined
                 hide-details="auto"
                 :items="[
@@ -101,16 +100,15 @@
         </v-container>
       </v-card-text>
       <v-card-actions>
-        <v-row >
+        <v-row>
           <v-col cols="4" align="center">
-
-            <v-btn text color="black" @click.stop="show = false"
-              >Cancel</v-btn
-            >
-            </v-col
-          >
+            <v-btn text color="black" @click.stop="show = false">Cancel</v-btn>
+          </v-col>
           <v-col class="mr-2">
-            <v-btn block color="primary" @click.stop="saveGoal(),show = false"
+            <v-btn
+              block
+              color="primary"
+              @click.stop="saveGoal(), (show = false)"
               >Save</v-btn
             >
           </v-col>
@@ -122,21 +120,20 @@
 
 <script>
 export default {
-  data () {
-    return {
-      goal:{
-        description:"",
-        date:"",
-        value:"",
-        type:0,
-        walletId:0
+  data:vm => ({
+      goal: {
+        description: "",
+        date: "",
+        value: "",
+        type: 0,
+        walletId: 0,
       },
-      menu:false,
+      date: vm.parseDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)),
+      menu: false,
       rules: {
         required: (value) => !!value || "Required.",
       },
-    }
-  },
+  }),
   props: {
     value: Boolean,
   },
@@ -148,15 +145,21 @@ export default {
       set(value) {
         this.$emit("input", value);
       },
+      computedDate() {
+        return this.parseDate(this.date)
+      },
     },
   },
   methods: {
-    saveGoal(){
-      console.log(this.goal)
+    saveGoal() {
+      console.log(this.goal);
     },
-    editGoal(){
-      
-    }
+    editGoal() {},
+    parseDate(date) {
+      if (!date) return null
+      const [year, month, day] = date.split('-')
+      return `${day}/${month}/${year}`
+    },
   },
 };
 </script>
