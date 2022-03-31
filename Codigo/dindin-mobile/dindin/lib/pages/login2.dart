@@ -17,7 +17,7 @@ class _LoginState extends State<Login2> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState>_scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
       body: Column(
@@ -119,7 +119,22 @@ class _LoginState extends State<Login2> {
                                 ),
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
-                                    userAuth(email, password);
+                                    final snackBarTrue =
+                                        SnackBar(content: Text('Loging'));
+                                    final snackBarFalse =
+                                        SnackBar(content: Text('User not Found'));
+                                    userAuth(email, password).then((res) => {
+                                          if (res==true)
+                                            {
+                                              _scaffoldKey.currentState!
+                                                  .showSnackBar(snackBarTrue)
+                                            }
+                                          else
+                                            {
+                                              _scaffoldKey.currentState!
+                                                  .showSnackBar(snackBarFalse)
+                                            }
+                                        });
                                   } else {
                                     final snackBar = SnackBar(
                                         content: Text('Invalid credencials'));
@@ -172,17 +187,14 @@ class _LoginState extends State<Login2> {
   }
 }
 
-Future userAuth(String email, String password) async {
+Future<bool> userAuth(String email, String password) async {
   var url = "http://localhost:3001/api/user/auth";
   final Uri uri = Uri.parse(url);
   var response =
       await http.post(uri, body: {'email': email, 'password': password});
   var status = response.statusCode;
-  var responseBody = response.body;
   if (status == 200) {
-    print('Voce está logado!');
-  } else {
-    print('Usuário não encontrado');
+    return true;
   }
-  return response.body;
+  return false;
 }
