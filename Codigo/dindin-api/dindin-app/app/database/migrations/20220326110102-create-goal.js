@@ -17,8 +17,7 @@ module.exports = {
         },
         value: {
           type: DataTypes.DOUBLE,
-          allowNull: false,
-          unique: true
+          allowNull: false
         },
         status: {
           type: DataTypes.ENUM,
