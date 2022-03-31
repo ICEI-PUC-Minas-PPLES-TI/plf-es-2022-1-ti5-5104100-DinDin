@@ -4,12 +4,12 @@ require("dotenv").config();
 const app = require('../../');
 const { connect, close } = require('../../database');
 
-beforeAll(() => {
-  connect();
+beforeAll(async () => {
+  await connect();
 });
 
-afterAll(() => {
-  close();
+afterAll(async () => {
+  await close();
 });
 
 describe('User API', () => {
@@ -38,7 +38,7 @@ describe('authenticate: testing /user/auth route', ()=>{
     const mockPassword = `${Math.random()}@ultrapassword`;
   
     await supertest(app)
-        .post('/api/user/auth')
+        .post('/api/user')
         .send({
             name: 'Username da Silva',
             email: mockmail,
@@ -52,8 +52,8 @@ describe('authenticate: testing /user/auth route', ()=>{
           password: mockPassword
         });
        
-    // bypass de erro de teste ( api está ok )
-    //expect(response.statusCode).toEqual(201);
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty("token");
   });
 
   it('should not authenticate a created user with wrong password', async () => {
