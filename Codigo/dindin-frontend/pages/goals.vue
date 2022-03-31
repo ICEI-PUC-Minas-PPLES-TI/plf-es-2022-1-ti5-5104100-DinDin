@@ -36,15 +36,43 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    <tr v-if="loading">
+                      <td colspan="6">Loading...</td>
+                    </tr>
+                    <tr v-for="(goal, gidx) in goals" :key="gidx">
                       <td>
-                        Be biquinis
+                        {{ goal.description }}
                       </td>
-                      <td>Saving</td>
-                      <td>R$1500</td>
-                      <td>25/05/2022</td>
-                      <td>In progress</td>
-                      <td>btns</td>
+                      <td>{{ goal.type }}</td>
+                      <td>R${{ goal.value }}</td>
+                      <td>{{ dateFormat(goal.expire_at) }}</td>
+                      <td class="table-goals-status">{{ goal.status }}</td>
+                      <td>
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn elevation="0" small v-bind="attrs" v-on="on">
+                              <i class="fa-solid fa-eye"></i>
+                            </v-btn>
+                          </template>
+                          <span>View</span>
+                        </v-tooltip>
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn elevation="0" small v-bind="attrs" v-on="on">
+                              <i class="fa-solid fa-pen-to-square"></i>
+                            </v-btn>
+                          </template>
+                          <span>Edit</span>
+                        </v-tooltip>
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn elevation="0" small color="error" v-bind="attrs" v-on="on">
+                              <i class="fa-solid fa-trash"></i>
+                            </v-btn>
+                          </template>
+                          <span>Delete</span>
+                        </v-tooltip>
+                      </td>
                     </tr>
                   </tbody>
                 </template>
@@ -56,9 +84,10 @@
             <v-col cols="12" md="8" offset-md="4">
               <div class="mw-100">
                 <v-pagination
-                v-model="page"
+                v-model="currentPage"
                 class="my-4"
-                :length="20"
+                :length="pages"
+                @input="changePagination"
               ></v-pagination>
               </div>
             </v-col>
@@ -74,11 +103,43 @@ export default {
   layout: "home",
   data(){
     return {
-      page: 1
+      currentPage: 1,
+      pages: 1,
+      goals: [],
+      loading: false
+    }
+  },
+  async fetch() {
+    this.loading = true
+    await this.$axios
+      .$get(`/goal?page=${this.currentPage}`)
+      .then(res => {
+        this.pages = res.paginas
+        this.goals = res.goals
+      })
+      .finally(() => {
+        this.loading = false
+      })
+  },
+  methods: {
+    dateFormat(date){
+      if(date) {
+        const dt = new Date(date)
+        return dt.toLocaleString()
+      } else return null
+    },
+    changePagination(){
+      this.$fetch()
     }
   }
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.table-goals-status{
+  text-transform: lowercase;
+  &::first-letter{
+    text-transform: uppercase;
+  }
+}
 </style>
