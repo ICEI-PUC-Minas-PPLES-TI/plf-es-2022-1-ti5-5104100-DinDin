@@ -1,7 +1,7 @@
 const yup = require("yup");
 
-const AppError = require("../../errors/AppError");
-const GoalCreateUseCase = require("./GoalCreateUseCase");
+const AppError = require("../../../errors/AppError");
+const CreateGoalUseCase = require("./CreateGoalUseCase");
 
 const statusEnum = ["FINISHED", "LOST", "PENDING"];
 const typeEnum = ["A", "B"];
@@ -32,8 +32,8 @@ class CreateGoalController {
 
     const { description, value, status, type, expire_at, wallet_id } = request.body;
     
-    const goalCreateUseCase = new GoalCreateUseCase();
-    const goal = await goalCreateUseCase.create(
+    const createGoalUseCase = new CreateGoalUseCase();
+    const goal = await createGoalUseCase.create(
       description,
       value,
       status,
