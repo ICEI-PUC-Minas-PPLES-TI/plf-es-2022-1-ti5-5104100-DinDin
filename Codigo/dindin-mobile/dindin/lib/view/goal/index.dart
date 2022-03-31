@@ -12,7 +12,20 @@ class Goals extends StatelessWidget {
         title: const Text('Goals'),
         backgroundColor: primaryColor,
       ),
-      body: const Center(child: Text('Press the button below!')),
+      body: ListView(
+        children: const <Widget>[
+          Card(
+            child: Padding(
+              padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+              child: ListTile(
+                leading: FlutterLogo(size: 56.0),
+                title: Text('Three-line ListTile'),
+                trailing: Icon(Icons.more_vert),
+              ),
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Add your onPressed code here!
