@@ -1,8 +1,8 @@
 const yup = require("yup");
 
-const AppError = require("../../errors/AppError");
+const AppError = require("../../../errors/AppError");
 const GoalUpdateUseCase = require("./UpdateGoalUseCase");
-const GoalFindUseCase = require("../findGoal/GoalFindUseCase");
+const FindGoalUseCase = require("../findGoal/FindGoalUseCase");
 const statusEnum = ["FINISHED", "LOST", "PENDING"];
 const typeEnum = ["A", "B"];
 
@@ -10,10 +10,10 @@ class UpdateGoalController {
   async update(request, response) {
     const id = request.params.id;
     //check if goal exists...
-    const goalFindUseCase = new GoalFindUseCase();
-    let findGoal = await goalFindUseCase.find(id);//throw execption if not found
+    const findGoalUseCase = new FindGoalUseCase();
+    let findGoal = await findGoalUseCase.find(id);//throw execption if not found
     findGoal = null;
-    goalFindUseCase = null;
+    findGoalUseCase = null;
     
     const scheme = yup.object().shape({
       description: yup.string().required().max(30),

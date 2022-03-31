@@ -1,6 +1,6 @@
 const AppError = require("../../../errors/AppError");
 const Goal = require("../../../models/Goal");
-
+const { SortPaginate } = require("../../../");
 class ListGoalUseCase {
     async list(query) {
         const statusEnums = [
@@ -9,31 +9,27 @@ class ListGoalUseCase {
             "PENDING"
           ];
     
-    
         let whre = {
           status: statusEnums
         }
-    
-        const qtd = await Goal.count({where: whre});
-        const { paginas, ...SortPaginateOptions } = SortPaginate(
-          query,
-          Object.keys(Goal.rawAttributes) /* Todos os atributos de Goal */,
-          qtd
-        );
+        //const qtd = await Goal.count({where: whre});
+        //const qtd = await Goal.count();
+        console.log(query);
+        const perPage = query.limit ? + query.limit : 10;
+        const offset = query.page ? (query.page - 1)* perPage : 0;
     
         const goals = await Goal.findAndCountAll({
-          ...SortPaginateOptions,
-          where: whre,
+          limit: perPage,
+          offset: offset         
         }).catch(error => {
           throw new AppError("Erro interno do servidor!", 500, error);
         });
     
         return {
-          dados: goals.rows,
           quantidade: goals.rows.length,
           total: goals.count,
-          paginas: paginas,
-          offset: SortPaginateOptions.offset
+          paginas: Math.ceil(goals.count / perPage),
+          goals: goals.rows
         };
       }
 }
