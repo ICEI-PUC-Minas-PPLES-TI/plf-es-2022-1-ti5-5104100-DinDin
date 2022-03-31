@@ -6,7 +6,7 @@ const seeder = require('../database/seeders/prog');
 
 // Seed the database with schema and data
 async function seedTestDatabase() {
-  await connect()
+  // await connect()
   try {
     await migrate()
     await seeder()
