@@ -1,7 +1,7 @@
 const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
-const GoalCreateUseCase = require("./CreateGoalUseCase");
+const CreateGoalUseCase = require("./CreateGoalUseCase");
 
 const statusEnum = ["FINISHED", "LOST", "PENDING"];
 const typeEnum = ["A", "B"];
