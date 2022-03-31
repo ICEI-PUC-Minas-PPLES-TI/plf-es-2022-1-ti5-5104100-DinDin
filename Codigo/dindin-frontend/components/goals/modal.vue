@@ -64,7 +64,9 @@
                 </template>
                 <v-date-picker
                   v-model="goal.date"
+                  @click.native="parseDate(goal.date)"
                   @input="menu = false"
+
                 ></v-date-picker>
               </v-menu>
             </v-row>
@@ -120,7 +122,8 @@
 
 <script>
 export default {
-  data:vm => ({
+  data(){
+    return{
       goal: {
         description: "",
         date: "",
@@ -128,12 +131,13 @@ export default {
         type: 0,
         walletId: 0,
       },
-      date: vm.parseDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)),
+      date: "",
       menu: false,
       rules: {
         required: (value) => !!value || "Required.",
       },
-  }),
+    }
+  },
   props: {
     value: Boolean,
   },
@@ -145,9 +149,6 @@ export default {
       set(value) {
         this.$emit("input", value);
       },
-      computedDate() {
-        return this.parseDate(this.date)
-      },
     },
   },
   methods: {
@@ -156,9 +157,8 @@ export default {
     },
     editGoal() {},
     parseDate(date) {
-      if (!date) return null
       const [year, month, day] = date.split('-')
-      return `${day}/${month}/${year}`
+      this.date = `${day}/${month}/${year}`
     },
   },
 };
