@@ -14,10 +14,12 @@ class Login2 extends StatefulWidget {
 class _LoginState extends State<Login2> {
   String email = '';
   String password = '';
-
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      key: _scaffoldKey,
       body: Column(
         children: [
           Flexible(
@@ -46,68 +48,109 @@ class _LoginState extends State<Login2> {
                   ),
                 ),
               )),
-          Flexible(
-              flex: 5,
-              child: SizedBox(
-                height: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Flexible(
-                          flex: 2,
-                          child: Column(
-                            children: [
-                              TextField(
-                                onChanged: (text) {
-                                  email = text;
+          Form(
+            key: formKey,
+            child: Flexible(
+                flex: 5,
+                child: SizedBox(
+                  height: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Flexible(
+                            flex: 2,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  onChanged: (text) {
+                                    email = text;
+                                  },
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: InputDecoration(
+                                      labelText: 'Enter Email Adress',
+                                      border: OutlineInputBorder(),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.green),
+                                      )),
+                                  validator: (value) {
+                                    if (value!.isEmpty ||
+                                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                            .hasMatch(value)) {
+                                      return "Enter correct email";
+                                    } else {
+                                      null;
+                                    }
+                                  },
+                                ),
+                                SizedBox(height: 20),
+                                TextFormField(
+                                  onChanged: (text) {
+                                    password = text;
+                                  },
+                                  obscureText: true,
+                                  decoration: InputDecoration(
+                                      labelText: 'Password',
+                                      border: OutlineInputBorder(),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.green),
+                                      )),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Password can't be empty";
+                                    } else {
+                                      null;
+                                    }
+                                  },
+                                ),
+                              ],
+                            )),
+                        Flexible(
+                            flex: 3,
+                            child: SizedBox(
+                              height: 40,
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                child: Text("Login"),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  if (formKey.currentState!.validate()) {
+                                    final snackBarTrue =
+                                        SnackBar(content: Text('Loging'));
+                                    final snackBarFalse =
+                                        SnackBar(content: Text('User not Found'));
+                                    userAuth(email, password).then((res) => {
+                                          if (res==true)
+                                            {
+                                              _scaffoldKey.currentState!
+                                                  .showSnackBar(snackBarTrue)
+                                            }
+                                          else
+                                            {
+                                              _scaffoldKey.currentState!
+                                                  .showSnackBar(snackBarFalse)
+                                            }
+                                        });
+                                  } else {
+                                    final snackBar = SnackBar(
+                                        content: Text('Invalid credencials'));
+                                    _scaffoldKey.currentState!
+                                        .showSnackBar(snackBar);
+                                  }
                                 },
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: InputDecoration(
-                                    labelText: 'Enter Email Adress',
-                                    border: OutlineInputBorder(),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.green),
-                                    )),
                               ),
-                              SizedBox(height: 20),
-                              TextField(
-                                onChanged: (text) {
-                                  password = text;
-                                },
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                    labelText: 'Password',
-                                    border: OutlineInputBorder(),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.green),
-                                    )),
-                              ),
-                            ],
-                          )),
-                      Flexible(
-                          flex: 3,
-                          child: SizedBox(
-                            height: 40,
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              child: Text("Login"),
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.grey,
-                              ),
-                              onPressed: () {
-                                userAuth(email, password);
-                              },
-                            ),
-                          ))
-                    ],
+                            ))
+                      ],
+                    ),
                   ),
-                ),
-              )),
+                )),
+          ),
           Flexible(
-              flex: 2,
+              flex: 1,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
@@ -144,17 +187,14 @@ class _LoginState extends State<Login2> {
   }
 }
 
-Future userAuth(String email, String password) async {
+Future<bool> userAuth(String email, String password) async {
   var url = "http://localhost:3001/api/user/auth";
   final Uri uri = Uri.parse(url);
   var response =
       await http.post(uri, body: {'email': email, 'password': password});
   var status = response.statusCode;
-  var responseBody = response.body;
   if (status == 200) {
-    print('Voce está logado!');
-  } else {
-    print('Usuário não encontrado');
+    return true;
   }
-  return response.body;
+  return false;
 }
