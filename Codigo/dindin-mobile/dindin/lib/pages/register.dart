@@ -1,19 +1,18 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-class Login2 extends StatefulWidget {
+class Register extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _LoginState();
   }
 }
 
-class _LoginState extends State<Login2> {
+class _LoginState extends State<Register> {
   String email = '';
   String password = '';
   final formKey = GlobalKey<FormState>();
@@ -41,7 +40,7 @@ class _LoginState extends State<Login2> {
                       Flexible(
                         flex: 2,
                         child: Text(
-                          "Log In",
+                          "Register",
                           style: const TextStyle(
                               fontSize: 40, fontWeight: FontWeight.w400),
                         ),
@@ -115,7 +114,7 @@ class _LoginState extends State<Login2> {
                               height: 40,
                               width: double.infinity,
                               child: ElevatedButton(
-                                child: Text("Login"),
+                                child: Text("Register"),
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.grey,
                                 ),
@@ -162,16 +161,16 @@ class _LoginState extends State<Login2> {
                       children: [
                         Row(
                           children: [
-                            Text("Don't have an account?"),
+                            Text("Already have an account?"),
                           ],
                         ),
                         Row(
                           children: [
                             RichText(text: TextSpan(
-                                text: "REGISTER ",
+                                text: "LOGIN",
                                 style: TextStyle(color: Colors.green[800]),
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () { Navigator.pushNamed(context, "/register");
+                                  ..onTap = () { Navigator.pushNamed(context, "/login");
                                 }
                               ),
                             ),
