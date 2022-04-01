@@ -38,19 +38,13 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-    '@nuxtjs/proxy'
+    '@nuxtjs/axios'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: `http://localhost:3001/api`,
-    proxy: true
-  },
-
-  proxy: {
-    '/api/': { target: 'http://localhost:3001/api', pathRewrite: { '^/api/': '' }, changeOrigin: true }
+    baseURL: `http://localhost:3001/api`
   },
 
   vuetify: {
@@ -70,4 +64,9 @@ export default {
   build: {
   },
 
+  watchers: {
+    webpack: {
+      poll: true
+    }
+  }
 }

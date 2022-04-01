@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    networks:
+      - frontend-net
+    working_dir: /usr/src/dindin-frontend
+    container_name: dindin-frontend
+    restart: always
+    env_file: ./.env
+    volumes:
+      - ./:/usr/src/dindin-frontend
+      - node_modules:/usr/src/dindin-frontend/node_modules
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_PUBLIC_PORT
+    stdin_open: true
+    tty: true
+    command: /bin/bash -c "npm run frontend"
+
+volumes:
+  node_modules:
+
+networks:
+    frontend-net:
