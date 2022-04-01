@@ -12,7 +12,7 @@ const routes = require("./routes/index");
 
 // Define cors origin
 var corsOptions = {
-  origin: [`http://${process.env.NODE_APP_HOST}:${process.env.NODE_CORS_PORT}`, `http://${process.env.NODE_APP_HOST}:3000`, `http://${process.env.NODE_APP_HOST}:80`],
+  origin: "*",
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
