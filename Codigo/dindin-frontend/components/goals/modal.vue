@@ -5,7 +5,7 @@
     @click:outside="$emit('input', false)"
     @keydown.esc="$emit('input', false)"
   >
-    <v-card height="130%" class="pa-2">
+    <v-card class="pa-2">
       <v-card-title class="text-h5 goals-modal-title">
         <h4>
           <span> Goals</span>
@@ -104,13 +104,13 @@
       <v-card-actions>
         <v-row>
           <v-col cols="4" align="center">
-            <v-btn text color="black" @click.stop="show = false">Cancel</v-btn>
+            <v-btn text color="black" @click.stop="$emit('input', false)">Cancel</v-btn>
           </v-col>
           <v-col class="mr-2">
             <v-btn
               block
               color="primary"
-              @click.stop="saveGoal(), (show = false)"
+              @click.stop="saveGoal()"
               >Save</v-btn
             >
           </v-col>
@@ -154,6 +154,7 @@ export default {
   methods: {
     saveGoal() {
       console.log(this.goal);
+      this.show=false;
     },
     editGoal() {},
     parseDate(date) {
@@ -165,17 +166,10 @@ export default {
 </script>
 
 <style>
-.goals-modal-title {
-  margin-left: 0px;
-}
 .goals-modal-title h4 {
   width: calc(100% - 37px);
   text-align: left;
   line-height: 0.1em;
   margin: 20px 0 20px;
-}
-.goals-modal-title h4 span {
-  background: #fff;
-  padding: 0 10px;
 }
 </style>
