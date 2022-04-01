@@ -91,6 +91,7 @@ export default {
             password: this.password,
           })
           .then((res) => {
+            console.log(res.data)
             let d = new Date();
             d.setTime(d.getTime() + 1 * 24 * 60 * 60 * 1000);
             document.cookie = "token= ";
@@ -98,7 +99,7 @@ export default {
             this.$router.push('/dashboard')
           })
           .catch((err) => {
-            this.erroLogin = "User not Found";
+            this.erroLogin = err.response.data.message;
           });
       }
     },
