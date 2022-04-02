@@ -16,8 +16,14 @@
       </v-card-title>
       <v-card-text>
         <v-container fluids>
-          <v-form>
-            <v-row class="pb-2">
+          <v-form
+          ref="form"
+              v-on:submit.prevent="saveGoal"
+              lazy-validation>
+            <v-row
+              class="pb-2"
+              
+            >
               <v-text-field
                 :rules="[rules.required]"
                 prepend-inner-icon="mdi-tag"
@@ -66,7 +72,6 @@
                   v-model="goal.date"
                   @click.native="parseDate(goal.date)"
                   @input="menu = false"
-
                 ></v-date-picker>
               </v-menu>
             </v-row>
@@ -104,15 +109,12 @@
       <v-card-actions>
         <v-row>
           <v-col cols="4" align="center">
-            <v-btn text color="black" @click.stop="$emit('input', false)">Cancel</v-btn>
+            <v-btn text color="black" @click.stop="$emit('input', false)"
+              >Cancel</v-btn
+            >
           </v-col>
           <v-col class="mr-2">
-            <v-btn
-              block
-              color="primary"
-              @click.stop="saveGoal()"
-              >Save</v-btn
-            >
+            <v-btn block color="primary" @click.stop="saveGoal()">Save</v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
@@ -122,8 +124,8 @@
 
 <script>
 export default {
-  data(){
-    return{
+  data() {
+    return {
       goal: {
         description: "",
         date: "",
@@ -136,7 +138,7 @@ export default {
       rules: {
         required: (value) => !!value || "Required.",
       },
-    }
+    };
   },
   props: {
     value: Boolean,
@@ -153,13 +155,16 @@ export default {
   },
   methods: {
     saveGoal() {
-      console.log(this.goal);
-      this.show=false;
+      if (this.$refs.form.validate()) {
+        console.log(this.goal);
+        // this.show=false;
+      }
     },
     editGoal() {},
     parseDate(date) {
-      const [year, month, day] = date.split('-')
-      this.date = `${day}/${month}/${year}`
+      if (!date) return null;
+      const [year, month, day] = date.split("-");
+      this.date = `${day}/${month}/${year}`;
     },
   },
 };
