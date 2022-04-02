@@ -13,7 +13,7 @@ class UpdateGoalController {
       return new AppError("Please send a valid id on url", 500);
     //check if goal exists...
     const findGoalUseCase = new FindGoalUseCase();
-    let findGoal = await findGoalUseCase.find(id); //throw execption if not found
+    await findGoalUseCase.find(id); //throw execption if not found
 
     const scheme = yup.object().shape({
       description: yup.string().required().max(30),
