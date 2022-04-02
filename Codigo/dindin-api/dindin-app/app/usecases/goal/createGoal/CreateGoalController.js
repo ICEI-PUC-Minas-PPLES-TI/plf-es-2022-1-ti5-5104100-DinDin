@@ -13,10 +13,10 @@ class CreateGoalController {
       value: yup.number("'value' must be numeric!").required(),
       status: yup
         .mixed()
-        .oneOf(statusEnum, `'status' must be one of these: ${statusEnum}.`),
+        .oneOf(statusEnum, `'status' must be one of these: ${statusEnum}.`).required(),
       type: yup
         .mixed()
-        .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`),
+        .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`).required(),
       expire_at: yup.date("'expire_at' must be date!").required(),
       wallet_id: yup.number("'usuario_id_medico' must be numeric!").nullable(), // nullable por enquanto trocar depois...
     });
