@@ -4,7 +4,7 @@ function SortPaginate(query, attributes, dataCount) {
       ? Number.parseInt(query.limit)
       : 50;
 
-  const page = query.pagina ? Number.parseInt(query.pagina) : 1;
+  const page = query.page ? Number.parseInt(query.page) : 1;
   const pages = Math.ceil(dataCount / limit);
 
   const offset = limit * (page - 1);

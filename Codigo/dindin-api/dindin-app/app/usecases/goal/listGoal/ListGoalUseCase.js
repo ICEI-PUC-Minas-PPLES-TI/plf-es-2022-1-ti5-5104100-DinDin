@@ -17,9 +17,6 @@ class ListGoalUseCase {
       whre.type = query.type;
     }
 
-    const perPage = query.limit ? +query.limit : 10;
-    const offset = query.page ? (query.page - 1) * perPage : 0;
-
     const attributes = Object.keys(Goal.getAttributes);
     const goalsQuantity = await Goal.count();
     const sortPaginateOptions = SortPaginate(query, attributes, goalsQuantity);
@@ -37,7 +34,7 @@ class ListGoalUseCase {
     return {
       count: goals.rows.length,
       total: goals.count,
-      pages: Math.ceil(goals.count / perPage),
+      pages: Math.ceil(goals.count / sortPaginateOptions.limit),
       goals: goals.rows,
     };
   }
