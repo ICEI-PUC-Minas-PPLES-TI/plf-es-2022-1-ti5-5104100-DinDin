@@ -1,8 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-html, body {margin: 0; height: 100%; overflow: hidden}
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
+html, body {
+    margin: 0;
+    max-height: 100%;
+    overflow: hidden;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+#dindin-app{
+    background-color: #F9F9F9;
+}
+
 *{
     font-family: 'Roboto', sans-serif;
 }
 .text-left{
     text-align: left;
+}
+
+.p-20{
+    padding: 20px;
 }
