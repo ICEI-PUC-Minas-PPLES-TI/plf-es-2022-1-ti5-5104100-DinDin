@@ -3,7 +3,7 @@ const DataTypes = require('sequelize/lib/data-types');
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('goal', 
+    await queryInterface.createTable('goal',
       {
         id: {
           type: DataTypes.INTEGER.UNSIGNED,

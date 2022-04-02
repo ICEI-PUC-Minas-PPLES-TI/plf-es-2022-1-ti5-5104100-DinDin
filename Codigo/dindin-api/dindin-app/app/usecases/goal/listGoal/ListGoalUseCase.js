@@ -5,9 +5,9 @@ const { Op } = require("sequelize");
 class ListGoalUseCase {
   async list(query) {
     let whre = {};
-    
+
     if (query.description) {
-      whre.description = {  [Op.like]: `%${query.description}%`};
+      whre.description = { [Op.like]: `%${query.description}%` };
     }
     if (query.status) {
       whre.status = query.status;

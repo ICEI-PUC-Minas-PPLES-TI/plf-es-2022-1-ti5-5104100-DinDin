@@ -5,56 +5,56 @@ class Goal extends Model {
     super.init(
       {
         id: {
-            type: DataTypes.INTEGER(11).UNSIGNED,
-            primaryKey: true,
-            autoIncrement: true,
-            allowNull: false
+          type: DataTypes.INTEGER(11).UNSIGNED,
+          primaryKey: true,
+          autoIncrement: true,
+          allowNull: false
         },
         description: {
-            type: DataTypes.STRING(30),
-            allowNull: false
+          type: DataTypes.STRING(30),
+          allowNull: false
         },
         value: {
-            type: DataTypes.DOUBLE,
-            allowNull: false,
-            unique: true
+          type: DataTypes.DOUBLE,
+          allowNull: false,
+          unique: true
         },
         status: {
-            type: DataTypes.ENUM,
-            values: ["FINISHED", "LOST", "PENDING"],
-            defaultValue: "PENDING",
-            allowNull: false
+          type: DataTypes.ENUM,
+          values: ["FINISHED", "LOST", "PENDING"],
+          defaultValue: "PENDING",
+          allowNull: false
         },
         type: {
-            type: DataTypes.ENUM,
-            values: ["A", "B"],
-            defaultValue: "A",
-            allowNull: false
+          type: DataTypes.ENUM,
+          values: ["A", "B"],
+          defaultValue: "A",
+          allowNull: false
         },
         expire_at: {
-            allowNull: true,
-            type: DataTypes.DATE
+          allowNull: true,
+          type: DataTypes.DATE
         },
         wallet_id: {
-            type: DataTypes.INTEGER(11).UNSIGNED,
-            allowNull: true//trocar depois
-            // references: {
-            //   model: Wallet,
-            //   key: "id"
-            // }
+          type: DataTypes.INTEGER(11).UNSIGNED,
+          allowNull: true//trocar depois
+          // references: {
+          //   model: Wallet,
+          //   key: "id"
+          // }
         },
         created_at: {
-            allowNull: false,
-            type: DataTypes.DATE
+          allowNull: false,
+          type: DataTypes.DATE
         },
         updated_at: {
-            allowNull: false,
-            type: DataTypes.DATE
+          allowNull: false,
+          type: DataTypes.DATE
         },
         deleted_at: {
-            allowNull: true,
-            type: DataTypes.DATE,
-            defaultValue: null,
+          allowNull: true,
+          type: DataTypes.DATE,
+          defaultValue: null,
         }
 
       },

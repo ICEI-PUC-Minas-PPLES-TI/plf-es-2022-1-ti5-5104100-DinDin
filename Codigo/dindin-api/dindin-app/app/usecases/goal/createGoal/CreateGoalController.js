@@ -28,7 +28,7 @@ class CreateGoalController {
     }
 
     const { description, value, status, type, expire_at, wallet_id } = request.body;
-    
+
     const createGoalUseCase = new CreateGoalUseCase();
     const goal = await createGoalUseCase.create(
       description,

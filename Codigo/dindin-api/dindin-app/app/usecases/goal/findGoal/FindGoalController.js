@@ -5,7 +5,7 @@ class FindGoalController {
 
   async find(request, response) {
     const id = request?.params?.id;
-    if(!id || !(id > 0)) return new AppError("Please send a valid id on url", 500);
+    if (!id || !(id > 0)) return new AppError("Please send a valid id on url", 500);
     const findGoalUseCase = new GoalFindUseCase();
     const goal = await findGoalUseCase.find(
       id
