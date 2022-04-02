@@ -8,16 +8,16 @@ module.exports = {
         {
           description: "Goal 1",
           value: "16000",
-          status: "PENDING",
+          status: "FINISHED",
           type: "A",
           expire_at: "2022-09-26 11:50:00",
           created_at: "2022-03-26 11:30:00",
           updated_at: "2022-05-30 11:30:00",
-        },        
+        },
         {
           description: "Goal 2",
           value: "20000.55",
-          status: "PENDING",
+          status: "LOST",
           type: "A",
           expire_at: "2022-07-20 11:50:00",
           created_at: "2022-03-24 11:30:00",
@@ -26,7 +26,7 @@ module.exports = {
         {
           description: "Goal 3",
           value: "50000.55",
-          status: "LOST",
+          status: "PENDING",
           type: "A",
           expire_at: "2022-02-20 11:50:00",
           created_at: "2022-01-24 11:30:00",
@@ -44,7 +44,7 @@ module.exports = {
         {
           description: "Goal 5",
           value: "7000.5",
-          status: "FINISHED",
+          status: "LOST",
           type: "B",
           expire_at: "2022-05-26 11:50:00",
           created_at: "2022-03-24 11:30:00",
@@ -59,7 +59,7 @@ module.exports = {
           created_at: "2022-03-24 11:30:00",
           updated_at: "2023-03-26 11:30:00",
         }
-      ]      
+      ]
     );
   },
 
