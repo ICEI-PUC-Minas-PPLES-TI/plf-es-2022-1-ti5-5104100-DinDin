@@ -1,6 +1,7 @@
 const AppError = require("../../../errors/AppError");
 const Goal = require("../../../models/Goal");
 const { Op } = require("sequelize");
+const { SortPaginate } = require("../../../helpers/SortPaginate");
 
 class ListGoalUseCase {
   async list(query) {
@@ -19,10 +20,15 @@ class ListGoalUseCase {
     const perPage = query.limit ? +query.limit : 10;
     const offset = query.page ? (query.page - 1) * perPage : 0;
 
+    const attributes = Object.keys(Goal.getAttributes);
+    const goalsQuantity = await Goal.count();
+    const sortPaginateOptions = SortPaginate(query, attributes, goalsQuantity);
+
     const goals = await Goal.findAndCountAll({
       where: whre,
-      limit: perPage,
-      offset: offset,
+      limit: sortPaginateOptions.limit,
+      offset: sortPaginateOptions.offset,
+      order: sortPaginateOptions.order
       //include: [wallet]
     }).catch((error) => {
       throw new AppError("Erro interno do servidor!", 500, error);
