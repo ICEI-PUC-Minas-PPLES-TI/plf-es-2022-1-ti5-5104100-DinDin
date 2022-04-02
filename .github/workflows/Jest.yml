@@ -35,6 +35,7 @@ jobs:
         echo DB_USER=${{ secrets.DB_USER }} >> .env
         echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
         echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+        echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
     - name: Set up MySQL 5.7
       uses: mirromutth/mysql-action@v1.1
       with:
