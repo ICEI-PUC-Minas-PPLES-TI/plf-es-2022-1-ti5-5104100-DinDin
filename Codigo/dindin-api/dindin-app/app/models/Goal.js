@@ -5,7 +5,7 @@ class Goal extends Model {
     super.init(
       {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER(11).UNSIGNED,
             primaryKey: true,
             autoIncrement: true,
             allowNull: false
@@ -56,7 +56,7 @@ class Goal extends Model {
             type: DataTypes.DATE,
             defaultValue: null,
         }
-        
+
       },
       {
         tableName: "goal",
