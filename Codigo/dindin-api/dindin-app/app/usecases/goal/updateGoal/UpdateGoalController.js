@@ -8,13 +8,13 @@ const typeEnum = ["A", "B"];
 
 class UpdateGoalController {
   async update(request, response) {
-    const id = request.params.id;
+    const id = request?.params?.id;
+    if (!id || !(id > 0))
+      return new AppError("Please send a valid id on url", 500);
     //check if goal exists...
     const findGoalUseCase = new FindGoalUseCase();
-    let findGoal = await findGoalUseCase.find(id);//throw execption if not found
-    findGoal = null;
-    findGoalUseCase = null;
-    
+    let findGoal = await findGoalUseCase.find(id); //throw execption if not found
+
     const scheme = yup.object().shape({
       description: yup.string().required().max(30),
       value: yup.number("'value' must be numeric!").required(),
@@ -35,10 +35,10 @@ class UpdateGoalController {
     } catch (error) {
       throw new AppError(error.name, 422, error.errors);
     }
-    
 
-    const { description, value, status, type, expire_at, wallet_id } = request.body;
-    
+    const { description, value, status, type, expire_at, wallet_id } =
+      request.body;
+
     const goalUpdateUseCase = new GoalUpdateUseCase();
     const goal = await goalUpdateUseCase.update(
       id,

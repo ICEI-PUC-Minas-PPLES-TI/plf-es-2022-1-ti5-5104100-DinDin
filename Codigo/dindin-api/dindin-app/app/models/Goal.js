@@ -66,20 +66,8 @@ class Goal extends Model {
         paranoid: true, // deleted_at need this
         createdAt: "created_at",
         updatedAt: "updated_at",
-        deleted_at: "deleted_at", // .destroy() and .destroy(); to softdelete
+        deletedAt: "deleted_at", // .destroy() and .destroy(); to softdelete
         sequelize
-        // scopes: {
-        //   deleted: {
-        //     where: {
-        //       deleted: true
-        //     }
-        //   },
-        //   activeUsers: {
-        //     include: [
-        //       { model: User, where: { active: true } }
-        //     ]
-        //   },
-        // }
       }
     );
   }

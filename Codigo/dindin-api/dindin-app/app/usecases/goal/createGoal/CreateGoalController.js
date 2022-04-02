@@ -13,12 +13,10 @@ class CreateGoalController {
       value: yup.number("'value' must be numeric!").required(),
       status: yup
         .mixed()
-        .oneOf(statusEnum, `'status' must be one of these: ${statusEnum}.`)
-        .required(),
+        .oneOf(statusEnum, `'status' must be one of these: ${statusEnum}.`),
       type: yup
         .mixed()
-        .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`)
-        .required(),
+        .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`),
       expire_at: yup.date("'expire_at' must be date!").required(),
       wallet_id: yup.number("'usuario_id_medico' must be numeric!").nullable(), // nullable por enquanto trocar depois...
     });
@@ -28,7 +26,6 @@ class CreateGoalController {
     } catch (error) {
       throw new AppError(error.name, 422, error.errors);
     }
-    //console.log(request);
 
     const { description, value, status, type, expire_at, wallet_id } = request.body;
     
