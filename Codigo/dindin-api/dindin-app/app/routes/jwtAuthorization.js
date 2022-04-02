@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const AppError = require("../errors/AppError");
+require("dotenv").config();
 
 const verifyToken = (request, response, next) => {
   let token = request.headers["Authorization"];
@@ -26,8 +27,25 @@ const verifyToken = (request, response, next) => {
   });
 };
 
+const logIn = (id) => {
+  // 1 day in seconds: 86400
+  const days = 90;
+  const seconds = 86400 * days;
+  const token = jwt.sign(
+    {
+      id: id
+    },
+    process.env.SECRET_KEY,
+    {
+      expiresIn: seconds
+    }
+  );
+  return token;
+};
+
 const jwtAuthorization = {
   verifyToken,
+  logIn
 };
 
 module.exports = jwtAuthorization;
