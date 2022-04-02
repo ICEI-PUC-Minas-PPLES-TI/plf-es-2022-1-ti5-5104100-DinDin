@@ -2,7 +2,7 @@ const AppError = require("../../../errors/AppError");
 const Goal = require("../../../models/Goal");
 
 class UpdateGoalUseCase {
-  async update( id, description, value, status, type, expire_at, wallet_id) {
+  async update(id, description, value, status, type, expire_at, wallet_id) {
 
     const goal = await Goal.update({
       description,
@@ -12,11 +12,11 @@ class UpdateGoalUseCase {
       expire_at,
       wallet_id
     },
-    {
-      where: { id: id }
-    }).catch((error) => {
-      throw new AppError(error.message, 500, error);
-    });
+      {
+        where: { id: id }
+      }).catch((error) => {
+        throw new AppError(error.message, 500, error);
+      });
     return goal;
   }
 }
