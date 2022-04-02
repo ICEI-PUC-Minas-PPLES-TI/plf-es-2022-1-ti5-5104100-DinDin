@@ -16,17 +16,15 @@ class UpdateGoalController {
     await findGoalUseCase.find(id); //throw execption if not found
 
     const scheme = yup.object().shape({
-      description: yup.string().required().max(30),
-      value: yup.number("'value' must be numeric!").required(),
+      description: yup.string().max(30),
+      value: yup.number("'value' must be numeric!"),
       status: yup
         .mixed()
-        .oneOf(statusEnum, `'status' must be one of these: ${statusEnum}.`)
-        .required(),
+        .oneOf(statusEnum, `'status' must be one of these: ${statusEnum}.`),
       type: yup
         .mixed()
-        .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`)
-        .required(),
-      expire_at: yup.date("'expire_at' must be date!").required(),
+        .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`),
+      expire_at: yup.date("'expire_at' must be date!"),
       wallet_id: yup.number("'usuario_id_medico' must be numeric!").nullable(), // nullable por enquanto trocar depois...
     });
 
