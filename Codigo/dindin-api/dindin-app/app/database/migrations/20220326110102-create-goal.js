@@ -6,7 +6,7 @@ module.exports = {
     await queryInterface.createTable('goal',
       {
         id: {
-          type: DataTypes.INTEGER.UNSIGNED,
+          type: DataTypes.INTEGER(11).UNSIGNED,
           primaryKey: true,
           autoIncrement: true,
           allowNull: false
