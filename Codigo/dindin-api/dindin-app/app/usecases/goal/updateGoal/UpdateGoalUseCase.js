@@ -15,10 +15,9 @@ class UpdateGoalUseCase {
     {
       where: { id: id }
     }).catch((error) => {
-      //console.log(error);
       throw new AppError(error.message, 500, error);
     });
-    return  await Goal.findOne({where:{id: id}}) ;
+    return goal;
   }
 }
 
