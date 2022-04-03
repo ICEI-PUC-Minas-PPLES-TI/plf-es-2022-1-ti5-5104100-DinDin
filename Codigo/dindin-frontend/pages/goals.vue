@@ -15,7 +15,7 @@
           <!-- Table top toolbar -->
           <v-row>
             <v-col cols="2" offset="10">
-              <v-btn block color="success">
+              <v-btn block color="success" @click.stop="showModal=true">
                 New Goal
               </v-btn>
             </v-col>
@@ -94,19 +94,25 @@
           </v-row>
         </v-card>
       </v-col>
-    </v-row>
+    </v-row>   
+    <modal v-model="showModal" />
   </v-container>
 </template>
 
 <script>
+import modal from '@/components/goals/modal.vue'
 export default {
   layout: "home",
+  components: {
+    modal
+  },
   data(){
     return {
       currentPage: 1,
       pages: 1,
       goals: [],
-      loading: false
+      loading: false,
+      showModal: false
     }
   },
   async fetch() {
