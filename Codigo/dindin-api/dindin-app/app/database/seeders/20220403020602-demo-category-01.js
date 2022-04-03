@@ -59,7 +59,7 @@ module.exports = {
       },
       {
         name: "Vehicle",
-        color: "BLACK",
+        color: "RED",
         created_at: "2022-04-04 04:00:00",
         updated_at: "2022-04-04 04:00:00"
       },
@@ -78,7 +78,7 @@ module.exports = {
       
       {
         name: "Pet",
-        color: "BLACK",
+        color: "BLUE",
         created_at: "2022-04-04 04:00:00",
         updated_at: "2022-04-04 04:00:00"
       }
