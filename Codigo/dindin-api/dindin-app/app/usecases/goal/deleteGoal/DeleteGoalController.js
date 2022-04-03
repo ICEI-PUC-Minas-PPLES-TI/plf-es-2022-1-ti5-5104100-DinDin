@@ -1,18 +1,17 @@
-const AppError = require("../../errors/AppError");
 const DeleteGoalUseCase = require("./DeleteGoalUseCase");
-const GoalFindUseCase = require("../findGoal/FindGoalUseCase");
+const FindGoalUseCase = require("../findGoal/FindGoalUseCase");
 
 class DeleteGoalController {
-  async update(request, response) {
-    const id = request.params.id;
+  async delete(request, response) {
+    const id = request?.params?.id;
+    if (!id || !(id > 0))
+      return new AppError("Please send a valid id on url", 500);
     //check if goal exists...
-    const goalFindUseCase = new GoalFindUseCase();
-    let findGoal = await goalFindUseCase.find(id);//throw execption if not found
-    findGoal = null;
-    goalFindUseCase = null;
-    
+    const findGoalUseCase = new FindGoalUseCase();
+    const findGoal = await findGoalUseCase.find(id);
+
     const deleteGoalUseCase = new DeleteGoalUseCase();
-    const goal = await deleteGoalUseCase.deleteById(id);
+    const goal = await deleteGoalUseCase.delete(findGoal);
 
     return response.status(201).json({
       goal,
