@@ -6,6 +6,7 @@ const { Sequelize } = require("sequelize");
 const dbConfig = require("../config/config.js");
 
 const User = require("../models/User.js");
+const Category = require("../models/Category")
 
 const dbConfigEnviroment = process.env.NODE_ENV === "test" ? dbConfig.test : dbConfig.production;
 const sequelize = new Sequelize(dbConfigEnviroment.database, dbConfigEnviroment.username, dbConfigEnviroment.password, {
@@ -63,7 +64,7 @@ module.exports = {
     try {
       // Start Models here
       User.init(sequelize);
-
+      Category.init(sequelize);
       // Configure Associations here
 
 
