@@ -13,7 +13,7 @@ class DeleteGoalController {
     const deleteGoalUseCase = new DeleteGoalUseCase();
     const goal = await deleteGoalUseCase.delete(findGoal);
 
-    return response.status(201).json({
+    return response.status(204).json({
       goal,
     });
   }
