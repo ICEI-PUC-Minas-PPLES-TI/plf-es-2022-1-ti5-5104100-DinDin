@@ -18,7 +18,12 @@ const sequelize = new Sequelize(dbConfigEnviroment.database, dbConfigEnviroment.
     supportBigNumbers: true,
     bigNumberStrings: true,
     connectTimeout: 60000,
-    debug: false
+    debug: false,
+    dateStrings: true,
+    options: {
+      useUTC: false, // for reading from database
+      dateFirst: 1
+    }
   },
 
   // use pooling in order to reduce db connection overload and to increase speed
@@ -36,7 +41,7 @@ const sequelize = new Sequelize(dbConfigEnviroment.database, dbConfigEnviroment.
     dialectOptions: {
       collate: 'utf8mb4_bin'
     },
-    timestamps: true
+    timestamps: false // I don't want timestamp fields by default
   },
 
   // similar for sync: you can define this to always force sync for models
@@ -44,6 +49,8 @@ const sequelize = new Sequelize(dbConfigEnviroment.database, dbConfigEnviroment.
 
   // sync after each association (see below). If set to false, you need to sync manually after setting all associations. Default: true
   syncOnAssociation: true,
+
+  timezone: '-03:00', // for writing to database
 
   // language is used to determine how to translate words into singular or plural
   language: 'en',
@@ -93,7 +100,7 @@ module.exports = {
    * This method literally drop the database, use it
    * only on test enviroment
    */
-  async __drop__(){
+  async __drop__() {
     const connection = await mysql.createConnection({ host: dbConfigEnviroment.host, port: dbConfigEnviroment.port, user: dbConfigEnviroment.username, password: dbConfigEnviroment.password });
     if (process.env.NODE_ENV === "test")
       await connection.query(`DROP DATABASE IF EXISTS \`${dbConfigEnviroment.database}\``);
