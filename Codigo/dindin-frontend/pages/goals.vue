@@ -120,7 +120,7 @@ export default {
     await this.$axios
       .$get(`/goal?page=${this.currentPage}`)
       .then(res => {
-        this.pages = res.paginas
+        this.pages = res.pages
         this.goals = res.goals
       })
       .finally(() => {
