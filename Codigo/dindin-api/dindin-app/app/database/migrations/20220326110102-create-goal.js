@@ -3,7 +3,7 @@ const DataTypes = require('sequelize/lib/data-types');
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('user',
+    await queryInterface.createTable('goal',
       {
         id: {
           type: DataTypes.INTEGER(11).UNSIGNED,
@@ -11,19 +11,37 @@ module.exports = {
           autoIncrement: true,
           allowNull: false
         },
-        name: {
-          type: DataTypes.STRING(100),
+        description: {
+          type: DataTypes.STRING(30),
           allowNull: false
         },
-        email: {
-          type: DataTypes.STRING(150),
-          allowNull: false,
-          unique: true
+        value: {
+          type: DataTypes.DOUBLE,
+          allowNull: false
         },
-        password: {
-          type: DataTypes.STRING(64),
-          allowNull: false,
-          comment: 'Encrypted with 64 digits'
+        status: {
+          type: DataTypes.ENUM,
+          values: ["FINISHED", "LOST", "PENDING"],
+          defaultValue: "PENDING",
+          allowNull: false
+        },
+        type: {
+          type: DataTypes.ENUM,
+          values: ["A", "B"],
+          defaultValue: "A",
+          allowNull: false
+        },
+        expire_at: {
+          allowNull: true,
+          type: Sequelize.DATE
+        },
+        wallet_id: {
+          type: DataTypes.INTEGER(11).UNSIGNED,
+          allowNull: true//trocar depois
+          // references: {
+          //   model: Wallet,
+          //   key: "id"
+          // }
         },
         created_at: {
           allowNull: false,
@@ -47,6 +65,6 @@ module.exports = {
     );
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('user');
+    await queryInterface.dropTable('goal');
   }
 };
