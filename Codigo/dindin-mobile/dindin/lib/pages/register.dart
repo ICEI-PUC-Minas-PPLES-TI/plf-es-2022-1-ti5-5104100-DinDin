@@ -13,8 +13,10 @@ class Register extends StatefulWidget {
 }
 
 class _LoginState extends State<Register> {
+  final TextEditingController _emailController = TextEditingController();
   String email = '';
   String password = '';
+  String name = '';
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -22,184 +24,208 @@ class _LoginState extends State<Register> {
     return Scaffold(
       key: _scaffoldKey,
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flexible(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  height: double.infinity,
-                  width: double.infinity,
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Column(children: [
-                      Flexible(
-                        flex: 2,
-                        child: SizedBox(height: double.infinity),
-                      ),
-                      Flexible(
-                        flex: 2,
-                        child: Text(
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 0.0, vertical: 20.0),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Column(children: [
+                        Text(
                           "Register",
                           style: const TextStyle(
                               fontSize: 40, fontWeight: FontWeight.w400),
                         ),
-                      ),
-                    ]),
+                      ]),
+                    ),
                   ),
                 ),
-              )),
-          Form(
-            key: formKey,
-            child: Flexible(
-                flex: 5,
-                child: SizedBox(
-                  height: double.infinity,
+                Form(
+                  key: formKey,
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        Flexible(
-                            flex: 2,
-                            child: Column(
-                              children: [
-                                TextFormField(
-                                  onChanged: (text) {
-                                    email = text;
-                                  },
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: InputDecoration(
-                                      labelText: 'Enter Email Adress',
-                                      border: OutlineInputBorder(),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.green),
-                                      )),
-                                  validator: (value) {
-                                    if (value!.isEmpty ||
-                                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                            .hasMatch(value)) {
-                                      return "Enter correct email";
-                                    } else {
-                                      null;
-                                    }
-                                  },
-                                ),
-                                SizedBox(height: 20),
-                                TextFormField(
-                                  onChanged: (text) {
-                                    password = text;
-                                  },
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                      labelText: 'Password',
-                                      border: OutlineInputBorder(),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.green),
-                                      )),
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Password can't be empty";
-                                    } else {
-                                      null;
-                                    }
-                                  },
-                                ),
-                              ],
-                            )),
-                        Flexible(
-                            flex: 3,
-                            child: SizedBox(
-                              height: 40,
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                child: Text("Register"),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.grey,
-                                ),
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    final snackBarTrue =
-                                        SnackBar(content: Text('Loging'));
-                                    final snackBarFalse =
-                                        SnackBar(content: Text('User not Found'));
-                                    userAuth(email, password).then((res) => {
-                                          if (res==true)
-                                            {
-                                              _scaffoldKey.currentState!
-                                                  .showSnackBar(snackBarTrue)
-                                            }
-                                          else
-                                            {
-                                              _scaffoldKey.currentState!
-                                                  .showSnackBar(snackBarFalse)
-                                            }
-                                        });
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0.0, vertical: 10.0),
+                              child: TextFormField(
+                                onChanged: (text) {
+                                  email = text;
+                                },
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                    labelText: 'Email Adress',
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    )),
+                                validator: (value) {
+                                  if (value!.isEmpty ||
+                                      !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                          .hasMatch(value)) {
+                                    return "Enter correct email";
                                   } else {
-                                    final snackBar = SnackBar(
-                                        content: Text('Invalid credencials'));
-                                    _scaffoldKey.currentState!
-                                        .showSnackBar(snackBar);
+                                    null;
                                   }
                                 },
                               ),
-                            ))
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0.0, vertical: 10.0),
+                              child: TextFormField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                    labelText: 'Your Name',
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    )),
+                                validator: (value) {
+                                  if (value!.isEmpty ||
+                                      !RegExp(r"^[a-zA-Z ]").hasMatch(value)) {
+                                    return "Enter correct name (only letters)";
+                                  } else {
+                                    null;
+                                  }
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0.0, vertical: 10.0),
+                              child: TextFormField(
+                                onChanged: (text) {
+                                  password = text;
+                                },
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    )),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Password can't be empty";
+                                  } else {
+                                    null;
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 0.0, vertical: 10.0),
+                          child: SizedBox(
+                            height: 40,
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              child: Text("Register"),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.grey,
+                              ),
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  final snackBarTrue =
+                                      SnackBar(content: Text('User created'));
+                                  final snackBarFalse = SnackBar(
+                                      content: Text('Fail to create user'));
+                                  createUser(email, password, name)
+                                      .then((res) => {
+                                            if (res == 0)
+                                              {
+                                                _scaffoldKey.currentState!
+                                                    .showSnackBar(snackBarTrue)
+                                              }
+                                            else
+                                              {
+                                                _scaffoldKey.currentState!
+                                                    .showSnackBar(snackBarFalse)
+                                              }
+                                          });
+                                } else {
+                                  final snackBar = SnackBar(
+                                      content: Text('Invalid credencials'));
+                                  _scaffoldKey.currentState!
+                                      .showSnackBar(snackBar);
+                                }
+                              },
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
-                )),
+                ),
+              ],
+            ),
           ),
-          Flexible(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            Text("Already have an account?"),
-                          ],
+                        Text("Already have an account?"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                              text: "LOGIN",
+                              style: TextStyle(color: Colors.green[800]),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.popAndPushNamed(context, "/login");
+                                }),
                         ),
-                        Row(
-                          children: [
-                            RichText(text: TextSpan(
-                                text: "LOGIN",
-                                style: TextStyle(color: Colors.green[800]),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () { Navigator.pushNamed(context, "/login");
-                                }
-                              ),
-                            ),
-                            Icon(
-                              Icons.arrow_forward,
-                              color: Colors.green,
-                              size: 30.0,
-                            ),
-                          ],
+                        Icon(
+                          Icons.arrow_forward,
+                          color: Colors.green,
+                          size: 30.0,
                         ),
                       ],
-                    )
+                    ),
                   ],
-                ),
-              ))
+                )
+              ],
+            ),
+          )
         ],
       ),
     );
   }
 }
 
-Future<bool> userAuth(String email, String password) async {
-  var url = "http://localhost:3001/api/user/auth";
+Future<Object> createUser(String email, String name, String password) async {
+  String url = "http://localhost:3001/api/user";
   final Uri uri = Uri.parse(url);
-  var response =
-      await http.post(uri, body: {'email': email, 'password': password});
-  var status = response.statusCode;
-  if (status == 200) {
-    return true;
+  var response = await http
+      .post(uri, body: {'email': email, 'password': password, 'name': name});
+  int status = response.statusCode;
+  if (status == 201) {
+    return jsonDecode(response.body);
   }
-  return false;
+  return {'message': "Fail to connect to the network"};
 }
