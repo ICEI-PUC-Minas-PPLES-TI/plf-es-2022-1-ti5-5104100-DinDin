@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'pages/login2.dart';
 import 'pages/login.dart';
 import 'package:flutter/services.dart';
+import 'pages/register.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,8 +15,9 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Login2(),
-    );
+    return MaterialApp(initialRoute: "/login", routes: {
+      "/login": (context) => Login2(),
+      "/register": (context) => Register()
+    });
   }
 }
