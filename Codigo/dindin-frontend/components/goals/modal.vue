@@ -15,10 +15,7 @@
         </v-btn>
       </v-card-title>
       <v-card-text>
-        <v-alert
-          v-if="errors.length > 0"
-          type="error"
-        >
+        <v-alert v-if="errors.length > 0" type="error">
           Error:
           <ul>
             <li v-for="(er, eidx) in errors" :key="eidx">
@@ -28,14 +25,8 @@
         </v-alert>
         <!-- Goal Add Form -->
         <v-container fluids>
-          <v-form
-          ref="form"
-              v-on:submit.prevent="saveGoal"
-              lazy-validation>
-            <v-row
-              class="pb-2"
-              
-            >
+          <v-form ref="form" v-on:submit.prevent="saveGoal" lazy-validation>
+            <v-row class="pb-2">
               <v-text-field
                 :rules="[rules.required]"
                 prepend-inner-icon="mdi-tag"
@@ -69,7 +60,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    :rules="[rules.required]"
+                    :rules="[rules.wrongDate]"
                     prepend-inner-icon="mdi-calendar-range"
                     outlined
                     hide-details="auto"
@@ -77,7 +68,7 @@
                     :value="date"
                     v-bind="attrs"
                     v-on="on"
-                    label="Date"
+                    label="Expire at"
                   />
                 </template>
                 <v-date-picker
@@ -95,8 +86,8 @@
                 hide-details="auto"
                 outlined
                 :items="[
-                  { text: 'Saving', value: 1 },
-                  { text: 'Achievement', value: 2 },
+                  { text: 'Saving', value: 'A' },
+                  { text: 'Achievement', value: 'B' },
                 ]"
                 label="Goal Type"
               />
@@ -135,7 +126,7 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 export default {
   data() {
     return {
@@ -146,12 +137,14 @@ export default {
         type: 0,
         walletId: 0,
       },
+      today:"",
       date: "",
       menu: false,
       rules: {
         required: (value) => !!value || "Required.",
+        wrongDate: (value) => this.compareDates(value,this.today) || "Date expired.",
       },
-      errors: []
+      errors: [],
     };
   },
   props: {
@@ -169,22 +162,38 @@ export default {
   },
   methods: {
     saveGoal() {
-      this.errors = []
+      this.errors = [];
       if (this.$refs.form.validate()) {
-        Swal.fire({
-          title: 'Goal Created',
-          icon: 'success',
-          showConfirmButton: false,
-          toast: true,
-          position: 'top-end',
-          timer: 3000,
-          timerProgressBar: true,
-        })
-        this.$emit('input', false)
+        this.$axios
+          .post("/goal", {
+            description: this.goal.description,
+            expire_at: this.goal.date,
+            value: this.goal.value,
+            type: this.goal.type,
+            walletId: this.goal.walletId,
+            status: "PENDING",
+          })
+          .then((res) => {
+            Swal.fire({
+              title: "Goal Created",
+              icon: "success",
+              showConfirmButton: false,
+              toast: true,
+              position: "top-end",
+              timer: 3000,
+              timerProgressBar: true,
+            });
+            this.$refs.form.reset();
+            this.$emit("input", false);
+          })
+          .catch((err) => {
+            this.erroLogin = err.response.data.message;
+            if (err.response.status == 500) {
+              this.erroLogin = "Erro interno do servidor";
+            }
+          });
       } else {
-        this.errors = [
-          'Fields have invalid input'
-        ]
+        this.errors = ["Fields have invalid input"];
       }
     },
     editGoal() {},
@@ -193,6 +202,25 @@ export default {
       const [year, month, day] = date.split("-");
       this.date = `${day}/${month}/${year}`;
     },
+    compareDates(date1,date2){
+      let date1Split = date1.split("/");
+      let date2Split = date2.split("/");
+      let resp = false;
+      if(parseInt(date1Split[2])>=parseInt(date2Split[2])){
+        if(parseInt(date1Split[1])>=parseInt(date2Split[1])){
+          if(parseInt(date1Split[0])>=parseInt(date2Split[0])){
+            resp = true;
+          }
+        }
+      }
+      console.log(resp)
+      return resp;
+    }
+  },
+  mounted(){
+    let dateToday=(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+    const [year, month, day] = dateToday.split("-");
+    this.today = `${day}/${month}/${year}`
   },
 };
 </script>
