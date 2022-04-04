@@ -35,7 +35,7 @@ module.exports = {
       },
       {
         name: "Shopping",
-        color: "Green",
+        color: "GREEN",
         created_at: "2022-05-05 05:00:00",
         updated_at: "2022-05-05 05:00:00"
       },
@@ -71,11 +71,11 @@ module.exports = {
       },
       {
         name: "Work",
-        color: "Green",
+        color: "GREEN",
         created_at: "2022-05-05 05:00:00",
         updated_at: "2022-05-05 05:00:00"
       },
-      
+
       {
         name: "Pet",
         color: "BLUE",
