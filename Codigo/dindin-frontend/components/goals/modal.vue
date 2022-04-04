@@ -8,7 +8,7 @@
     <v-card class="pa-2">
       <v-card-title class="text-h5 goals-modal-title">
         <h4>
-          <span> Goals</span>
+          <span> {{ title }}</span>
         </h4>
         <v-btn icon @click="$emit('input', false)">
           <v-icon>mdi-close</v-icon>
@@ -128,8 +128,12 @@
 <script>
 import Swal from "sweetalert2";
 export default {
+  props: { 
+    value: Boolean,
+  },
   data() {
     return {
+      title: "New Goal",
       goal: {
         description: "",
         date: "",
@@ -137,18 +141,16 @@ export default {
         type: 0,
         walletId: 0,
       },
-      today:"",
+      today: "",
       date: "",
       menu: false,
       rules: {
         required: (value) => !!value || "Required.",
-        wrongDate: (value) => this.compareDates(value,this.today) || "Date expired.",
+        wrongDate: (value) =>
+          this.compareDates(value, this.today) || "Date expired.",
       },
       errors: [],
     };
-  },
-  props: {
-    value: Boolean,
   },
   computed: {
     show: {
@@ -202,25 +204,31 @@ export default {
       const [year, month, day] = date.split("-");
       this.date = `${day}/${month}/${year}`;
     },
-    compareDates(date1,date2){
+    compareDates(date1, date2) {
+      if (date1 == null || date2 == null) {
+        return false;
+      }
       let date1Split = date1.split("/");
       let date2Split = date2.split("/");
       let resp = false;
-      if(parseInt(date1Split[2])>=parseInt(date2Split[2])){
-        if(parseInt(date1Split[1])>=parseInt(date2Split[1])){
-          if(parseInt(date1Split[0])>=parseInt(date2Split[0])){
+      if (parseInt(date1Split[2]) >= parseInt(date2Split[2])) {
+        if (parseInt(date1Split[1]) >= parseInt(date2Split[1])) {
+          if (parseInt(date1Split[0]) >= parseInt(date2Split[0])) {
             resp = true;
           }
         }
       }
-      console.log(resp)
       return resp;
-    }
+    },
   },
-  mounted(){
-    let dateToday=(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+  mounted() {
+    let dateToday = new Date(
+      Date.now() - new Date().getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .substr(0, 10);
     const [year, month, day] = dateToday.split("-");
-    this.today = `${day}/${month}/${year}`
+    this.today = `${day}/${month}/${year}`;
   },
 };
 </script>
