@@ -66,7 +66,7 @@
                         </v-tooltip>
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn elevation="0" small color="error" v-bind="attrs" v-on="on">
+                            <v-btn elevation="0" small color="error" v-bind="attrs" v-on="on" @click="removeGoal(goal)">
                               <i class="fa-solid fa-trash"></i>
                             </v-btn>
                           </template>
@@ -101,6 +101,7 @@
 
 <script>
 import modal from '@/components/goals/modal.vue'
+import Swal from 'sweetalert2'
 export default {
   layout: "home",
   components: {
@@ -136,6 +137,30 @@ export default {
     },
     changePagination(){
       this.$fetch()
+    },
+    removeGoal(goal){
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        reverseButtons: true,
+        confirmButtonText: 'Yes, I want to delete!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Deleted!',
+            text: 'The goal has been deleted.',
+            icon: 'info',
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end',
+            timer: 3000,
+            timerProgressBar: true,
+          })
+        }
+      })
     }
   }
 };
