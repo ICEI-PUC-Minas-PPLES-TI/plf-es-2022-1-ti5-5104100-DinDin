@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/login2.dart';
-import 'pages/login.dart';
+import 'pages/walltet/index.dart';
 import 'package:flutter/services.dart';
 
 void main() {
@@ -15,7 +15,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Login2(),
+      initialRoute: "/login",
+      routes: {
+        "/login": (context) => Login2(),
+        "/wallet/index": (context) => const WalletList()
+      },
+      theme: ThemeData(
+        primarySwatch: Colors.green
+      ),
     );
   }
 }
