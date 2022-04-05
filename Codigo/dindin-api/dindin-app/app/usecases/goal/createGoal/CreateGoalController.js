@@ -3,7 +3,6 @@ const yup = require("yup");
 const AppError = require("../../../errors/AppError");
 const CreateGoalUseCase = require("./CreateGoalUseCase");
 
-const statusEnum = ["FINISHED", "LOST", "PENDING"];
 const typeEnum = ["A", "B"];
 
 class CreateGoalController {
@@ -11,9 +10,6 @@ class CreateGoalController {
     const scheme = yup.object().shape({
       description: yup.string().required().max(30),
       value: yup.number("'value' must be numeric!").required(),
-      status: yup
-        .mixed()
-        .oneOf(statusEnum, `'status' must be one of these: ${statusEnum}.`).required(),
       type: yup
         .mixed()
         .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`).required(),
@@ -27,13 +23,12 @@ class CreateGoalController {
       throw new AppError(error.name, 422, error.errors);
     }
 
-    const { description, value, status, type, expire_at, wallet_id } = request.body;
+    const { description, value, type, expire_at, wallet_id } = request.body;
 
     const createGoalUseCase = new CreateGoalUseCase();
     const goal = await createGoalUseCase.create(
       description,
       value,
-      status,
       type,
       expire_at,
       wallet_id

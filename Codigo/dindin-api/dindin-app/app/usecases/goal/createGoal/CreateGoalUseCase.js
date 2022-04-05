@@ -2,11 +2,11 @@ const AppError = require("../../../errors/AppError");
 const Goal = require("../../../models/Goal");
 
 class CreateGoalUseCase {
-  async create(description, value, status, type, expire_at, wallet_id) {
+  async create(description, value, type, expire_at, wallet_id) {
     const goal = await Goal.create({
       description,
       value,
-      status,
+      status: "PENDING",
       type,
       expire_at,
       wallet_id
