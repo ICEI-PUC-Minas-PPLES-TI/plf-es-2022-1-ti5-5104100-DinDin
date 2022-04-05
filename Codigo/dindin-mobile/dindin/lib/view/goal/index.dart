@@ -45,6 +45,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GoalList extends StatefulWidget {
   const GoalList({Key? key}) : super(key: key);
@@ -79,41 +80,54 @@ class _GoalListState extends State<GoalList> {
 
   @override
   Widget build(BuildContext context) {
+    const primaryColor = Colors.green;
     return Scaffold(
       appBar: AppBar(
-        title: Text('User List'),
+        title: const Text('Goals'),
+        backgroundColor: primaryColor,
       ),
-      body: Container(
-        child: FutureBuilder<List<dynamic>>(
-          future: fetchUsers(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              print(_age(snapshot.data[0]));
-              return ListView.builder(
-                  padding: EdgeInsets.all(8),
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      child: Column(
-                        children: <Widget>[
-                          ListTile(
-                            leading: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(
-                                    snapshot.data[index]['picture']['large'])),
+      body: FutureBuilder<List<dynamic>>(
+        future: fetchUsers(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            print(_age(snapshot.data[0]));
+            return ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                          child: ListTile(
+                            leading: const Padding(
+                              padding: EdgeInsets.only(top: 5.0),
+                              child: FaIcon(
+                                FontAwesomeIcons.bullseye,
+                                size: 30.0,
+                                color: Colors.redAccent,
+                              ),
+                            ),
                             title: Text(_name(snapshot.data[index])),
-                            subtitle: Text(_location(snapshot.data[index])),
                             trailing: Text(_age(snapshot.data[index])),
-                          )
-                        ],
-                      ),
-                    );
-                  });
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                });
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add your onPressed code here!
+        },
+        backgroundColor: primaryColor,
+        child: const Icon(Icons.add),
       ),
     );
   }
