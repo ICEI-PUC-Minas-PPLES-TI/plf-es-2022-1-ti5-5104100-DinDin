@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Recursive:wght@300&family=Roboto:wght@300;400&display=swap');
 html, body {
     margin: 0;
     max-height: 100%;
@@ -14,10 +14,19 @@ html, body {
 *{
     font-family: 'Roboto', sans-serif;
 }
+
+.page-title{
+    font-family: 'Recursive', sans-serif;
+}
+
 .text-left{
     text-align: left;
 }
 
 .p-20{
     padding: 20px;
+}
+
+.mw-100{
+    max-width: 100%
 }
