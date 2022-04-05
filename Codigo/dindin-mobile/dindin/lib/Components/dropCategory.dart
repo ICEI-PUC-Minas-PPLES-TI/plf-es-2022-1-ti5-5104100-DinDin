@@ -14,7 +14,7 @@ class DropCategory extends StatelessWidget {
               children: [
                 DropdownButton<String>(
                   hint: const Text("Select Category",
-                        style: TextStyle(fontSize: 20)),
+                        style: TextStyle(fontSize: 15)),
                   value: (value.isEmpty) ? null : value,
                   onChanged: (option) => dropValue.value = option.toString(),
                   items: dropOptionsCategories

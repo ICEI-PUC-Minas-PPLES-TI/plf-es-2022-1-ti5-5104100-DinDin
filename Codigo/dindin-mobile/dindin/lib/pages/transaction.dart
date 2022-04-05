@@ -68,9 +68,12 @@ class _TransactionState extends State<Transaction> {
               flex: 1,
               child: Card(
                 child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [DropCategory(), DropWallet()],
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [DropCategory(), DropWallet()],
+                    ),
                   ),
                 ),
               ),
