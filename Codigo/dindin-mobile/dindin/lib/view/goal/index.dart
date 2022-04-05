@@ -1,51 +1,10 @@
-// import 'package:flutter/material.dart';
-
-// class Goals extends StatefulWidget {
-//   const Goals({Key? key}) : super(key: key);
-
-//   @override
-//   State<Goals> createState() => _GoalsState();
-// }
-
-// class _GoalsState extends State<Goals> {
-//   @override
-//   Widget build(BuildContext context) {
-//     const primaryColor = Colors.green;
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Goals'),
-//         backgroundColor: primaryColor,
-//       ),
-//       body: ListView(
-//         children: const <Widget>[
-//           Card(
-//             child: Padding(
-//               padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-//               child: ListTile(
-//                 leading: FlutterLogo(size: 56.0),
-//                 title: Text('Three-line ListTile'),
-//                 trailing: Icon(Icons.more_vert),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () {
-//           // Add your onPressed code here!
-//         },
-//         backgroundColor: primaryColor,
-//         child: const Icon(Icons.add),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'package:dindin/view/goal/model.dart';
 
 class GoalList extends StatefulWidget {
   const GoalList({Key? key}) : super(key: key);
@@ -54,28 +13,40 @@ class GoalList extends StatefulWidget {
   State<GoalList> createState() => _GoalListState();
 }
 
+Future<List<Goal>> fetchGoals() async {
+  List<Goal> goalsList = <Goal>[];
+  http.Response response;
+
+  try {
+    response = await http.get(Uri.parse(
+        'http://localhost:3001/api/goal?page=1&limit=5&attribute=id&order=ASC'));
+  } catch (e) {
+    final String response = await rootBundle.loadString('assets/goals.json');
+    final goalsJson = jsonDecode(response)['goals'];
+    for (var goal in goalsJson) {
+      goalsList.add(Goal.fromJson(goal));
+    }
+    return goalsList;
+  }
+
+  if (response.statusCode == 200) {
+    final goalsJson = jsonDecode(response.body)['goals'];
+    for (var goal in goalsJson) {
+      goalsList.add(Goal.fromJson(goal));
+    }
+    return goalsList;
+  } else {
+    throw Exception('Failed to load goals');
+  }
+}
+
 class _GoalListState extends State<GoalList> {
-  final String apiUrl = "https://randomuser.me/api/?results=10";
+  late Future<List<Goal>> goals;
 
-  Future<List<dynamic>> fetchUsers() async {
-    var result = await http.get(Uri.parse(apiUrl));
-    return json.decode(result.body)['results'];
-  }
-
-  String _name(dynamic user) {
-    return user['name']['title'] +
-        " " +
-        user['name']['first'] +
-        " " +
-        user['name']['last'];
-  }
-
-  String _location(dynamic user) {
-    return user['location']['country'];
-  }
-
-  String _age(Map<dynamic, dynamic> user) {
-    return "Age: " + user['dob']['age'].toString();
+  @override
+  void initState() {
+    super.initState();
+    goals = fetchGoals();
   }
 
   @override
@@ -87,32 +58,33 @@ class _GoalListState extends State<GoalList> {
         backgroundColor: primaryColor,
       ),
       body: FutureBuilder<List<dynamic>>(
-        future: fetchUsers(),
+        future: fetchGoals(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            print(_age(snapshot.data[0]));
             return ListView.builder(
                 padding: const EdgeInsets.all(8),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                          child: ListTile(
-                            leading: const Padding(
-                              padding: EdgeInsets.only(top: 5.0),
-                              child: FaIcon(
-                                FontAwesomeIcons.bullseye,
-                                size: 30.0,
-                                color: Colors.redAccent,
-                              ),
+                    child: InkWell(
+                      onTap: () {
+                        print("Open Goal Visualization at id: " +
+                            snapshot.data[index].id.toString());
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                        child: ListTile(
+                          leading: const Padding(
+                            padding: EdgeInsets.only(top: 5.0),
+                            child: FaIcon(
+                              FontAwesomeIcons.bullseye,
+                              size: 30.0,
+                              color: Colors.redAccent,
                             ),
-                            title: Text(_name(snapshot.data[index])),
                           ),
-                        )
-                      ],
+                          title: Text((snapshot.data[index].description)),
+                        ),
+                      ),
                     ),
                   );
                 });
@@ -123,7 +95,7 @@ class _GoalListState extends State<GoalList> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Add your onPressed code here!
+          print("Create a new Goal");
         },
         backgroundColor: primaryColor,
         child: const Icon(Icons.add),
