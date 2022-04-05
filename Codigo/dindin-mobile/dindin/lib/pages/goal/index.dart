@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:dindin/view/goal/model.dart';
+import 'package:dindin/pages/goal/model.dart';
 
 class GoalList extends StatefulWidget {
   const GoalList({Key? key}) : super(key: key);
