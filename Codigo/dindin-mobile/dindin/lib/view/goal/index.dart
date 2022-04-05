@@ -110,7 +110,6 @@ class _GoalListState extends State<GoalList> {
                               ),
                             ),
                             title: Text(_name(snapshot.data[index])),
-                            trailing: Text(_age(snapshot.data[index])),
                           ),
                         )
                       ],
