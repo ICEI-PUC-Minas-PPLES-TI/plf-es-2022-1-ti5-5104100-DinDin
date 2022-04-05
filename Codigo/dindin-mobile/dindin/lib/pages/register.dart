@@ -16,10 +16,25 @@ class _LoginState extends State<Register> {
   final TextEditingController _emailController = TextEditingController();
   String email = '';
   String password = '';
+  String confirmPassword = '';
   String name = '';
+  bool acceptedTerms = false;
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return Colors.green;
+      }
+      return Colors.grey;
+    }
+
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
@@ -128,6 +143,57 @@ class _LoginState extends State<Register> {
                                 },
                               ),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0.0, vertical: 10.0),
+                              child: TextFormField(
+                                onChanged: (text) {
+                                  password = text;
+                                },
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                    labelText: 'Confirm Password',
+                                    border: OutlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
+                                    )),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Confirm your password!";
+                                  } else if (value != password) {
+                                    return "Passwords don't match!";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0.0, vertical: 10.0),
+                              child: SizedBox(
+                                height: 20,
+                                width: double.infinity,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Checkbox(
+                                      checkColor: Colors.white,
+                                      splashRadius: 20.0,
+                                      fillColor: MaterialStateProperty.resolveWith(getColor),
+                                      value: acceptedTerms,
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          acceptedTerms = value!;
+                                        });
+                                      },
+                                    ),
+                                    Text("I’ve read and agree to the terms of privacy policy")
+                                  ]
+                                )
+                              ),
+                            ),
+                            
                           ],
                         ),
                         Padding(
@@ -197,7 +263,7 @@ class _LoginState extends State<Register> {
                               style: TextStyle(color: Colors.green[800]),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.popAndPushNamed(context, "/login");
+                                  Navigator.pushNamed(context, "/login");
                                 }),
                         ),
                         Icon(
