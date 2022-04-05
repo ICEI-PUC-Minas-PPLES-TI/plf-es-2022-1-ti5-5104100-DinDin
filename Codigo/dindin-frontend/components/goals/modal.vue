@@ -2,7 +2,10 @@
   <v-dialog
     v-model="show"
     max-width="600px"
-    @click:outside="$emit('input', false)"
+    @click:outside="
+      $emit('input', false);
+      goalToEditNull();
+    "
     @keydown.esc="$emit('input', false)"
   >
     <v-card class="pa-2">
@@ -116,7 +119,10 @@
               >Cancel</v-btn
             >
           </v-col>
-          <v-col class="mr-2">
+          <v-col v-if="goalToEdit != null" class="mr-2">
+            <v-btn block color="primary" @click.stop="saveGoal()">Edit</v-btn>
+          </v-col>
+          <v-col v-else class="mr-2">
             <v-btn block color="primary" @click.stop="saveGoal()">Save</v-btn>
           </v-col>
         </v-row>
@@ -128,8 +134,9 @@
 <script>
 import Swal from "sweetalert2";
 export default {
-  props: { 
+  props: {
     value: Boolean,
+    goalToEdit: Object,
   },
   data() {
     return {
@@ -141,6 +148,7 @@ export default {
         type: 0,
         walletId: 0,
       },
+      choosenGoal: "",
       today: "",
       date: "",
       menu: false,
@@ -160,6 +168,18 @@ export default {
       set(value) {
         this.$emit("input", value);
       },
+    },
+  },
+  watch: {
+    goalToEdit: function (goalToEdit) {
+      if (goalToEdit) {
+        this.title = "Edit Goal";
+        this.choosenGoal = goalToEdit;
+        this.fillForm(this.choosenGoal);
+      } else {
+        this.title = "New Goal";
+        this.choosenGoal = null;
+      }
     },
   },
   methods: {
@@ -204,6 +224,11 @@ export default {
       const [year, month, day] = date.split("-");
       this.date = `${day}/${month}/${year}`;
     },
+    shortDate(date) {
+      let parse = date.substring(0, 10);
+      const [year, month, day] = parse.split("-");
+      return `${day}/${month}/${year}`;
+    },
     compareDates(date1, date2) {
       if (date1 == null || date2 == null) {
         return false;
@@ -219,6 +244,17 @@ export default {
         }
       }
       return resp;
+    },
+    fillForm(data) {
+      this.goal.description = data.description;
+      this.goal.value = data.value;
+      this.date = this.shortDate(data.expire_at);
+      this.goal.date = data.expire_at.substring(0, 10);
+      this.goal.type = data.type;
+      this.goal.walletId = data.walletId;
+    },
+    goalToEditNull() {
+      this.choosenGoal = null;
     },
   },
   mounted() {

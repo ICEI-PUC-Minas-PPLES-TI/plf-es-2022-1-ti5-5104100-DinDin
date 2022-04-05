@@ -100,7 +100,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <modal v-model="showModal" />
+    <modal :goalToEdit="this.goalToEdit" v-model="showModal" />
   </v-container>
 </template>
 
@@ -119,6 +119,7 @@ export default {
       goals: [],
       loading: false,
       showModal: false,
+      goalToEdit:null
     };
   },
   async fetch() {
@@ -170,7 +171,8 @@ export default {
       });
     },
     editGoal(goal){
-      
+      this.goalToEdit=goal
+      console.log(this.goalToEdit)
       this.showModal = true
     }
   },
