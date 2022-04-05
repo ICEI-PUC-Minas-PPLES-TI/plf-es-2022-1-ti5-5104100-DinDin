@@ -13,7 +13,7 @@
           <!-- Table top toolbar -->
           <v-row>
             <v-col cols="2" offset="10">
-              <v-btn block color="success" @click.stop="showModal = true">
+              <v-btn block color="success" @click.stop="showModal = true;modalEdit=false">
                 New Goal
               </v-btn>
             </v-col>
@@ -56,7 +56,13 @@
                         </v-tooltip>
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn elevation="0" small v-bind="attrs" v-on="on" @click="editGoal(goal)">
+                            <v-btn
+                              elevation="0"
+                              small
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="editGoal(goal)"
+                            >
                               <i class="fa-solid fa-pen-to-square"></i>
                             </v-btn>
                           </template>
@@ -100,7 +106,8 @@
         </v-card>
       </v-col>
     </v-row>
-    <modal :goalToEdit="this.goalToEdit" v-model="showModal" />
+    <modal :goalToEdit="this.goalToEdit" :modalEdit="this.modalEdit"
+    v-model="showModal" />
   </v-container>
 </template>
 
@@ -119,7 +126,8 @@ export default {
       goals: [],
       loading: false,
       showModal: false,
-      goalToEdit:null
+      goalToEdit: null,
+      modalEdit: false,
     };
   },
   async fetch() {
@@ -168,13 +176,14 @@ export default {
             });
           });
         }
+        window.location.reload()
       });
     },
-    editGoal(goal){
-      this.goalToEdit=goal
-      console.log(this.goalToEdit)
-      this.showModal = true
-    }
+    editGoal(goal) {
+      this.goalToEdit = goal;
+      this.modalEdit=true;
+      this.showModal = true;
+    },
   },
 };
 </script>

@@ -2,10 +2,7 @@
   <v-dialog
     v-model="show"
     max-width="600px"
-    @click:outside="
-      $emit('input', false);
-      goalToEditNull();
-    "
+    @click:outside="$emit('input', false)"
     @keydown.esc="$emit('input', false)"
   >
     <v-card class="pa-2">
@@ -120,7 +117,7 @@
             >
           </v-col>
           <v-col v-if="goalToEdit != null" class="mr-2">
-            <v-btn block color="primary" @click.stop="saveGoal()">Edit</v-btn>
+            <v-btn block color="primary" @click.stop="editGoal()">Edit</v-btn>
           </v-col>
           <v-col v-else class="mr-2">
             <v-btn block color="primary" @click.stop="saveGoal()">Save</v-btn>
@@ -137,11 +134,13 @@ export default {
   props: {
     value: Boolean,
     goalToEdit: Object,
+    modalEdit: Boolean,
   },
   data() {
     return {
       title: "New Goal",
       goal: {
+        id:"",
         description: "",
         date: "",
         value: "",
@@ -171,14 +170,28 @@ export default {
     },
   },
   watch: {
+    modalEdit: function (modalEdit) {
+      if (modalEdit) {
+        this.title = "Edit Goal";
+      } else {
+        this.choosenGoal = null;
+        let emptyGoal = {
+          description: "",
+          expire_at: this.goal.date,
+          value: "",
+          type: "",
+          walletId: "",
+          status: "PENDING",
+        };
+        this.fillForm(emptyGoal);
+        this.cleanForm();
+        this.title = "New Goal";
+      }
+    },
     goalToEdit: function (goalToEdit) {
       if (goalToEdit) {
-        this.title = "Edit Goal";
         this.choosenGoal = goalToEdit;
         this.fillForm(this.choosenGoal);
-      } else {
-        this.title = "New Goal";
-        this.choosenGoal = null;
       }
     },
   },
@@ -207,6 +220,7 @@ export default {
             });
             this.$refs.form.reset();
             this.$emit("input", false);
+            window.location.reload()
           })
           .catch((err) => {
             this.erroLogin = err.response.data.message;
@@ -218,13 +232,51 @@ export default {
         this.errors = ["Fields have invalid input"];
       }
     },
-    editGoal() {},
+    editGoal() {
+      this.errors = [];
+      if (this.$refs.form.validate()) {
+        this.$axios
+          .put("/goal/"+this.goal.id, {
+            description: this.goal.description,
+            expire_at: this.goal.date,
+            value: this.goal.value,
+            type: this.goal.type,
+            walletId: this.goal.walletId,
+            status: "PENDING",
+          })
+          .then((res) => {
+            Swal.fire({
+              title: "Goal Edited",
+              icon: "success",
+              showConfirmButton: false,
+              toast: true,
+              position: "top-end",
+              timer: 3000,
+              timerProgressBar: true,
+            });
+            this.$refs.form.reset();
+            this.$emit("input", false);
+            window.location.reload()
+          })
+          .catch((err) => {
+            this.erroLogin = err.response.data.message;
+            if (err.response.status == 500) {
+              this.erroLogin = "Erro interno do servidor";
+            }
+          });
+      } else {
+        this.errors = ["Fields have invalid input"];
+      }
+    },
     parseDate(date) {
       if (!date) return null;
       const [year, month, day] = date.split("-");
       this.date = `${day}/${month}/${year}`;
     },
     shortDate(date) {
+      if(!date){
+        return null
+      }
       let parse = date.substring(0, 10);
       const [year, month, day] = parse.split("-");
       return `${day}/${month}/${year}`;
@@ -246,6 +298,7 @@ export default {
       return resp;
     },
     fillForm(data) {
+      this.goal.id=data.id;
       this.goal.description = data.description;
       this.goal.value = data.value;
       this.date = this.shortDate(data.expire_at);
@@ -253,8 +306,8 @@ export default {
       this.goal.type = data.type;
       this.goal.walletId = data.walletId;
     },
-    goalToEditNull() {
-      this.choosenGoal = null;
+    cleanForm() {
+      this.$refs.form.reset();
     },
   },
   mounted() {
