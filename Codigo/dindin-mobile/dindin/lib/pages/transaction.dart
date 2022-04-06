@@ -95,16 +95,12 @@ class _TransactionState extends State<Transaction> {
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
-                            Text(
-                              "Amount",
-                              style: TextStyle(fontSize: 20),
-                            ),
                             SizedBox(
                               child: TextField(
                                 keyboardType: TextInputType.number,
                                 onChanged: null,
                                 decoration: InputDecoration(
-                                    labelText: "200,00",
+                                    labelText: "Amount",
                                     labelStyle: TextStyle(fontSize: 30),
                                     border: UnderlineInputBorder(),
                                     focusedBorder: OutlineInputBorder(
