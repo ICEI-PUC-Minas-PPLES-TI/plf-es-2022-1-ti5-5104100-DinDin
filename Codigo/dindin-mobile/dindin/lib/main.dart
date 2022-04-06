@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'pages/login2.dart';
-import 'pages/login.dart';
-import 'pages/goal_create.dart';
 import 'package:flutter/services.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: primaryColor,
       ),
-      home: GoalCreate(),
+      home: Login2(),
     );
   }
 }
