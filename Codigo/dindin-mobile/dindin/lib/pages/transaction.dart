@@ -48,8 +48,8 @@ class _TransactionState extends State<Transaction> {
                           child: ElevatedButton(
                             onPressed: _isIncome ? null : changeButtonState,
                             style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.green),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.green),
                             ),
                             child: Text(
                               "Income",
@@ -64,7 +64,8 @@ class _TransactionState extends State<Transaction> {
                               onPressed: _isIncome ? changeButtonState : null,
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all<Color>(Colors.red),
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.red),
                               ),
                               child: Text("Outcome",
                                   style: TextStyle(fontSize: 20))),
@@ -107,7 +108,8 @@ class _TransactionState extends State<Transaction> {
                                     labelStyle: TextStyle(fontSize: 30),
                                     border: UnderlineInputBorder(),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.green),
+                                      borderSide:
+                                          BorderSide(color: Colors.green),
                                     )),
                               ),
                             ),
@@ -139,8 +141,16 @@ class _TransactionState extends State<Transaction> {
                           style: TextStyle(fontSize: 25),
                         ),
                         ElevatedButton(
-                            child: Text('Select Date',
-                            style: TextStyle(fontSize: 20),),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.green),
+                            ),
+                            child: Text(
+                              'Select Date',
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
                             onPressed: () async {
                               DateTime? newDate = await showDatePicker(
                                   context: context,
@@ -169,11 +179,12 @@ class _TransactionState extends State<Transaction> {
                           child: ElevatedButton(
                               onPressed: insertTransaction,
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                    Colors.green),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.green),
                               ),
-                              child:
-                                  Text("Insert", style: TextStyle(fontSize: 20))),
+                              child: Text("Insert",
+                                  style: TextStyle(fontSize: 20))),
                         ),
                         SizedBox(
                           height: 50,
@@ -182,10 +193,11 @@ class _TransactionState extends State<Transaction> {
                               onPressed: cancelTransaction,
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all<Color>(Colors.grey),
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.grey),
                               ),
-                              child:
-                                  Text("Cancel", style: TextStyle(fontSize: 20))),
+                              child: Text("Cancel",
+                                  style: TextStyle(fontSize: 20))),
                         ),
                       ],
                     ),
