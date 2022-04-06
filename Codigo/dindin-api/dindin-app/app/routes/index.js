@@ -9,6 +9,7 @@ const categoryRoytes = require("./categoryRoutes");
 
 // User
 router.use('/user', userRoutes)
+router.use('/goal', goalRoutes)
 router.use('/category', categoryRoytes)
 
 module.exports = router;

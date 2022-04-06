@@ -64,6 +64,7 @@ module.exports = {
     try {
       // Start Models here
       User.init(sequelize);
+      Goal.init(sequelize);
       Category.init(sequelize);
       // Configure Associations here
 
