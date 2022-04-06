@@ -4,7 +4,7 @@ const { Sequelize } = require("sequelize");
 
 // It uses dbConfig instead of .env to work both locally and in docker and Sequelize migrations and seeds need the config/config.js file
 const dbConfig = require("../config/config.js");
-
+const Goal = require('../models/Goal.js');
 const User = require("../models/User.js");
 const Category = require("../models/Category")
 

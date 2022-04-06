@@ -4,6 +4,7 @@ const router = Router();
 const jwtAuthorization = require("./jwtAuthorization");
 
 const userRoutes = require("./userRoutes");
+const goalRoutes = require("./goalRoutes");
 const categoryRoytes = require("./categoryRoutes");
 
 // User
