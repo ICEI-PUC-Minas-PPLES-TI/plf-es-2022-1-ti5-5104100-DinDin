@@ -15,6 +15,18 @@
         </v-btn>
       </v-card-title>
       <v-card-text>
+        <v-alert
+          v-if="errors.length > 0"
+          type="error"
+        >
+          Error:
+          <ul>
+            <li v-for="(er, eidx) in errors" :key="eidx">
+              {{ er }}
+            </li>
+          </ul>
+        </v-alert>
+        <!-- Goal Add Form -->
         <v-container fluids>
           <v-form
           ref="form"
@@ -123,6 +135,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 export default {
   data() {
     return {
@@ -138,6 +151,7 @@ export default {
       rules: {
         required: (value) => !!value || "Required.",
       },
+      errors: []
     };
   },
   props: {
@@ -155,9 +169,22 @@ export default {
   },
   methods: {
     saveGoal() {
+      this.errors = []
       if (this.$refs.form.validate()) {
-        console.log(this.goal);
-        // this.show=false;
+        Swal.fire({
+          title: 'Goal Created',
+          icon: 'success',
+          showConfirmButton: false,
+          toast: true,
+          position: 'top-end',
+          timer: 3000,
+          timerProgressBar: true,
+        })
+        this.$emit('input', false)
+      } else {
+        this.errors = [
+          'Fields have invalid input'
+        ]
       }
     },
     editGoal() {},
