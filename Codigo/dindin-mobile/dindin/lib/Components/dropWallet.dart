@@ -12,9 +12,13 @@ class DropWallet extends StatelessWidget {
           builder: (BuildContext context, String value, _) {
             return Row(
               children: [
+                const Icon(
+                  Icons.account_balance_wallet,
+                  color: Colors.green,
+                  size: 25.0,
+                ),
                 DropdownButton<String>(
-                  hint: const Text("Select Wallet",
-                        style: TextStyle(fontSize: 15)),
+                  hint: const Text("Wallet", style: TextStyle(fontSize: 22)),
                   value: (value.isEmpty) ? null : value,
                   onChanged: (option) => dropValue.value = option.toString(),
                   items: dropOptionsWallets

@@ -12,9 +12,13 @@ class DropCategory extends StatelessWidget {
           builder: (BuildContext context, String value, _) {
             return Row(
               children: [
+                const Icon(
+                  Icons.category,
+                  color: Colors.green,
+                  size: 25.0,
+                ),
                 DropdownButton<String>(
-                  hint: const Text("Select Category",
-                        style: TextStyle(fontSize: 15)),
+                  hint: const Text("Category", style: TextStyle(fontSize: 22)),
                   value: (value.isEmpty) ? null : value,
                   onChanged: (option) => dropValue.value = option.toString(),
                   items: dropOptionsCategories
@@ -25,8 +29,7 @@ class DropCategory extends StatelessWidget {
                         ),
                       )
                       .toList(),
-                )
-                ,
+                ),
               ],
             );
           }),
