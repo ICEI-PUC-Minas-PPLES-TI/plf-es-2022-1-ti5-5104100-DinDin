@@ -153,10 +153,23 @@ class _TransactionState extends State<Transaction> {
                             ),
                             onPressed: () async {
                               DateTime? newDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: date,
-                                  firstDate: DateTime(2022),
-                                  lastDate: DateTime(2062));
+                                context: context,
+                                initialDate: date,
+                                firstDate: DateTime(2022),
+                                lastDate: DateTime(2062),
+                                builder: (context, child) {
+                                  return Theme(
+                                    data: ThemeData.light().copyWith(
+                                      primaryColor: Colors.green,
+                                      colorScheme: ColorScheme.light(
+                                          primary: Colors.green),
+                                      buttonTheme: ButtonThemeData(
+                                          textTheme: ButtonTextTheme.primary),
+                                    ),
+                                    child: child!,
+                                  );
+                                },
+                              );
                               if (newDate == null) return;
                               setState(() => date = newDate);
                             })
