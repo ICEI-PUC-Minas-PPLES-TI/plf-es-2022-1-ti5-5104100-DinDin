@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
-import 'dart:convert';
-
-import 'package:dindin/pages/goal/index.dart';
+import 'package:dindin/pages/profile/index.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -133,7 +131,7 @@ class _LoginState extends State<Login2> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const GoalList()),
+                                                        const ProfilePage()),
                                               )
                                             }
                                           else
