@@ -1,3 +1,4 @@
+import 'package:dindin/pages/transactions/extract.dart';
 import 'package:flutter/material.dart';
 import 'pages/login2.dart';
 import 'pages/login.dart';
@@ -15,12 +16,10 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: "/login", 
-      routes: {
-        "/login": (context) => Login2(),
-        "/register": (context) => Register()
-      }
-    );
+    return MaterialApp(initialRoute: "/extract", routes: {
+      "/login": (context) => Login2(),
+      "/register": (context) => Register(),
+      "/extract": (context) => Extract()
+    });
   }
 }
