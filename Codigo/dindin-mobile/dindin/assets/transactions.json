@@ -4,7 +4,7 @@
         "value": 2000.0,
         "description": "Compra na feira",
         "categoryIcon": "trem",
-        "categoryColor": "#fe627a",
+        "categoryColor": "0xfe627a",
         "createdAt": "2022-03-04T20:12"
     }]
 }

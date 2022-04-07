@@ -15,14 +15,13 @@ class Transaction {
       required this.id});
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
-    print(json);
     return Transaction(
+      id: json['id'],
+      value: json['value'],
       categoryIcon: json['categoryIcon'],
       description: json['description'],
-      value: json['value'],
       categoryColor: json['categoryColor'],
-      id: json['id'],
-      createdAt: json['created_at'],
+      createdAt: json['createdAt'],
     );
   }
 }

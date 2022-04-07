@@ -18,21 +18,21 @@ Future<List<Transaction>> fetchTransaction() async {
 
   try {
     response = await http.get(Uri.parse(
-        'http://localhost:3001/api/goal?page=1&limit=5&attribute=id&order=ASC'));
+        'http://localhost:3001/api/extract?page=1&limit=5&attribute=id&order=ASC'));
   } catch (e) {
     final String response =
         await rootBundle.loadString('assets/transactions.json');
-    final exatractJson = jsonDecode(response)['transactions'];
-    for (var goal in exatractJson) {
-      extract.add(Transaction.fromJson(goal));
+    final extractJson = jsonDecode(response)['transactions'];
+    for (var transaction in extractJson) {
+      extract.add(Transaction.fromJson(transaction));
     }
     return extract;
   }
 
   if (response.statusCode == 200) {
-    final exatractJson = jsonDecode(response.body)['transactions'];
-    for (var goal in exatractJson) {
-      extract.add(Transaction.fromJson(goal));
+    final extractJson = jsonDecode(response.body)['transactions'];
+    for (var transaction in extractJson) {
+      extract.add(Transaction.fromJson(transaction));
     }
     return extract;
   } else {
@@ -63,26 +63,34 @@ class _ExtractState extends State<Extract> {
           if (snapshot.hasData) {
             return ListView.builder(
                 padding: const EdgeInsets.all(8),
-                itemCount: snapshot.data.length,
+                itemCount: snapshot.data?.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
                     child: InkWell(
                       onTap: () {
-                        print("Open Goal Visualization at id: " +
+                        print("Open Transaction Visualization at id: " +
                             snapshot.data[index].id.toString());
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                         child: ListTile(
-                          leading: const Padding(
-                            padding: EdgeInsets.only(top: 5.0),
-                            child: FaIcon(
-                              FontAwesomeIcons.bullseye,
-                              size: 30.0,
-                              color: Colors.redAccent,
+                          leading: CircleAvatar(
+                            backgroundColor: fromHex(snapshot.data[index].categoryColor),
+                            child: const FaIcon(
+                              FontAwesomeIcons.cartShopping,
+                              size: 20.0,
+                              color: Colors.white,
                             ),
                           ),
-                          title: Text((snapshot.data[index].description)),
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text((snapshot.data[index].description), 
+                                style: const TextStyle(fontWeight: FontWeight.bold)
+                              ),
+                              Text(DateTime.parse(snapshot.data[index].createdAt).toString())
+                            ],
+                          )
                         ),
                       ),
                     ),
@@ -102,4 +110,12 @@ class _ExtractState extends State<Extract> {
       ),
     );
   }
+}
+
+
+Color fromHex(String hexString) {
+  final buffer = StringBuffer();
+  if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+  buffer.write(hexString.replaceFirst('#', ''));
+  return Color(int.parse(buffer.toString(), radix: 16));
 }
