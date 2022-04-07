@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, unnecessary_new
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -14,88 +14,157 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   String email = '';
   String password = '';
-
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-        body: SingleChildScrollView(
-            child: SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(children: [
-          SizedBox(height: 20),
-          Row(
-            children: [
-              Text(
-                "Log In",
-                style:
-                    const TextStyle(fontSize: 40, fontWeight: FontWeight.w400),
-              ),
-            ],
-          ),
-          SizedBox(height: 80),
-          SizedBox(
-            height: 40,
-            child: TextField(
-              onChanged: (text) {
-                email = text;
-              },
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                labelText: 'Enter Email Adress',
-                border: OutlineInputBorder(),
-                focusedBorder: new OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.green),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 10),
-          SizedBox(
-            height: 40,
-            child: TextField(
-              onChanged: (text) {
-                password = text;
-              },
-              obscureText: true,
-              decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  focusedBorder: new OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green),
-                  )),
-            ),
-          ),
-          SizedBox(height: 45),
-          SizedBox(
-            height: 40,
-            width: double.infinity,
-            child: ElevatedButton(
-              child: Text("Login"),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.grey,
-              ),
-              onPressed: () {
-                userAuth(email, password);
-              },
-            ),
-          ),
-          SizedBox(height: 90),
-          Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text("Don't have an account?"),
-                    ],
+      key: _scaffoldKey,
+      body: Column(
+        children: [
+          Flexible(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SizedBox(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Column(children: [
+                      Flexible(
+                        flex: 2,
+                        child: SizedBox(height: double.infinity),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: Text(
+                          "Log In",
+                          style: const TextStyle(
+                              fontSize: 40, fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                    ]),
                   ),
-                  Row(
-                    children: [
-                      Text(
+                ),
+              )),
+          Form(
+            key: formKey,
+            child: Expanded(
+                flex: 5,
+                child: SizedBox(
+                  height: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Flexible(
+                            flex: 2,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  onChanged: (text) {
+                                    email = text;
+                                  },
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: InputDecoration(
+                                      labelText: 'Enter Email Adress',
+                                      border: OutlineInputBorder(),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.green),
+                                      )),
+                                  validator: (value) {
+                                    if (value!.isEmpty ||
+                                        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                            .hasMatch(value)) {
+                                      return "Enter correct email";
+                                    } else {
+                                      null;
+                                    }
+                                  },
+                                ),
+                                SizedBox(height: 20),
+                                TextFormField(
+                                  onChanged: (text) {
+                                    password = text;
+                                  },
+                                  obscureText: true,
+                                  decoration: InputDecoration(
+                                      labelText: 'Password',
+                                      border: OutlineInputBorder(),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.green),
+                                      )),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Password can't be empty";
+                                    } else {
+                                      null;
+                                    }
+                                  },
+                                ),
+                                SizedBox(height: 20),
+                                SizedBox(
+                                  height: 40,
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                  child: Text("Login"),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.grey,
+                                  ),
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      final snackBarTrue =
+                                          SnackBar(content: Text('Loging'));
+                                      final snackBarFalse =
+                                          SnackBar(content: Text('User not Found'));
+                                      userAuth(email, password).then((res) => {
+                                            if (res==true)
+                                              {
+                                                _scaffoldKey.currentState!
+                                                    .showSnackBar(snackBarTrue)
+                                              }
+                                            else
+                                              {
+                                                _scaffoldKey.currentState!
+                                                    .showSnackBar(snackBarFalse)
+                                              }
+                                          });
+                                    } else {
+                                      final snackBar = SnackBar(
+                                          content: Text('Invalid credencials'));
+                                      _scaffoldKey.currentState!
+                                          .showSnackBar(snackBar);
+                                    }
+                                  },
+                              ),
+                                ),
+                              ],
+                            )),
+                      ],
+                    ),
+                  ),
+                )),
+          ),
+          Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          children: [
+                            Text("Don't have an account?"),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
                               "REGISTER ",
                               style: TextStyle(color: Colors.green[800]),
                             ),
@@ -104,29 +173,26 @@ class _LoginState extends State<Login> {
                               color: Colors.green,
                               size: 30.0,
                             ),
-                    ],
-                  ),
-                ],
-              )
-            ],
-          )
-        ]),
+                          ],
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ))
+        ],
       ),
-    )));
-  }
+    );}
 }
 
-Future userAuth(String email, String password) async {
+Future<bool> userAuth(String email, String password) async {
   var url = "http://localhost:3001/api/user/auth";
   final Uri uri = Uri.parse(url);
   var response =
       await http.post(uri, body: {'email': email, 'password': password});
   var status = response.statusCode;
-  var responseBody = response.body;
   if (status == 200) {
-    print('Voce está logado!');
-  } else {
-    print('Usuário não encontrado');
+    return true;
   }
-  return response.body;
+  return false;
 }
