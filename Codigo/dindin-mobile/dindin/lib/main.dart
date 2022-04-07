@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/login2.dart';
-import 'pages/walltet/index.dart';
+import 'package:dindin/pages/wallet/index.dart';
 import 'package:flutter/services.dart';
 
 void main() {
