@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
-class DropWallet extends StatelessWidget {
+class DropWallet extends StatefulWidget {
   final dropValue = ValueNotifier('');
-  final dropOptionsWallets = ['Family', 'Home', 'Store'];
-  DropWallet({Key? key}) : super(key: key);
+  @override
+  _DropWalletState createState() => _DropWalletState();
+}
+
+class _DropWalletState extends State<DropWallet> {
   @override
   Widget build(BuildContext context) {
+    final dropOptionsWallets = ['Family', 'Home', 'Store'];
     return Center(
       child: ValueListenableBuilder(
-          valueListenable: dropValue,
+          valueListenable: widget.dropValue,
           builder: (BuildContext context, String value, _) {
             return Row(
               children: [
@@ -18,9 +22,10 @@ class DropWallet extends StatelessWidget {
                   size: 25.0,
                 ),
                 DropdownButton<String>(
-                  hint: const Text("Wallet", style: TextStyle(fontSize: 22)),
+                  hint: const Text("Wallet", style: TextStyle(fontSize: 20)),
                   value: (value.isEmpty) ? null : value,
-                  onChanged: (option) => dropValue.value = option.toString(),
+                  onChanged: (option) =>
+                      widget.dropValue.value = option.toString(),
                   items: dropOptionsWallets
                       .map(
                         (op) => DropdownMenuItem(

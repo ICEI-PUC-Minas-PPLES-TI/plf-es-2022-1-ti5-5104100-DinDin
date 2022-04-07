@@ -10,17 +10,24 @@ class Transaction extends StatefulWidget {
 }
 
 class _TransactionState extends State<Transaction> {
-  bool isChecked = false;
+  bool _isChecked = false;
   DateTime date = DateTime(2022, 2, 2);
-  bool _isIncome = false;
-
+  bool _isIncome = true;
+  String category = "";
+  String wallet = "";
+  double amount = 0;
+  
   void changeButtonState() {
     setState(() {
       _isIncome = !_isIncome;
     });
   }
 
-  void insertTransaction() {}
+  void insertTransaction() {
+    print(_isIncome);
+    print(_isChecked);
+    print(date);
+  }
 
   void cancelTransaction() {}
 
@@ -46,11 +53,19 @@ class _TransactionState extends State<Transaction> {
                           height: 50,
                           width: 120,
                           child: ElevatedButton(
-                            onPressed: _isIncome ? null : changeButtonState,
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.green),
-                            ),
+                            onPressed: () {
+                              _isIncome ? null : changeButtonState();
+                            },
+                            style: _isIncome
+                                ? ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.green))
+                                : ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.grey),
+                                  ),
                             child: Text(
                               "Income",
                               style: TextStyle(fontSize: 20),
@@ -61,12 +76,20 @@ class _TransactionState extends State<Transaction> {
                           height: 50,
                           width: 120,
                           child: ElevatedButton(
-                              onPressed: _isIncome ? changeButtonState : null,
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.red),
-                              ),
+                              onPressed: () {
+                                !_isIncome ? null : changeButtonState();
+                              },
+                              style: !_isIncome
+                                  ? ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.red),
+                                    )
+                                  : ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.grey),
+                                    ),
                               child: Text("Outcome",
                                   style: TextStyle(fontSize: 20))),
                         ),
@@ -101,7 +124,7 @@ class _TransactionState extends State<Transaction> {
                                 onChanged: null,
                                 decoration: InputDecoration(
                                     labelText: "Amount",
-                                    labelStyle: TextStyle(fontSize: 30),
+                                    labelStyle: TextStyle(fontSize: 20),
                                     border: UnderlineInputBorder(),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide:
@@ -114,10 +137,10 @@ class _TransactionState extends State<Transaction> {
                                 "Recurrent?",
                                 style: TextStyle(fontSize: 20),
                               ),
-                              value: isChecked,
+                              value: _isChecked,
                               onChanged: (bool? opt) {
                                 setState(() {
-                                  isChecked = opt!;
+                                  _isChecked = opt!;
                                 });
                               },
                               controlAffinity: ListTileControlAffinity
@@ -134,7 +157,7 @@ class _TransactionState extends State<Transaction> {
                       child: Column(children: [
                         Text(
                           '${date.day}/${date.month}/${date.year}',
-                          style: TextStyle(fontSize: 25),
+                          style: TextStyle(fontSize: 20),
                         ),
                         ElevatedButton(
                             style: ButtonStyle(

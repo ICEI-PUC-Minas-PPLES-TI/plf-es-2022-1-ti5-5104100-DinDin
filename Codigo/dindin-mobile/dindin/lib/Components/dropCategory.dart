@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
-class DropCategory extends StatelessWidget {
+class DropCategory extends StatefulWidget {
   final dropValue = ValueNotifier('');
-  final dropOptionsCategories = ['Food', 'Work', 'Bar'];
   DropCategory({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _DropCategoryState();
+}
+
+class _DropCategoryState extends State<DropCategory> {
+  final dropOptionsCategories = ['Food', 'Work', 'Bar'];
   @override
   Widget build(BuildContext context) {
     return Center(
       child: ValueListenableBuilder(
-          valueListenable: dropValue,
+          valueListenable: widget.dropValue,
           builder: (BuildContext context, String value, _) {
             return Row(
               children: [
@@ -18,9 +24,10 @@ class DropCategory extends StatelessWidget {
                   size: 25.0,
                 ),
                 DropdownButton<String>(
-                  hint: const Text("Category", style: TextStyle(fontSize: 22)),
+                  hint: const Text("Category", style: TextStyle(fontSize: 20)),
                   value: (value.isEmpty) ? null : value,
-                  onChanged: (option) => dropValue.value = option.toString(),
+                  onChanged: (option) =>
+                      widget.dropValue.value = option.toString(),
                   items: dropOptionsCategories
                       .map(
                         (op) => DropdownMenuItem(
