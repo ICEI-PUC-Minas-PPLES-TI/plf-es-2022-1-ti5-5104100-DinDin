@@ -1,6 +1,6 @@
 import 'package:dindin/pages/wallet/view.dart';
 import 'package:flutter/material.dart';
-import 'pages/login2.dart';
+import 'pages/login.dart';
 import 'package:flutter/services.dart';
 
 void main() {
@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: WalletView(),
+    return MaterialApp(
+      home: Login(),
     );
   }
 }
