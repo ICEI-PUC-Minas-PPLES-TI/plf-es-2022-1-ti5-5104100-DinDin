@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import '../Components/dropCategory.dart';
 import 'package:flutter/material.dart';
-
 import '../Components/dropWallet.dart';
 
 class Transaction extends StatefulWidget {
@@ -16,7 +15,7 @@ class _TransactionState extends State<Transaction> {
   String category = "";
   String wallet = "";
   double amount = 0;
-  
+
   void changeButtonState() {
     setState(() {
       _isIncome = !_isIncome;
@@ -42,194 +41,190 @@ class _TransactionState extends State<Transaction> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              Flexible(
-                flex: 1,
+              Center(
                 child: Card(
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          width: 120,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              _isIncome ? null : changeButtonState();
-                            },
-                            style: _isIncome
-                                ? ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Colors.green))
-                                : ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Colors.grey),
-                                  ),
-                            child: Text(
-                              "Income",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 50,
-                          width: 120,
-                          child: ElevatedButton(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: ElevatedButton(
                               onPressed: () {
-                                !_isIncome ? null : changeButtonState();
+                                _isIncome ? null : changeButtonState();
                               },
-                              style: !_isIncome
+                              style: _isIncome
                                   ? ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
-                                              Colors.red),
-                                    )
+                                              Colors.green))
                                   : ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
                                               Colors.grey),
                                     ),
-                              child: Text("Outcome",
-                                  style: TextStyle(fontSize: 20))),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: Card(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [DropCategory(), DropWallet()],
+                              child: Text(
+                                "Income",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  !_isIncome ? null : changeButtonState();
+                                },
+                                style: !_isIncome
+                                    ? ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.red),
+                                      )
+                                    : ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.grey),
+                                      ),
+                                child: Text("Outcome",
+                                    style: TextStyle(fontSize: 20))),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
               ),
               Card(
-                child: SizedBox(
+                child: Center(
                     child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                onChanged: null,
-                                decoration: InputDecoration(
-                                    labelText: "Amount",
-                                    labelStyle: TextStyle(fontSize: 20),
-                                    border: UnderlineInputBorder(),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.green),
-                                    )),
-                              ),
-                            ),
-                            CheckboxListTile(
-                              title: Text(
-                                "Recurrent?",
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              value: _isChecked,
-                              onChanged: (bool? opt) {
-                                setState(() {
-                                  _isChecked = opt!;
-                                });
-                              },
-                              controlAffinity: ListTileControlAffinity
-                                  .leading, //  <-- leading Checkbox
-                            )
-                          ],
-                        ))),
+                  padding: const EdgeInsets.all(2.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [DropCategory(), DropWallet()],
+                  ),
+                )),
               ),
-              Container(
+              Expanded(
                 child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Center(
-                      child: Column(children: [
-                        Text(
-                          '${date.day}/${date.month}/${date.year}',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.green),
-                            ),
-                            child: Text(
-                              'Select Date',
-                              style: TextStyle(
-                                fontSize: 20,
+                  child: Center(
+                      child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+  crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                child: TextField(
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                      labelText: "Amount",
+                                      labelStyle: TextStyle(fontSize: 40),
+                                      border: UnderlineInputBorder(),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.green),
+                                      )),
+                                ),
                               ),
-                            ),
-                            onPressed: () async {
-                              DateTime? newDate = await showDatePicker(
-                                context: context,
-                                initialDate: date,
-                                firstDate: DateTime(2022),
-                                lastDate: DateTime(2062),
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: ThemeData.light().copyWith(
-                                      primaryColor: Colors.green,
-                                      colorScheme: ColorScheme.light(
-                                          primary: Colors.green),
-                                      buttonTheme: ButtonThemeData(
-                                          textTheme: ButtonTextTheme.primary),
-                                    ),
-                                    child: child!,
-                                  );
+                              CheckboxListTile(
+                                title: Text(
+                                  "Recurrent?",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                value: _isChecked,
+                                onChanged: (bool? opt) {
+                                  setState(() {
+                                    _isChecked = opt!;
+                                  });
                                 },
-                              );
-                              if (newDate == null) return;
-                              setState(() => date = newDate);
-                            })
-                      ]),
-                    ),
+                                controlAffinity: ListTileControlAffinity
+                                    .leading, //  <-- leading Checkbox
+                              )
+                            ],
+                          ))),
+                ),
+              ),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(
+                    child: Column(children: [
+                      Text(
+                        '${date.day}/${date.month}/${date.year}',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.green),
+                          ),
+                          child: Text(
+                            'Select Date',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          onPressed: () async {
+                            DateTime? newDate = await showDatePicker(
+                              context: context,
+                              initialDate: date,
+                              firstDate: DateTime(2022),
+                              lastDate: DateTime(2062),
+                              builder: (context, child) {
+                                return Theme(
+                                  data: ThemeData.light().copyWith(
+                                    primaryColor: Colors.green,
+                                    colorScheme: ColorScheme.light(
+                                        primary: Colors.green),
+                                    buttonTheme: ButtonThemeData(
+                                        textTheme: ButtonTextTheme.primary),
+                                  ),
+                                  child: child!,
+                                );
+                              },
+                            );
+                            if (newDate == null) return;
+                            setState(() => date = newDate);
+                          })
+                    ]),
                   ),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: Card(
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Center(
-                    heightFactor: 2,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         SizedBox(
-                          height: 50,
-                          width: 120,
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          width: MediaQuery.of(context).size.width * 0.4,
                           child: ElevatedButton(
                               onPressed: insertTransaction,
                               style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.green),
+                                backgroundColor: MaterialStateProperty.all<Color>(
+                                    Colors.green),
                               ),
-                              child: Text("Insert",
-                                  style: TextStyle(fontSize: 20))),
+                              child:
+                                  Text("Insert", style: TextStyle(fontSize: 20))),
                         ),
                         SizedBox(
-                          height: 50,
-                          width: 120,
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          width: MediaQuery.of(context).size.width * 0.4,
                           child: ElevatedButton(
                               onPressed: cancelTransaction,
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.grey),
+                                    MaterialStateProperty.all<Color>(Colors.grey),
                               ),
-                              child: Text("Cancel",
-                                  style: TextStyle(fontSize: 20))),
+                              child:
+                                  Text("Cancel", style: TextStyle(fontSize: 20))),
                         ),
                       ],
                     ),
