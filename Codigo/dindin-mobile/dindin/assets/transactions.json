@@ -5,34 +5,34 @@
         "description": "Compra na feira",
         "categoryIcon": "trem",
         "categoryColor": "#fe627a",
-        "createdAt": "2022-03-04T20:12"
+        "createdAt": "2022-03-04T7:03"
     },{
         "id": 5,
         "value": -150.0,
         "description": "Ingresso do festival",
         "categoryIcon": "trem",
         "categoryColor": "#aa0b77",
-        "createdAt": "2022-03-04T20:12"
+        "createdAt": "2022-03-02T08:55"
     },{
         "id": 6,
         "value": 800.0,
         "description": "Freela do Augusto",
         "categoryIcon": "trem",
         "categoryColor": "#1002f0",
-        "createdAt": "2022-03-04T20:12"
+        "createdAt": "2022-02-28T20:12"
     },{
         "id": 7,
         "value": 30.0,
         "description": "José me pagou",
         "categoryIcon": "trem",
         "categoryColor": "#1002f0",
-        "createdAt": "2022-03-04T20:12"
+        "createdAt": "2022-02-27T13:00"
     },{
         "id": 6,
-        "value": 100.50,
+        "value": -100.50,
         "description": "Compra Mercado Livre",
         "categoryIcon": "trem",
-        "categoryColor": "#1002f0",
-        "createdAt": "2022-03-04T20:12"
+        "categoryColor": "#fe627a",
+        "createdAt": "2022-02-25T10:10"
     }]
 }
