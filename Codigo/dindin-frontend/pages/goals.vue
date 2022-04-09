@@ -106,8 +106,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <modal :goalToEdit="this.goalToEdit" :modalEdit="this.modalEdit"
-    v-model="showModal" />
+    <modal :goalToEdit="this.goalToEdit" :modalEdit="this.modalEdit" v-model="showModal" @created="$fetch" />
   </v-container>
 </template>
 

@@ -146,6 +146,7 @@ export default {
         value: "",
         type: 0,
         walletId: 0,
+        status: "PENDING"
       },
       choosenGoal: "",
       today: "",
@@ -200,14 +201,7 @@ export default {
       this.errors = [];
       if (this.$refs.form.validate()) {
         this.$axios
-          .post("/goal", {
-            description: this.goal.description,
-            expire_at: this.goal.date,
-            value: this.goal.value,
-            type: this.goal.type,
-            walletId: this.goal.walletId,
-            status: "PENDING",
-          })
+          .post("/goal", this.goal)
           .then((res) => {
             Swal.fire({
               title: "Goal Created",
@@ -220,7 +214,7 @@ export default {
             });
             this.$refs.form.reset();
             this.$emit("input", false);
-            window.location.reload()
+            this.$emit("created", this.goal);
           })
           .catch((err) => {
             this.erroLogin = err.response.data.message;
@@ -236,14 +230,7 @@ export default {
       this.errors = [];
       if (this.$refs.form.validate()) {
         this.$axios
-          .put("/goal/"+this.goal.id, {
-            description: this.goal.description,
-            expire_at: this.goal.date,
-            value: this.goal.value,
-            type: this.goal.type,
-            walletId: this.goal.walletId,
-            status: "PENDING",
-          })
+          .put("/goal/"+this.goal.id, this.goal)
           .then((res) => {
             Swal.fire({
               title: "Goal Edited",
@@ -256,7 +243,7 @@ export default {
             });
             this.$refs.form.reset();
             this.$emit("input", false);
-            window.location.reload()
+            this.$emit("created", this.goal);
           })
           .catch((err) => {
             this.erroLogin = err.response.data.message;
