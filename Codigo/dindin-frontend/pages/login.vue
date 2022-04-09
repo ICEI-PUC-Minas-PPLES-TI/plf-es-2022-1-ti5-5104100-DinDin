@@ -51,7 +51,10 @@
                   </v-btn>
 
                   <v-card-actions class="text--secondary">
-                    Not registered yet?<a class="pl-2" style="color: #25baae"
+                    Not registered yet?<a
+                      href="/register"
+                      class="pl-2"
+                      style="color: #25baae"
                       >Create an account</a
                     >
                   </v-card-actions>
@@ -94,11 +97,16 @@ export default {
             let d = new Date();
             d.setTime(d.getTime() + 1 * 24 * 60 * 60 * 1000);
             document.cookie = "token= ";
-            document.cookie = "token=" + res.data;
-            this.$router.push('/dashboard')
+            document.cookie = "token=" + res.data.token;
+            this.$router.push("/dashboard");
           })
           .catch((err) => {
-            this.erroLogin = "User not Found";
+            this.erroLogin = err.response.data.message;
+            if (err.response.status == 500) {
+              this.erroLogin = "Erro interno do servidor";
+            } else if (err.response.status == 403) {
+              this.erroLogin = "Senha incorreta";
+            }
           });
       }
     },

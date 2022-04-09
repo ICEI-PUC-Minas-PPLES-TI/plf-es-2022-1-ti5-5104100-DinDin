@@ -17,12 +17,15 @@ services:
   app:
     depends_on:
       - mysqldb
-    build: ./dindin-app
+    build:
+      context: ./dindin-app
+      dockerfile: Dockerfile
     networks:
       - db-net
     links:
       - 'mysqldb:mysql'
     working_dir: /usr/src/dindin-api
+    container_name: dindin-api
     restart: always
     env_file: ./.env
     volumes:
