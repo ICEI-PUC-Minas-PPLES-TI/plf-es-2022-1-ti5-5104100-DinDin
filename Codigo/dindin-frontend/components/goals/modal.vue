@@ -275,8 +275,11 @@ export default {
       let date1Split = date1.split("/");
       let date2Split = date2.split("/");
       let resp = false;
-      if (parseInt(date1Split[2]) >= parseInt(date2Split[2])) {
-        if (parseInt(date1Split[1]) >= parseInt(date2Split[1])) {
+      if(parseInt(date1Split[2]) > parseInt(date2Split[2])){
+          return true;
+      }
+      if (parseInt(date1Split[2]) == parseInt(date2Split[2])) {
+        if ((parseInt(date1Split[1]) >= parseInt(date2Split[1]))) {
           if (parseInt(date1Split[0]) >= parseInt(date2Split[0])) {
             resp = true;
           }
