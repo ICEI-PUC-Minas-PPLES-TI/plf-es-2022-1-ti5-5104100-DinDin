@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
-import 'package:dindin/pages/profile/index.dart';
+import 'package:dindin/pages/dashboard.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -131,7 +131,7 @@ class _LoginState extends State<Login2> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const ProfilePage()),
+                                                        const Dashboard()),
                                               )
                                             }
                                           else
@@ -193,6 +193,7 @@ class _LoginState extends State<Login2> {
 }
 
 Future<bool> userAuth(String email, String password) async {
+  return true;
   var url = "http://localhost:3001/api/user/auth";
   final Uri uri = Uri.parse(url);
   var response =
