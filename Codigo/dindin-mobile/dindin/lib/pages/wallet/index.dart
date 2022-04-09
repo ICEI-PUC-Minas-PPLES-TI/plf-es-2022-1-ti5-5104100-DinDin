@@ -13,40 +13,24 @@ class WalletList extends StatefulWidget {
   State<WalletList> createState() => _WalletListState();
 }
 
-Future<List<Goal>> fetchGoals() async {
-  List<Goal> goalsList = <Goal>[];
-  http.Response response;
+Future<List<Wallet>> fetchWallets() async {
+  List<Wallet> walletList = <Wallet>[];
 
-  try {
-    response = await http.get(Uri.parse(
-        'http://localhost:3001/api/goal?page=1&limit=5&attribute=id&order=ASC'));
-  } catch (e) {
-    final String response = await rootBundle.loadString('assets/goals.json');
-    final goalsJson = jsonDecode(response)['goals'];
-    for (var goal in goalsJson) {
-      goalsList.add(Goal.fromJson(goal));
-    }
-    return goalsList;
+  final String response = await rootBundle.loadString('assets/wallets.json');
+  final walletsJson = jsonDecode(response)['wallets'];
+  for (var wallet in walletsJson) {
+    walletList.add(Wallet.fromJson(wallet));
   }
-
-  if (response.statusCode == 200) {
-    final goalsJson = jsonDecode(response.body)['goals'];
-    for (var goal in goalsJson) {
-      goalsList.add(Goal.fromJson(goal));
-    }
-    return goalsList;
-  } else {
-    throw Exception('Failed to load goals');
-  }
+  return walletList;
 }
 
 class _WalletListState extends State<WalletList> {
-  late Future<List<Goal>> goals;
+  late Future<List<Wallet>> wallets;
 
   @override
   void initState() {
     super.initState();
-    goals = fetchGoals();
+    wallets = fetchWallets();
   }
 
   @override
@@ -58,7 +42,7 @@ class _WalletListState extends State<WalletList> {
         backgroundColor: primaryColor,
       ),
       body: FutureBuilder<List<dynamic>>(
-        future: fetchGoals(),
+        future: fetchWallets(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
@@ -68,7 +52,7 @@ class _WalletListState extends State<WalletList> {
                   return Card(
                     child: InkWell(
                       onTap: () {
-                        print("Open Goal Visualization at id: " +
+                        print("Open Wallet Visualization at id: " +
                             snapshot.data[index].id.toString());
                       },
                       child: Padding(
@@ -76,11 +60,8 @@ class _WalletListState extends State<WalletList> {
                         child: ListTile(
                           leading: const Padding(
                             padding: EdgeInsets.only(top: 5.0),
-                            child: FaIcon(
-                              FontAwesomeIcons.wallet,
-                              size: 30.0,
-                              color: Colors.black
-                            ),
+                            child: FaIcon(FontAwesomeIcons.wallet,
+                                size: 20.0, color: Colors.black),
                           ),
                           title: Text((snapshot.data[index].description)),
                         ),
