@@ -4,6 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+
+final formatMoney = NumberFormat("#,##0.00", "en_US");
 
 class Extract extends StatefulWidget {
   const Extract({Key? key}) : super(key: key);
@@ -54,7 +57,7 @@ class _ExtractState extends State<Extract> {
     const primaryColor = Colors.green;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Goals'),
+        title: const Text('Transactions'),
         backgroundColor: primaryColor,
       ),
       body: FutureBuilder<List<dynamic>>(
@@ -74,24 +77,43 @@ class _ExtractState extends State<Extract> {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                         child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: fromHex(snapshot.data[index].categoryColor),
-                            child: const FaIcon(
-                              FontAwesomeIcons.cartShopping,
-                              size: 20.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text((snapshot.data[index].description), 
-                                style: const TextStyle(fontWeight: FontWeight.bold)
+                            leading: CircleAvatar(
+                              backgroundColor:
+                                  fromHex(snapshot.data[index].categoryColor),
+                              child: const FaIcon(
+                                FontAwesomeIcons.cartShopping,
+                                size: 20.0,
+                                color: Colors.white,
                               ),
-                              Text(DateTime.parse(snapshot.data[index].createdAt).toString())
-                            ],
-                          )
-                        ),
+                            ),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text((snapshot.data[index].description),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    Text(
+                                      DateFormat.yMMMMd().add_jms().format(
+                                          DateTime.parse(
+                                              snapshot.data[index].createdAt)),
+                                      style: const TextStyle(fontSize: 12),
+                                    )
+                                  ],
+                                ),
+                                Text(
+                                    formatMoney.format(
+                                        snapshot.data[index].value.abs()),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: snapshot.data[index].value < 0
+                                            ? Colors.red
+                                            : Colors.black)),
+                              ],
+                            )),
                       ),
                     ),
                   );
@@ -101,17 +123,16 @@ class _ExtractState extends State<Extract> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print("Create a new Goal");
-        },
-        backgroundColor: primaryColor,
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     print("Create a new Goal");
+      //   },
+      //   backgroundColor: primaryColor,
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 }
-
 
 Color fromHex(String hexString) {
   final buffer = StringBuffer();
