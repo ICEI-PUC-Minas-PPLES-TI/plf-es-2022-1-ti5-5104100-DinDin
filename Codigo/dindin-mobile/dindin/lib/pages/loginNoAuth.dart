@@ -16,6 +16,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       body: Column(
         children: [
