@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class WalletView extends StatefulWidget {
@@ -47,15 +48,28 @@ class _WalletViewState extends State<WalletView> {
                 ),
                 child: Column(
                   children: [
-                    IconButton(
-                      icon: Icon(Icons.three_p_sharp),
-                      color: Colors.black,
-                      onPressed: () {
-                        // Respond to icon toggle
-                      },
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20, top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            alignment: Alignment.topRight,
+                            icon: const FaIcon(
+                              FontAwesomeIcons.ellipsis,
+                              size: 30.0,
+                              color: Colors.black,
+                            ),
+                            color: Colors.black,
+                            onPressed: () {
+                              // Respond to icon toggle
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 60.0),
+                      padding: const EdgeInsets.only(top: 25.0),
                       child: Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(10.0),
@@ -73,7 +87,7 @@ class _WalletViewState extends State<WalletView> {
                     ),
                     const SizedBox(height: 25.0),
                     const Text(
-                      "Description",
+                      "Receipient type: Private",
                       style: TextStyle(fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 60.0),
@@ -83,56 +97,50 @@ class _WalletViewState extends State<WalletView> {
               const SizedBox(
                 height: 35,
               ),
-              TextFormField(
-                initialValue: "demo-user-01@email.com",
-                maxLength: 150,
-                decoration: const InputDecoration(
-                  labelText: 'E-mail',
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(),
-                  ),
-                  suffixIcon: Icon(Icons.edit_outlined),
-                ),
+              const Card(
+                child: ListTile(
+                    leading: Padding(
+                      padding: EdgeInsets.only(top: 4.0, left: 4.0),
+                      child: FaIcon(
+                        FontAwesomeIcons.user,
+                        size: 30.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                    title: Text('Wallet Holder'),
+                    subtitle: Text('Zé João')),
               ),
               const SizedBox(
                 height: 10,
               ),
-              IntlPhoneField(
-                initialValue: "31988887777",
-                decoration: const InputDecoration(
-                  labelText: 'Phone Number',
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(),
-                  ),
-                  suffixIcon: Icon(Icons.edit_outlined),
-                ),
-                initialCountryCode: 'BR',
-                onChanged: (phone) {
-                  print(phone.completeNumber);
-                },
-                onCountryChanged: (country) {
-                  print('Country changed to: ' + country.name);
-                },
+              const Card(
+                child: ListTile(
+                    leading: Padding(
+                      padding: EdgeInsets.only(top: 4.0, left: 4.0),
+                      child: FaIcon(
+                        FontAwesomeIcons.buildingColumns,
+                        size: 30.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                    title: Text('Bank Name'),
+                    subtitle: Text('Inter')),
               ),
               const SizedBox(
                 height: 10,
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  MaterialButton(
-                    minWidth: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: const Text('Save Changes'),
-                    color: primaryColor,
-                    textColor: Colors.white,
-                    onPressed: () {
-                      _formKey.currentState?.validate();
-                    },
-                  ),
-                  Container(height: 20.0),
-                ],
+              const Card(
+                child: ListTile(
+                    leading: Padding(
+                      padding: EdgeInsets.only(top: 4.0, left: 4.0),
+                      child: FaIcon(
+                        FontAwesomeIcons.envelope,
+                        size: 30.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                    title: Text('Share Wallet'),
+                    subtitle: Text('zejoao@protonmail.com')),
               ),
             ],
           ),
