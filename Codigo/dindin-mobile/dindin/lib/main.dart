@@ -1,5 +1,6 @@
+import 'package:dindin/pages/goal/index.dart';
 import 'package:flutter/material.dart';
-import 'pages/login2.dart';
+import 'package:dindin/pages/wallet/index.dart';
 import 'pages/login.dart';
 import 'package:flutter/services.dart';
 import 'pages/register.dart';
@@ -16,11 +17,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: "/login", 
+      initialRoute: "/login",
       routes: {
-        "/login": (context) => Login2(),
-        "/register": (context) => Register()
-      }
+        "/login": (context) => Login(),
+        "/register": (context) => Register(),
+        "/wallet/index": (context) => const WalletList(),
+        "/goal/index": (context) => const GoalList()
+      },
+      theme: ThemeData(primarySwatch: Colors.green),
     );
   }
 }
