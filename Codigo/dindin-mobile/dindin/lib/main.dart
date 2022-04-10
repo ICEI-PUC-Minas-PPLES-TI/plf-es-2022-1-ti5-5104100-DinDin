@@ -22,8 +22,6 @@ class MyApp extends StatelessWidget {
       routes: {
         "/login": (context) => Login(),
         "/wallet/index": (context) => const WalletList(),
-        "/wallet/create": (context) => const WalletCreate(),
-        "/wallet/update": (context) => const WalletUpdate(),
         "/goal/index": (context) => const GoalList()
       },
       theme: ThemeData(primarySwatch: Colors.green),

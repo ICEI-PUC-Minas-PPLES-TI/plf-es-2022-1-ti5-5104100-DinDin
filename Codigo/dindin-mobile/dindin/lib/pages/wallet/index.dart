@@ -1,3 +1,4 @@
+import 'package:dindin/pages/wallet/update.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -54,6 +55,11 @@ class _WalletListState extends State<WalletList> {
                       onTap: () {
                         print("Open Wallet Visualization at id: " +
                             snapshot.data[index].id.toString());
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const WalletUpdate()),
+                        );
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
