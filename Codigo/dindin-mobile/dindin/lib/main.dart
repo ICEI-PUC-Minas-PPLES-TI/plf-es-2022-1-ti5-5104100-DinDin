@@ -1,5 +1,6 @@
 import 'package:dindin/pages/goal/index.dart';
 import 'package:dindin/pages/wallet/create.dart';
+import 'package:dindin/pages/wallet/update.dart';
 import 'package:flutter/material.dart';
 import 'package:dindin/pages/wallet/index.dart';
 import 'pages/login.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         "/login": (context) => Login(),
         "/wallet/index": (context) => const WalletList(),
         "/wallet/create": (context) => const WalletCreate(),
+        "/wallet/update": (context) => const WalletUpdate(),
         "/goal/index": (context) => const GoalList()
       },
       theme: ThemeData(primarySwatch: Colors.green),
