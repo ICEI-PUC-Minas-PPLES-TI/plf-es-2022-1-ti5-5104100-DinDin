@@ -1,17 +1,14 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
-import 'dart:convert';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-class Login2 extends StatefulWidget {
+class LoginNoAuth extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _LoginState();
+    return _LoginNoAuthState();
   }
 }
 
-class _LoginState extends State<Login2> {
+class _LoginNoAuthState extends State<LoginNoAuth> {
   String email = '';
   String password = '';
   final formKey = GlobalKey<FormState>();
@@ -19,6 +16,7 @@ class _LoginState extends State<Login2> {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       body: Column(
         children: [
@@ -50,7 +48,7 @@ class _LoginState extends State<Login2> {
               )),
           Form(
             key: formKey,
-            child: Flexible(
+            child: Expanded(
                 flex: 5,
                 child: SizedBox(
                   height: double.infinity,
@@ -105,51 +103,39 @@ class _LoginState extends State<Login2> {
                                     }
                                   },
                                 ),
+                                SizedBox(height: 20),
+                                SizedBox(
+                                  height: 40,
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    child: Text("Login"),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      if (formKey.currentState!.validate()) {
+                                        final snackBarTrue =
+                                            SnackBar(content: Text('Logging'));
+                                        _scaffoldKey.currentState!
+                                            .showSnackBar(snackBarTrue);
+                                            userAuth(email);
+                                      } else {
+                                        final snackBarFalse = SnackBar(
+                                            content: Text('Invalid Credencials'));
+                                            _scaffoldKey.currentState!
+                                            .showSnackBar(snackBarFalse);
+                                      }
+                                    },
+                                  ),
+                                ),
                               ],
                             )),
-                        Flexible(
-                            flex: 3,
-                            child: SizedBox(
-                              height: 40,
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                child: Text("Login"),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.grey,
-                                ),
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    final snackBarTrue =
-                                        SnackBar(content: Text('Loging'));
-                                    final snackBarFalse =
-                                        SnackBar(content: Text('User not Found'));
-                                    userAuth(email, password).then((res) => {
-                                          if (res==true)
-                                            {
-                                              _scaffoldKey.currentState!
-                                                  .showSnackBar(snackBarTrue)
-                                            }
-                                          else
-                                            {
-                                              _scaffoldKey.currentState!
-                                                  .showSnackBar(snackBarFalse)
-                                            }
-                                        });
-                                  } else {
-                                    final snackBar = SnackBar(
-                                        content: Text('Invalid credencials'));
-                                    _scaffoldKey.currentState!
-                                        .showSnackBar(snackBar);
-                                  }
-                                },
-                              ),
-                            ))
                       ],
                     ),
                   ),
                 )),
           ),
-          Flexible(
+          Expanded(
               flex: 1,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -158,7 +144,7 @@ class _LoginState extends State<Login2> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
+                        Wrap(
                           children: [
                             Text("Don't have an account?"),
                           ],
@@ -187,14 +173,6 @@ class _LoginState extends State<Login2> {
   }
 }
 
-Future<bool> userAuth(String email, String password) async {
-  var url = "http://localhost:3001/api/user/auth";
-  final Uri uri = Uri.parse(url);
-  var response =
-      await http.post(uri, body: {'email': email, 'password': password});
-  var status = response.statusCode;
-  if (status == 200) {
-    return true;
-  }
-  return false;
+void userAuth(email) {
+  print("Usuario: " + email);
 }

@@ -1,4 +1,4 @@
-[![Jest](https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin/actions/workflows/Jest.yml/badge.svg?branch=master)](https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin/actions/workflows/Jest.yml)
+[![Test Pipeline](https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin/actions/workflows/test.yml)
 
 # DinDin
 

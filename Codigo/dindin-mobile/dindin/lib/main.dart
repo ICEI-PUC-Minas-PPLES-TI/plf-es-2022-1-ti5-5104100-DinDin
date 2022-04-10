@@ -1,6 +1,7 @@
+import 'package:dindin/pages/goal/index.dart';
 import 'package:flutter/material.dart';
-import 'pages/login2.dart';
 import 'package:dindin/pages/wallet/index.dart';
+import 'pages/login.dart';
 import 'package:flutter/services.dart';
 
 void main() {
@@ -17,12 +18,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: "/login",
       routes: {
-        "/login": (context) => Login2(),
-        "/wallet/index": (context) => const WalletList()
+        "/login": (context) => Login(),
+        "/wallet/index": (context) => const WalletList(),
+        "/goal/index": (context) => const GoalList()
       },
-      theme: ThemeData(
-        primarySwatch: Colors.green
-      ),
+      theme: ThemeData(primarySwatch: Colors.green),
     );
   }
 }

@@ -8,17 +8,14 @@
     <v-card class="pa-2">
       <v-card-title class="text-h5 goals-modal-title">
         <h4>
-          <span> Goals</span>
+          <span> {{ title }}</span>
         </h4>
         <v-btn icon @click="$emit('input', false)">
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-card-title>
       <v-card-text>
-        <v-alert
-          v-if="errors.length > 0"
-          type="error"
-        >
+        <v-alert v-if="errors.length > 0" type="error">
           Error:
           <ul>
             <li v-for="(er, eidx) in errors" :key="eidx">
@@ -28,14 +25,8 @@
         </v-alert>
         <!-- Goal Add Form -->
         <v-container fluids>
-          <v-form
-          ref="form"
-              v-on:submit.prevent="saveGoal"
-              lazy-validation>
-            <v-row
-              class="pb-2"
-              
-            >
+          <v-form ref="form" v-on:submit.prevent="saveGoal" lazy-validation>
+            <v-row class="pb-2">
               <v-text-field
                 :rules="[rules.required]"
                 prepend-inner-icon="mdi-tag"
@@ -69,7 +60,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    :rules="[rules.required]"
+                    :rules="[rules.wrongDate]"
                     prepend-inner-icon="mdi-calendar-range"
                     outlined
                     hide-details="auto"
@@ -77,7 +68,7 @@
                     :value="date"
                     v-bind="attrs"
                     v-on="on"
-                    label="Date"
+                    label="Expire at"
                   />
                 </template>
                 <v-date-picker
@@ -95,8 +86,8 @@
                 hide-details="auto"
                 outlined
                 :items="[
-                  { text: 'Saving', value: 1 },
-                  { text: 'Achievement', value: 2 },
+                  { text: 'Saving', value: 'A' },
+                  { text: 'Achievement', value: 'B' },
                 ]"
                 label="Goal Type"
               />
@@ -125,7 +116,10 @@
               >Cancel</v-btn
             >
           </v-col>
-          <v-col class="mr-2">
+          <v-col v-if="goalToEdit != null" class="mr-2">
+            <v-btn block color="primary" @click.stop="editGoal()">Edit</v-btn>
+          </v-col>
+          <v-col v-else class="mr-2">
             <v-btn block color="primary" @click.stop="saveGoal()">Save</v-btn>
           </v-col>
         </v-row>
@@ -135,27 +129,36 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 export default {
+  props: {
+    value: Boolean,
+    goalToEdit: Object,
+    modalEdit: Boolean,
+  },
   data() {
     return {
+      title: "New Goal",
       goal: {
+        id:"",
         description: "",
         date: "",
         value: "",
         type: 0,
         walletId: 0,
+        status: "PENDING"
       },
+      choosenGoal: "",
+      today: "",
       date: "",
       menu: false,
       rules: {
         required: (value) => !!value || "Required.",
+        wrongDate: (value) =>
+          this.compareDates(value, this.today) || "Date expired.",
       },
-      errors: []
+      errors: [],
     };
-  },
-  props: {
-    value: Boolean,
   },
   computed: {
     show: {
@@ -167,32 +170,144 @@ export default {
       },
     },
   },
-  methods: {
-    saveGoal() {
-      this.errors = []
-      if (this.$refs.form.validate()) {
-        Swal.fire({
-          title: 'Goal Created',
-          icon: 'success',
-          showConfirmButton: false,
-          toast: true,
-          position: 'top-end',
-          timer: 3000,
-          timerProgressBar: true,
-        })
-        this.$emit('input', false)
+  watch: {
+    modalEdit: function (modalEdit) {
+      if (modalEdit) {
+        this.title = "Edit Goal";
       } else {
-        this.errors = [
-          'Fields have invalid input'
-        ]
+        this.choosenGoal = null;
+        let emptyGoal = {
+          description: "",
+          expire_at: this.goal.date,
+          value: "",
+          type: "",
+          walletId: "",
+          status: "PENDING",
+        };
+        this.fillForm(emptyGoal);
+        this.cleanForm();
+        this.title = "New Goal";
       }
     },
-    editGoal() {},
+    goalToEdit: function (goalToEdit) {
+      if (goalToEdit) {
+        this.choosenGoal = goalToEdit;
+        this.fillForm(this.choosenGoal);
+      }
+    },
+  },
+  methods: {
+    saveGoal() {
+      this.errors = [];
+      if (this.$refs.form.validate()) {
+        this.$axios
+          .post("/goal", this.goal)
+          .then((res) => {
+            Swal.fire({
+              title: "Goal Created",
+              icon: "success",
+              showConfirmButton: false,
+              toast: true,
+              position: "top-end",
+              timer: 3000,
+              timerProgressBar: true,
+            });
+            this.$refs.form.reset();
+            this.$emit("input", false);
+            this.$emit("created", this.goal);
+          })
+          .catch((err) => {
+            this.erroLogin = err.response.data.message;
+            if (err.response.status == 500) {
+              this.erroLogin = "Erro interno do servidor";
+            }
+          });
+      } else {
+        this.errors = ["Fields have invalid input"];
+      }
+    },
+    editGoal() {
+      this.errors = [];
+      if (this.$refs.form.validate()) {
+        this.$axios
+          .put("/goal/"+this.goal.id, this.goal)
+          .then((res) => {
+            Swal.fire({
+              title: "Goal Edited",
+              icon: "success",
+              showConfirmButton: false,
+              toast: true,
+              position: "top-end",
+              timer: 3000,
+              timerProgressBar: true,
+            });
+            this.$refs.form.reset();
+            this.$emit("input", false);
+            this.$emit("created", this.goal);
+          })
+          .catch((err) => {
+            this.erroLogin = err.response.data.message;
+            if (err.response.status == 500) {
+              this.erroLogin = "Erro interno do servidor";
+            }
+          });
+      } else {
+        this.errors = ["Fields have invalid input"];
+      }
+    },
     parseDate(date) {
       if (!date) return null;
       const [year, month, day] = date.split("-");
       this.date = `${day}/${month}/${year}`;
     },
+    shortDate(date) {
+      if(!date){
+        return null
+      }
+      let parse = date.substring(0, 10);
+      const [year, month, day] = parse.split("-");
+      return `${day}/${month}/${year}`;
+    },
+    compareDates(date1, date2) {
+      if (date1 == null || date2 == null) {
+        return false;
+      }
+      let date1Split = date1.split("/");
+      let date2Split = date2.split("/");
+      let resp = false;
+      if(parseInt(date1Split[2]) > parseInt(date2Split[2])){
+          return true;
+      }
+      if (parseInt(date1Split[2]) == parseInt(date2Split[2])) {
+        if ((parseInt(date1Split[1]) >= parseInt(date2Split[1]))) {
+          if (parseInt(date1Split[0]) >= parseInt(date2Split[0])) {
+            resp = true;
+          }
+        }
+      }
+      return resp;
+    },
+    fillForm(data) {
+      this.goal.id=data.id;
+      this.goal.description = data.description;
+      this.goal.value = data.value;
+      this.date = this.shortDate(data.expire_at);
+      this.goal.date = data.expire_at.substring(0, 10);
+      this.goal.type = data.type;
+      this.goal.walletId = data.walletId;
+    },
+    cleanForm() {
+      this.$refs.form.reset();
+    },
+  },
+  mounted() {
+    let dateToday = new Date(
+      Date.now() - new Date().getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .substr(0, 10);
+    const [year, month, day] = dateToday.split("-");
+    this.today = `${day}/${month}/${year}`;
   },
 };
 </script>
