@@ -1,3 +1,4 @@
+import 'package:dindin/pages/category/list_categories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -40,6 +41,19 @@ class _WalletListState extends State<WalletList> {
       appBar: AppBar(
         title: const Text('Wallet'),
         backgroundColor: primaryColor,
+        actions: [
+          IconButton(
+            icon: const FaIcon(FontAwesomeIcons.tag),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ListCategories()),
+              );
+            },
+          ),
+          // add more IconButton
+        ],
       ),
       body: FutureBuilder<List<dynamic>>(
         future: fetchWallets(),
