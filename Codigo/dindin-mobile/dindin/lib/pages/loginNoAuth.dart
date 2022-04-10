@@ -1,16 +1,17 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
 import 'package:dindin/pages/dashboard.dart';
 import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 
-class Login2 extends StatefulWidget {
+class LoginNoAuth extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _LoginState();
+    return _LoginNoAuthState();
   }
 }
 
-class _LoginState extends State<Login2> {
+class _LoginNoAuthState extends State<LoginNoAuth> {
   String email = '';
   String password = '';
   final formKey = GlobalKey<FormState>();
@@ -18,6 +19,7 @@ class _LoginState extends State<Login2> {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       body: Column(
         children: [
@@ -49,7 +51,7 @@ class _LoginState extends State<Login2> {
               )),
           Form(
             key: formKey,
-            child: Flexible(
+            child: Expanded(
                 flex: 5,
                 child: SizedBox(
                   height: double.infinity,
@@ -104,6 +106,31 @@ class _LoginState extends State<Login2> {
                                     }
                                   },
                                 ),
+                                SizedBox(height: 20),
+                                SizedBox(
+                                  height: 40,
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    child: Text("Login"),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      if (formKey.currentState!.validate()) {
+                                        final snackBarTrue =
+                                            SnackBar(content: Text('Logging'));
+                                        _scaffoldKey.currentState!
+                                            .showSnackBar(snackBarTrue);
+                                            userAuth(email,'123');
+                                      } else {
+                                        final snackBarFalse = SnackBar(
+                                            content: Text('Invalid Credencials'));
+                                            _scaffoldKey.currentState!
+                                            .showSnackBar(snackBarFalse);
+                                      }
+                                    },
+                                  ),
+                                ),
                               ],
                             )),
                         Flexible(
@@ -154,7 +181,7 @@ class _LoginState extends State<Login2> {
                   ),
                 )),
           ),
-          Flexible(
+          Expanded(
               flex: 1,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -163,7 +190,7 @@ class _LoginState extends State<Login2> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
+                        Wrap(
                           children: [
                             Text("Don't have an account?"),
                           ],

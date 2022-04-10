@@ -1,5 +1,7 @@
+import 'package:dindin/pages/goal/index.dart';
 import 'package:flutter/material.dart';
-import 'pages/login2.dart';
+import 'package:dindin/pages/wallet/index.dart';
+import 'pages/login.dart';
 import 'package:flutter/services.dart';
 
 
@@ -22,9 +24,14 @@ class MyApp extends StatelessWidget {
         tabBarTheme: const TabBarTheme(
           labelColor: Colors.black87, // color for text
         ),
+        primarySwatch: Colors.green
       ),
-      
-      home: Login2(),
+      initialRoute: "/login",
+      routes: {
+        "/login": (context) => Login(),
+        "/wallet/index": (context) => const WalletList(),
+        "/goal/index": (context) => const GoalList()
+      }
     );
   }
 }
