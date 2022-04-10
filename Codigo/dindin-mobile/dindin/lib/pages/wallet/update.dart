@@ -16,7 +16,7 @@ class _WalletUpdateState extends State<WalletUpdate> {
     return Scaffold(
         appBar: AppBar(
             title: const Text(
-              'Update Goal',
+              'Update Wallet',
             ),
             backgroundColor: Theme.of(context).primaryColor),
         body: Form(
@@ -30,10 +30,11 @@ class _WalletUpdateState extends State<WalletUpdate> {
                     // Description field
                     const Text('Description',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    const TextField(
-                      decoration: InputDecoration(
+                    TextField(
+                      controller: TextEditingController(text: "Wallet X"),
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'ex: Money under the mattress',
+                          hintText: 'Insert a Wallet description',
                           suffixIcon:
                               Icon(FontAwesomeIcons.penToSquare, size: 20.0)),
                     ),
