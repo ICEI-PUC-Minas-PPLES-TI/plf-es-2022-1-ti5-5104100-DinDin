@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -110,36 +111,40 @@ class _LoginState extends State<Login> {
                                   height: 40,
                                   width: double.infinity,
                                   child: ElevatedButton(
-                                  child: Text("Login"),
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.grey,
+                                    child: Text("Login"),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      if (formKey.currentState!.validate()) {
+                                        final snackBarTrue =
+                                            SnackBar(content: Text('Loging'));
+                                        final snackBarFalse = SnackBar(
+                                            content: Text('User not Found'));
+                                        userAuth(email, password)
+                                            .then((res) => {
+                                                  if (res == true)
+                                                    {
+                                                      _scaffoldKey.currentState!
+                                                          .showSnackBar(
+                                                              snackBarTrue)
+                                                    }
+                                                  else
+                                                    {
+                                                      _scaffoldKey.currentState!
+                                                          .showSnackBar(
+                                                              snackBarFalse)
+                                                    }
+                                                });
+                                      } else {
+                                        final snackBar = SnackBar(
+                                            content:
+                                                Text('Invalid credencials'));
+                                        _scaffoldKey.currentState!
+                                            .showSnackBar(snackBar);
+                                      }
+                                    },
                                   ),
-                                  onPressed: () {
-                                    if (formKey.currentState!.validate()) {
-                                      final snackBarTrue =
-                                          SnackBar(content: Text('Loging'));
-                                      final snackBarFalse =
-                                          SnackBar(content: Text('User not Found'));
-                                      userAuth(email, password).then((res) => {
-                                            if (res==true)
-                                              {
-                                                _scaffoldKey.currentState!
-                                                    .showSnackBar(snackBarTrue)
-                                              }
-                                            else
-                                              {
-                                                _scaffoldKey.currentState!
-                                                    .showSnackBar(snackBarFalse)
-                                              }
-                                          });
-                                    } else {
-                                      final snackBar = SnackBar(
-                                          content: Text('Invalid credencials'));
-                                      _scaffoldKey.currentState!
-                                          .showSnackBar(snackBar);
-                                    }
-                                  },
-                              ),
                                 ),
                               ],
                             )),
@@ -164,9 +169,15 @@ class _LoginState extends State<Login> {
                         ),
                         Row(
                           children: [
-                            Text(
-                              "REGISTER ",
-                              style: TextStyle(color: Colors.green[800]),
+                            RichText(
+                              text: TextSpan(
+                                text: "REGISTER ",
+                                style: TextStyle(color: Colors.green[800]),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.pushNamed(context, "/register");
+                                  },
+                              ),
                             ),
                             Icon(
                               Icons.arrow_forward,
@@ -182,8 +193,8 @@ class _LoginState extends State<Login> {
               ))
         ],
       ),
-      
-    );}
+    );
+  }
 }
 
 Future<bool> userAuth(String email, String password) async {
