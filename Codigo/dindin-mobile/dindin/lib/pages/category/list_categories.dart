@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/category_list.dart';
 import '../../models/category.dart';
-import './category_create.dart';
+import 'category_form.dart';
 
 class ListCategories extends StatefulWidget {
   const ListCategories({Key? key}) : super(key: key);
@@ -130,7 +130,7 @@ class _ListCategoriesState extends State<ListCategories> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        const CategoryCreate()),
+                        const CategoryForm(null)),
               );
             },
             child: const Icon(Icons.add),

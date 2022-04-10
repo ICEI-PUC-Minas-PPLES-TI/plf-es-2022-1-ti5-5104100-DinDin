@@ -2,9 +2,9 @@ class Category {
   final int id;
   final int user_id;
   final int wallet_id;
-  final String description;
-  final String type;
-  final String color;
+  final String? description;
+  final String? type;
+  final String? color;
 
   Category({
     required this.id,

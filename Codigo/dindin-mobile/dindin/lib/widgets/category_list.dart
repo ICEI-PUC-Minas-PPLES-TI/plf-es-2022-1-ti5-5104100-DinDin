@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../helpers/color_helper.dart';
 import '../models/category.dart';
+import '../pages/category/category_form.dart';
 
 class CategoryList extends StatelessWidget {
   final List<Category> categories;
@@ -27,25 +28,35 @@ class CategoryList extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: ListView.builder(
               itemBuilder: (ctx, index) {
-                return Card(
-                  elevation: 5,
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 5,
-                    horizontal: 0,
-                  ),
-                  child: ListTile(
-                    tileColor: ch.fromHex(categories[index].color),
-                    title: Text(
-                      categories[index].description,
-                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                return GestureDetector(
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CategoryForm(categories[index])),
+                    )
+                  },
+                  child: Card(
+                    elevation: 5,
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 5,
+                      horizontal: 0,
                     ),
-                    trailing: CircleAvatar(
-                      radius: 20,
-                      backgroundColor: const Color.fromARGB(158, 255, 255, 255),
-                      child: IconButton(
-                        icon: const Icon(Icons.delete),
-                        color: Theme.of(context).errorColor,
-                        onPressed: () => deleteTx(categories[index].id),
+                    child: ListTile(
+                      tileColor: ch.fromHex(categories[index].color!),
+                      title: Text(
+                        categories[index].description!,
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                      trailing: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: const Color.fromARGB(158, 255, 255, 255),
+                        child: IconButton(
+                          icon: const Icon(Icons.delete),
+                          color: Theme.of(context).errorColor,
+                          onPressed: () => deleteTx(categories[index].id),
+                        ),
                       ),
                     ),
                   ),

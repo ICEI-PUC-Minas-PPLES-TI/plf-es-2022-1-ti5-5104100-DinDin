@@ -1,25 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../helpers/color_helper.dart';
+import '../../models/category.dart';
 
 
-class CategoryCreate extends StatefulWidget {
-  const CategoryCreate({Key? key}) : super(key: key);
+class CategoryForm extends StatefulWidget {
+  final Category? category;
+
+  const CategoryForm(this.category, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _CategoryCreateState();
+    return _CategoryFormState();
   }
 }
 
-class _CategoryCreateState extends State<CategoryCreate> {
+class _CategoryFormState extends State<CategoryForm> {
 
   String _catType = 'IN';
   String _catColor = 'eb5a46';
   ColorHelper ch = ColorHelper();
 
+  final TextEditingController _descriptionController = TextEditingController();
+
   @override
   void initState() {
+    if(widget.category != null) {
+      // Edit
+      _descriptionController.text = widget.category!.description!;
+      _catColor = widget.category!.color!;
+      _catType = widget.category!.type!;
+    } else {
+      //Create
+    }
     super.initState();
   }
 
@@ -27,8 +40,8 @@ class _CategoryCreateState extends State<CategoryCreate> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: const Text(
-              'Create Category',
+            title: Text(
+              widget.category != null ? 'Edit Category': 'Create Category',
             ),
             backgroundColor: Theme.of(context).primaryColor),
         body: Form(
@@ -41,12 +54,13 @@ class _CategoryCreateState extends State<CategoryCreate> {
                   children: [
                     // Description field
                     const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
-                    const TextField(
-                      decoration: InputDecoration(
+                    TextField(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'ex: Food, Education, etc...',
                         suffixIcon: Icon(FontAwesomeIcons.penToSquare, size: 20.0)
                       ),
+                      controller: _descriptionController,
                     ),
                     const SizedBox(height: 20),
                     // End category type
