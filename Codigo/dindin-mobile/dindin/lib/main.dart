@@ -1,4 +1,5 @@
 import 'package:dindin/pages/goal/index.dart';
+import 'package:dindin/pages/goal/view.dart';
 import 'package:flutter/material.dart';
 import 'package:dindin/pages/wallet/index.dart';
 import 'pages/login.dart';
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
       routes: {
         "/login": (context) => Login(),
         "/wallet/index": (context) => const WalletList(),
-        "/goal/index": (context) => const GoalList()
+        "/goal/index": (context) => const GoalList(),
+        "/goal/view": (context) => const GoalView(),
       },
       theme: ThemeData(primarySwatch: Colors.green),
     );
