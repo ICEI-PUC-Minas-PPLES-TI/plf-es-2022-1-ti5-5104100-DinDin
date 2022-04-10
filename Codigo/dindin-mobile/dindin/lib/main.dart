@@ -1,3 +1,4 @@
+import 'package:dindin/pages/wallet/view.dart';
 import 'package:flutter/material.dart';
 import 'pages/login.dart';
 import 'package:flutter/services.dart';
