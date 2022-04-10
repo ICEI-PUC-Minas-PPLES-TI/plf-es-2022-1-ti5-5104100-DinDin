@@ -1,3 +1,4 @@
+import 'package:dindin/pages/wallet/create.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -77,6 +78,10 @@ class _WalletListState extends State<WalletList> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print("Create a new Wallet");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const WalletCreate()),
+          );
         },
         backgroundColor: primaryColor,
         child: const Icon(Icons.add),
