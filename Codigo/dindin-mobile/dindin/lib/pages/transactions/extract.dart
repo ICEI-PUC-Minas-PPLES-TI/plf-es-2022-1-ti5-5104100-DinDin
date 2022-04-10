@@ -123,6 +123,17 @@ class _ExtractState extends State<Extract> {
                     ],
                   ),
                 ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 12.0, top: 10),
+                  child: Text(
+                    'Recent transactions',
+                    maxLines: 20,
+                    style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                ),
                 ListView.builder(
                     key: const Key("keyListBuilderTransactions"),
                     shrinkWrap: true,
