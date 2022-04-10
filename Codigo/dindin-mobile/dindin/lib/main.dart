@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(initialRoute: "/extract", routes: {
       "/login": (context) => Login2(),
       "/register": (context) => Register(),
-      "/extract": (context) => Extract()
+      "/extract": (context) => const Extract()
     });
   }
 }

@@ -64,60 +64,129 @@ class _ExtractState extends State<Extract> {
         future: fetchTransaction(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: snapshot.data?.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    child: InkWell(
-                      onTap: () {
-                        print("Open Transaction Visualization at id: " +
-                            snapshot.data[index].id.toString());
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                        child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor:
-                                  fromHex(snapshot.data[index].categoryColor),
-                              child: const FaIcon(
-                                FontAwesomeIcons.cartShopping,
-                                size: 20.0,
-                                color: Colors.white,
+            return ListView(
+              children: [
+                Card(
+                  key: const Key("keyBoxCurrentBalance"),
+                  elevation: 5,
+                  color: fromHex("F5F6FA"),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(
+                              alignment: Alignment.topRight,
+                              icon: const FaIcon(
+                                FontAwesomeIcons.arrowLeft,
+                                size: 30.0,
+                                color: Colors.black,
                               ),
+                              color: Colors.black,
+                              onPressed: () {
+                                print("go back to menu screen");
+                              },
                             ),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text((snapshot.data[index].description),
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    Text(
-                                      DateFormat.yMMMMd().add_jms().format(
-                                          DateTime.parse(
-                                              snapshot.data[index].createdAt)),
-                                      style: const TextStyle(fontSize: 12),
-                                    )
-                                  ],
-                                ),
-                                Text(
-                                    formatMoney.format(
-                                        snapshot.data[index].value.abs()),
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                        color: snapshot.data[index].value < 0
-                                            ? Colors.red
-                                            : Colors.black)),
-                              ],
-                            )),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                });
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(10.0),
+                        child: const Center(
+                            child: Text('Your Balance',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                ))),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 25.0),
+                        child: Text(
+                          '\$' + formatMoney.format(1372.50).toString(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 42),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 60.0),
+                        child: Text(
+                          "See bank details",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, color: Colors.green),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ListView.builder(
+                    key: const Key("keyListBuilderTransactions"),
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(8),
+                    itemCount: snapshot.data?.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        child: InkWell(
+                          onTap: () {
+                            print("Open Transaction Visualization at id: " +
+                                snapshot.data[index].id.toString());
+                          },
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                            child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: fromHex(
+                                      snapshot.data[index].categoryColor),
+                                  child: const FaIcon(
+                                    FontAwesomeIcons.cartShopping,
+                                    size: 20.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text((snapshot.data[index].description),
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        Text(
+                                          DateFormat.yMMMMd().add_jms().format(
+                                              DateTime.parse(snapshot
+                                                  .data[index].createdAt)),
+                                          style: const TextStyle(fontSize: 12),
+                                        )
+                                      ],
+                                    ),
+                                    Text(
+                                        '\$' +
+                                            formatMoney.format(snapshot
+                                                .data[index].value
+                                                .abs()),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                            color:
+                                                snapshot.data[index].value < 0
+                                                    ? Colors.red
+                                                    : Colors.black)),
+                                  ],
+                                )),
+                          ),
+                        ),
+                      );
+                    }),
+              ],
+            );
           } else {
             return const Center(child: CircularProgressIndicator());
           }

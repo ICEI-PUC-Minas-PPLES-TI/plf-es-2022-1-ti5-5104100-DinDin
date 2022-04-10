@@ -1,11 +1,12 @@
 {
+    "currentValue": 2750.0,
     "transactions": [{
         "id": 1,
         "value": -73.70,
         "description": "Compra na feira",
         "categoryIcon": "trem",
         "categoryColor": "#fe627a",
-        "createdAt": "2022-03-04T7:03"
+        "createdAt": "2022-03-04T07:03"
     },{
         "id": 5,
         "value": -150.0,
