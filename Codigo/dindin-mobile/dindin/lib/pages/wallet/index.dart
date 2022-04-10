@@ -4,49 +4,33 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:dindin/pages/goal/model.dart';
+import 'package:dindin/pages/wallet/model.dart';
 
-class GoalList extends StatefulWidget {
-  const GoalList({Key? key}) : super(key: key);
+class WalletList extends StatefulWidget {
+  const WalletList({Key? key}) : super(key: key);
 
   @override
-  State<GoalList> createState() => _GoalListState();
+  State<WalletList> createState() => _WalletListState();
 }
 
-Future<List<Goal>> fetchGoals() async {
-  List<Goal> goalsList = <Goal>[];
-  http.Response response;
+Future<List<Wallet>> fetchWallets() async {
+  List<Wallet> walletList = <Wallet>[];
 
-  try {
-    response = await http.get(Uri.parse(
-        'http://localhost:3001/api/goal?page=1&limit=5&attribute=id&order=ASC'));
-  } catch (e) {
-    final String response = await rootBundle.loadString('/goals.json');
-    final goalsJson = jsonDecode(response)['goals'];
-    for (var goal in goalsJson) {
-      goalsList.add(Goal.fromJson(goal));
-    }
-    return goalsList;
+  final String response = await rootBundle.loadString('assets/wallets.json');
+  final walletsJson = jsonDecode(response)['wallets'];
+  for (var wallet in walletsJson) {
+    walletList.add(Wallet.fromJson(wallet));
   }
-
-  if (response.statusCode == 200) {
-    final goalsJson = jsonDecode(response.body)['goals'];
-    for (var goal in goalsJson) {
-      goalsList.add(Goal.fromJson(goal));
-    }
-    return goalsList;
-  } else {
-    throw Exception('Failed to load goals');
-  }
+  return walletList;
 }
 
-class _GoalListState extends State<GoalList> {
-  late Future<List<Goal>> goals;
+class _WalletListState extends State<WalletList> {
+  late Future<List<Wallet>> wallets;
 
   @override
   void initState() {
     super.initState();
-    goals = fetchGoals();
+    wallets = fetchWallets();
   }
 
   @override
@@ -54,11 +38,11 @@ class _GoalListState extends State<GoalList> {
     const primaryColor = Colors.green;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Goals'),
+        title: const Text('Wallet'),
         backgroundColor: primaryColor,
       ),
       body: FutureBuilder<List<dynamic>>(
-        future: fetchGoals(),
+        future: fetchWallets(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
@@ -68,7 +52,7 @@ class _GoalListState extends State<GoalList> {
                   return Card(
                     child: InkWell(
                       onTap: () {
-                        print("Open Goal Visualization at id: " +
+                        print("Open Wallet Visualization at id: " +
                             snapshot.data[index].id.toString());
                       },
                       child: Padding(
@@ -76,11 +60,8 @@ class _GoalListState extends State<GoalList> {
                         child: ListTile(
                           leading: const Padding(
                             padding: EdgeInsets.only(top: 5.0),
-                            child: FaIcon(
-                              FontAwesomeIcons.bullseye,
-                              size: 30.0,
-                              color: Colors.redAccent,
-                            ),
+                            child: FaIcon(FontAwesomeIcons.wallet,
+                                size: 20.0, color: Colors.black),
                           ),
                           title: Text((snapshot.data[index].description)),
                         ),
@@ -95,7 +76,7 @@ class _GoalListState extends State<GoalList> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print("Create a new Goal");
+          print("Create a new Wallet");
         },
         backgroundColor: primaryColor,
         child: const Icon(Icons.add),
