@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(initialRoute: "/extract", routes: {
+    return MaterialApp(initialRoute: "/login", routes: {
       "/login": (context) => Login2(),
       "/register": (context) => Register(),
       "/extract": (context) => const Extract()
