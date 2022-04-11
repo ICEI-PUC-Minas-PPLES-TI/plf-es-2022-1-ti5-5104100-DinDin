@@ -158,9 +158,8 @@ class _ExtractState extends State<Extract> {
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                           Text(
-                                            DateFormat.yMMMMd()
-                                                .add_jms()
-                                                .format(DateTime.parse(snapshot
+                                            DateFormat.yMEd().add_jms().format(
+                                                DateTime.parse(snapshot
                                                     .data[index].createdAt)),
                                             style:
                                                 const TextStyle(fontSize: 12),
@@ -174,7 +173,7 @@ class _ExtractState extends State<Extract> {
                                                   .abs()),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 14,
+                                              fontSize: 10,
                                               color:
                                                   snapshot.data[index].value < 0
                                                       ? Colors.red

@@ -18,7 +18,7 @@ class Dashboard extends StatelessWidget {
             title: const Text('Dashboard'),
             backgroundColor: Theme.of(context).primaryColor,
             automaticallyImplyLeading: false),
-        body: Column(
+        body: ListView(
           children: [
             // User name Row
             Padding(
@@ -30,10 +30,12 @@ class Dashboard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Column(children: const [
-                    FaIcon(
-                      FontAwesomeIcons.circleUser,
-                      size: 30.0,
-                      color: Colors.black,
+                    Center(
+                      child: FaIcon(
+                        FontAwesomeIcons.circleUser,
+                        size: 30.0,
+                        color: Colors.black,
+                      ),
                     ),
                     SizedBox(height: 20),
                     Text(
@@ -51,31 +53,36 @@ class Dashboard extends StatelessWidget {
             Row(
               children: [
                 // Transaction Button
-                Expanded(
-                    child: Column(children: [
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Colors.grey.shade100,
-                        child: IconButton(
-                          alignment: Alignment.topRight,
-                          icon: const FaIcon(
-                            FontAwesomeIcons.arrowRightArrowLeft,
-                            size: 25.0,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Expanded(
+                      child: Column(children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.grey.shade100,
+                          child: IconButton(
+                            alignment: Alignment.topRight,
+                            icon: const Center(
+                              child: FaIcon(
+                                FontAwesomeIcons.arrowRightArrowLeft,
+                                size: 25.0,
+                                color: Colors.black,
+                              ),
+                            ),
                             color: Colors.black,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Extract()),
+                              );
+                            },
                           ),
-                          color: Colors.black,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Extract()),
-                            );
-                          },
                         ),
-                      ),
-                      const Text('Transaction')
-                    ]),
-                    flex: 2),
+                        const Text('Transaction')
+                      ]),
+                      flex: 2),
+                ),
                 // Account Button
                 Expanded(
                     child: Column(
@@ -85,10 +92,12 @@ class Dashboard extends StatelessWidget {
                           backgroundColor: Colors.grey.shade100,
                           child: IconButton(
                             alignment: Alignment.topRight,
-                            icon: const FaIcon(
-                              FontAwesomeIcons.circleUser,
-                              size: 25.0,
-                              color: Colors.black,
+                            icon: const Center(
+                              child: FaIcon(
+                                FontAwesomeIcons.circleUser,
+                                size: 25.0,
+                                color: Colors.black,
+                              ),
                             ),
                             color: Colors.black,
                             onPressed: () {
@@ -113,10 +122,12 @@ class Dashboard extends StatelessWidget {
                           backgroundColor: Colors.grey.shade100,
                           child: IconButton(
                             alignment: Alignment.topRight,
-                            icon: const FaIcon(
-                              FontAwesomeIcons.bullseye,
-                              size: 25.0,
-                              color: Colors.black,
+                            icon: const Center(
+                              child: FaIcon(
+                                FontAwesomeIcons.bullseye,
+                                size: 25.0,
+                                color: Colors.black,
+                              ),
                             ),
                             color: Colors.black,
                             onPressed: () {
@@ -141,10 +152,12 @@ class Dashboard extends StatelessWidget {
                           backgroundColor: Colors.grey.shade100,
                           child: IconButton(
                             alignment: Alignment.topRight,
-                            icon: const FaIcon(
-                              FontAwesomeIcons.wallet,
-                              size: 25.0,
-                              color: Colors.black,
+                            icon: const Center(
+                              child: FaIcon(
+                                FontAwesomeIcons.wallet,
+                                size: 25.0,
+                                color: Colors.black,
+                              ),
                             ),
                             color: Colors.black,
                             onPressed: () {
@@ -256,7 +269,7 @@ class Dashboard extends StatelessWidget {
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
                   return Expanded(
-                    child: ListView(
+                    child: Column(
                       children: [
                         ListView.builder(
                             key: const Key("keyListBuilderTransactions"),
@@ -299,7 +312,7 @@ class Dashboard extends StatelessWidget {
                                                         fontWeight:
                                                             FontWeight.bold)),
                                                 Text(
-                                                  DateFormat.yMMMMd()
+                                                  DateFormat.yMEd()
                                                       .add_jms()
                                                       .format(DateTime.parse(
                                                           snapshot.data[index]
@@ -316,7 +329,7 @@ class Dashboard extends StatelessWidget {
                                                         .abs()),
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
+                                                    fontSize: 10,
                                                     color: snapshot.data[index]
                                                                 .value <
                                                             0
