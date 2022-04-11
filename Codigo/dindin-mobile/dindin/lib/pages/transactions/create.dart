@@ -33,7 +33,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset : false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text("Add transaction"),
           backgroundColor: Theme.of(context).primaryColor,
@@ -115,29 +115,25 @@ class _CreateTransactionState extends State<CreateTransaction> {
                 child: Card(
                   child: Center(
                       child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: ListView(
                             children: [
-                              SizedBox(
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                      labelText: "Amount",
-                                      labelStyle: const TextStyle(fontSize: 30),
-                                      border: const UnderlineInputBorder(),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      )),
-                                ),
+                              TextField(
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                    labelText: "Amount",
+                                    labelStyle: const TextStyle(fontSize: 16),
+                                    border: const UnderlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    )),
                               ),
                               CheckboxListTile(
                                 title: const Text(
                                   "Recurrent?",
-                                  style: TextStyle(fontSize: 20),
+                                  style: TextStyle(fontSize: 12),
                                 ),
                                 value: _isChecked,
                                 onChanged: (bool? opt) {
