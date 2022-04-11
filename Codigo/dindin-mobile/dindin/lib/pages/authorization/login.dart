@@ -21,6 +21,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       key: _scaffoldKey,
       body: Column(
         children: [
@@ -160,9 +161,8 @@ class _LoginState extends State<Login> {
                   ),
                 )),
           ),
-          Expanded(
-              flex: 1,
-              child: Padding(
+          Wrap(
+              children: [Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
@@ -197,7 +197,7 @@ class _LoginState extends State<Login> {
                     )
                   ],
                 ),
-              ))
+              )])
         ],
       ),
     );
