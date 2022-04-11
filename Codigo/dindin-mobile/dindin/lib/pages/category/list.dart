@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:dindin/models/category.dart';
+import 'package:dindin/pages/category/form.dart';
+import 'package:dindin/widgets/category_list.dart';
 
-import '../../widgets/category_list.dart';
-import '../../models/category.dart';
-import 'category_form.dart';
+import 'package:flutter/material.dart';
 
 class ListCategories extends StatefulWidget {
   const ListCategories({Key? key}) : super(key: key);
@@ -15,22 +15,22 @@ class _ListCategoriesState extends State<ListCategories> {
   final List<Category> _walletCategoriesOut = [
     Category(
         id: 1,
-        user_id: 1,
-        wallet_id: 1,
+        userId: 1,
+        walletId: 1,
         description: 'Food',
         type: 'OUT',
         color: 'eb5a46'),
     Category(
         id: 2,
-        user_id: 1,
-        wallet_id: 1,
+        userId: 1,
+        walletId: 1,
         description: 'Transport',
         type: 'OUT',
         color: 'ff9f1a'),
     Category(
         id: 3,
-        user_id: 1,
-        wallet_id: 1,
+        userId: 1,
+        walletId: 1,
         description: 'Studies',
         type: 'OUT',
         color: '0079bf')
@@ -39,15 +39,15 @@ class _ListCategoriesState extends State<ListCategories> {
   final List<Category> _walletCategoriesIn = [
     Category(
         id: 4,
-        user_id: 1,
-        wallet_id: 1,
+        userId: 1,
+        walletId: 1,
         description: 'Salary',
         type: 'IN',
         color: '61bd4f'),
     Category(
         id: 5,
-        user_id: 1,
-        wallet_id: 1,
+        userId: 1,
+        walletId: 1,
         description: 'Stocks',
         type: 'IN',
         color: 'c377e0')

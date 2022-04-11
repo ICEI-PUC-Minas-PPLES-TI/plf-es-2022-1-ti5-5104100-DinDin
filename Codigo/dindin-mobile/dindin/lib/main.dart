@@ -1,5 +1,6 @@
 import 'package:dindin/pages/authorization/login.dart';
 import 'package:dindin/pages/authorization/register.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

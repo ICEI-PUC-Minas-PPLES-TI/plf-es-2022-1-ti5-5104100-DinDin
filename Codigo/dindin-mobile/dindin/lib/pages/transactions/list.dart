@@ -1,5 +1,6 @@
 import 'package:dindin/pages/transactions/create.dart';
-import 'package:dindin/pages/transactions/model.dart';
+import 'package:dindin/models/transaction.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;

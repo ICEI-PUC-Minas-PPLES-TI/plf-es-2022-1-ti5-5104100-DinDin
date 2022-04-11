@@ -1,7 +1,7 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-import '../../Components/dropCategory.dart';
+import 'package:dindin/widgets/category_drop.dart';
+import 'package:dindin/widgets/wallet_drop.dart';
+
 import 'package:flutter/material.dart';
-import '../../Components/dropWallet.dart';
 
 class CreateTransaction extends StatefulWidget {
   const CreateTransaction({Key? key}) : super(key: key);
@@ -34,7 +34,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Add transaction"),
+          title: const Text("Add transaction"),
           backgroundColor: Theme.of(context).primaryColor,
         ),
         body: Padding(
@@ -67,7 +67,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                                           MaterialStateProperty.all<Color>(
                                               Colors.grey),
                                     ),
-                              child: Text(
+                              child: const Text(
                                 "Income",
                                 style: TextStyle(fontSize: 20),
                               ),
@@ -91,7 +91,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                                             MaterialStateProperty.all<Color>(
                                                 Colors.grey),
                                       ),
-                                child: Text("Outcome",
+                                child: const Text("Outcome",
                                     style: TextStyle(fontSize: 20))),
                           ),
                         ],
@@ -124,8 +124,8 @@ class _CreateTransactionState extends State<CreateTransaction> {
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                       labelText: "Amount",
-                                      labelStyle: TextStyle(fontSize: 40),
-                                      border: UnderlineInputBorder(),
+                                      labelStyle: const TextStyle(fontSize: 40),
+                                      border: const UnderlineInputBorder(),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Theme.of(context).primaryColor,
@@ -134,7 +134,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                                 ),
                               ),
                               CheckboxListTile(
-                                title: Text(
+                                title: const Text(
                                   "Recurrent?",
                                   style: TextStyle(fontSize: 20),
                                 ),
@@ -158,7 +158,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                     child: Column(children: [
                       Text(
                         '${date.day}/${date.month}/${date.year}',
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                       ),
                       ElevatedButton(
                           style: ButtonStyle(
@@ -166,7 +166,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                               Theme.of(context).primaryColor,
                             ),
                           ),
-                          child: Text(
+                          child: const Text(
                             'Select Date',
                             style: TextStyle(
                               fontSize: 20,
@@ -186,7 +186,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                                     colorScheme: ColorScheme.light(
                                       primary: Theme.of(context).primaryColor,
                                     ),
-                                    buttonTheme: ButtonThemeData(
+                                    buttonTheme: const ButtonThemeData(
                                         textTheme: ButtonTextTheme.primary),
                                   ),
                                   child: child!,
@@ -218,7 +218,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                                   Theme.of(context).primaryColor,
                                 ),
                               ),
-                              child: Text("Insert",
+                              child: const Text("Insert",
                                   style: TextStyle(fontSize: 20))),
                         ),
                         SizedBox(
@@ -233,7 +233,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                                     MaterialStateProperty.all<Color>(
                                         Colors.grey),
                               ),
-                              child: Text("Cancel",
+                              child: const Text("Cancel",
                                   style: TextStyle(fontSize: 20))),
                         ),
                       ],

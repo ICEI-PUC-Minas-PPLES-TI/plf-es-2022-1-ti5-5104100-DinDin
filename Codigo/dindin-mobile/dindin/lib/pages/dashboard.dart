@@ -1,12 +1,11 @@
-import 'package:dindin/pages/transactions/index.dart';
+import 'package:dindin/pages/goal/list.dart';
+import 'package:dindin/pages/profile/edit.dart';
+import 'package:dindin/pages/transactions/create.dart';
+import 'package:dindin/pages/transactions/list.dart';
+import 'package:dindin/pages/wallet/list.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import './goal/index.dart';
-import './wallet/index.dart';
-import './profile/index.dart';
-import 'transactions/create.dart';
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Dashboard extends StatelessWidget {
@@ -17,7 +16,8 @@ class Dashboard extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
             title: const Text('Dashboard'),
-            backgroundColor: Theme.of(context).primaryColor),
+            backgroundColor: Theme.of(context).primaryColor,
+            automaticallyImplyLeading: false),
         body: Column(
           children: [
             // User name Row
