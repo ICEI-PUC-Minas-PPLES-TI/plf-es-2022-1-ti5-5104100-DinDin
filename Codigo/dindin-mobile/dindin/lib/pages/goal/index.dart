@@ -1,3 +1,4 @@
+import 'package:dindin/pages/goal/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -71,6 +72,11 @@ class _GoalListState extends State<GoalList> {
                       onTap: () {
                         print("Open Goal Visualization at id: " +
                             snapshot.data[index].id.toString());
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const GoalView()),
+                        );
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),

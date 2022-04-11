@@ -1,8 +1,5 @@
-import 'package:dindin/pages/loginNoAuth.dart';
 import 'package:dindin/pages/transactions/extract.dart';
 import 'package:dindin/pages/goal/index.dart';
-import 'package:dindin/pages/wallet/create.dart';
-import 'package:dindin/pages/wallet/update.dart';
 import 'package:flutter/material.dart';
 import 'package:dindin/pages/wallet/index.dart';
 import 'pages/login.dart';
