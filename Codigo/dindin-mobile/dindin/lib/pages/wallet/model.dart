@@ -1,7 +1,7 @@
 class Wallet {
   final int id;
   final String description;
-  final double? current_value;
+  final double? currentValue;
   final int shared;
   final String? createdAt;
   final String? updatedAt;
@@ -10,7 +10,7 @@ class Wallet {
   const Wallet({
     required this.id,
     required this.description,
-    required this.current_value,
+    required this.currentValue,
     required this.shared,
     required this.createdAt,
     required this.updatedAt,
@@ -21,7 +21,7 @@ class Wallet {
     return Wallet(
       id: json['id'],
       description: json['description'],
-      current_value: json['current_value'],
+      currentValue: json['current_value'],
       shared: json['shared'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],

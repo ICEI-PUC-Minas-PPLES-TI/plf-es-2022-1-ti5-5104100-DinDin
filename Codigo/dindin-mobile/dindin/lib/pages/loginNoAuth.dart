@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class LoginNoAuth extends StatefulWidget {
+  const LoginNoAuth({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _LoginNoAuthState();
@@ -32,7 +34,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                   width: double.infinity,
                   child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: Column(children: [
+                    child: Column(children: const [
                       Flexible(
                         flex: 2,
                         child: SizedBox(height: double.infinity),
@@ -41,7 +43,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                         flex: 2,
                         child: Text(
                           "Log In",
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 40, fontWeight: FontWeight.w400),
                         ),
                       ),
@@ -68,7 +70,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                                     email = text;
                                   },
                                   keyboardType: TextInputType.emailAddress,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       labelText: 'Enter Email Adress',
                                       border: OutlineInputBorder(),
                                       focusedBorder: OutlineInputBorder(
@@ -85,13 +87,13 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                                     }
                                   },
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 TextFormField(
                                   onChanged: (text) {
                                     password = text;
                                   },
                                   obscureText: true,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       labelText: 'Password',
                                       border: OutlineInputBorder(),
                                       focusedBorder: OutlineInputBorder(
@@ -106,24 +108,24 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                                     }
                                   },
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 SizedBox(
                                   height: 40,
                                   width: double.infinity,
                                   child: ElevatedButton(
-                                    child: Text("Login"),
+                                    child: const Text("Login"),
                                     style: ElevatedButton.styleFrom(
                                       primary: Colors.grey,
                                     ),
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
-                                        final snackBarTrue =
+                                        const snackBarTrue =
                                             SnackBar(content: Text('Logging'));
                                         _scaffoldKey.currentState!
                                             .showSnackBar(snackBarTrue);
                                         userAuth(email, '123');
                                       } else {
-                                        final snackBarFalse = SnackBar(
+                                        const snackBarFalse = SnackBar(
                                             content:
                                                 Text('Invalid Credencials'));
                                         _scaffoldKey.currentState!
@@ -140,15 +142,15 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                               height: 40,
                               width: double.infinity,
                               child: ElevatedButton(
-                                child: Text("Login"),
+                                child: const Text("Login"),
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.grey,
                                 ),
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
-                                    final snackBarTrue =
+                                    const snackBarTrue =
                                         SnackBar(content: Text('Loging'));
-                                    final snackBarFalse = SnackBar(
+                                    const snackBarFalse = SnackBar(
                                         content: Text('User not Found'));
                                     userAuth(email, password).then((res) => {
                                           if (res == true)
@@ -169,7 +171,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                                             }
                                         });
                                   } else {
-                                    final snackBar = SnackBar(
+                                    const snackBar = SnackBar(
                                         content: Text('Invalid credencials'));
                                     _scaffoldKey.currentState!
                                         .showSnackBar(snackBar);
@@ -192,7 +194,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Wrap(
-                          children: [
+                          children: const [
                             Text("Don't have an account?"),
                           ],
                         ),
@@ -207,7 +209,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                                       Navigator.pushNamed(context, "/register");
                                     }),
                             ),
-                            Icon(
+                            const Icon(
                               Icons.arrow_forward,
                               color: Colors.green,
                               size: 30.0,

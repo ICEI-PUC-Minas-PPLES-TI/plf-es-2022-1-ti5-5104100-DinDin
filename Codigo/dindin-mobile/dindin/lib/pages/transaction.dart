@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../Components/dropWallet.dart';
 
 class Transaction extends StatefulWidget {
+  const Transaction({Key? key}) : super(key: key);
+
   @override
   _TransactionState createState() => _TransactionState();
 }
@@ -116,7 +118,7 @@ class _TransactionState extends State<Transaction> {
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-  crossAxisAlignment: CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SizedBox(
                                 child: TextField(
@@ -208,11 +210,12 @@ class _TransactionState extends State<Transaction> {
                           child: ElevatedButton(
                               onPressed: insertTransaction,
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                    Colors.green),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.green),
                               ),
-                              child:
-                                  Text("Insert", style: TextStyle(fontSize: 20))),
+                              child: Text("Insert",
+                                  style: TextStyle(fontSize: 20))),
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.1,
@@ -221,10 +224,11 @@ class _TransactionState extends State<Transaction> {
                               onPressed: cancelTransaction,
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all<Color>(Colors.grey),
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.grey),
                               ),
-                              child:
-                                  Text("Cancel", style: TextStyle(fontSize: 20))),
+                              child: Text("Cancel",
+                                  style: TextStyle(fontSize: 20))),
                         ),
                       ],
                     ),

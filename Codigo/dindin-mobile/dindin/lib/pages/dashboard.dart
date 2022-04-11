@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import './goal/index.dart';
-import './category/list_categories.dart';
 import './wallet/index.dart';
 import './profile/index.dart';
 import './transaction.dart';
@@ -184,7 +183,7 @@ class Dashboard extends StatelessWidget {
             // Out/IN
             Column(children: [
               Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Row(children: [
                   Expanded(
                       flex: 4,

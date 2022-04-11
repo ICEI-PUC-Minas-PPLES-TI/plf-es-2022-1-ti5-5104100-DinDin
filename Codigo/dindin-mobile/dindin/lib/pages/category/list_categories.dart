@@ -62,37 +62,38 @@ class _ListCategoriesState extends State<ListCategories> {
   }
 
   void _deleteCategory(List<Category> _walletCategories, int id) {
-      Widget cancelButton = MaterialButton(
-        child: const Text("Cancel"),
-        onPressed:  () {
-          Navigator.of(context).pop();
-        },
-      );
-      Widget continueButton = MaterialButton(
-        child: const Text("Yes, delete"),
-        onPressed:  () {
-          setState(() {
-            _walletCategories.removeWhere((tx) => tx.id == id);
-          });
-          Navigator.of(context).pop();
-        },
-      );
-      // set up the AlertDialog
-      AlertDialog alert = AlertDialog(
-        title: const Text("Alert"),
-        content: const Text("By removing a category, all transactions linked to it will be unlinked, are you sure ?"),
-        actions: [
-          cancelButton,
-          continueButton,
-        ],
-      );
+    Widget cancelButton = MaterialButton(
+      child: const Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = MaterialButton(
+      child: const Text("Yes, delete"),
+      onPressed: () {
+        setState(() {
+          _walletCategories.removeWhere((tx) => tx.id == id);
+        });
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Alert"),
+      content: const Text(
+          "By removing a category, all transactions linked to it will be unlinked, are you sure ?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
 
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-      );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   TabBar get _tabBar => const TabBar(
@@ -116,7 +117,7 @@ class _ListCategoriesState extends State<ListCategories> {
             bottom: PreferredSize(
                 preferredSize: _tabBar.preferredSize,
                 child: ColoredBox(
-                  color: Color.fromARGB(255, 255, 255, 255),
+                  color: const Color.fromARGB(255, 255, 255, 255),
                   child: _tabBar,
                 )),
           ),
@@ -129,8 +130,7 @@ class _ListCategoriesState extends State<ListCategories> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        const CategoryForm(null)),
+                    builder: (context) => const CategoryForm(null)),
               );
             },
             child: const Icon(Icons.add),

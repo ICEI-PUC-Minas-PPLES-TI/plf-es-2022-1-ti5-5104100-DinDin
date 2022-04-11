@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:dindin/pages/dashboard.dart';
 
 class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _LoginState();
@@ -30,7 +32,7 @@ class _LoginState extends State<Login> {
                   width: double.infinity,
                   child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: Column(children: [
+                    child: Column(children: const [
                       Flexible(
                         flex: 2,
                         child: SizedBox(height: double.infinity),
@@ -39,7 +41,7 @@ class _LoginState extends State<Login> {
                         flex: 2,
                         child: Text(
                           "Log In",
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 40, fontWeight: FontWeight.w400),
                         ),
                       ),
@@ -66,7 +68,7 @@ class _LoginState extends State<Login> {
                                     email = text;
                                   },
                                   keyboardType: TextInputType.emailAddress,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       labelText: 'Enter Email Adress',
                                       border: OutlineInputBorder(),
                                       focusedBorder: OutlineInputBorder(
@@ -83,13 +85,13 @@ class _LoginState extends State<Login> {
                                     }
                                   },
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 TextFormField(
                                   onChanged: (text) {
                                     password = text;
                                   },
                                   obscureText: true,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       labelText: 'Password',
                                       border: OutlineInputBorder(),
                                       focusedBorder: OutlineInputBorder(
@@ -104,20 +106,20 @@ class _LoginState extends State<Login> {
                                     }
                                   },
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 SizedBox(
                                   height: 40,
                                   width: double.infinity,
                                   child: ElevatedButton(
-                                    child: Text("Login"),
+                                    child: const Text("Login"),
                                     style: ElevatedButton.styleFrom(
                                       primary: Colors.grey,
                                     ),
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
-                                        final snackBarTrue =
+                                        const snackBarTrue =
                                             SnackBar(content: Text('Loging'));
-                                        final snackBarFalse = SnackBar(
+                                        const snackBarFalse = SnackBar(
                                             content: Text('User not Found'));
                                         userAuth(email, password)
                                             .then((res) => {
@@ -141,7 +143,7 @@ class _LoginState extends State<Login> {
                                                     }
                                                 });
                                       } else {
-                                        final snackBar = SnackBar(
+                                        const snackBar = SnackBar(
                                             content:
                                                 Text('Invalid credencials'));
                                         _scaffoldKey.currentState!
@@ -167,7 +169,7 @@ class _LoginState extends State<Login> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Wrap(
-                          children: [
+                          children: const [
                             Text("Don't have an account?"),
                           ],
                         ),
@@ -183,7 +185,7 @@ class _LoginState extends State<Login> {
                                   },
                               ),
                             ),
-                            Icon(
+                            const Icon(
                               Icons.arrow_forward,
                               color: Colors.green,
                               size: 30.0,

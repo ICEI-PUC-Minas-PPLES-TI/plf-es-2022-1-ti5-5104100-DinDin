@@ -85,7 +85,7 @@ class _WalletUpdateState extends State<WalletUpdate> {
                               ),
                             ],
                             actionsAlignment: MainAxisAlignment.spaceAround,
-                            actionsPadding: EdgeInsets.all(16.0),
+                            actionsPadding: const EdgeInsets.all(16.0),
                           ),
                         ),
                         child: const Text(
