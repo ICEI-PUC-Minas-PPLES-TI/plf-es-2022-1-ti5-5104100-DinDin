@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:dindin/pages/goal/model.dart';
+import 'goal_create.dart';
 
 class GoalList extends StatefulWidget {
   const GoalList({Key? key}) : super(key: key);
@@ -96,6 +97,12 @@ class _GoalListState extends State<GoalList> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print("Create a new Goal");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    const GoalCreate()),
+          );
         },
         backgroundColor: primaryColor,
         child: const Icon(Icons.add),

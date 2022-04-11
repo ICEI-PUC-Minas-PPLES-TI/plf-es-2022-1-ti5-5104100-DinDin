@@ -12,19 +12,25 @@ void main() {
   runApp(const MyApp());
 }
 
+const primaryColor = Color.fromARGB(255, 91, 208, 152);
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: "/login",
-      routes: {
-        "/login": (context) => Login(),
-        "/register": (context) => Register(),
-        "/wallet/index": (context) => const WalletList(),
-        "/goal/index": (context) => const GoalList()
-      },
-      theme: ThemeData(primarySwatch: Colors.green),
-    );
+        theme: ThemeData(
+            primaryColor: primaryColor,
+            tabBarTheme: const TabBarTheme(
+              labelColor: Colors.black87, // color for text
+            ),
+            primarySwatch: Colors.green),
+        initialRoute: "/login",
+        routes: {
+          "/login": (context) => Login(),
+          "/wallet/index": (context) => const WalletList(),
+          "/goal/index": (context) => const GoalList()
+        });
   }
 }
