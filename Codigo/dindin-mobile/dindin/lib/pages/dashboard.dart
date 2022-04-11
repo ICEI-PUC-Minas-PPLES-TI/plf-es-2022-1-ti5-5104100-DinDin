@@ -1,10 +1,10 @@
-import 'package:dindin/pages/transactions/extract.dart';
+import 'package:dindin/pages/transactions/index.dart';
 import 'package:flutter/material.dart';
 
 import './goal/index.dart';
 import './wallet/index.dart';
 import './profile/index.dart';
-import './transaction.dart';
+import 'transactions/create.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -257,7 +257,8 @@ class Dashboard extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Transaction()),
+              MaterialPageRoute(
+                  builder: (context) => const CreateTransaction()),
             );
           },
           child: const Icon(Icons.add),

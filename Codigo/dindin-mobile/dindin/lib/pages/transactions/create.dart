@@ -1,16 +1,16 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-import '../Components/dropCategory.dart';
+import '../../Components/dropCategory.dart';
 import 'package:flutter/material.dart';
-import '../Components/dropWallet.dart';
+import '../../Components/dropWallet.dart';
 
-class Transaction extends StatefulWidget {
-  const Transaction({Key? key}) : super(key: key);
+class CreateTransaction extends StatefulWidget {
+  const CreateTransaction({Key? key}) : super(key: key);
 
   @override
-  _TransactionState createState() => _TransactionState();
+  _CreateTransactionState createState() => _CreateTransactionState();
 }
 
-class _TransactionState extends State<Transaction> {
+class _CreateTransactionState extends State<CreateTransaction> {
   bool _isChecked = false;
   DateTime date = DateTime(2022, 2, 2);
   bool _isIncome = true;
@@ -29,8 +29,6 @@ class _TransactionState extends State<Transaction> {
     print(_isChecked);
     print(date);
   }
-
-  void cancelTransaction() {}
 
   @override
   Widget build(BuildContext context) {
@@ -227,7 +225,9 @@ class _TransactionState extends State<Transaction> {
                           height: MediaQuery.of(context).size.height * 0.1,
                           width: MediaQuery.of(context).size.width * 0.4,
                           child: ElevatedButton(
-                              onPressed: cancelTransaction,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
