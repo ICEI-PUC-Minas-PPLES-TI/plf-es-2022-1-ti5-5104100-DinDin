@@ -11,8 +11,11 @@ void main() {
   runApp(const MyApp());
 }
 
+const primaryColor = Color.fromARGB(255, 91, 208, 152);
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
