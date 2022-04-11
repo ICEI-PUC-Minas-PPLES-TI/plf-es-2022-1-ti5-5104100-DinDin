@@ -235,11 +235,18 @@ class Dashboard extends StatelessWidget {
               )
             ]),
             // Recent Transaction List Row
-            Column(children: const [
-              Text('Recent transactions',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-              Text('WIP Widget'),
-            ]),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Column(children: const [
+                  Text('Recent transactions',
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                  Text('WIP Widget'),
+                ]),
+              ),
+            ),
           ],
         ),
         floatingActionButton: FloatingActionButton(
