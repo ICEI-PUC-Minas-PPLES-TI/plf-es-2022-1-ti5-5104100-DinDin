@@ -19,13 +19,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: "/login",
-      routes: {
-        "/login": (context) => Login(),
-        "/wallet/index": (context) => const WalletList(),
-        "/goal/index": (context) => const GoalList()
-      },
-      theme: ThemeData(primarySwatch: Colors.green),
-    );
+        theme: ThemeData(
+            primaryColor: primaryColor,
+            tabBarTheme: const TabBarTheme(
+              labelColor: Colors.black87, // color for text
+            ),
+            primarySwatch: Colors.green),
+        initialRoute: "/login",
+        routes: {
+          "/login": (context) => Login(),
+          "/wallet/index": (context) => const WalletList(),
+          "/goal/index": (context) => const GoalList()
+        });
   }
 }
