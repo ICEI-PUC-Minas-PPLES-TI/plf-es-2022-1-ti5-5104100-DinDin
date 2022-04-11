@@ -1,6 +1,6 @@
 class Transaction {
-  final int id;
-  final double value;
+  final num id;
+  final num value;
   final String categoryIcon;
   final String categoryColor;
   final String description;

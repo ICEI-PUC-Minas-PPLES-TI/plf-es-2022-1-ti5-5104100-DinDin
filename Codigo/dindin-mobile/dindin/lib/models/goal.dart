@@ -1,11 +1,11 @@
 class Goal {
-  final int id;
+  final num id;
   final String description;
-  final double? value;
+  final num? value;
   final String? status;
   final String? type;
   final String? expireAt;
-  final int? walletId;
+  final num? walletId;
   final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;

@@ -1,7 +1,7 @@
 class Category {
-  final int id;
-  final int userId;
-  final int walletId;
+  final num id;
+  final num userId;
+  final num walletId;
   final String? description;
   final String? type;
   final String? color;

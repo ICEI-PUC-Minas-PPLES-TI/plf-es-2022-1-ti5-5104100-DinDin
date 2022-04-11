@@ -1,8 +1,8 @@
 class Wallet {
-  final int id;
+  final num id;
   final String description;
-  final double? currentValue;
-  final int shared;
+  final num? currentValue;
+  final num shared;
   final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;
