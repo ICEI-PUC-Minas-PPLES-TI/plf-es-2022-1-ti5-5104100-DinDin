@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
         "/login": (context) => Login(),
         "/wallet/index": (context) => const WalletList(),
         "/goal/index": (context) => const GoalList(),
-        "/goal/view": (context) => const GoalView(),
       },
       theme: ThemeData(primarySwatch: Colors.green),
     );
