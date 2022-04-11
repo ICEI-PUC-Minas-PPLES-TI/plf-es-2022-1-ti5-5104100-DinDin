@@ -115,7 +115,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                 child: Card(
                   child: Center(
                       child: Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(12.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -125,7 +125,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                       labelText: "Amount",
-                                      labelStyle: const TextStyle(fontSize: 35),
+                                      labelStyle: const TextStyle(fontSize: 30),
                                       border: const UnderlineInputBorder(),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
