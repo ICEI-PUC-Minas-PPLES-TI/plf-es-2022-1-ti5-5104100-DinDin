@@ -33,6 +33,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset : false,
         appBar: AppBar(
           title: const Text("Add transaction"),
           backgroundColor: Theme.of(context).primaryColor,
@@ -124,7 +125,7 @@ class _CreateTransactionState extends State<CreateTransaction> {
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                       labelText: "Amount",
-                                      labelStyle: const TextStyle(fontSize: 40),
+                                      labelStyle: const TextStyle(fontSize: 35),
                                       border: const UnderlineInputBorder(),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
