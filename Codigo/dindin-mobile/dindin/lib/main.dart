@@ -1,10 +1,8 @@
-import 'package:dindin/pages/transactions/extract.dart';
-import 'package:dindin/pages/goal/index.dart';
+import 'package:dindin/pages/authorization/login.dart';
+import 'package:dindin/pages/authorization/register.dart';
+
 import 'package:flutter/material.dart';
-import 'package:dindin/pages/wallet/index.dart';
-import 'pages/login.dart';
 import 'package:flutter/services.dart';
-import 'pages/register.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,11 +27,8 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.green),
         initialRoute: "/login",
         routes: {
-          "/login": (context) => Login(),
+          "/login": (context) => const Login(),
           "/register": (context) => Register(),
-          "/wallet/index": (context) => const WalletList(),
-          "/goal/index": (context) => const GoalList(),
-          "/transaction/index": (context) => const Extract()
         });
   }
 }

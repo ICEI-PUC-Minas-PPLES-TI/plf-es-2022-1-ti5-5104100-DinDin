@@ -1,14 +1,16 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-import '../Components/dropCategory.dart';
-import 'package:flutter/material.dart';
-import '../Components/dropWallet.dart';
+import 'package:dindin/widgets/category_drop.dart';
+import 'package:dindin/widgets/wallet_drop.dart';
 
-class Transaction extends StatefulWidget {
+import 'package:flutter/material.dart';
+
+class CreateTransaction extends StatefulWidget {
+  const CreateTransaction({Key? key}) : super(key: key);
+
   @override
-  _TransactionState createState() => _TransactionState();
+  _CreateTransactionState createState() => _CreateTransactionState();
 }
 
-class _TransactionState extends State<Transaction> {
+class _CreateTransactionState extends State<CreateTransaction> {
   bool _isChecked = false;
   DateTime date = DateTime(2022, 2, 2);
   bool _isIncome = true;
@@ -28,14 +30,13 @@ class _TransactionState extends State<Transaction> {
     print(date);
   }
 
-  void cancelTransaction() {}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text("Add transaction"),
-          backgroundColor: Colors.green,
+          title: const Text("Add transaction"),
+          backgroundColor: Theme.of(context).primaryColor,
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -60,13 +61,14 @@ class _TransactionState extends State<Transaction> {
                                   ? ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
-                                              Colors.green))
+                                      Theme.of(context).primaryColor,
+                                    ))
                                   : ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
                                               Colors.grey),
                                     ),
-                              child: Text(
+                              child: const Text(
                                 "Income",
                                 style: TextStyle(fontSize: 20),
                               ),
@@ -90,7 +92,7 @@ class _TransactionState extends State<Transaction> {
                                             MaterialStateProperty.all<Color>(
                                                 Colors.grey),
                                       ),
-                                child: Text("Outcome",
+                                child: const Text("Outcome",
                                     style: TextStyle(fontSize: 20))),
                           ),
                         ],
@@ -113,28 +115,25 @@ class _TransactionState extends State<Transaction> {
                 child: Card(
                   child: Center(
                       child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-  crossAxisAlignment: CrossAxisAlignment.center,
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: ListView(
                             children: [
-                              SizedBox(
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                      labelText: "Amount",
-                                      labelStyle: TextStyle(fontSize: 40),
-                                      border: UnderlineInputBorder(),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.green),
-                                      )),
-                                ),
+                              TextField(
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                    labelText: "Amount",
+                                    labelStyle: const TextStyle(fontSize: 16),
+                                    border: const UnderlineInputBorder(),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    )),
                               ),
                               CheckboxListTile(
-                                title: Text(
+                                title: const Text(
                                   "Recurrent?",
-                                  style: TextStyle(fontSize: 20),
+                                  style: TextStyle(fontSize: 12),
                                 ),
                                 value: _isChecked,
                                 onChanged: (bool? opt) {
@@ -156,14 +155,15 @@ class _TransactionState extends State<Transaction> {
                     child: Column(children: [
                       Text(
                         '${date.day}/${date.month}/${date.year}',
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                       ),
                       ElevatedButton(
                           style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.green),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).primaryColor,
+                            ),
                           ),
-                          child: Text(
+                          child: const Text(
                             'Select Date',
                             style: TextStyle(
                               fontSize: 20,
@@ -178,10 +178,12 @@ class _TransactionState extends State<Transaction> {
                               builder: (context, child) {
                                 return Theme(
                                   data: ThemeData.light().copyWith(
-                                    primaryColor: Colors.green,
+                                    primaryColor:
+                                        Theme.of(context).primaryColor,
                                     colorScheme: ColorScheme.light(
-                                        primary: Colors.green),
-                                    buttonTheme: ButtonThemeData(
+                                      primary: Theme.of(context).primaryColor,
+                                    ),
+                                    buttonTheme: const ButtonThemeData(
                                         textTheme: ButtonTextTheme.primary),
                                   ),
                                   child: child!,
@@ -208,23 +210,28 @@ class _TransactionState extends State<Transaction> {
                           child: ElevatedButton(
                               onPressed: insertTransaction,
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                    Colors.green),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  Theme.of(context).primaryColor,
+                                ),
                               ),
-                              child:
-                                  Text("Insert", style: TextStyle(fontSize: 20))),
+                              child: const Text("Insert",
+                                  style: TextStyle(fontSize: 20))),
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.1,
                           width: MediaQuery.of(context).size.width * 0.4,
                           child: ElevatedButton(
-                              onPressed: cancelTransaction,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all<Color>(Colors.grey),
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.grey),
                               ),
-                              child:
-                                  Text("Cancel", style: TextStyle(fontSize: 20))),
+                              child: const Text("Cancel",
+                                  style: TextStyle(fontSize: 20))),
                         ),
                       ],
                     ),

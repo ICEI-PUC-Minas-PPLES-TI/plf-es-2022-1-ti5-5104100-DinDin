@@ -13,11 +13,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Colors.green;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile'),
-        backgroundColor: primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -83,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     minWidth: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: const Text('Save Changes'),
-                    color: primaryColor,
+                    color: Theme.of(context).primaryColor,
                     textColor: Colors.white,
                     onPressed: () {
                       _formKey.currentState?.validate();

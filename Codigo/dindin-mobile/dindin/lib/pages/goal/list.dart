@@ -1,62 +1,65 @@
-import 'package:dindin/pages/category/list_categories.dart';
-import 'package:dindin/pages/wallet/update.dart';
-import 'package:dindin/pages/wallet/create.dart';
+import 'package:dindin/pages/goal/create.dart';
+import 'package:dindin/pages/goal/view.dart';
+import 'package:dindin/models/goal.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:dindin/pages/wallet/model.dart';
-
-class WalletList extends StatefulWidget {
-  const WalletList({Key? key}) : super(key: key);
+class GoalList extends StatefulWidget {
+  const GoalList({Key? key}) : super(key: key);
 
   @override
-  State<WalletList> createState() => _WalletListState();
+  State<GoalList> createState() => _GoalListState();
 }
 
-Future<List<Wallet>> fetchWallets() async {
-  List<Wallet> walletList = <Wallet>[];
+Future<List<Goal>> fetchGoals() async {
+  List<Goal> goalsList = <Goal>[];
+  http.Response response;
 
-  final String response = await rootBundle.loadString('assets/wallets.json');
-  final walletsJson = jsonDecode(response)['wallets'];
-  for (var wallet in walletsJson) {
-    walletList.add(Wallet.fromJson(wallet));
+  try {
+    response = await http.get(Uri.parse(
+        'http://localhost:3001/api/goal?page=1&limit=5&attribute=id&order=ASC'));
+  } catch (e) {
+    final String response =
+        await rootBundle.loadString('assets/data/goals.json');
+    final goalsJson = jsonDecode(response)['goals'];
+    for (var goal in goalsJson) {
+      goalsList.add(Goal.fromJson(goal));
+    }
+    return goalsList;
   }
-  return walletList;
+
+  if (response.statusCode == 200) {
+    final goalsJson = jsonDecode(response.body)['goals'];
+    for (var goal in goalsJson) {
+      goalsList.add(Goal.fromJson(goal));
+    }
+    return goalsList;
+  } else {
+    throw Exception('Failed to load goals');
+  }
 }
 
-class _WalletListState extends State<WalletList> {
-  late Future<List<Wallet>> wallets;
+class _GoalListState extends State<GoalList> {
+  late Future<List<Goal>> goals;
 
   @override
   void initState() {
     super.initState();
-    wallets = fetchWallets();
+    goals = fetchGoals();
   }
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Colors.green;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Wallet'),
-        backgroundColor: primaryColor,
-        actions: [
-          IconButton(
-            icon: const FaIcon(FontAwesomeIcons.tag),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ListCategories()),
-              );
-            },
-          ),
-          // add more IconButton
-        ],
-      ),
+          title: const Text('Goals'),
+          backgroundColor: Theme.of(context).primaryColor),
       body: FutureBuilder<List<dynamic>>(
-        future: fetchWallets(),
+        future: fetchGoals(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
@@ -66,12 +69,12 @@ class _WalletListState extends State<WalletList> {
                   return Card(
                     child: InkWell(
                       onTap: () {
-                        print("Open Wallet Visualization at id: " +
+                        print("Open Goal Visualization at id: " +
                             snapshot.data[index].id.toString());
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const WalletUpdate()),
+                              builder: (context) => const GoalView()),
                         );
                       },
                       child: Padding(
@@ -79,8 +82,11 @@ class _WalletListState extends State<WalletList> {
                         child: ListTile(
                           leading: const Padding(
                             padding: EdgeInsets.only(top: 5.0),
-                            child: FaIcon(FontAwesomeIcons.wallet,
-                                size: 20.0, color: Colors.black),
+                            child: FaIcon(
+                              FontAwesomeIcons.bullseye,
+                              size: 30.0,
+                              color: Colors.redAccent,
+                            ),
                           ),
                           title: Text((snapshot.data[index].description)),
                         ),
@@ -95,13 +101,13 @@ class _WalletListState extends State<WalletList> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print("Create a new Wallet");
+          print("Create a new Goal");
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const WalletCreate()),
+            MaterialPageRoute(builder: (context) => const GoalCreate()),
           );
         },
-        backgroundColor: primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
       ),
     );

@@ -1,17 +1,19 @@
-import 'package:flutter/gestures.dart';
 import 'package:dindin/pages/dashboard.dart';
-import 'package:http/http.dart' as http;
 
+import 'package:flutter/gestures.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-class LoginNoAuth extends StatefulWidget {
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
-    return _LoginNoAuthState();
+    return _LoginState();
   }
 }
 
-class _LoginNoAuthState extends State<LoginNoAuth> {
+class _LoginState extends State<Login> {
   String email = '';
   String password = '';
   final formKey = GlobalKey<FormState>();
@@ -19,7 +21,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset : false,
       key: _scaffoldKey,
       body: Column(
         children: [
@@ -32,7 +34,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                   width: double.infinity,
                   child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: Column(children: [
+                    child: Column(children: const [
                       Flexible(
                         flex: 2,
                         child: SizedBox(height: double.infinity),
@@ -41,7 +43,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                         flex: 2,
                         child: Text(
                           "Log In",
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 40, fontWeight: FontWeight.w400),
                         ),
                       ),
@@ -68,7 +70,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                                     email = text;
                                   },
                                   keyboardType: TextInputType.emailAddress,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       labelText: 'Enter Email Adress',
                                       border: OutlineInputBorder(),
                                       focusedBorder: OutlineInputBorder(
@@ -85,13 +87,13 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                                     }
                                   },
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 TextFormField(
                                   onChanged: (text) {
                                     password = text;
                                   },
                                   obscureText: true,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       labelText: 'Password',
                                       border: OutlineInputBorder(),
                                       focusedBorder: OutlineInputBorder(
@@ -106,85 +108,61 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                                     }
                                   },
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 SizedBox(
                                   height: 40,
                                   width: double.infinity,
                                   child: ElevatedButton(
-                                    child: Text("Login"),
+                                    child: const Text("Login"),
                                     style: ElevatedButton.styleFrom(
                                       primary: Colors.grey,
                                     ),
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
-                                        final snackBarTrue =
-                                            SnackBar(content: Text('Logging'));
-                                        _scaffoldKey.currentState!
-                                            .showSnackBar(snackBarTrue);
-                                        userAuth(email, '123');
+                                        const snackBarTrue =
+                                            SnackBar(content: Text('Loging'));
+                                        const snackBarFalse = SnackBar(
+                                            content: Text('User not Found'));
+                                        userAuth(email, password)
+                                            .then((res) => {
+                                                  if (res == true)
+                                                    {
+                                                      _scaffoldKey.currentState!
+                                                          .showSnackBar(
+                                                              snackBarTrue),
+                                                      Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const Dashboard()),
+                                                      )
+                                                    }
+                                                  else
+                                                    {
+                                                      _scaffoldKey.currentState!
+                                                          .showSnackBar(
+                                                              snackBarFalse)
+                                                    }
+                                                });
                                       } else {
-                                        final snackBarFalse = SnackBar(
+                                        const snackBar = SnackBar(
                                             content:
-                                                Text('Invalid Credencials'));
+                                                Text('Invalid credencials'));
                                         _scaffoldKey.currentState!
-                                            .showSnackBar(snackBarFalse);
+                                            .showSnackBar(snackBar);
                                       }
                                     },
                                   ),
                                 ),
                               ],
                             )),
-                        Flexible(
-                            flex: 3,
-                            child: SizedBox(
-                              height: 40,
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                child: Text("Login"),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.grey,
-                                ),
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    final snackBarTrue =
-                                        SnackBar(content: Text('Loging'));
-                                    final snackBarFalse = SnackBar(
-                                        content: Text('User not Found'));
-                                    userAuth(email, password).then((res) => {
-                                          if (res == true)
-                                            {
-                                              _scaffoldKey.currentState!
-                                                  .showSnackBar(snackBarTrue),
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const Dashboard()),
-                                              )
-                                            }
-                                          else
-                                            {
-                                              _scaffoldKey.currentState!
-                                                  .showSnackBar(snackBarFalse)
-                                            }
-                                        });
-                                  } else {
-                                    final snackBar = SnackBar(
-                                        content: Text('Invalid credencials'));
-                                    _scaffoldKey.currentState!
-                                        .showSnackBar(snackBar);
-                                  }
-                                },
-                              ),
-                            ))
                       ],
                     ),
                   ),
                 )),
           ),
-          Expanded(
-              flex: 1,
-              child: Padding(
+          Wrap(
+              children: [Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
@@ -192,7 +170,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Wrap(
-                          children: [
+                          children: const [
                             Text("Don't have an account?"),
                           ],
                         ),
@@ -200,14 +178,15 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                           children: [
                             RichText(
                               text: TextSpan(
-                                  text: "REGISTER ",
-                                  style: TextStyle(color: Colors.green[800]),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.pushNamed(context, "/register");
-                                    }),
+                                text: "REGISTER ",
+                                style: TextStyle(color: Colors.green[800]),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.pushNamed(context, "/register");
+                                  },
+                              ),
                             ),
-                            Icon(
+                            const Icon(
                               Icons.arrow_forward,
                               color: Colors.green,
                               size: 30.0,
@@ -218,7 +197,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                     )
                   ],
                 ),
-              ))
+              )])
         ],
       ),
     );
