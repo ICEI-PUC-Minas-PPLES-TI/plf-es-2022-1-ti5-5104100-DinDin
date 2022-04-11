@@ -1,5 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:dindin/pages/dashboard.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -123,7 +125,13 @@ class _LoginState extends State<Login> {
                                                     {
                                                       _scaffoldKey.currentState!
                                                           .showSnackBar(
-                                                              snackBarTrue)
+                                                              snackBarTrue),
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const Dashboard()),
+                                                      )
                                                     }
                                                   else
                                                     {
@@ -165,9 +173,15 @@ class _LoginState extends State<Login> {
                         ),
                         Row(
                           children: [
-                            Text(
-                              "REGISTER ",
-                              style: TextStyle(color: Colors.green[800]),
+                            RichText(
+                              text: TextSpan(
+                                text: "REGISTER ",
+                                style: TextStyle(color: Colors.green[800]),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.pushNamed(context, "/register");
+                                  },
+                              ),
                             ),
                             Icon(
                               Icons.arrow_forward,
@@ -188,6 +202,7 @@ class _LoginState extends State<Login> {
 }
 
 Future<bool> userAuth(String email, String password) async {
+  return true;
   var url = "http://localhost:3001/api/user/auth";
   final Uri uri = Uri.parse(url);
   var response =

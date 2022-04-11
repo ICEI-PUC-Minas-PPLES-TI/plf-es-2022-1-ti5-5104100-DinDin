@@ -1,4 +1,7 @@
 import 'package:flutter/gestures.dart';
+import 'package:dindin/pages/dashboard.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 
 class LoginNoAuth extends StatefulWidget {
@@ -118,7 +121,7 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                                             SnackBar(content: Text('Logging'));
                                         _scaffoldKey.currentState!
                                             .showSnackBar(snackBarTrue);
-                                        userAuth(email);
+                                        userAuth(email, '123');
                                       } else {
                                         final snackBarFalse = SnackBar(
                                             content:
@@ -131,6 +134,49 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                                 ),
                               ],
                             )),
+                        Flexible(
+                            flex: 3,
+                            child: SizedBox(
+                              height: 40,
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                child: Text("Login"),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  if (formKey.currentState!.validate()) {
+                                    final snackBarTrue =
+                                        SnackBar(content: Text('Loging'));
+                                    final snackBarFalse = SnackBar(
+                                        content: Text('User not Found'));
+                                    userAuth(email, password).then((res) => {
+                                          if (res == true)
+                                            {
+                                              _scaffoldKey.currentState!
+                                                  .showSnackBar(snackBarTrue),
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const Dashboard()),
+                                              )
+                                            }
+                                          else
+                                            {
+                                              _scaffoldKey.currentState!
+                                                  .showSnackBar(snackBarFalse)
+                                            }
+                                        });
+                                  } else {
+                                    final snackBar = SnackBar(
+                                        content: Text('Invalid credencials'));
+                                    _scaffoldKey.currentState!
+                                        .showSnackBar(snackBar);
+                                  }
+                                },
+                              ),
+                            ))
                       ],
                     ),
                   ),
@@ -179,6 +225,15 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
   }
 }
 
-void userAuth(email) {
-  print("Usuario: " + email);
+Future<bool> userAuth(String email, String password) async {
+  return true;
+  var url = "http://localhost:3001/api/user/auth";
+  final Uri uri = Uri.parse(url);
+  var response =
+      await http.post(uri, body: {'email': email, 'password': password});
+  var status = response.statusCode;
+  if (status == 200) {
+    return true;
+  }
+  return false;
 }
