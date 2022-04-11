@@ -1,3 +1,5 @@
+import 'package:dindin/pages/loginNoAuth.dart';
+import 'package:dindin/pages/transactions/extract.dart';
 import 'package:dindin/pages/goal/index.dart';
 import 'package:flutter/material.dart';
 import 'package:dindin/pages/wallet/index.dart';
@@ -31,7 +33,8 @@ class MyApp extends StatelessWidget {
           "/login": (context) => Login(),
           "/register": (context) => Register(),
           "/wallet/index": (context) => const WalletList(),
-          "/goal/index": (context) => const GoalList()
+          "/goal/index": (context) => const GoalList(),
+          "/transaction/index": (context) => const Extract()
         });
   }
 }
