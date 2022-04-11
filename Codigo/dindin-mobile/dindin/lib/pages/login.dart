@@ -126,7 +126,7 @@ class _LoginState extends State<Login> {
                                                       _scaffoldKey.currentState!
                                                           .showSnackBar(
                                                               snackBarTrue),
-                                                      Navigator.push(
+                                                      Navigator.pushReplacement(
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) =>
