@@ -23,8 +23,7 @@ Future<List<Transaction>> fetchTransaction() async {
     response = await http.get(Uri.parse(
         'http://localhost:3001/api/extract?page=1&limit=5&attribute=id&order=ASC'));
   } catch (e) {
-    final String response =
-        await rootBundle.loadString('assets/transactions.json');
+    final String response = await rootBundle.loadString('/transactions.json');
     final extractJson = jsonDecode(response)['transactions'];
     for (var transaction in extractJson) {
       extract.add(Transaction.fromJson(transaction));
