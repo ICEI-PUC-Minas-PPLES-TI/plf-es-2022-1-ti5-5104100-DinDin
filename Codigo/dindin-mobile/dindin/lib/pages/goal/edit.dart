@@ -100,7 +100,7 @@ class _GoalEditState extends State<GoalEdit> {
                                 : Colors.transparent,
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
-                              child: Row(
+                              child: Wrap(
                                 children: [
                                   Column(
                                     crossAxisAlignment:
@@ -131,7 +131,7 @@ class _GoalEditState extends State<GoalEdit> {
                                   : Colors.transparent,
                               child: Padding(
                                 padding: const EdgeInsets.all(5.0),
-                                child: Row(children: [
+                                child: Wrap(children: [
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -160,7 +160,7 @@ class _GoalEditState extends State<GoalEdit> {
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: '1000,00',
+                          hintText: '9999,99',
                           suffixIcon:
                               Icon(FontAwesomeIcons.penToSquare, size: 20.0)),
                     ),
@@ -187,7 +187,7 @@ class _GoalEditState extends State<GoalEdit> {
                     DropdownButtonFormField(
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Wallet 1',
+                          hintText: 'Wallet 2',
                           suffixIcon:
                               Icon(FontAwesomeIcons.wallet, size: 20.0)),
                       value: _currentWallet,

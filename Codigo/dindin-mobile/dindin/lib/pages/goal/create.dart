@@ -100,7 +100,7 @@ class _GoalCreateState extends State<GoalCreate> {
                                 : Colors.transparent,
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
-                              child: Row(
+                              child: Wrap(
                                 children: [
                                   Column(
                                     crossAxisAlignment:
@@ -131,7 +131,7 @@ class _GoalCreateState extends State<GoalCreate> {
                                   : Colors.transparent,
                               child: Padding(
                                 padding: const EdgeInsets.all(5.0),
-                                child: Row(children: [
+                                child: Wrap(children: [
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
