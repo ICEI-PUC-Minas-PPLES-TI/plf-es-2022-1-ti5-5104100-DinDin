@@ -18,7 +18,8 @@ class WalletList extends StatefulWidget {
 Future<List<Wallet>> fetchWallets() async {
   List<Wallet> walletList = <Wallet>[];
 
-  final String response = await rootBundle.loadString('assets/wallets.json');
+  final String response =
+      await rootBundle.loadString('assets/data/wallets.json');
   final walletsJson = jsonDecode(response)['wallets'];
   for (var wallet in walletsJson) {
     walletList.add(Wallet.fromJson(wallet));

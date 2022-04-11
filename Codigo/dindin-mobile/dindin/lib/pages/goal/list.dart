@@ -23,7 +23,8 @@ Future<List<Goal>> fetchGoals() async {
     response = await http.get(Uri.parse(
         'http://localhost:3001/api/goal?page=1&limit=5&attribute=id&order=ASC'));
   } catch (e) {
-    final String response = await rootBundle.loadString('/goals.json');
+    final String response =
+        await rootBundle.loadString('assets/data/goals.json');
     final goalsJson = jsonDecode(response)['goals'];
     for (var goal in goalsJson) {
       goalsList.add(Goal.fromJson(goal));
