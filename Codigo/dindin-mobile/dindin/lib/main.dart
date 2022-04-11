@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         initialRoute: "/login",
         routes: {
           "/login": (context) => Login(),
+          "/register": (context) => Register(),
           "/wallet/index": (context) => const WalletList(),
           "/goal/index": (context) => const GoalList()
         });
