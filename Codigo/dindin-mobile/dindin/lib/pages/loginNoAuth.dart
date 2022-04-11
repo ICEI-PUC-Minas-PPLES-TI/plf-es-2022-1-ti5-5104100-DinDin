@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
+import 'package:flutter/gestures.dart';
 import 'package:dindin/pages/dashboard.dart';
 import 'package:http/http.dart' as http;
 
@@ -121,11 +122,12 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                                             SnackBar(content: Text('Logging'));
                                         _scaffoldKey.currentState!
                                             .showSnackBar(snackBarTrue);
-                                            userAuth(email,'123');
+                                        userAuth(email, '123');
                                       } else {
                                         final snackBarFalse = SnackBar(
-                                            content: Text('Invalid Credencials'));
-                                            _scaffoldKey.currentState!
+                                            content:
+                                                Text('Invalid Credencials'));
+                                        _scaffoldKey.currentState!
                                             .showSnackBar(snackBarFalse);
                                       }
                                     },
@@ -197,9 +199,14 @@ class _LoginNoAuthState extends State<LoginNoAuth> {
                         ),
                         Row(
                           children: [
-                            Text(
-                              "REGISTER ",
-                              style: TextStyle(color: Colors.green[800]),
+                            RichText(
+                              text: TextSpan(
+                                  text: "REGISTER ",
+                                  style: TextStyle(color: Colors.green[800]),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.pushNamed(context, "/register");
+                                    }),
                             ),
                             Icon(
                               Icons.arrow_forward,

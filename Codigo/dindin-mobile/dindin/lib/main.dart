@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dindin/pages/wallet/index.dart';
 import 'pages/login.dart';
 import 'package:flutter/services.dart';
+import 'pages/register.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         initialRoute: "/login",
         routes: {
           "/login": (context) => Login(),
+          "/register": (context) => Register(),
           "/wallet/index": (context) => const WalletList(),
           "/goal/index": (context) => const GoalList()
         });
