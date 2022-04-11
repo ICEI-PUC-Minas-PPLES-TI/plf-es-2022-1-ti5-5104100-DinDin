@@ -1,6 +1,6 @@
 import 'package:dindin/pages/category/list_categories.dart';
-import 'package:dindin/pages/wallet/update.dart';
 import 'package:dindin/pages/wallet/create.dart';
+import 'package:dindin/pages/wallet/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -37,11 +37,10 @@ class _WalletListState extends State<WalletList> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Colors.green;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Wallet'),
-        backgroundColor: primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         actions: [
           IconButton(
             icon: const FaIcon(FontAwesomeIcons.tag),
@@ -71,7 +70,7 @@ class _WalletListState extends State<WalletList> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const WalletUpdate()),
+                              builder: (context) => const WalletView()),
                         );
                       },
                       child: Padding(
@@ -101,7 +100,7 @@ class _WalletListState extends State<WalletList> {
             MaterialPageRoute(builder: (context) => const WalletCreate()),
           );
         },
-        backgroundColor: primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
       ),
     );

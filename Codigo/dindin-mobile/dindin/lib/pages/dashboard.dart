@@ -1,3 +1,4 @@
+import 'package:dindin/pages/transactions/extract.dart';
 import 'package:flutter/material.dart';
 
 import './goal/index.dart';
@@ -63,7 +64,11 @@ class Dashboard extends StatelessWidget {
                           ),
                           color: Colors.black,
                           onPressed: () {
-                            // Respond to icon toggle
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Extract()),
+                            );
                           },
                         ),
                       ),
@@ -252,7 +257,7 @@ class Dashboard extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Transaction()),
+              MaterialPageRoute(builder: (context) => const Transaction()),
             );
           },
           child: const Icon(Icons.add),

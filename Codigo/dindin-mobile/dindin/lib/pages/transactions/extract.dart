@@ -53,11 +53,10 @@ class _ExtractState extends State<Extract> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Colors.green;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Transactions'),
-        backgroundColor: primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: FutureBuilder<List<dynamic>>(
         future: fetchTransaction(),
@@ -74,25 +73,8 @@ class _ExtractState extends State<Extract> {
                   ),
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            IconButton(
-                              alignment: Alignment.topRight,
-                              icon: const FaIcon(
-                                FontAwesomeIcons.arrowLeft,
-                                size: 30.0,
-                                color: Colors.black,
-                              ),
-                              color: Colors.black,
-                              onPressed: () {
-                                print("go back to menu screen");
-                              },
-                            ),
-                          ],
-                        ),
+                      const SizedBox(
+                        height: 40,
                       ),
                       Container(
                         width: double.infinity,
@@ -206,7 +188,7 @@ class _ExtractState extends State<Extract> {
       //   onPressed: () {
       //     print("Create a new Goal");
       //   },
-      //   backgroundColor: primaryColor,
+      //   backgroundColor: Theme.of(context).primaryColor,
       //   child: const Icon(Icons.add),
       // ),
     );

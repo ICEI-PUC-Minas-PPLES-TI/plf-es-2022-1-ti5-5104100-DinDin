@@ -25,11 +25,10 @@ class _GoalViewState extends State<GoalView> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Colors.green;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Goal X'),
-        backgroundColor: primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),

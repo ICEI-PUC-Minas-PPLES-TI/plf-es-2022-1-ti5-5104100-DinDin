@@ -53,12 +53,10 @@ class _GoalListState extends State<GoalList> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Colors.green;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Goals'),
-        backgroundColor: primaryColor,
-      ),
+          title: const Text('Goals'),
+          backgroundColor: Theme.of(context).primaryColor),
       body: FutureBuilder<List<dynamic>>(
         future: fetchGoals(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -108,7 +106,7 @@ class _GoalListState extends State<GoalList> {
             MaterialPageRoute(builder: (context) => const GoalCreate()),
           );
         },
-        backgroundColor: primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
       ),
     );

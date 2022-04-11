@@ -29,7 +29,7 @@ class _LoginState extends State<Register> {
         MaterialState.focused,
       };
       if (states.any(interactiveStates.contains)) {
-        return Colors.green;
+        return Theme.of(context).primaryColor;
       }
       return Colors.grey;
     }

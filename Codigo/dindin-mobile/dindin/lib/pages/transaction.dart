@@ -37,7 +37,7 @@ class _TransactionState extends State<Transaction> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Add transaction"),
-          backgroundColor: Colors.green,
+          backgroundColor: Theme.of(context).primaryColor,
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -62,7 +62,8 @@ class _TransactionState extends State<Transaction> {
                                   ? ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
-                                              Colors.green))
+                                      Theme.of(context).primaryColor,
+                                    ))
                                   : ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
@@ -128,8 +129,9 @@ class _TransactionState extends State<Transaction> {
                                       labelStyle: TextStyle(fontSize: 40),
                                       border: UnderlineInputBorder(),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.green),
+                                        borderSide: BorderSide(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
                                       )),
                                 ),
                               ),
@@ -162,8 +164,9 @@ class _TransactionState extends State<Transaction> {
                       ),
                       ElevatedButton(
                           style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all<Color>(Colors.green),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).primaryColor,
+                            ),
                           ),
                           child: Text(
                             'Select Date',
@@ -180,9 +183,11 @@ class _TransactionState extends State<Transaction> {
                               builder: (context, child) {
                                 return Theme(
                                   data: ThemeData.light().copyWith(
-                                    primaryColor: Colors.green,
+                                    primaryColor:
+                                        Theme.of(context).primaryColor,
                                     colorScheme: ColorScheme.light(
-                                        primary: Colors.green),
+                                      primary: Theme.of(context).primaryColor,
+                                    ),
                                     buttonTheme: ButtonThemeData(
                                         textTheme: ButtonTextTheme.primary),
                                   ),
@@ -212,7 +217,8 @@ class _TransactionState extends State<Transaction> {
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.green),
+                                  Theme.of(context).primaryColor,
+                                ),
                               ),
                               child: Text("Insert",
                                   style: TextStyle(fontSize: 20))),

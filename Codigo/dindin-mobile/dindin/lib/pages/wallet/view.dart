@@ -1,3 +1,4 @@
+import 'package:dindin/pages/wallet/update.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -25,11 +26,10 @@ class _WalletViewState extends State<WalletView> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Colors.green;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Wallet X'),
-        backgroundColor: primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -61,7 +61,11 @@ class _WalletViewState extends State<WalletView> {
                             ),
                             color: Colors.black,
                             onPressed: () {
-                              // Respond to icon toggle
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const WalletUpdate()),
+                              );
                             },
                           ),
                         ],
