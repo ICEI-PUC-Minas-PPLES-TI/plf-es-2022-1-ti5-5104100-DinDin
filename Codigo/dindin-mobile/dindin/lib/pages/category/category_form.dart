@@ -1,0 +1,297 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../helpers/color_helper.dart';
+import '../../models/category.dart';
+
+
+class CategoryForm extends StatefulWidget {
+  final Category? category;
+
+  const CategoryForm(this.category, {Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _CategoryFormState();
+  }
+}
+
+class _CategoryFormState extends State<CategoryForm> {
+
+  String _catType = 'IN';
+  String _catColor = 'eb5a46';
+  ColorHelper ch = ColorHelper();
+
+  final TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    if(widget.category != null) {
+      // Edit
+      _descriptionController.text = widget.category!.description!;
+      _catColor = widget.category!.color!;
+      _catType = widget.category!.type!;
+    } else {
+      //Create
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+            title: Text(
+              widget.category != null ? 'Edit Category': 'Create Category',
+            ),
+            backgroundColor: Theme.of(context).primaryColor),
+        body: Form(
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Description field
+                    const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextField(
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'ex: Food, Education, etc...',
+                        suffixIcon: Icon(FontAwesomeIcons.penToSquare, size: 20.0)
+                      ),
+                      controller: _descriptionController,
+                    ),
+                    const SizedBox(height: 20),
+                    // End category type
+                    // Type Input
+                    const Text('Type', style: TextStyle(fontWeight: FontWeight.bold)),
+                    Column(
+                      children: <Widget>[
+                        ListTile(
+                          title: const Text('Income'),
+                          leading: Radio<String>(
+                            value: 'IN',
+                            groupValue: _catType,
+                            onChanged: (String? value) {
+                              setState(() {
+                                _catType = value!;
+                              });
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          title: const Text('Outcome'),
+                          leading: Radio<String>(
+                            value: 'OUT',
+                            groupValue: _catType,
+                            onChanged: (String? value) {
+                              setState(() {
+                                _catType = value!;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    // End category type
+                    // Category color grid 
+                    const Text('Color', style: TextStyle(fontWeight: FontWeight.bold)),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        // Red Color
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: GestureDetector(
+                              onTap: () => {
+                                setState(() {
+                                  _catColor = 'eb5a46';
+                                })
+                              },
+                              child: Container(
+                                height: 80,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: _catColor == 'eb5a46' ? Colors.blueAccent: Colors.transparent, width: 5),
+                                  color: ch.fromHex('eb5a46'),
+                                ),
+                              )
+                            ),
+                          ),
+                        ),
+                        // Orange Color
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: GestureDetector(
+                              onTap: () => {
+                                setState(() {
+                                  _catColor = 'ff9f1a';
+                                })
+                              },
+                              child: Container(
+                                height: 80,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: _catColor == 'ff9f1a' ? Colors.blueAccent: Colors.transparent, width: 5),
+                                  color: ch.fromHex('ff9f1a'),
+                                ),
+                              )
+                            ),
+                          ),
+                        ),
+                        // Blue Color
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: GestureDetector(
+                              onTap: () => {
+                                setState(() {
+                                  _catColor = '0079bf';
+                                })
+                              },
+                              child: Container(
+                                height: 80,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: _catColor == '0079bf' ? Colors.blueAccent: Colors.transparent, width: 5),
+                                  color: ch.fromHex('0079bf'),
+                                ),
+                              )
+                            ),
+                          ),
+                        ),
+                        // Green Color
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: GestureDetector(
+                              onTap: () => {
+                                setState(() {
+                                  _catColor = '61bd4f';
+                                })
+                              },
+                              child: Container(
+                                height: 80,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: _catColor == '61bd4f' ? Colors.blueAccent: Colors.transparent, width: 5),
+                                  color: ch.fromHex('61bd4f'),
+                                ),
+                              )
+                            ),
+                          ),
+                        )
+                      ]),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        // Purple Color
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: GestureDetector(
+                              onTap: () => {
+                                setState(() {
+                                  _catColor = 'c377e0';
+                                })
+                              },
+                              child: Container(
+                                height: 80,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: _catColor == 'c377e0' ? Colors.blueAccent: Colors.transparent, width: 5),
+                                  color: ch.fromHex('c377e0'),
+                                ),
+                              )
+                            ),
+                          ),
+                        ),
+                        // Yellow Color
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: GestureDetector(
+                              onTap: () => {
+                                setState(() {
+                                  _catColor = 'f2d600';
+                                })
+                              },
+                              child: Container(
+                                height: 80,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: _catColor == 'f2d600' ? Colors.blueAccent: Colors.transparent, width: 5),
+                                  color: ch.fromHex('f2d600'),
+                                ),
+                              )
+                            ),
+                          ),
+                        ),
+                        // Dark Blue Color
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: GestureDetector(
+                              onTap: () => {
+                                setState(() {
+                                  _catColor = '344563';
+                                })
+                              },
+                              child: Container(
+                                height: 80,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: _catColor == '344563' ? Colors.blueAccent: Colors.transparent, width: 5),
+                                  color: ch.fromHex('344563'),
+                                ),
+                              )
+                            ),
+                          ),
+                        ),
+                        // Pink Color
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: GestureDetector(
+                              onTap: () => {
+                                setState(() {
+                                  _catColor = 'ff78cb';
+                                })
+                              },
+                              child: Container(
+                                height: 80,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: _catColor == 'ff78cb' ? Colors.blueAccent: Colors.transparent, width: 5),
+                                  color: ch.fromHex('ff78cb'),
+                                ),
+                              )
+                            ),
+                          ),
+                        )
+                      ]
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      height: 40,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        child: const Text("Save"),
+                        style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor,
+                        ), onPressed: () {  },
+                      ),
+                    )
+                    // End wallet list
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ));
+  }
+}
