@@ -1,5 +1,6 @@
 import 'package:dindin/pages/transactions/index.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import './goal/index.dart';
 import './wallet/index.dart';
@@ -247,9 +248,93 @@ class Dashboard extends StatelessWidget {
                   Text('Recent transactions',
                       style:
                           TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-                  Text('WIP Widget'),
                 ]),
               ),
+            ),
+            FutureBuilder<List<dynamic>>(
+              future: fetchTransaction(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  return Expanded(
+                    child: ListView(
+                      children: [
+                        ListView.builder(
+                            key: const Key("keyListBuilderTransactions"),
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.all(8),
+                            itemCount: snapshot.data?.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Card(
+                                child: InkWell(
+                                  onTap: () {
+                                    print(
+                                        "Open Transaction Visualization at id: " +
+                                            snapshot.data[index].id.toString());
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 8.0, bottom: 8.0),
+                                    child: ListTile(
+                                        leading: CircleAvatar(
+                                          backgroundColor: fromHex(snapshot
+                                              .data[index].categoryColor),
+                                          child: const FaIcon(
+                                            FontAwesomeIcons.cartShopping,
+                                            size: 20.0,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    (snapshot.data[index]
+                                                        .description),
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                Text(
+                                                  DateFormat.yMMMMd()
+                                                      .add_jms()
+                                                      .format(DateTime.parse(
+                                                          snapshot.data[index]
+                                                              .createdAt)),
+                                                  style: const TextStyle(
+                                                      fontSize: 12),
+                                                )
+                                              ],
+                                            ),
+                                            Text(
+                                                '\$' +
+                                                    formatMoney.format(snapshot
+                                                        .data[index].value
+                                                        .abs()),
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14,
+                                                    color: snapshot.data[index]
+                                                                .value <
+                                                            0
+                                                        ? Colors.red
+                                                        : Colors.black)),
+                                          ],
+                                        )),
+                                  ),
+                                ),
+                              );
+                            }),
+                      ],
+                    ),
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
             ),
           ],
         ),
