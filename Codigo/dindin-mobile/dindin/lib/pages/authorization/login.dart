@@ -1,5 +1,5 @@
 import 'package:dindin/pages/dashboard.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -14,14 +14,37 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String email = '';
-  String password = '';
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+@override
+  initState() {
+    super.initState();
+    _getData();
+  }
+
+  _saveData() async {
+    String emailTyped = email.text;
+    String passwordTyped = password.text;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("email", emailTyped);
+    await prefs.setString("password", passwordTyped);
+  }
+
+  _getData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      email.text = prefs.getString("email") ?? "";
+      password.text = prefs.getString("password") ?? "";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       body: Column(
         children: [
@@ -66,9 +89,7 @@ class _LoginState extends State<Login> {
                             child: Column(
                               children: [
                                 TextFormField(
-                                  onChanged: (text) {
-                                    email = text;
-                                  },
+                                  controller: email,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: const InputDecoration(
                                       labelText: 'Enter Email Adress',
@@ -89,9 +110,7 @@ class _LoginState extends State<Login> {
                                 ),
                                 const SizedBox(height: 20),
                                 TextFormField(
-                                  onChanged: (text) {
-                                    password = text;
-                                  },
+                                  controller: password,
                                   obscureText: true,
                                   decoration: const InputDecoration(
                                       labelText: 'Password',
@@ -118,39 +137,40 @@ class _LoginState extends State<Login> {
                                       primary: Colors.grey,
                                     ),
                                     onPressed: () {
-                                      if (formKey.currentState!.validate()) {
-                                        const snackBarTrue =
-                                            SnackBar(content: Text('Loging'));
-                                        const snackBarFalse = SnackBar(
-                                            content: Text('User not Found'));
-                                        userAuth(email, password)
-                                            .then((res) => {
-                                                  if (res == true)
-                                                    {
-                                                      _scaffoldKey.currentState!
-                                                          .showSnackBar(
-                                                              snackBarTrue),
-                                                      Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                const Dashboard()),
-                                                      )
-                                                    }
-                                                  else
-                                                    {
-                                                      _scaffoldKey.currentState!
-                                                          .showSnackBar(
-                                                              snackBarFalse)
-                                                    }
-                                                });
-                                      } else {
-                                        const snackBar = SnackBar(
-                                            content:
-                                                Text('Invalid credencials'));
-                                        _scaffoldKey.currentState!
-                                            .showSnackBar(snackBar);
-                                      }
+                                      _saveData();
+                                      // if (formKey.currentState!.validate()) {
+                                      //   const snackBarTrue =
+                                      //       SnackBar(content: Text('Loging'));
+                                      //   const snackBarFalse = SnackBar(
+                                      //       content: Text('User not Found'));
+                                      //   userAuth(email.text, password.text)
+                                      //       .then((res) => {
+                                      //             if (res == true)
+                                      //               {
+                                      //                 _scaffoldKey.currentState!
+                                      //                     .showSnackBar(
+                                      //                         snackBarTrue),
+                                      //                 Navigator.pushReplacement(
+                                      //                   context,
+                                      //                   MaterialPageRoute(
+                                      //                       builder: (context) =>
+                                      //                           const Dashboard()),
+                                      //                 )
+                                      //               }
+                                      //             else
+                                      //               {
+                                      //                 _scaffoldKey.currentState!
+                                      //                     .showSnackBar(
+                                      //                         snackBarFalse)
+                                      //               }
+                                      //           });
+                                      // } else {
+                                      //   const snackBar = SnackBar(
+                                      //       content:
+                                      //           Text('Invalid credencials'));
+                                      //   _scaffoldKey.currentState!
+                                      //       .showSnackBar(snackBar);
+                                      // }
                                     },
                                   ),
                                 ),
@@ -161,43 +181,44 @@ class _LoginState extends State<Login> {
                   ),
                 )),
           ),
-          Wrap(
-              children: [Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Wrap(
-                          children: const [
-                            Text("Don't have an account?"),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                text: "REGISTER ",
-                                style: TextStyle(color: Colors.green[800]),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.pushNamed(context, "/register");
-                                  },
-                              ),
+          Wrap(children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(
+                        children: const [
+                          Text("Don't have an account?"),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: "REGISTER ",
+                              style: TextStyle(color: Colors.green[800]),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.pushNamed(context, "/register");
+                                },
                             ),
-                            const Icon(
-                              Icons.arrow_forward,
-                              color: Colors.green,
-                              size: 30.0,
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              )])
+                          ),
+                          const Icon(
+                            Icons.arrow_forward,
+                            color: Colors.green,
+                            size: 30.0,
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
+          ])
         ],
       ),
     );
