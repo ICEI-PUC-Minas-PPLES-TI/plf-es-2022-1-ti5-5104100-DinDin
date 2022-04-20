@@ -19,8 +19,10 @@ describe('Category API', () => {
         const response = await supertest(app)
             .post('/api/category')
             .send({
-                name: 'Category',
-                color: 'BLACK'
+                name: "Pedrinho",
+                description: "teste",
+                type: "IN",
+                color: "qwe23"
             });
         expect(response.statusCode).toEqual(201);
         expect(response.body).toHaveProperty('id');
@@ -32,20 +34,22 @@ describe('Category API', () => {
             .post('/api/category')
             .send({
                 name: 'Category',
-                color: 'Black'
+                color: '123123'
             });
         expect(response.statusCode).toEqual(422);
     })
 
     it("should update a category", async () => {
         const mockCategory = {
-            name: 'Category',
-            color: 'BLACK'
+            name: "Pedrinho",
+            description: "teste",
+            type: "IN",
+            color: "qwe23"
         }
         const createdCategory = await Category.create(mockCategory);
 
-        mockCategory.name='Category Updated';
-        mockCategory.color='GREEN'
+        mockCategory.name = 'Category Updated';
+        mockCategory.color = '1233erer'
 
         const response = await supertest(app)
             .put('/api/Category/' + createdCategory.id)

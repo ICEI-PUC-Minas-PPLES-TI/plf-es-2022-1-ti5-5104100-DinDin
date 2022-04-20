@@ -13,8 +13,12 @@ class UpdateCategoryController {
         const findCategoryUseCase = new FindCategoryUseCase();
         await findCategoryUseCase.find(id);
         const scheme = yup.object().shape({
-            name: yup.string().required(),
-            color: yup.mixed().oneOf(['BLUE', 'RED', 'GREEN', 'YELLOW', 'BLACK']).required(),
+          wallet_id: yup.number("'wallet_id' must be numeric!").nullable(), 
+          user_id: yup.number("'user_id' must be numeric!").nullable(), 
+          name: yup.string(),
+          description: yup.string().max(100),
+          type: yup.mixed().oneOf(['IN', 'OUT']),
+          color: yup.string().max(10),
         });
         try {
             await scheme.validate(request.body, { abortEarly: false });
@@ -22,13 +26,17 @@ class UpdateCategoryController {
             throw new AppError(error.name, 422, error.errors);
           }
         
-          const { name,color } = request.body;
+          const { wallet_id,user_id,name,description,type,color } = request.body;
 
           const updateCategoryUseCase = new UpdateCategoryUseCase();
 
           const category = await updateCategoryUseCase.update(
             id,  
+            wallet_id,
+            user_id,
             name,
+            description,
+            type,
             color
           );
 
