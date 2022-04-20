@@ -5,80 +5,106 @@ module.exports = {
     return await queryInterface.bulkInsert('category', [
       {
         name: "Food",
-        color: "BLUE",
+        description:"Food",
+        type:"IN",
+        color: "000000",
         created_at: "2022-01-01 01:00:00",
         updated_at: "2022-01-01 01:00:00"
       },
       {
         name: "Bar",
-        color: "RED",
+        description:"Bar",
+        type:"IN",
+        color: "FF0000",
         created_at: "2022-02-02 02:00:00",
         updated_at: "2022-02-02 02:00:00"
       },
       {
         name: "Culture",
-        color: "BLACK",
+        description:"Culture",
+        type:"IN",
+        color: "50FF00",
         created_at: "2022-03-03 03:00:00",
         updated_at: "2022-03-03 03:00:00"
       },
       {
         name: "House",
-        color: "BLACK",
+        description:"House",
+        type:"IN",
+        color: "FCFF00",
         created_at: "2022-04-04 04:00:00",
         updated_at: "2022-04-04 04:00:00"
       },
       {
         name: "Clothes",
-        color: "BLACK",
+        description:"Clothes",
+        type:"IN",
+        color: "FCFF00",
         created_at: "2022-05-05 05:00:00",
         updated_at: "2022-05-05 05:00:00"
       },
       {
         name: "Shopping",
-        color: "GREEN",
+        description:"Shopping",
+        type:"IN",
+        color: "FCFF00",
         created_at: "2022-05-05 05:00:00",
         updated_at: "2022-05-05 05:00:00"
       },
       {
         name: "Personal",
-        color: "BLUE",
+        description:"Personal",
+        type:"IN",
+        color: "0024FF",
         created_at: "2022-01-01 01:00:00",
         updated_at: "2022-01-01 01:00:00"
       },
       {
         name: "Learn",
-        color: "RED",
+        description:"Learn",
+        type:"IN",
+        color: "000000",
         created_at: "2022-02-02 02:00:00",
         updated_at: "2022-02-02 02:00:00"
       },
       {
         name: "Health",
-        color: "BLACK",
+        description:"Health",
+        type:"IN",
+        color: "000000",
         created_at: "2022-03-03 03:00:00",
         updated_at: "2022-03-03 03:00:00"
       },
       {
         name: "Vehicle",
-        color: "RED",
+        description:"Vehicle",
+        type:"IN",
+        color: "0024FF",
         created_at: "2022-04-04 04:00:00",
         updated_at: "2022-04-04 04:00:00"
       },
       {
         name: "Fun",
-        color: "BLACK",
+        description:"Fun",
+        type:"IN",
+        color: "000000",
         created_at: "2022-05-05 05:00:00",
         updated_at: "2022-05-05 05:00:00"
       },
       {
         name: "Work",
-        color: "GREEN",
+        description:"Work",
+        type:"IN",
+        color: "FCFF00",
         created_at: "2022-05-05 05:00:00",
         updated_at: "2022-05-05 05:00:00"
       },
 
       {
         name: "Pet",
-        color: "BLUE",
+        description:"Pet",
+        type:"IN",
+        color: "0024FF",
         created_at: "2022-04-04 04:00:00",
         updated_at: "2022-04-04 04:00:00"
       }

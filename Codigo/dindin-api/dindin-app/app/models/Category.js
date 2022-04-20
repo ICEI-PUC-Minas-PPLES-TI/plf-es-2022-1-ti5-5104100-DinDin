@@ -12,14 +12,37 @@ class Category extends Model {
           autoIncrement: true,
           allowNull: false
         },
+        wallet_id: {
+          type: DataTypes.INTEGER.UNSIGNED,
+          allowNull: true//to change 
+          // references: {
+          //   model: Wallet,
+          //   key: "id"
+          // }
+        },
+        user_id: {
+          type: DataTypes.INTEGER.UNSIGNED,
+          allowNull: true//to change
+          // references: {
+          //   model: User,
+          //   key: "id"
+          // }
+        },
         name: {
           type: DataTypes.STRING(100),
           allowNull: false
         },
-        color: {
+        description: {
+          type: DataTypes.STRING(100),
+          allowNull: false
+        },
+        type: {
           type: DataTypes.ENUM,
-          values: ['BLUE', 'RED', 'GREEN', 'YELLOW', 'BLACK'],
-          defaultValue: "RED",
+          values: ['IN', 'OUT'],
+          allowNull: false
+        },
+        color: {
+          type: DataTypes.STRING(10),
           allowNull: false
         },
       },
