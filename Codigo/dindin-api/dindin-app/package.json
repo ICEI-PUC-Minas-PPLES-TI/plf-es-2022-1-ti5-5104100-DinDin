@@ -7,10 +7,11 @@
     "test": "echo \"Jest: running all tests\" && cross-env NODE_ENV=test jest",
     "test:watch": "jest --watch",
     "preteste": "npm run reset",
+    "createDatabase": "node ./app/database/createDatabase.js",
     "undomigrations": "npx sequelize-cli db:migrate:undo:all --env 'production'",
     "migrations": "npx sequelize-cli db:migrate --env 'production'",
     "seeds": "npx sequelize-cli db:seed:all --env 'production'",
-    "reset": "echo \"Reseting database\" && npm run undomigrations && npm run migrations && npm run seeds",
+    "reset": "echo \"Reseting database\" && npm run createDatabase && npm run undomigrations && npm run migrations && npm run seeds",
     "start": "echo \"----------------> Starting the DinDin API WITH auto-reloading <----------------\" && cross-env NODE_ENV=dev nodemon -L index.js",
     "start:reset": "echo \"----------------> Starting the DinDin API WITH auto-reloading <----------------\" && cross-env NODE_ENV=dev npm run reset && nodemon -L index.js",
     "start:prod": "echo \"----------------> Starting the DinDin API WITHOUT auto-reloading <----------------\" && cross-env NODE_ENV=prod node index.js"
