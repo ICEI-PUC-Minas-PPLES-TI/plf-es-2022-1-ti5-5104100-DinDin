@@ -4,7 +4,7 @@ const Goal = require("../../../models/Goal");
 class UpdateGoalUseCase {
   async update(id, description, value, type, expire_at, wallet_id) {
 
-    const goal = await Goal.update({
+    await Goal.update({
       description,
       value,
       type,
@@ -16,6 +16,7 @@ class UpdateGoalUseCase {
       }).catch((error) => {
         throw new AppError(error.message, 500, error);
       });
+    const goal = Goal.findByPk(id);
     return goal;
   }
 }
