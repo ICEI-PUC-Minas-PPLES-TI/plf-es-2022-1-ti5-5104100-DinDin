@@ -1,0 +1,45 @@
+name: Docker Compose Frontend
+
+on:
+  push:
+    branches: [master]
+    paths: 
+    - 'Codigo/dindin-frontend/**'
+  pull_request:
+    branches: [master]
+    paths: 
+    - 'Codigo/dindin-frontend/**'
+
+jobs:
+  docker:
+    name: Docker-compose Frontend CI | OS ${{ matrix.os }}
+    timeout-minutes: 30
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Create docker .env file
+        working-directory: ./Codigo/dindin-frontend/
+        run: |
+          touch .env
+          echo NODE_LOCAL_PORT=${{ secrets.NODE_LOCAL_PORT }} >> .env
+          echo NODE_PUBLIC_PORT=${{ secrets.NODE_PUBLIC_PORT }} >> .env
+          echo NODE_APP_HOST=${{ secrets.NODE_APP_HOST }} >> .env
+          echo NPM_DOCKER_CMD=start >> .env
+
+      - name: Start containers
+        run: docker-compose -f "docker-compose.yml" up -d --build
+        working-directory: ./Codigo/dindin-frontend/
+        env:
+          CI: true
+
+      - name: Stop containers
+        if: always()
+        run: docker-compose -f "docker-compose.yml" down
+        working-directory: ./Codigo/dindin-frontend/

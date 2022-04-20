@@ -23,7 +23,7 @@ RUN npm install
 # copy the app, note .dockerignore, bundle app source
 COPY . .
 # convert from windows to linux
-RUN find /usr/src/dindin-api -type f -print0 | xargs -0 -n 1 -P 4 dos2unix
+RUN find /usr/src/dindin-frontend -type f -print0 | xargs -0 -n 1 -P 4 dos2unix
 
 # set app serving to permissive / assigned
 ENV NUXT_HOST=0.0.0.0

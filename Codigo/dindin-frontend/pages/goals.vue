@@ -3,9 +3,7 @@
     <!-- Page Title -->
     <v-row>
       <v-col>
-        <h2 class="page-title">
-          Goals
-        </h2>
+        <h2 class="page-title">Goals</h2>
       </v-col>
     </v-row>
     <!-- Table Section -->
@@ -15,7 +13,7 @@
           <!-- Table top toolbar -->
           <v-row>
             <v-col cols="2" offset="10">
-              <v-btn block color="success" @click.stop="showModal=true">
+              <v-btn block color="success" @click.stop="showModal = true;modalEdit=false">
                 New Goal
               </v-btn>
             </v-col>
@@ -58,7 +56,13 @@
                         </v-tooltip>
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn elevation="0" small v-bind="attrs" v-on="on">
+                            <v-btn
+                              elevation="0"
+                              small
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="editGoal(goal)"
+                            >
                               <i class="fa-solid fa-pen-to-square"></i>
                             </v-btn>
                           </template>
@@ -66,7 +70,14 @@
                         </v-tooltip>
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn elevation="0" small color="error" v-bind="attrs" v-on="on">
+                            <v-btn
+                              elevation="0"
+                              small
+                              color="error"
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="removeGoal(goal)"
+                            >
                               <i class="fa-solid fa-trash"></i>
                             </v-btn>
                           </template>
@@ -84,67 +95,102 @@
             <v-col cols="12" md="8" offset-md="4">
               <div class="mw-100">
                 <v-pagination
-                v-model="currentPage"
-                class="my-4"
-                :length="pages"
-                @input="changePagination"
-              ></v-pagination>
+                  v-model="currentPage"
+                  class="my-4"
+                  :length="pages"
+                  @input="changePagination"
+                ></v-pagination>
               </div>
             </v-col>
           </v-row>
         </v-card>
       </v-col>
-    </v-row>   
-    <modal v-model="showModal" />
+    </v-row>
+    <modal :goalToEdit="this.goalToEdit" :modalEdit="this.modalEdit" v-model="showModal" @created="$fetch" />
   </v-container>
 </template>
 
 <script>
-import modal from '@/components/goals/modal.vue'
+import modal from "@/components/goals/modal.vue";
+import Swal from "sweetalert2";
 export default {
   layout: "home",
   components: {
-    modal
+    modal,
   },
-  data(){
+  data() {
     return {
       currentPage: 1,
       pages: 1,
       goals: [],
       loading: false,
-      showModal: false
-    }
+      showModal: false,
+      goalToEdit: null,
+      modalEdit: false,
+    };
   },
   async fetch() {
-    this.loading = true
+    this.loading = true;
     await this.$axios
       .$get(`/goal?page=${this.currentPage}`)
-      .then(res => {
-        this.pages = res.pages
-        this.goals = res.goals
+      .then((res) => {
+        this.pages = res.pages;
+        this.goals = res.goals;
       })
       .finally(() => {
-        this.loading = false
-      })
+        this.loading = false;
+      });
   },
   methods: {
-    dateFormat(date){
-      if(date) {
-        const dt = new Date(date)
-        return dt.toLocaleString()
-      } else return null
+    dateFormat(date) {
+      if (date) {
+        const dt = new Date(date);
+        return dt.toLocaleString();
+      } else return null;
     },
-    changePagination(){
-      this.$fetch()
-    }
-  }
+    changePagination() {
+      this.$fetch();
+    },
+    removeGoal(goal) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        reverseButtons: true,
+        confirmButtonText: "Yes, I want to delete!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.$axios.delete("/goal/" + goal.id).then((res) => {
+            Swal.fire({
+              title: "Deleted!",
+              text: "The goal has been deleted.",
+              icon: "info",
+              showConfirmButton: false,
+              toast: true,
+              position: "top-end",
+              timer: 3000,
+              timerProgressBar: true,
+            });
+          });
+        }
+        window.location.reload()
+      });
+    },
+    editGoal(goal) {
+      this.goalToEdit = goal;
+      this.modalEdit=true;
+      this.showModal = true;
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.table-goals-status{
+.table-goals-status {
   text-transform: lowercase;
-  &::first-letter{
+  &::first-letter {
     text-transform: uppercase;
   }
 }
