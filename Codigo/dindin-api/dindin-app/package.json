@@ -12,9 +12,9 @@
     "migrations": "npx sequelize-cli db:migrate --env 'production'",
     "seeds": "npx sequelize-cli db:seed:all --env 'production'",
     "reset": "echo \"Reseting database\" && npm run createDatabase && npm run undomigrations && npm run migrations && npm run seeds",
-    "start": "echo \"----------------> Starting the DinDin API WITH auto-reloading <----------------\" && cross-env NODE_ENV=dev nodemon -L index.js",
-    "start:reset": "echo \"----------------> Starting the DinDin API WITH auto-reloading <----------------\" && cross-env NODE_ENV=dev npm run reset && nodemon -L index.js",
-    "start:prod": "echo \"----------------> Starting the DinDin API WITHOUT auto-reloading <----------------\" && cross-env NODE_ENV=prod node index.js"
+    "start": " cross-env NODE_ENV=dev nodemon -L index.js",
+    "start:reset": "cross-env NODE_ENV=dev npm run reset && nodemon -L index.js",
+    "start:prod": "cross-env NODE_ENV=prod node index.js"
   },
   "jest": {
     "testEnvironment": "node",
