@@ -14,21 +14,16 @@
           <v-row>
             <v-col cols="7" sm="0"> </v-col>
             <v-col>
-              <v-btn
-                block
-                color="white"
-              >
-                Join Wallet
-              </v-btn>
+              <v-btn block color="white" @click.stop="acceptInivte()"> Join Wallet </v-btn>
             </v-col>
             <v-col>
               <v-btn
                 block
-                color="success"
+                color="#5BD098"
                 @click.stop="
                   showModal = true;
                   modalEdit = false;
-                  walletToEdit=null;
+                  walletToEdit = null;
                 "
               >
                 New Wallet
@@ -59,14 +54,14 @@
                       <td>R${{ wallet.current_value }}</td>
                       <td>R${{ wallet.current_value }}</td>
                       <td>
-                       <!-- <v-tooltip top>
+                        <!-- <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn elevation="0" small v-bind="attrs" v-on="on">
                               <i class="fa-solid fa-eye"></i>
                             </v-btn>
                           </template>
                           <span>View</span>
-                        </v-tooltip> --> 
+                        </v-tooltip> -->
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn
@@ -142,20 +137,21 @@ export default {
       pages: 1,
       wallets: [
         {
-          id:1,
-          description:"Wallet",
-          current_value:1000
+          id: 1,
+          description: "Wallet",
+          current_value: 1000,
         },
         {
-          id:2,
-          description:"Personal",
-          current_value:1000
+          id: 2,
+          description: "Personal",
+          current_value: 1000,
         },
         {
-          id:3,
-          description:"Family",
-          current_value:1000
-        }],
+          id: 3,
+          description: "Family",
+          current_value: 1000,
+        },
+      ],
       loading: false,
       showModal: false,
       walletToEdit: null,
@@ -203,6 +199,42 @@ export default {
           });
         }
         window.location.reload();
+      });
+    },
+    acceptInivte() {
+      Swal.fire({
+        title: "Join Wallet",
+        input: "text",
+        inputAttributes: {
+          autocapitalize: "off",
+        },
+        showCancelButton: true,
+        confirmButtonText: "Join",
+        confirmButtonColor: '#5BD098',
+        color: '#000',
+        showLoaderOnConfirm: true,
+        closeOnConfirm: true,
+        closeOnCancel: true,
+        preConfirm: (login) => {
+          // return fetch(`//api.github.com/users/${login}`)
+          //   .then((response) => {
+          //     if (!response.ok) {
+          //       throw new Error(response.statusText);
+          //     }
+          //     return response.json();
+          //   })
+          //   .catch((error) => {
+          //     Swal.showValidationMessage(`Request failed: ${error}`);
+          //   });
+        },
+        allowOutsideClick: () => !Swal.isLoading(),
+      }).then((result) => {
+        // if (result.isConfirmed) {
+        //   Swal.fire({
+        //     title: `${result.value.login}'s avatar`,
+        //     imageUrl: result.value.avatar_url,
+        //   });
+        // }
       });
     },
     editWallet(wallet) {
