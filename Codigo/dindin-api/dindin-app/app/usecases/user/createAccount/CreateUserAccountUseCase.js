@@ -15,7 +15,7 @@ class CreateUserAccountUseCase {
     }).catch(error => {
       throw new AppError(error.message, 500, error);
     });
-    if(usedEmail) {
+    if (usedEmail) {
       throw new AppError("'email' already used", 409);
     }
 
@@ -27,7 +27,7 @@ class CreateUserAccountUseCase {
     }).catch(error => {
       throw new AppError(error.message, 500, error);
     });
-    return {'id': user.id};
+    return { 'id': user.id };
   }
 
 }

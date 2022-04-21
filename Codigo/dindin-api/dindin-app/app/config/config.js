@@ -3,8 +3,8 @@ require('dotenv').config({
 })
 
 let logging = false;
-if(process.env.APP_DEBUG)
-  logging=console.log;
+if (process.env.APP_DEBUG)
+  logging = console.log;
 
 module.exports = {
   development: {

@@ -11,7 +11,7 @@ class FindUserAccountUseCase {
     }).catch(error => {
       throw new AppError(error.message, 500, error);
     });
-    if(user)
+    if (user)
       return user;
     else
       throw new AppError('User not found!', 404)
@@ -25,7 +25,7 @@ class FindUserAccountUseCase {
     }).catch(error => {
       throw new AppError(error.message, 500, error);
     });
-    if(user)
+    if (user)
       return user;
     else
       throw new AppError('User not found!', 404);

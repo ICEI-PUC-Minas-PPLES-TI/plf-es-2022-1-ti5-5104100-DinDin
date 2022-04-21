@@ -10,7 +10,7 @@ class UpdateUserAccountUseCase {
     const user = await User.scope('withPassword').findByPk(id);
 
     let bcryptPassword;
-    if(password)
+    if (password)
       bcryptPassword = bcrypt.hashSync(password, 8);
     await user.update({
       name,
@@ -18,7 +18,7 @@ class UpdateUserAccountUseCase {
     }).catch(error => {
       throw new AppError(error.message, 500, error);
     });
-    return {'id': user.id};
+    return { 'id': user.id };
   }
 
 }

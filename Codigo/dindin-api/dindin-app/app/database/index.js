@@ -11,7 +11,7 @@ const dbConfigEnviroment = process.env.NODE_ENV === "test" ? dbConfig.test : dbC
 const sequelize = new Sequelize(dbConfigEnviroment.database, dbConfigEnviroment.username, dbConfigEnviroment.password, {
   host: dbConfigEnviroment.host,
   port: dbConfigEnviroment.port,
-  logging: process.env.APP_DEBUG && process.env.NODE_ENV!='test' ? console.log : false,
+  logging: process.env.APP_DEBUG && process.env.NODE_ENV != 'test' ? console.log : false,
 
   dialect: dbConfigEnviroment.dialect,
   dialectOptions: {
@@ -74,7 +74,7 @@ module.exports = {
       // await sequelize.sync({ alter: false }); // force: true to drop and re-create
       await sequelize.authenticate();
 
-      if (process.env.APP_DEBUG && process.env.NODE_ENV!='test') {
+      if (process.env.APP_DEBUG && process.env.NODE_ENV != 'test') {
         console.log(
           `\n--> Connection with '${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}' established. Check and re-sync all models with the database completed successfully!`
         );

@@ -30,7 +30,7 @@ class CreateGoalController {
 
     // ! Fix check if wallet exist
     const wallet = "findWalletUseCase.find(wallet_id)";
-    if(wallet_id != 1)
+    if (wallet_id != 1)
       throw new AppError("'wallet_id' does not exist", 422);
 
     const createGoalUseCase = new CreateGoalUseCase();

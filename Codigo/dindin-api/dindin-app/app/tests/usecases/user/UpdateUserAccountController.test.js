@@ -53,7 +53,7 @@ describe('PUT /user test suite', () => {
       .put('/api/user/1')
       .send({
         name: 'User test updated',
-        email:  `updated${Math.random()}@email.com`,
+        email: `updated${Math.random()}@email.com`,
         password: 'userTestePasswordUpdated'
       });
     expect(response.statusCode).toEqual(200);

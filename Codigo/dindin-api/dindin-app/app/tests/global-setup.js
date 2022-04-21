@@ -18,12 +18,12 @@ async function seedTestDatabase() {
 }
 
 module.exports = async () => {
-    try {
-      await createDatabase()
-      await seedTestDatabase()
-      console.log('Test database created successfully');
-    } catch (error) {
-      console.log(error)
-      process.exit(1)
-    }
+  try {
+    await createDatabase()
+    await seedTestDatabase()
+    console.log('Test database created successfully');
+  } catch (error) {
+    console.log(error)
+    process.exit(1)
+  }
 }

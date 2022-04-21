@@ -4,7 +4,7 @@ const winstonRotator = require('winston-daily-rotate-file');
 
 let access_filename = './logs/access.log';
 let error_filename = './logs/error.log';
-if(process.env.NODE_ENV=='test') {
+if (process.env.NODE_ENV == 'test') {
   access_filename = './logs/access-test.log';
   error_filename = './logs/error-test.log';
 }
