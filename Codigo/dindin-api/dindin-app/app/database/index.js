@@ -19,11 +19,7 @@ const sequelize = new Sequelize(dbConfigEnviroment.database, dbConfigEnviroment.
     bigNumberStrings: true,
     connectTimeout: 60000,
     debug: false,
-    dateStrings: true,
-    options: {
-      useUTC: false, // for reading from database
-      dateFirst: 1
-    }
+    dateStrings: true
   },
 
   // use pooling in order to reduce db connection overload and to increase speed
