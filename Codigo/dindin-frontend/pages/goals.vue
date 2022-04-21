@@ -46,14 +46,14 @@
                       <td>{{ dateFormat(goal.expire_at) }}</td>
                       <td class="table-goals-status">{{ goal.status }}</td>
                       <td>
-                        <v-tooltip top>
+                        <!-- <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn elevation="0" small v-bind="attrs" v-on="on">
                               <i class="fa-solid fa-eye"></i>
                             </v-btn>
                           </template>
                           <span>View</span>
-                        </v-tooltip>
+                        </v-tooltip> -->
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn
@@ -175,7 +175,7 @@ export default {
             });
           });
         }
-        window.location.reload()
+        this.$fetch();
       });
     },
     editGoal(goal) {
