@@ -72,8 +72,8 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="goal.date"
-                  @click.native="parseDate(goal.date)"
+                  v-model="goal.expire_at"
+                  @click.native="parseDate(goal.expire_at)"
                   @input="menu = false"
                 ></v-date-picker>
               </v-menu>
@@ -142,7 +142,7 @@ export default {
       goal: {
         id:"",
         description: "",
-        date: "",
+        expire_at: "",
         value: "",
         type: 0,
         walletId: 0,
@@ -178,7 +178,7 @@ export default {
         this.choosenGoal = null;
         let emptyGoal = {
           description: "",
-          expire_at: this.goal.date,
+          expire_at: this.goal.expire_at,
           value: "",
           type: "",
           walletId: "",
@@ -292,7 +292,7 @@ export default {
       this.goal.description = data.description;
       this.goal.value = data.value;
       this.date = this.shortDate(data.expire_at);
-      this.goal.date = data.expire_at.substring(0, 10);
+      this.goal.expire_at = data.expire_at.substring(0, 10);
       this.goal.type = data.type;
       this.goal.walletId = data.walletId;
     },
