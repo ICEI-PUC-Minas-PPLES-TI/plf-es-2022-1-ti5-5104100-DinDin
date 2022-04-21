@@ -1,16 +1,25 @@
-
 const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
-const UserCreateAccountUseCase = require("./CreateUserAccountUseCase")
+const CreateUserAccountUseCase = require("./CreateUserAccountUseCase")
 
-class UserCreateAccountController {
+class CreateUserAccountController {
 
   async create(request, response) {
     const scheme = yup.object().shape({
-      name: yup.string().required(),
-      email: yup.string().email().required(),
-      password: yup.string().required().min(8),
+      name: yup
+        .string("'name' must be string")
+        .max(100)
+        .required("'name' is a required field"),
+      email: yup
+        .string("'email' must be string")
+        .email("'email' must be a email")
+        .max(150)
+        .required("'email' is a required field"),
+      password: yup
+        .string("'password' must be string")
+        .min(8)
+        .required("'password' is a required field"),
     });
 
     try {
@@ -21,7 +30,7 @@ class UserCreateAccountController {
 
     const { name, email, password } = request.body;
 
-    const userCreateAccountUseCase = new UserCreateAccountUseCase();
+    const userCreateAccountUseCase = new CreateUserAccountUseCase();
     const user = await userCreateAccountUseCase.create(
       name,
       email,
@@ -35,4 +44,4 @@ class UserCreateAccountController {
 
 }
 
-module.exports = UserCreateAccountController;
+module.exports = CreateUserAccountController;

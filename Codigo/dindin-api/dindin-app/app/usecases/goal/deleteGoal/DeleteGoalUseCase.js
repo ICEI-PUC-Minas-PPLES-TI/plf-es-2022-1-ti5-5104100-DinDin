@@ -1,4 +1,5 @@
 const AppError = require("../../../errors/AppError");
+
 class DeleteGoalUseCase {
   async delete(goal) {
 

@@ -1,6 +1,7 @@
+const { Op } = require("sequelize");
+
 const AppError = require("../../../errors/AppError");
 const Goal = require("../../../models/Goal");
-const { Op } = require("sequelize");
 const { SortPaginate } = require("../../../helpers/SortPaginate");
 
 class ListGoalUseCase {

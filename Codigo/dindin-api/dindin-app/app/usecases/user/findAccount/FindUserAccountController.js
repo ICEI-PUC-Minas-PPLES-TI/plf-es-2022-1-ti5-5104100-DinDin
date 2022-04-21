@@ -1,10 +1,10 @@
-const UserFindAccountUseCase = require("./FindUserAccountUseCase")
+const FindUserAccountUseCase = require("./FindUserAccountUseCase")
 
-class UserFindAccountController {
+class FindUserAccountController {
 
   async find(request, response) {
     const id = request.params.id;
-    const userFindAccountUseCase = new UserFindAccountUseCase();
+    const userFindAccountUseCase = new FindUserAccountUseCase();
     const user = await userFindAccountUseCase.find(
       id
     );
@@ -13,4 +13,4 @@ class UserFindAccountController {
 
 }
 
-module.exports = UserFindAccountController;
+module.exports = FindUserAccountController;

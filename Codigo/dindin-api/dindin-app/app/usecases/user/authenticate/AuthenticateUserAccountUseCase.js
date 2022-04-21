@@ -1,10 +1,10 @@
-const AppError = require("../../../errors/AppError");
-const User = require("../../../models/User");
-
 const bcrypt = require("bcryptjs");
 const jwtAuthorization = require("../../../routes/jwtAuthorization");
 
-class AuthenticateUseCase {
+const AppError = require("../../../errors/AppError");
+const User = require("../../../models/User");
+
+class AuthenticateUserAccountUseCase {
 
   async execute(email, password) {
     const user = await User.findOne({
@@ -27,4 +27,4 @@ class AuthenticateUseCase {
 
 }
 
-module.exports = AuthenticateUseCase;
+module.exports = AuthenticateUserAccountUseCase;

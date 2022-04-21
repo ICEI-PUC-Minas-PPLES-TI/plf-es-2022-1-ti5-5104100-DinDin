@@ -1,7 +1,7 @@
 const AppError = require("../../../errors/AppError");
 const User = require("../../../models/User");
 
-class UserFindUseCase {
+class FindUserAccountUseCase {
 
   async find(id) {
     const user = await User.findOne({
@@ -19,4 +19,4 @@ class UserFindUseCase {
 
 }
 
-module.exports = UserFindUseCase;
+module.exports = FindUserAccountUseCase;

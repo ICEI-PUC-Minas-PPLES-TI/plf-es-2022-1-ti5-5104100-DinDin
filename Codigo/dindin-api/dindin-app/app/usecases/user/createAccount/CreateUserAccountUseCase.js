@@ -1,10 +1,10 @@
-const AppError = require("../../../errors/AppError");
-const User = require("../../../models/User");
-
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-class UserCreateUseCase {
+const AppError = require("../../../errors/AppError");
+const User = require("../../../models/User");
+
+class CreateUserAccountUseCase {
 
   async create(name, email, password) {
     const bcryptPassword = bcrypt.hashSync(password, 8);
@@ -20,4 +20,4 @@ class UserCreateUseCase {
 
 }
 
-module.exports = UserCreateUseCase;
+module.exports = CreateUserAccountUseCase;

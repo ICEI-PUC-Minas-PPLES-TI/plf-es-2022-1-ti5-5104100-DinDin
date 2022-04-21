@@ -1,8 +1,11 @@
 const yup = require("yup");
+
 const AppError = require("../../../errors/AppError");
 const ListGoalUseCase = require("./ListGoalUseCase");
+
 const statusEnum = ["FINISHED", "LOST", "PENDING"];
 const typeEnum = ["A", "B"];
+
 class ListGoalController {
   async list(request, response) {
 

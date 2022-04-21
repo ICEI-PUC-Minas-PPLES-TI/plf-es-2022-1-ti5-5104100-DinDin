@@ -3,6 +3,7 @@ const yup = require("yup");
 const AppError = require("../../../errors/AppError");
 const GoalUpdateUseCase = require("./UpdateGoalUseCase");
 const FindGoalUseCase = require("../findGoal/FindGoalUseCase");
+
 const typeEnum = ["A", "B"];
 
 class UpdateGoalController {

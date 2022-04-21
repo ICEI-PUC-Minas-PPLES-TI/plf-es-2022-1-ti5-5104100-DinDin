@@ -2,9 +2,9 @@
 const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
-const AuthenticateUseCase = require("./AuthenticateUserAccountUseCase")
+const AuthenticateUserAccountUseCase = require("./AuthenticateUserAccountUseCase")
 
-class AuthenticateController {
+class AuthenticateUserAccountController {
 
   async handle(request, response) {
     const scheme = yup.object().shape({
@@ -19,7 +19,7 @@ class AuthenticateController {
     }
     const { email, password } = request.body;
 
-    const authenticateUseCase = new AuthenticateUseCase();
+    const authenticateUseCase = new AuthenticateUserAccountUseCase();
     const token = await authenticateUseCase.execute(
       email,
       password
@@ -32,4 +32,4 @@ class AuthenticateController {
 
 }
 
-module.exports = AuthenticateController;
+module.exports = AuthenticateUserAccountController;
