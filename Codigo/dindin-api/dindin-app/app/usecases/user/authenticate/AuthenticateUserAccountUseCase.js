@@ -6,7 +6,7 @@ const User = require("../../../models/User");
 
 class AuthenticateUserAccountUseCase {
 
-  async execute(email, password) {
+  async login(email, password) {
     const user = await User.findOne({
       where: { email },
       attributes: {

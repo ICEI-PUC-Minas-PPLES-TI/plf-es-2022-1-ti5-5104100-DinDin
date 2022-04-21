@@ -106,7 +106,7 @@ describe('POST /user test suite', () => {
       .send({
         name: '12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901',
         email: `${Math.random()}@email.com`,
-        password: '1234567'
+        password: 'userTestePassword'
       });
     expect(response.statusCode).toEqual(422);
   });
@@ -117,7 +117,7 @@ describe('POST /user test suite', () => {
       .send({
         name: 'User teste',
         email: `${Math.random()}@1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901.com`,
-        password: '1234567'
+        password: 'userTestePassword'
       });
     expect(response.statusCode).toEqual(422);
   });

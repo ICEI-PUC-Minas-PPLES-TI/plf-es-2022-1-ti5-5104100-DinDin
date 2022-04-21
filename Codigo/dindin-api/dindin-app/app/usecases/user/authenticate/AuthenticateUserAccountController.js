@@ -8,8 +8,15 @@ class AuthenticateUserAccountController {
 
   async handle(request, response) {
     const scheme = yup.object().shape({
-      email: yup.string().email().required(),
-      password: yup.string().required().min(8),
+      email: yup
+        .string("'email' must be string")
+        .email("'email' must be a email")
+        .max(150)
+        .required("'email' is a required field"),
+      password: yup
+        .string("'password' must be string")
+        .min(8)
+        .required("'password' is a required field"),
     });
 
     try {
@@ -20,7 +27,7 @@ class AuthenticateUserAccountController {
     const { email, password } = request.body;
 
     const authenticateUseCase = new AuthenticateUserAccountUseCase();
-    const token = await authenticateUseCase.execute(
+    const token = await authenticateUseCase.login(
       email,
       password
     );
