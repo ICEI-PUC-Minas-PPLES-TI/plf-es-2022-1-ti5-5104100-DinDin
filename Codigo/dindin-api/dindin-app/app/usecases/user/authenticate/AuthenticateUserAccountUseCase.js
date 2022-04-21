@@ -1,8 +1,8 @@
-const AppError = require("../../errors/AppError");
-const User = require("../../models/User");
+const AppError = require("../../../errors/AppError");
+const User = require("../../../models/User");
 
 const bcrypt = require("bcryptjs");
-const jwtAuthorization = require("../../routes/jwtAuthorization");
+const jwtAuthorization = require("../../../routes/jwtAuthorization");
 
 class AuthenticateUseCase {
 

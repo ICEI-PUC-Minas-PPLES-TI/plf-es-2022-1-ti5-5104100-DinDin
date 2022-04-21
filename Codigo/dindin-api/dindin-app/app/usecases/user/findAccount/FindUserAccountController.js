@@ -1,4 +1,4 @@
-const UserFindAccountUseCase = require("./UserFindAccountUseCase")
+const UserFindAccountUseCase = require("./FindUserAccountUseCase")
 
 class UserFindAccountController {
 

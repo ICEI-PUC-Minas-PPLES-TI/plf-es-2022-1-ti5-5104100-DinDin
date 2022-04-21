@@ -1,8 +1,8 @@
 
 const yup = require("yup");
 
-const AppError = require("../../errors/AppError");
-const AuthenticateUseCase = require("./AuthenticateUseCase")
+const AppError = require("../../../errors/AppError");
+const AuthenticateUseCase = require("./AuthenticateUserAccountUseCase")
 
 class AuthenticateController {
 

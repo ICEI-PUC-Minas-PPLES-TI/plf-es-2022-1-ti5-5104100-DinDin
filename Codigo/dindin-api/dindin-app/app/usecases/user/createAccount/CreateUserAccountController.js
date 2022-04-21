@@ -1,8 +1,8 @@
 
 const yup = require("yup");
 
-const AppError = require("../../errors/AppError");
-const UserCreateAccountUseCase = require("./UserCreateAccountUseCase")
+const AppError = require("../../../errors/AppError");
+const UserCreateAccountUseCase = require("./CreateUserAccountUseCase")
 
 class UserCreateAccountController {
 

@@ -3,9 +3,9 @@ const userRoutes = Router();
 
 const jwtAuthorization = require("./jwtAuthorization");
 
-const UserFindAccountController = require("../usecases/findAccount/UserFindAccountController");
-const UserCreateAccountController = require("../usecases/createAccount/UserCreateAccountController");
-const AuthenticateController = require("../usecases/authenticate/AuthenticateController");
+const UserFindAccountController = require("../usecases/user/findAccount/FindUserAccountController");
+const UserCreateAccountController = require("../usecases/user/createAccount/CreateUserAccountController");
+const AuthenticateController = require("../usecases/user/authenticate/AuthenticateUserAccountController");
 
 const userFindAccountController = new UserFindAccountController();
 const userCreateAccountController = new UserCreateAccountController();
