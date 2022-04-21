@@ -79,6 +79,9 @@ class User extends Model {
           }
         },
         scopes: {
+          withPassword: {
+            attributes: {},
+          },
           deleted: {
             where: {
               deleted: true
