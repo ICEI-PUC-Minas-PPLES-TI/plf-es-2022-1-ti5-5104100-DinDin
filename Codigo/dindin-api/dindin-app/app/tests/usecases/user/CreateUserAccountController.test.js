@@ -3,8 +3,6 @@ require("dotenv").config();
 
 const app = require('../../..');
 const { connect, close } = require('../../../database');
-const User = require('../../../models/User');
-const FindUserAccountUseCase = require('../../../usecases/user/findAccount/FindUserAccountUseCase');
 
 beforeAll(async () => {
   await connect();
@@ -46,7 +44,7 @@ describe('POST /user test suite', () => {
         email: `${Math.random()}@email.com`,
         password: 'userTestePassword'
       });
-      expect(response.statusCode).toEqual(422);
+    expect(response.statusCode).toEqual(422);
   });
 
   it('should fail to create user as it did not send the email field', async () => {
@@ -67,7 +65,7 @@ describe('POST /user test suite', () => {
         email: '',
         password: 'userTestePassword'
       });
-      expect(response.statusCode).toEqual(422);
+    expect(response.statusCode).toEqual(422);
   });
 
   it('should fail to create user as it did not send the password field', async () => {
@@ -88,7 +86,7 @@ describe('POST /user test suite', () => {
         email: `${Math.random()}@email.com`,
         password: ''
       });
-      expect(response.statusCode).toEqual(422);
+    expect(response.statusCode).toEqual(422);
   });
 
   it('should fail to create user with invalid email field', async () => {
@@ -136,16 +134,24 @@ describe('POST /user test suite', () => {
   });
 
   it('should fail to create user with already used email', async () => {
-    const response = await supertest(app)
+    const email = "email@email.com";
+    const responseOne = await supertest(app)
       .post('/api/user')
       .send({
         name: 'User teste',
-        email: `${Math.random()}@email.com`,
+        email: email,
         password: 'userTestePassword'
       });
-    expect(response.statusCode).toEqual(201);
-    expect(response.body).toHaveProperty('user.id');
-    const user = FindUserAccountUseCase
+    expect(responseOne.statusCode).toEqual(201);
+    expect(responseOne.body).toHaveProperty('user.id');
+    const responseTwo = await supertest(app)
+      .post('/api/user')
+      .send({
+        name: 'User teste',
+        email: email,
+        password: 'userTestePassword'
+      });
+    expect(responseTwo.statusCode).toEqual(409);
   });
 
 })
