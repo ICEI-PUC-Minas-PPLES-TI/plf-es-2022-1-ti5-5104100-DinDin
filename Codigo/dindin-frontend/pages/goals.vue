@@ -175,7 +175,7 @@ export default {
             });
           });
         }
-        window.location.reload()
+        this.$fetch();
       });
     },
     editGoal(goal) {
