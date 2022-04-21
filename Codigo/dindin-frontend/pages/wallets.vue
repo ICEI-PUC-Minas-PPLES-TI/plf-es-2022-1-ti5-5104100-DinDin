@@ -208,7 +208,6 @@ export default {
         inputAttributes: {
           autocapitalize: "off",
         },
-        showCancelButton: true,
         confirmButtonText: "Join",
         confirmButtonColor: '#5BD098',
         color: '#000',
