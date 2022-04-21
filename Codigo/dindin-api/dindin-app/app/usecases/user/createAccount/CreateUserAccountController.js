@@ -30,8 +30,8 @@ class CreateUserAccountController {
 
     const { name, email, password } = request.body;
 
-    const userCreateAccountUseCase = new CreateUserAccountUseCase();
-    const user = await userCreateAccountUseCase.create(
+    const createUserAccountUseCase = new CreateUserAccountUseCase();
+    const user = await createUserAccountUseCase.create(
       name,
       email,
       password

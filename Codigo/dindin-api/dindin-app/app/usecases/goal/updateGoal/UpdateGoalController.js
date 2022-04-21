@@ -1,7 +1,7 @@
 const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
-const GoalUpdateUseCase = require("./UpdateGoalUseCase");
+const UpdateGoalUseCase = require("./UpdateGoalUseCase");
 const FindGoalUseCase = require("../findGoal/FindGoalUseCase");
 
 const typeEnum = ["A", "B"];
@@ -34,8 +34,8 @@ class UpdateGoalController {
     const { description, value, type, expire_at, wallet_id } =
       request.body;
 
-    const goalUpdateUseCase = new GoalUpdateUseCase();
-    const goal = await goalUpdateUseCase.update(
+    const updateGoalUseCase = new UpdateGoalUseCase();
+    const goal = await updateGoalUseCase.update(
       id,
       description,
       value,

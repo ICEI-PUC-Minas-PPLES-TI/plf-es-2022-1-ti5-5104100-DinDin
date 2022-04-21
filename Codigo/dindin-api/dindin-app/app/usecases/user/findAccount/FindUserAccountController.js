@@ -4,8 +4,8 @@ class FindUserAccountController {
 
   async find(request, response) {
     const id = request.params.id;
-    const userFindAccountUseCase = new FindUserAccountUseCase();
-    const user = await userFindAccountUseCase.find(
+    const findUserAccountUseCase = new FindUserAccountUseCase();
+    const user = await findUserAccountUseCase.find(
       id
     );
     return response.status(200).json(user);

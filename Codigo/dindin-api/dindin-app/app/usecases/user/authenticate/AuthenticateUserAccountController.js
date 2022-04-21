@@ -6,7 +6,7 @@ const AuthenticateUserAccountUseCase = require("./AuthenticateUserAccountUseCase
 
 class AuthenticateUserAccountController {
 
-  async handle(request, response) {
+  async login(request, response) {
     const scheme = yup.object().shape({
       email: yup
         .string("'email' must be string")
@@ -26,8 +26,8 @@ class AuthenticateUserAccountController {
     }
     const { email, password } = request.body;
 
-    const authenticateUseCase = new AuthenticateUserAccountUseCase();
-    const token = await authenticateUseCase.login(
+    const authenticateUserAccountUseCase = new AuthenticateUserAccountUseCase();
+    const token = await authenticateUserAccountUseCase.login(
       email,
       password
     );
