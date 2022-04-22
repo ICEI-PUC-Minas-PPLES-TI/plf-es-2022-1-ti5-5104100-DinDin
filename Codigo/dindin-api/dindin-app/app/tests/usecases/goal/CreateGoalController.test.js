@@ -67,7 +67,7 @@ describe('POST /goal test suite', () => {
       .post('/api/goal')
       .send(mockGoal);
 
-    expect(response.statusCode).toEqual(422); // talvez mudar para 409 (not acceptable)?
+    expect(response.statusCode).toEqual(422);
   });
 
   it('should not create a goal that has a past limit date', async () => {
@@ -76,7 +76,7 @@ describe('POST /goal test suite', () => {
       value: 2000,
       type: "A",
       expire_at: "2020-10-10",
-      wallet_id: 1   //unexisting wallet
+      wallet_id: 1
     }
 
     const response = await supertest(app)
@@ -160,7 +160,6 @@ describe('POST /goal test suite', () => {
         const response = await supertest(app)
           .post('/api/goal')
           .send(body);
-
         expect(response.statusCode).toEqual(422);
       })
     )

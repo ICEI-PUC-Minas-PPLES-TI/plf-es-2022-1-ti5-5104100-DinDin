@@ -26,6 +26,17 @@ describe('PUT /user test suite', () => {
     expect(response.body).toHaveProperty('user.id');
   });
 
+  it('should fail trying to update a non-existent user', async () => {
+    const nonExistentId = 987654321;
+    const response = await supertest(app)
+      .put(`/api/user/${nonExistentId}`)
+      .send({
+        name: 'User test updated',
+        password: 'userTestePasswordUpdated'
+      });
+    expect(response.statusCode).toEqual(404);
+  });
+
   it('should not fail to update user as it did not send the name field', async () => {
     const response = await supertest(app)
       .put('/api/user/1')

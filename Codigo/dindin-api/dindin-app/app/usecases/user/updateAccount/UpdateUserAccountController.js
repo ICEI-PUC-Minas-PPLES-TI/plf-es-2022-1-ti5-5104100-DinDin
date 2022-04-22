@@ -1,6 +1,7 @@
 const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
+const FindUserAccountUseCase = require("../findAccount/FindUserAccountUseCase");
 const UpdateUserAccountUseCase = require("./UpdateUserAccountUseCase")
 
 class UpdateUserAccountController {
@@ -23,6 +24,10 @@ class UpdateUserAccountController {
 
     const { name, password } = request.body;
     const id = request.params.id;
+    if (!id || !(id > 0))
+      throw new AppError("Please send a valid id on url", 404);
+    const findUserAccountUseCase = new FindUserAccountUseCase();
+    await findUserAccountUseCase.find(id);
 
     const updateUserAccountUseCase = new UpdateUserAccountUseCase();
     const user = await updateUserAccountUseCase.update(

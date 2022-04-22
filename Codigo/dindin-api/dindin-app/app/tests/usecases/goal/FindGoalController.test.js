@@ -37,7 +37,7 @@ describe("GET /goal/:id test suite", () => {
   })
 
   it("should not find a goal", async () => {
-    const unexistingGoalId = 1999862;
+    const unexistingGoalId = 987654321;
     const response = await supertest(app)
       .get('/api/goal/' + unexistingGoalId)
       .send();
@@ -45,5 +45,30 @@ describe("GET /goal/:id test suite", () => {
     expect(response.statusCode).toEqual(404);
   })
 
+  it("should fail when trying to find goal with invalid id", async () => {
+    let invalidId = 0;
+    let response = await supertest(app)
+      .get('/api/goal/' + invalidId)
+      .send();
+    expect(response.statusCode).toEqual(404);
+
+    invalidId = -1;
+    response = await supertest(app)
+      .get('/api/goal/' + invalidId)
+      .send();
+    expect(response.statusCode).toEqual(404);
+
+    invalidId = null;
+    response = await supertest(app)
+      .get('/api/goal/' + invalidId)
+      .send();
+    expect(response.statusCode).toEqual(404);
+
+    invalidId = undefined;
+    response = await supertest(app)
+      .get('/api/goal/' + invalidId)
+      .send();
+    expect(response.statusCode).toEqual(404);
+  })
 
 })

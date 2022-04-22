@@ -8,21 +8,24 @@ const typeEnum = ["A", "B"];
 
 class UpdateGoalController {
   async update(request, response) {
-    const id = request?.params?.id;
-    if (!id || !(id > 0))
-      return new AppError("Please send a valid id on url", 500);
-    //check if goal exists...
-    const findGoalUseCase = new FindGoalUseCase();
-    await findGoalUseCase.find(id); //throw execption if not found
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     const scheme = yup.object().shape({
-      description: yup.string().max(30),
-      value: yup.number("'value' must be numeric!"),
+      description: yup
+        .string("'description' must be string!")
+        .max(30),
+      value: yup
+        .number("'value' must be numeric!")
+        .required(),
       type: yup
         .mixed()
         .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`),
-      expire_at: yup.date("'expire_at' must be date!"),
-      wallet_id: yup.number("'usuario_id_medico' must be numeric!").nullable(), // nullable por enquanto trocar depois...
+      expire_at: yup
+        .date("'expire_at' must be date!")
+        .min(today, "expire_at' cannot be in the past"),
+      wallet_id: yup
+        .number("'wallet_id' must be numeric!"),
     });
 
     try {
@@ -33,6 +36,12 @@ class UpdateGoalController {
 
     const { description, value, type, expire_at, wallet_id } =
       request.body;
+
+    const id = request?.params?.id;
+    if (!id || !(id > 0))
+      throw new AppError("Please send a valid id on url", 404);
+    const findGoalUseCase = new FindGoalUseCase();
+    await findGoalUseCase.find(id);
 
     const updateGoalUseCase = new UpdateGoalUseCase();
     const goal = await updateGoalUseCase.update(

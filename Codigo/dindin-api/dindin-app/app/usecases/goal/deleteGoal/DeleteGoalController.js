@@ -3,10 +3,10 @@ const FindGoalUseCase = require("../findGoal/FindGoalUseCase");
 
 class DeleteGoalController {
   async delete(request, response) {
-    const id = request?.params?.id;
+    const id = request.params.id;
     if (!id || !(id > 0))
-      return new AppError("Please send a valid id on url", 500);
-    //check if goal exists...
+      throw new AppError("Please send a valid id on url", 404);
+
     const findGoalUseCase = new FindGoalUseCase();
     const findGoal = await findGoalUseCase.find(id);
 
