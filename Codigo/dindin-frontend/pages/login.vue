@@ -59,6 +59,9 @@
                     >
                   </v-card-actions>
                 </v-form>
+                
+                <FirebaseAuthButton />
+
               </v-card-text>
             </v-card>
           </v-col>
