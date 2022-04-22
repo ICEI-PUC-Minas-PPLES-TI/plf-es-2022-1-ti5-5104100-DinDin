@@ -64,6 +64,17 @@ module.exports = {
           wallet_id: 1,
           created_at: "2022-03-24 11:30:00",
           updated_at: "2023-03-26 11:30:00",
+        },
+        {
+          description: "Goal 7",
+          value: "9000.5",
+          status: "PENDING",
+          type: "B",
+          expire_at: "2022-06-20 11:50:00",
+          wallet_id: 1,
+          created_at: "2022-03-24 11:30:00",
+          updated_at: "2023-03-26 11:30:00",
+          deleted_at: "2023-03-26 11:30:00",
         }
       ]
     );

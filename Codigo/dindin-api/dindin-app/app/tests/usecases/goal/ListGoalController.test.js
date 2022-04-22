@@ -3,7 +3,6 @@ require("dotenv").config();
 
 const app = require('../../..');
 const { connect, close } = require('../../../database');
-const Goal = require('../../../models/Goal');
 
 beforeAll(async () => {
   await connect();
@@ -29,35 +28,131 @@ describe("GET /goal test suite", () => {
 
   it("should list the goals with limit", async () => {
     const response = await supertest(app)
-      .get('/api/goal/')
-      .send({
-        limit: 1
-      });
+      .get('/api/goal?limit=1')
+      .send();
 
     expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty('count');
+    expect(response.body).toHaveProperty('total');
+    expect(response.body).toHaveProperty('pages');
+    expect(response.body).toHaveProperty('goals');
     expect(response.body.goals.length).toBeGreaterThanOrEqual(1);
   })
 
   it("should list the goals with description search", async () => {
     const response = await supertest(app)
-      .get('/api/goal/')
-      .send({
-        description: "goal"
-      });
+      .get('/api/goal?description=goal 1')
+      .send();
 
     expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty('count');
+    expect(response.body).toHaveProperty('total');
+    expect(response.body).toHaveProperty('pages');
+    expect(response.body).toHaveProperty('goals');
     expect(response.body.goals.length).toBeGreaterThanOrEqual(1);
   })
 
   it("should list the goals with asc order id", async () => {
     const response = await supertest(app)
-      .get('/api/goal/')
-      .send({
-        attribute: "id",
-        order: "ASC"
-      });
+      .get('/api/goal?attribute=id&order=ASC')
+      .send();
 
     expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty('count');
+    expect(response.body).toHaveProperty('total');
+    expect(response.body).toHaveProperty('pages');
+    expect(response.body).toHaveProperty('goals');
     expect(response.body.goals[0].id).toEqual(1);
+  })
+
+  it("should list the goals with desc order id", async () => {
+    const response = await supertest(app)
+      .get('/api/goal?attribute=id&order=DESC')
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty('count');
+    expect(response.body).toHaveProperty('total');
+    expect(response.body).toHaveProperty('pages');
+    expect(response.body).toHaveProperty('goals');
+    expect(response.body.goals[0].id).not.toEqual(1);
+  })
+
+  it("should list the goals with value search", async () => {
+    const response = await supertest(app)
+      .get('/api/goal?value=16000')
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty('count');
+    expect(response.body).toHaveProperty('total');
+    expect(response.body).toHaveProperty('pages');
+    expect(response.body).toHaveProperty('goals');
+    expect(response.body.goals.length).toBeGreaterThanOrEqual(1);
+  })
+
+  it("should list the goals with status search", async () => {
+    const response = await supertest(app)
+      .get('/api/goal?status=FINISHED')
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty('count');
+    expect(response.body).toHaveProperty('total');
+    expect(response.body).toHaveProperty('pages');
+    expect(response.body).toHaveProperty('goals');
+    expect(response.body.goals.length).toBeGreaterThanOrEqual(1);
+  })
+
+  it("should list the goals with type search", async () => {
+    const response = await supertest(app)
+      .get('/api/goal?type=A')
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty('count');
+    expect(response.body).toHaveProperty('total');
+    expect(response.body).toHaveProperty('pages');
+    expect(response.body).toHaveProperty('goals');
+    expect(response.body.goals.length).toBeGreaterThanOrEqual(1);
+  })
+
+  it("should list the goals with type search", async () => {
+    const response = await supertest(app)
+      .get('/api/goal?type=A')
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty('count');
+    expect(response.body).toHaveProperty('total');
+    expect(response.body).toHaveProperty('pages');
+    expect(response.body).toHaveProperty('goals');
+    expect(response.body.goals.length).toBeGreaterThanOrEqual(1);
+  })
+
+  it("should list the goals between a expire_ats search", async () => {
+    const response = await supertest(app)
+      .get('/api/goal?expire_at_start=2010-01-01 11:50:00&expire_at_end=2099-01-01 11:50:00')
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty('count');
+    expect(response.body).toHaveProperty('total');
+    expect(response.body).toHaveProperty('pages');
+    expect(response.body).toHaveProperty('goals');
+    expect(response.body.goals.length).toBeGreaterThanOrEqual(1);
+  })
+
+  it("should list the goals with all filters", async () => {
+    const response = await supertest(app)
+      .get('/api/goal?page=1&limit=5&description=goal 1&attribute=id&order=DESC&value=16000&status=FINISHED&type=A&expire_at_start=2010-01-01 11:50:00&expire_at_end=2099-01-01 11:50:00&wallet_id=1')
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty('count');
+    expect(response.body).toHaveProperty('total');
+    expect(response.body).toHaveProperty('pages');
+    expect(response.body).toHaveProperty('goals');
+    expect(response.body.goals.length).toBeGreaterThanOrEqual(1);
   })
 })

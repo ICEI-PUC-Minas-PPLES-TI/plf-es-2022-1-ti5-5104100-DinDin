@@ -33,12 +33,19 @@ class ListGoalUseCase {
     const attributes = Object.keys(Goal.getAttributes);
     const goalsQuantity = await Goal.count();
     const sortPaginateOptions = SortPaginate(query, attributes, goalsQuantity);
+    if(query.created_at_start || query.created_at_end)
+      whre.created_at = sortPaginateOptions.where.created_at;
+    if(query.updated_at_start || query.updated_at_end)
+      whre.updated_at = sortPaginateOptions.where.updated_at;
+    if(query.deleted_at_start || query.deleted_at_end)
+      whre.deleted_at = sortPaginateOptions.where.deleted_at;
 
     const goals = await Goal.findAndCountAll({
       where: whre,
       limit: sortPaginateOptions.limit,
       offset: sortPaginateOptions.offset,
-      order: sortPaginateOptions.order
+      order: sortPaginateOptions.order,
+      paranoid: sortPaginateOptions.paranoid,
       // ! include: [wallet]
     }).catch((error) => {
       throw new AppError("Erro interno do servidor!", 500, error);
