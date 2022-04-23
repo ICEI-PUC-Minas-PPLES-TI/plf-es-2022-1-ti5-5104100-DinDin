@@ -2,9 +2,13 @@
 
 const firebaseAdmin = require("firebase-admin");
 
-const firebaseCredentials = JSON.parse(process.env.FIREBASE_CREDENTIALS_OBJ);
+const firebaseCredentials = process.env.FIREBASE_CREDENTIALS_OBJ ? 
+    firebaseAdmin.credential.cert(
+        JSON.parse(process.env.FIREBASE_CREDENTIALS_OBJ)
+    ) : firebaseAdmin.credential.applicationDefault() ;
+
 const initializeApp = () => firebaseAdmin.initializeApp({
-    credential: firebaseAdmin.credential.cert(firebaseCredentials)
+    credential: firebaseCredentials
 });
 
 const getAuth = firebaseAdmin.auth;
