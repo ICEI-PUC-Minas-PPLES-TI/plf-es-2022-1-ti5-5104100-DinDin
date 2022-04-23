@@ -24,10 +24,18 @@ jobs:
     permissions:
       contents: 'read'
       id-token: 'write'
-      
+
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: 'projects/125881301157/locations/global/workloadIdentityPools/github/providers/github'
+          service_account: 'firebase-adminsdk-xmgz0@dindinfinance.iam.gserviceaccount.com'
+          create_credentials_file: true
 
       - name: Create node .env file
         working-directory: ./Codigo/dindin-api/dindin-app
@@ -43,6 +51,7 @@ jobs:
           echo NODE_PUBLIC_PORT=${{ secrets.NODE_PUBLIC_PORT }} >> .env
           echo NODE_APP_HOST=${{ secrets.NODE_APP_HOST }} >> .env
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+          echo GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS >> .env
 
       - name: Create docker .env file
         working-directory: ./Codigo/dindin-api/
@@ -58,13 +67,8 @@ jobs:
           echo NODE_PUBLIC_PORT=${{ secrets.NODE_PUBLIC_PORT }} >> .env
           echo NODE_APP_HOST=${{ secrets.NODE_APP_HOST }} >> .env
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+          echo GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS >> .env
 
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0'
-        with:
-          workload_identity_provider: 'projects/125881301157/locations/global/workloadIdentityPools/github/providers/github'
-          service_account: 'firebase-adminsdk-xmgz0@dindinfinance.iam.gserviceaccount.com'
 
       - name: Start containers
         run: docker-compose -f "docker-compose.ci.yml" up -d --build
