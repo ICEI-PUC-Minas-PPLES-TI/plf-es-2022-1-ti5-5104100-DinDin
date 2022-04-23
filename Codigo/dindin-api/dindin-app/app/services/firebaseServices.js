@@ -1,7 +1,13 @@
-const { initializeApp, applicationDefault } = require("firebase-admin/app");
-const { getAuth } = require("firebase-admin/auth");
+'use strict';
 
-console.log("<<env>> ------> " + process.env.GOOGLE_APPLICATION_CREDENTIALS + " <-------- <<env>>");
+const firebaseAdmin = require("firebase-admin");
+
+const firebaseCredentials = JSON.parse(process.env.FIREBASE_CREDENTIALS_OBJ);
+const initializeApp = () => firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.cert(firebaseCredentials)
+});
+
+const getAuth = firebaseAdmin.auth;
 
 class firebaseServicesSingleton{
     static instance = new firebaseServicesSingleton();
@@ -9,9 +15,7 @@ class firebaseServicesSingleton{
     firebaseApp = null;
 
     constructor(){
-        this.firebaseApp = initializeApp({
-            credential:  applicationDefault(),
-        });
+        this.firebaseApp = initializeApp();
         
     }
 

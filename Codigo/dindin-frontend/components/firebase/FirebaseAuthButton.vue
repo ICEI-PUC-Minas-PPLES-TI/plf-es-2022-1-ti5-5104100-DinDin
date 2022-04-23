@@ -1,21 +1,47 @@
 <template>
   <div>
-    <v-progress-circular 
-      v-if="loading"
-    />
+    
     <div v-if="showOrDivider" class="or-divider">or</div>
-    <div v-if="!loading" id="firebase-auth-button-container"></div>
+    <div id="firebase-auth-button-container"></div>
+
+    <div class="spinner-div">
+      <v-progress-circular 
+        v-if="loading"
+        indeterminate
+        color="success"
+      />
+    </div>
+
   </div>
 </template>
 
 <script>
+
 async function getServerAuthByFirebaseAccessToken(accessToken){
+  console.log("fazer requisição", accessToken);
   // fazer chamada no backend passando o accessToken do firebase
   // essa requisição retorna o jwt
-  return new Promise((resolve, reject) => {
-    setTimeout(() => resolve("jwt"), 2000);
-  })
+  return this.$axios
+    .post("/user/auth", {
+        token,
+      })
+    .then((res)=>{
+      console.log(res);
+    })
 } 
+
+function signInSuccessWithAuthResult(authResult, redirectUrl){
+  console.log(authResult, authResult.credential.accessToken);
+  console.log(this)
+  this.loading = true;
+  getServerAuthByFirebaseAccessToken(authResult.credential.accessToken)
+  .then(()=> this.showOrDivider = false)
+  .finally(()=> this.loading = false );
+
+  console.log("tentei ir meu fi")
+
+  return false;
+}
 
 export default {
   name: "auth",
@@ -40,18 +66,34 @@ export default {
 
     ui.start("#firebase-auth-button-container", {
       signInOptions: [this.$fireModule.auth.GoogleAuthProvider.PROVIDER_ID],
-      tosUrl: '/dashboard',
+      signInSuccessUrl: '/dashboard',
       callbacks: {
         uiShown: () => this.showOrDivider = true,
         signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-          console.log(authResult, authResult.credential.accessToken);
+          console.log(authResult, authResult.credential.accessToken, this);
 
           this.loading = true;
-          getServerAuthByFirebaseAccessToken(authResult.credential.accessToken)
-          .then(()=> this.showOrDivider = false)
-          .finally(()=> this.loading = false );
 
-          //return false;
+          authResult.user.getIdToken()
+          .then((firebaseToken)=>{
+            console.log(firebaseToken)
+            this.$axios
+            .post("/user/auth", {
+                firebaseToken
+              })
+            .then((res)=>{
+              this.$store.dispatch('login/userLogin', {loginData: res.data.token, router: this.$router})
+            })
+            .then(()=> this.showOrDivider = false)
+            .catch((e)=>{
+              console.log(e)
+              this.$fire.auth.signOut()
+            })
+            .finally(()=> this.loading = false );
+          })
+          
+
+          return false;
         }
       }
     });
@@ -80,5 +122,10 @@ export default {
   display: flex;
   justify-content: center;
   margin: .8rem 0;
+}
+.spinner-div{
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 </style>
