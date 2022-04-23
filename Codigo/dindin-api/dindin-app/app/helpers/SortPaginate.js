@@ -1,5 +1,4 @@
-
-const { Op } = require('sequelize');
+const { Op } = require("sequelize");
 
 function SortPaginate(query, attributes, dataCount) {
   let paranoid = true;
@@ -8,20 +7,32 @@ function SortPaginate(query, attributes, dataCount) {
   const endDate = new Date("2999/01/01");
 
   if (query.created_at_start || query.created_at_end) {
-    const createdStartDate = query.created_at_start ? new Date(query.created_at_start) : startDate;
-    const createdEndDate = query.created_at_end ? new Date(query.created_at_end) : endDate;
-    whre.created_at = {[Op.between] : [createdStartDate , createdEndDate ]};
+    const createdStartDate = query.created_at_start
+      ? new Date(query.created_at_start)
+      : startDate;
+    const createdEndDate = query.created_at_end
+      ? new Date(query.created_at_end)
+      : endDate;
+    whre.created_at = { [Op.between]: [createdStartDate, createdEndDate] };
   }
   if (query.updated_at_start || query.updated_at_end) {
-    const updatedStartDate = query.updated_at_start ? new Date(query.updated_at_start) : startDate;
-    const updatedEndDate = query.updated_at_end ? new Date(query.updated_at_end) : endDate;
-    whre.updated_at = {[Op.between] : [updatedStartDate , updatedEndDate ]};
+    const updatedStartDate = query.updated_at_start
+      ? new Date(query.updated_at_start)
+      : startDate;
+    const updatedEndDate = query.updated_at_end
+      ? new Date(query.updated_at_end)
+      : endDate;
+    whre.updated_at = { [Op.between]: [updatedStartDate, updatedEndDate] };
   }
   if (query.deleted_at_start || query.deleted_at_end) {
     paranoid = false;
-    const deletedStartDate = query.deleted_at_start ? new Date(query.deleted_at_start) : startDate;
-    const deletedEndDate = query.deleted_at_end ? new Date(query.deleted_at_end) : endDate;
-    whre.deleted_at = {[Op.between] : [deletedStartDate , deletedEndDate ]};
+    const deletedStartDate = query.deleted_at_start
+      ? new Date(query.deleted_at_start)
+      : startDate;
+    const deletedEndDate = query.deleted_at_end
+      ? new Date(query.deleted_at_end)
+      : endDate;
+    whre.deleted_at = { [Op.between]: [deletedStartDate, deletedEndDate] };
   }
 
   const limit =
@@ -52,6 +63,5 @@ function SortPaginate(query, attributes, dataCount) {
 }
 
 module.exports = {
-  SortPaginate
+  SortPaginate,
 };
-

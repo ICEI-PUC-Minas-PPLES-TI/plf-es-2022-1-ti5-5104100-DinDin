@@ -11,7 +11,6 @@ class AppError {
       this.statusCode = statusCode;
       this.error = error;
     }
-
   }
 }
 

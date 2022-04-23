@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model, DataTypes
-} = require('sequelize');
+"use strict";
+const { Model, DataTypes } = require("sequelize");
 class Category extends Model {
   static init(sequelize) {
     super.init(
@@ -10,11 +8,11 @@ class Category extends Model {
           type: DataTypes.INTEGER.UNSIGNED,
           primaryKey: true,
           autoIncrement: true,
-          allowNull: false
+          allowNull: false,
         },
         wallet_id: {
           type: DataTypes.INTEGER.UNSIGNED,
-          allowNull: true//to change 
+          allowNull: true, //to change
           // references: {
           //   model: Wallet,
           //   key: "id"
@@ -22,7 +20,7 @@ class Category extends Model {
         },
         user_id: {
           type: DataTypes.INTEGER.UNSIGNED,
-          allowNull: true//to change
+          allowNull: true, //to change
           // references: {
           //   model: User,
           //   key: "id"
@@ -30,22 +28,22 @@ class Category extends Model {
         },
         description: {
           type: DataTypes.STRING(100),
-          allowNull: false
+          allowNull: false,
         },
         type: {
           type: DataTypes.ENUM,
-          values: ['IN', 'OUT'],
-          allowNull: false
+          values: ["IN", "OUT"],
+          allowNull: false,
         },
         color: {
           type: DataTypes.STRING(6),
-          allowNull: false
+          allowNull: false,
         },
       },
       {
         tableName: "category",
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_bin',
+        charset: "utf8mb4",
+        collate: "utf8mb4_bin",
         timestamps: true, // deleted_at and updatedAt need this
         paranoid: true, // deleted_at need this
         createdAt: "created_at",
@@ -54,22 +52,21 @@ class Category extends Model {
         sequelize,
         defaultScope: {
           attributes: {
-            exclude: [ // To not return password
-            ]
-          }
+            exclude: [
+              // To not return password
+            ],
+          },
         },
         scopes: {
           deleted: {
             where: {
-              deleted: true
-            }
+              deleted: true,
+            },
           },
-        }
+        },
       }
     );
-
   }
 }
-
 
 module.exports = Category;

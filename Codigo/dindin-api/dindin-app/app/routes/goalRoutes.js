@@ -13,11 +13,10 @@ const listGoalController = new ListGoalController();
 const findGoalController = new FindGoalController();
 const deleteGoalController = new DeleteGoalController();
 
-goalRoutes.post('/', goalCreateController.create)
-goalRoutes.put('/:id', goalUpdateController.update)
-goalRoutes.get('/', listGoalController.list)
-goalRoutes.get('/:id', findGoalController.find)
-goalRoutes.delete('/:id', deleteGoalController.delete)
-
+goalRoutes.post("/", goalCreateController.create);
+goalRoutes.put("/:id", goalUpdateController.update);
+goalRoutes.get("/", listGoalController.list);
+goalRoutes.get("/:id", findGoalController.find);
+goalRoutes.delete("/:id", deleteGoalController.delete);
 
 module.exports = goalRoutes;

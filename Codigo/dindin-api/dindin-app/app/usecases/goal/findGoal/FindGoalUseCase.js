@@ -10,10 +10,8 @@ class FindGoalUseCase {
     }).catch((error) => {
       throw new AppError(error.message, 500, error);
     });
-    if (goal)
-      return goal;
-    else
-      throw new AppError("Goal not found or already deleted!", 404);
+    if (goal) return goal;
+    else throw new AppError("Goal not found or already deleted!", 404);
   }
 }
 

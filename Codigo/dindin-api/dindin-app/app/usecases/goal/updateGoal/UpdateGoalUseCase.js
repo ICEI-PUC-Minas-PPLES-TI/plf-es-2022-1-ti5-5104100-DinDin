@@ -7,16 +7,20 @@ class UpdateGoalUseCase {
     const findGoalUseCase = new FindGoalUseCase();
     const goal = await findGoalUseCase.find(id);
 
-    goal.update({
-      description,
-      value,
-      type,
-      expire_at,
-      wallet_id
-    },
-      {
-        where: { id: id }
-      }).catch((error) => {
+    goal
+      .update(
+        {
+          description,
+          value,
+          type,
+          expire_at,
+          wallet_id,
+        },
+        {
+          where: { id: id },
+        }
+      )
+      .catch((error) => {
         throw new AppError(error.message, 500, error);
       });
 
