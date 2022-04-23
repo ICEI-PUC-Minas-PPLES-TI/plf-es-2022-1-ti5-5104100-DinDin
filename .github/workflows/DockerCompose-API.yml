@@ -11,6 +11,10 @@ on:
     - 'Codigo/dindin-api/**'
 
 jobs:
+  permissions:
+    contents: 'read'
+    id-token: 'write'
+    
   docker:
     name: Docker-compose API CI | OS ${{ matrix.os }}
     timeout-minutes: 30
