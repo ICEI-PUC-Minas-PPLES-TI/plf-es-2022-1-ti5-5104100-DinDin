@@ -8,7 +8,7 @@ const User = require("../../../models/User");
 class AuthenticateUserAccountUseCase {
 
   // ver como vai ser estruturado isso, se vai ser necessário
-  // criar outro arquivo ou algo do tipo
+  // criar outro arquivo ou algo do tipo 
   async executeForLocalAuth(email, password) {
     const user = await User.findOne({
       where: { email },
