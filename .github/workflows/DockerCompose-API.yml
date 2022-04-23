@@ -11,9 +11,6 @@ on:
     - 'Codigo/dindin-api/**'
 
 jobs:
-  permissions:
-    contents: 'read'
-    id-token: 'write'
     
   docker:
     name: Docker-compose API CI | OS ${{ matrix.os }}
@@ -24,6 +21,10 @@ jobs:
       matrix:
         os: [ubuntu-18.04, ubuntu-20.04]
 
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      
     steps:
       - name: Checkout
         uses: actions/checkout@v1

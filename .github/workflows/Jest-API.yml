@@ -11,19 +11,23 @@ on:
     - 'Codigo/dindin-api/dindin-app/**'
 
 jobs:
-  permissions:
-      contents: 'read'
-      id-token: 'write'
-      
+
   jest:
+
+      
     name: Jest API CI | OS ${{ matrix.os }} - Node Version ${{ matrix.node-version }} - MySQL 5.7
     runs-on: ${{ matrix.os }}
 
+      
     strategy:
       matrix:
         os: [ubuntu-18.04, ubuntu-20.04]
         node-version: [14.x, 16.x]
 
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      
     steps:
       - uses: actions/checkout@v1
 
