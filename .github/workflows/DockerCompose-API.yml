@@ -38,6 +38,7 @@ jobs:
           echo NODE_PUBLIC_PORT=${{ secrets.NODE_PUBLIC_PORT }} >> .env
           echo NODE_APP_HOST=${{ secrets.NODE_APP_HOST }} >> .env
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+          echo FIREBASE_CREDENTIALS_OBJ=${{ secrets.FIREBASE_CREDENTIALS_OBJ }} >> .env
 
       - name: Create docker .env file
         working-directory: ./Codigo/dindin-api/
@@ -53,6 +54,7 @@ jobs:
           echo NODE_PUBLIC_PORT=${{ secrets.NODE_PUBLIC_PORT }} >> .env
           echo NODE_APP_HOST=${{ secrets.NODE_APP_HOST }} >> .env
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+          echo FIREBASE_CREDENTIALS_OBJ=${{ secrets.FIREBASE_CREDENTIALS_OBJ }} >> .env
 
       - name: Start containers
         run: docker-compose -f "docker-compose.ci.yml" up -d --build
