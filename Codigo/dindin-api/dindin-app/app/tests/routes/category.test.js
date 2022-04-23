@@ -19,7 +19,6 @@ describe('Category API', () => {
         const response = await supertest(app)
             .post('/api/category')
             .send({
-                name: "Pedrinho",
                 description: "teste",
                 type: "IN",
                 color: "qwe23"
@@ -33,7 +32,7 @@ describe('Category API', () => {
         const response = await supertest(app)
             .post('/api/category')
             .send({
-                name: 'Category',
+                description: 'Category',
                 color: '123123'
             });
         expect(response.statusCode).toEqual(422);
@@ -41,14 +40,13 @@ describe('Category API', () => {
 
     it("should update a category", async () => {
         const mockCategory = {
-            name: "Pedrinho",
             description: "teste",
             type: "IN",
             color: "qwe23"
         }
         const createdCategory = await Category.create(mockCategory);
 
-        mockCategory.name = 'Category Updated';
+        mockCategory.description = 'Category Updated';
         mockCategory.color = '1233erer'
 
         const response = await supertest(app)
@@ -56,7 +54,7 @@ describe('Category API', () => {
             .send(mockCategory);
 
         expect(response.statusCode).toEqual(201);
-        expect(response.body.name).toEqual(mockCategory.name)
+        expect(response.body.description).toEqual(mockCategory.description)
         expect(response.body.color).toEqual(mockCategory.color)
 
     })

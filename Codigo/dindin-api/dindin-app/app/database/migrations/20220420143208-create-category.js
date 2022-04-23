@@ -25,10 +25,6 @@ module.exports = {
         //   key: "id"
         // }
       },
-      name: {
-        type: DataTypes.STRING(100),
-          allowNull: false
-      },
       description: {
         type: DataTypes.STRING(100),
         allowNull: false
@@ -39,7 +35,7 @@ module.exports = {
         allowNull: false
       },
       color: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.STRING(6),
         allowNull: false
       },
       created_at: {

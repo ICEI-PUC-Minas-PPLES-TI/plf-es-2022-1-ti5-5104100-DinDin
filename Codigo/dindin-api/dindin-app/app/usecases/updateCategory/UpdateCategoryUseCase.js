@@ -3,11 +3,10 @@ const Category = require("../../models/Category");
 const FindCategoryUseCase = require("../findCategory/FindCategoryUseCase");
 
 class UpdateCategoryUseCase {
-    async update(id,wallet_id,user_id,name,description,type,color) {
+    async update(id,wallet_id,user_id,description,type,color) {
         const category = await Category.update({
             wallet_id,
             user_id,
-            name,
             description,
             type,
             color

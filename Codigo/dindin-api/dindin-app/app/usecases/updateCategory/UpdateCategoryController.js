@@ -15,7 +15,6 @@ class UpdateCategoryController {
         const scheme = yup.object().shape({
           wallet_id: yup.number("'wallet_id' must be numeric!").nullable(), 
           user_id: yup.number("'user_id' must be numeric!").nullable(), 
-          name: yup.string(),
           description: yup.string().max(100),
           type: yup.mixed().oneOf(['IN', 'OUT']),
           color: yup.string().max(10),
@@ -26,7 +25,7 @@ class UpdateCategoryController {
             throw new AppError(error.name, 422, error.errors);
           }
         
-          const { wallet_id,user_id,name,description,type,color } = request.body;
+          const { wallet_id,user_id,description,type,color } = request.body;
 
           const updateCategoryUseCase = new UpdateCategoryUseCase();
 
@@ -34,7 +33,6 @@ class UpdateCategoryController {
             id,  
             wallet_id,
             user_id,
-            name,
             description,
             type,
             color

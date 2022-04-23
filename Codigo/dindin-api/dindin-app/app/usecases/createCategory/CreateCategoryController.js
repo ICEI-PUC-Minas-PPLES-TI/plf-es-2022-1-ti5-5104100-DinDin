@@ -8,7 +8,6 @@ class CreateCategoryController {
         const scheme = yup.object().shape({
             wallet_id: yup.number("'wallet_id' must be numeric!").nullable(), 
             user_id: yup.number("'user_id' must be numeric!").nullable(), 
-            name: yup.string().required(),
             description: yup.string().required().max(100),
             type: yup.mixed().oneOf(['IN', 'OUT']).required(),
             color: yup.string().required().max(10),
@@ -20,14 +19,13 @@ class CreateCategoryController {
             throw new AppError(error.name, 422, error.errors);
           }
 
-          const { wallet_id,user_id,name,description,type,color } = request.body;
+          const { wallet_id,user_id,description,type,color } = request.body;
 
           const createCategoryUseCase = new CreateCategoryUseCase();
 
           const category = await createCategoryUseCase.create(
             wallet_id,
             user_id,
-            name,
             description,
             type,
             color
