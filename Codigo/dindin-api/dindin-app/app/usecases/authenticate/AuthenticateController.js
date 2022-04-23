@@ -28,7 +28,7 @@ class AuthenticateController {
       });
     }
     let { email, password, firebaseToken } = request.body;
-    console.log(request.body);
+    
     const authenticateUseCase = new AuthenticateUseCase();
     let token;
     if (email && password){

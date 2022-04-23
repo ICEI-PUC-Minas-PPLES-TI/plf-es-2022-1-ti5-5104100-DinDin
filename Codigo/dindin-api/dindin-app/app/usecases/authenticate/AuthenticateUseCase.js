@@ -40,11 +40,8 @@ class AuthenticateUseCase {
     try {
       firebaseId = await firebaseServices.getFirebaseIdByToken(firebaseToken);
     } catch (error) {
-      console.log(error)
       throw new AppError("Não foi possível fazer login com entidade federada", 401);
     }
-
-    console.log(firebaseId);
 
     let user = await User.findOne({
       where: { firebaseId },
@@ -53,15 +50,11 @@ class AuthenticateUseCase {
       }
     })
 
-    console.log(user)
-
     if (!user){
       const {
         email,
         displayName: name
       } = await firebaseServices.getFirebaseUserById(firebaseId);
-
-      console.log(email, name, firebaseId);
 
       user = await User.create({
         name,
