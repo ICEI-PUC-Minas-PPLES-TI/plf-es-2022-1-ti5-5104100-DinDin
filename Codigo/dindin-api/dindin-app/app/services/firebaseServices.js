@@ -5,11 +5,11 @@ const firebaseAdmin = require("firebase-admin");
 const firebaseCredentials = process.env.FIREBASE_CREDENTIALS_OBJ ? 
     firebaseAdmin.credential.cert(
         JSON.parse(process.env.FIREBASE_CREDENTIALS_OBJ)
-    ) : firebaseAdmin.credential.applicationDefault() ;
+    ) : undefined ;
 
-const initializeApp = () => firebaseAdmin.initializeApp({
+const initializeApp = () => firebaseCredentials ? firebaseAdmin.initializeApp({
     credential: firebaseCredentials
-});
+}) : firebaseAdmin.initializeApp();
 
 const getAuth = firebaseAdmin.auth;
 
