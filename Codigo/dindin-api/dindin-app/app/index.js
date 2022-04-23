@@ -29,13 +29,13 @@ app.use('/api', routes);
 app.use(function (error, request, response, next) {
   console.log(error)
   if(process.env.APP_DEBUG) {
-    return response.status(error.statusCode).json({
+    return response.status(error.statusCode ?? 500).json({
       status: "Error",
       message: error.message,
       error: error
     });
   } else {
-    return response.status(error.statusCode).json({
+    return response.status(error.statusCode ?? 500).json({
       status: "Error",
       message: error.message,
     });
