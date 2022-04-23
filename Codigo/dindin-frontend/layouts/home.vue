@@ -132,6 +132,10 @@ export default {
         name: 'Goals',
         icon: 'fa-solid fa-bullseye',
         url: '/goals'
+      },{
+        name: 'Categories',
+        icon: 'fa-solid fa-align-justify',
+        url: '/categories'
       }]
     }
   },
