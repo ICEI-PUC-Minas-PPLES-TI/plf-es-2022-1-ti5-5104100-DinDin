@@ -52,7 +52,7 @@
                     <tr v-for="(wallet, gidx) in wallets" :key="gidx">
                       <td>
                         {{ wallet.description }}
-                        <span  v-if="wallet.is_shared">(shared)</span>
+                        <span v-if="wallet.is_shared">(shared)</span>
                       </td>
                       <td>R${{ wallet.current_value }}</td>
                       <td>R${{ wallet.current_value }}</td>
@@ -69,7 +69,7 @@
                               <i class="fa-solid fa-share"></i>
                             </v-btn>
                           </template>
-                          <span>Share</span>
+                          <span class="caption">Shared</span>
                         </v-tooltip>
                         <v-tooltip v-if="wallet.is_shared" top>
                           <template v-slot:activator="{ on, attrs }">
@@ -260,11 +260,10 @@ export default {
       Swal.fire({
         title: "<strong>New wallet invite</strong>",
         icon: "info",
-        html:
-          "AAAA9999",
+        html: "AAAA9999",
         focusConfirm: false,
         confirmButtonColor: "#5BD098",
-        confirmButtonText: 'Copy to clipboard',
+        confirmButtonText: "Copy to clipboard",
       });
     },
     editWallet(wallet) {
@@ -282,5 +281,8 @@ export default {
   &::first-letter {
     text-transform: uppercase;
   }
+}
+.shared-wallet {
+  font-size: 100px;
 }
 </style>
