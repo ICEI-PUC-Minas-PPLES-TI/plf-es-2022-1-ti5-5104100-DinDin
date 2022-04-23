@@ -1,15 +1,22 @@
 
 const yup = require("yup");
 
-const AppError = require("../../errors/AppError");
-const AuthenticateUseCase = require("./AuthenticateUseCase")
+const AppError = require("../../../errors/AppError");
+const AuthenticateUserAccountUseCase = require("./AuthenticateUserAccountUseCase")
 
-class AuthenticateController {
+class AuthenticateUserAccountController {
 
-  async handle(request, response) {
+  async login(request, response) {
     const defaultLoginScheme = yup.object().shape({
-      email: yup.string().email().required(),
-      password: yup.string().required().min(8),
+      email: yup
+        .string("'email' must be string")
+        .email("'email' must be a email")
+        .max(150)
+        .required("'email' is a required field"),
+      password: yup
+        .string("'password' must be string")
+        .min(8)
+        .required("'password' is a required field"),
     });
     const federatedLoginScheme = yup.object().shape({
       firebaseToken: yup.string().required()
@@ -29,7 +36,7 @@ class AuthenticateController {
     }
     let { email, password, firebaseToken } = request.body;
     
-    const authenticateUseCase = new AuthenticateUseCase();
+    const authenticateUseCase = new AuthenticateUserAccountUseCase();
     let token;
     if (email && password){
       const { 
@@ -57,4 +64,4 @@ class AuthenticateController {
 
 }
 
-module.exports = AuthenticateController;
+module.exports = AuthenticateUserAccountController;

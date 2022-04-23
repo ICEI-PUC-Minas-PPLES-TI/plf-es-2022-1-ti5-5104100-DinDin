@@ -1,13 +1,15 @@
 const AppError = require("../../../errors/AppError");
 const Goal = require("../../../models/Goal");
+const FindGoalUseCase = require("../findGoal/FindGoalUseCase");
 
 class UpdateGoalUseCase {
-  async update(id, description, value, status, type, expire_at, wallet_id) {
+  async update(id, description, value, type, expire_at, wallet_id) {
+    const findGoalUseCase = new FindGoalUseCase();
+    const goal = await findGoalUseCase.find(id);
 
-    const goal = await Goal.update({
+    goal.update({
       description,
       value,
-      status,
       type,
       expire_at,
       wallet_id
@@ -17,6 +19,7 @@ class UpdateGoalUseCase {
       }).catch((error) => {
         throw new AppError(error.message, 500, error);
       });
+
     return goal;
   }
 }

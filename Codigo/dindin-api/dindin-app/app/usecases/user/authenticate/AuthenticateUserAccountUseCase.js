@@ -1,12 +1,11 @@
-const AppError = require("../../errors/AppError");
-const User = require("../../models/User");
-
 const bcrypt = require("bcryptjs");
-const jwtAuthorization = require("../../routes/jwtAuthorization");
+const jwtAuthorization = require("../../../routes/jwtAuthorization");
+const { firebaseServices } = require("../../../services/firebaseServices");
 
-const { firebaseServices } = require("../../services/firebaseServices");
+const AppError = require("../../../errors/AppError");
+const User = require("../../../models/User");
 
-class AuthenticateUseCase {
+class AuthenticateUserAccountUseCase {
 
   // ver como vai ser estruturado isso, se vai ser necessário
   // criar outro arquivo ou algo do tipo
@@ -71,4 +70,4 @@ class AuthenticateUseCase {
 
 }
 
-module.exports = AuthenticateUseCase;
+module.exports = AuthenticateUserAccountUseCase;
