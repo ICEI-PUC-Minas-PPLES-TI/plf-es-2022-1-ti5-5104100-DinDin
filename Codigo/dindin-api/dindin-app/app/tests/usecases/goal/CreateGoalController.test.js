@@ -86,83 +86,159 @@ describe('POST /goal test suite', () => {
     expect(response.statusCode).toEqual(422);
   })
 
-  it('should fail validation', async () => {
-    const failValidationObjects = [
-      {
-        value: 2000,
-        type: "A",
-        expire_at: "2030-10-10",
-        wallet_id: 1
-      }, /* Without description */
-      {
-        description: "my goal",
-        type: "A",
-        expire_at: "2030-10-10",
-        wallet_id: 1
-      }, /* Without value */
-      {
-        description: "my goal",
-        value: 2000,
-        expire_at: "2030-10-10",
-        wallet_id: 1
-      }, /* Without type */
-      {
-        description: "my goal",
-        value: 2000,
-        type: "A",
-        wallet_id: 1
-      }, /* Without expire_at */
-      {
-        description: "my goal",
-        value: 2000,
-        type: "A",
-        expire_at: "2030-10-10",
-      }, /* Without wallet_id */
-      {
-        description: "1234567890123456789012345678901",
-        value: 2000,
-        type: "A",
-        expire_at: "2030-10-10",
-        wallet_id: 1
-      }, /* With a big description */
-      {
-        description: "my goal",
-        value: "notANumber",
-        type: "A",
-        expire_at: "2030-10-10",
-        wallet_id: 1
-      }, /* Invalid value */
-      {
-        description: "my goal",
-        value: 2000,
-        type: "X",
-        expire_at: "2030-10-10",
-        wallet_id: 1
-      }, /* Invalid type */
-      {
-        description: "my goal",
-        value: 2000,
-        type: "A",
-        expire_at: "notADate",
-        wallet_id: 1
-      }, /* Invalid date at expire_at*/
-      {
-        description: "my goal",
-        value: 2000,
-        type: "A",
-        expire_at: "2030-10-10",
-        wallet_id: "notAId"
-      }, /* Invalid date at wallet_id*/
-    ];
+  it('should fail validation without description', async () => {
+    const mockGoal = {
+      value: 2000,
+      type: "A",
+      expire_at: "2030-10-10",
+      wallet_id: 1
+    }
 
-    await Promise.all(
-      failValidationObjects.map(async (body) => {
-        const response = await supertest(app)
-          .post('/api/goal')
-          .send(body);
-        expect(response.statusCode).toEqual(422);
-      })
-    )
+    const response = await supertest(app)
+      .post('/api/goal')
+      .send(mockGoal);
 
-  });
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation without value', async () => {
+    const mockGoal = {
+      description: "my goal",
+      type: "A",
+      expire_at: "2030-10-10",
+      wallet_id: 1
+    }
+
+    const response = await supertest(app)
+      .post('/api/goal')
+      .send(mockGoal);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation without type', async () => {
+    const mockGoal = {
+      description: "my goal",
+      value: 2000,
+      expire_at: "2030-10-10",
+      wallet_id: 1
+    }
+
+    const response = await supertest(app)
+      .post('/api/goal')
+      .send(mockGoal);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation without expire_at', async () => {
+    const mockGoal = {
+      description: "my goal",
+      value: 2000,
+      type: "A",
+      wallet_id: 1
+    }
+
+    const response = await supertest(app)
+      .post('/api/goal')
+      .send(mockGoal);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation without wallet_id', async () => {
+    const mockGoal = {
+      description: "my goal",
+      value: 2000,
+      type: "A",
+      expire_at: "2030-10-10",
+    }
+
+    const response = await supertest(app)
+      .post('/api/goal')
+      .send(mockGoal);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation with a big description ', async () => {
+    const mockGoal = {
+      description: "1234567890123456789012345678901",
+      value: 2000,
+      type: "A",
+      expire_at: "2030-10-10",
+      wallet_id: 1
+    }
+
+    const response = await supertest(app)
+      .post('/api/goal')
+      .send(mockGoal);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation with a invalid value', async () => {
+    const mockGoal = {
+      description: "my goal",
+      value: "notANumber",
+      type: "A",
+      expire_at: "2030-10-10",
+      wallet_id: 1
+    }
+
+    const response = await supertest(app)
+      .post('/api/goal')
+      .send(mockGoal);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation with a invalid type', async () => {
+    const mockGoal = {
+      description: "my goal",
+      value: 2000,
+      type: "X",
+      expire_at: "2030-10-10",
+      wallet_id: 1
+    }
+
+    const response = await supertest(app)
+      .post('/api/goal')
+      .send(mockGoal);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation with a invalid expire_at', async () => {
+    const mockGoal = {
+      description: "my goal",
+      value: 2000,
+      type: "A",
+      expire_at: "notADate",
+      wallet_id: 1
+    }
+
+    const response = await supertest(app)
+      .post('/api/goal')
+      .send(mockGoal);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation with a invalid wallet_id', async () => {
+    const mockGoal = {
+      description: "my goal",
+      value: 2000,
+      type: "A",
+      expire_at: "2030-10-10",
+      wallet_id: "notAId"
+    }
+
+    const response = await supertest(app)
+      .post('/api/goal')
+      .send(mockGoal);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
 })
