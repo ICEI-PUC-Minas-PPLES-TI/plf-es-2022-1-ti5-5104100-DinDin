@@ -7,17 +7,21 @@ class User extends Model {
         id: {
           field: 'id',
           type: DataTypes.INTEGER(11).UNSIGNED,
-          required: true,
-          primaryKey: true,
           autoIncrement: true,
+          primaryKey: true,
+          allowNull: false,
+          required: true,
           notEmpty: true,
-          allowNull: false
+          validate: {
+            notEmpty: true,
+          }
         },
         name: {
           field: 'name',
           type: DataTypes.STRING(100),
           notEmpty: true,
           allowNull: false,
+          notEmpty: true,
           validate: {
             notEmpty: true,
           }
@@ -25,9 +29,9 @@ class User extends Model {
         email: {
           field: 'email',
           type: DataTypes.STRING(150),
-          notEmpty: true,
           unique: true,
           allowNull: false,
+          notEmpty: true,
           validate: {
             notEmpty: true,
             isEmail: true
@@ -36,12 +40,25 @@ class User extends Model {
         password: {
           field: 'password',
           type: DataTypes.STRING(64),
-          notEmpty: true,
           allowNull: false,
+          notEmpty: true,
           validate: {
             notEmpty: true,
           },
           comment: 'Encrypted with 64 digits'
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+        },
+        deleted_at: {
+          type: DataTypes.DATE,
+          allowNull: true,
+          defaultValue: null,
         }
       },
       {
@@ -62,15 +79,13 @@ class User extends Model {
           }
         },
         scopes: {
+          withPassword: {
+            attributes: {},
+          },
           deleted: {
             where: {
               deleted: true
             }
-          },
-          activeUsers: {
-            include: [
-              { model: User, where: { active: true } }
-            ]
           },
         }
       }

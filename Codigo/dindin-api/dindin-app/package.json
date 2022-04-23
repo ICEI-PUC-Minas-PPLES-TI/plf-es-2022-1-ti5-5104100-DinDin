@@ -5,15 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Jest: running all tests\" && cross-env NODE_ENV=test jest",
-    "test:watch": "jest --watch",
+    "test:watch": "cross-env NODE_ENV=test jest --watch",
     "preteste": "npm run reset",
+    "createDatabase": "node ./app/database/createDatabase.js",
     "undomigrations": "npx sequelize-cli db:migrate:undo:all --env 'production'",
     "migrations": "npx sequelize-cli db:migrate --env 'production'",
     "seeds": "npx sequelize-cli db:seed:all --env 'production'",
-    "reset": "echo \"Reseting database\" && npm run undomigrations && npm run migrations && npm run seeds",
-    "start": "echo \"----------------> Starting the DinDin API WITH auto-reloading <----------------\" && cross-env NODE_ENV=dev nodemon -L index.js",
-    "start:reset": "echo \"----------------> Starting the DinDin API WITH auto-reloading <----------------\" && cross-env NODE_ENV=dev npm run reset && nodemon -L index.js",
-    "start:prod": "echo \"----------------> Starting the DinDin API WITHOUT auto-reloading <----------------\" && cross-env NODE_ENV=prod node index.js"
+    "reset": "echo \"Reseting database\" && npm run createDatabase && npm run undomigrations && npm run migrations && npm run seeds",
+    "start": " cross-env NODE_ENV=dev nodemon -L index.js",
+    "start:reset": "cross-env NODE_ENV=dev npm run reset && nodemon -L index.js",
+    "start:prod": "cross-env NODE_ENV=prod node index.js"
   },
   "jest": {
     "testEnvironment": "node",
@@ -58,6 +59,8 @@
     "morgan": "^1.10.0",
     "mysql2": "^2.3.3",
     "sequelize": "^6.17.0",
+    "winston": "^3.7.2",
+    "winston-daily-rotate-file": "^4.6.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {

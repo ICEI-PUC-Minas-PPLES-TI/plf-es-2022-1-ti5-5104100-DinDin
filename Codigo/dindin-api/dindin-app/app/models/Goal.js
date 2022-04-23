@@ -6,8 +6,10 @@ class Goal extends Model {
       {
         id: {
           type: DataTypes.INTEGER(11).UNSIGNED,
+          required: true,
           primaryKey: true,
           autoIncrement: true,
+          notEmpty: true,
           allowNull: false
         },
         description: {
@@ -17,7 +19,6 @@ class Goal extends Model {
         value: {
           type: DataTypes.DOUBLE,
           allowNull: false,
-          unique: true
         },
         status: {
           type: DataTypes.ENUM,
@@ -37,26 +38,25 @@ class Goal extends Model {
         },
         wallet_id: {
           type: DataTypes.INTEGER(11).UNSIGNED,
-          allowNull: true//trocar depois
-          // references: {
-          //   model: Wallet,
-          //   key: "id"
-          // }
+          allowNull: true// ! trocar depois
+          // ! references: {
+          // !  model: Wallet,
+          // !  key: "id"
+          // !}
         },
         created_at: {
+          type: DataTypes.DATE,
           allowNull: false,
-          type: DataTypes.DATE
         },
         updated_at: {
+          type: DataTypes.DATE,
           allowNull: false,
-          type: DataTypes.DATE
         },
         deleted_at: {
-          allowNull: true,
           type: DataTypes.DATE,
+          allowNull: true,
           defaultValue: null,
         }
-
       },
       {
         tableName: "goal",
