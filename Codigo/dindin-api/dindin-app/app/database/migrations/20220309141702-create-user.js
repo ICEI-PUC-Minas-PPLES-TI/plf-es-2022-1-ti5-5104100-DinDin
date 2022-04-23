@@ -26,16 +26,16 @@ module.exports = {
           comment: 'Encrypted with 64 digits'
         },
         created_at: {
+          type: DataTypes.DATE,
           allowNull: false,
-          type: DataTypes.DATE
         },
         updated_at: {
+          type: DataTypes.DATE,
           allowNull: false,
-          type: DataTypes.DATE
         },
         deleted_at: {
-          allowNull: true,
           type: DataTypes.DATE,
+          allowNull: true,
           defaultValue: null,
         }
       },

@@ -21,7 +21,9 @@ describe('Category API', () => {
             .send({
                 description: "teste",
                 type: "IN",
-                color: "qwe23"
+                color: "qwe23",
+                user_id: 1,
+                wallet_id: 1
             });
         expect(response.statusCode).toEqual(201);
         expect(response.body).toHaveProperty('id');
@@ -33,7 +35,9 @@ describe('Category API', () => {
             .post('/api/category')
             .send({
                 description: 'Category',
-                color: '123123'
+                color: '123123',
+                user_id: 1,
+                wallet_id: 1
             });
         expect(response.statusCode).toEqual(422);
     })

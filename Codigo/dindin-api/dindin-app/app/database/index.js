@@ -6,13 +6,13 @@ const { Sequelize } = require("sequelize");
 const dbConfig = require("../config/config.js");
 const Goal = require('../models/Goal.js');
 const User = require("../models/User.js");
-const Category = require("../models/Category")
+const Category = require("../models/Category.js");
 
 const dbConfigEnviroment = process.env.NODE_ENV === "test" ? dbConfig.test : dbConfig.production;
 const sequelize = new Sequelize(dbConfigEnviroment.database, dbConfigEnviroment.username, dbConfigEnviroment.password, {
   host: dbConfigEnviroment.host,
   port: dbConfigEnviroment.port,
-  logging: process.env.APP_DEBUG ? console.log : false,
+  logging: process.env.APP_DEBUG && process.env.NODE_ENV != 'test' ? console.log : false,
 
   dialect: dbConfigEnviroment.dialect,
   dialectOptions: {
@@ -20,11 +20,7 @@ const sequelize = new Sequelize(dbConfigEnviroment.database, dbConfigEnviroment.
     bigNumberStrings: true,
     connectTimeout: 60000,
     debug: false,
-    dateStrings: true,
-    options: {
-      useUTC: false, // for reading from database
-      dateFirst: 1
-    }
+    dateStrings: true
   },
 
   // use pooling in order to reduce db connection overload and to increase speed
@@ -80,7 +76,7 @@ module.exports = {
       // await sequelize.sync({ alter: false }); // force: true to drop and re-create
       await sequelize.authenticate();
 
-      if (process.env.APP_DEBUG) {
+      if (process.env.APP_DEBUG && process.env.NODE_ENV != 'test') {
         console.log(
           `\n--> Connection with '${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}' established. Check and re-sync all models with the database completed successfully!`
         );

@@ -6,8 +6,8 @@ const CreateCategoryUseCase = require("./CreateCategoryUseCase")
 class CreateCategoryController {
     async create(request, response) {
         const scheme = yup.object().shape({
-            wallet_id: yup.number("'wallet_id' must be numeric!").nullable(), 
-            user_id: yup.number("'user_id' must be numeric!").nullable(), 
+            wallet_id: yup.number("'wallet_id' must be numeric!").required(),
+            user_id: yup.number("'user_id' must be numeric!").required(),
             description: yup.string().required().max(100),
             type: yup.mixed().oneOf(['IN', 'OUT']).required(),
             color: yup.string().required().max(10),

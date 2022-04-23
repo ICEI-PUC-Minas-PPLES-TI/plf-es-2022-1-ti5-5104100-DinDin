@@ -3,6 +3,7 @@ const Category = require("../../models/Category")
 
 class CreateCategoryUseCase {
     async create(wallet_id,user_id, description,type, color) {
+      console.log("a")
         const category = await Category.create({
             wallet_id,
             user_id,
@@ -12,6 +13,7 @@ class CreateCategoryUseCase {
         }).catch(error => {
             throw new AppError(error.message, 500, error);
         });
+        console.log("b")
         return { 'id': category.id };
     }
 }
