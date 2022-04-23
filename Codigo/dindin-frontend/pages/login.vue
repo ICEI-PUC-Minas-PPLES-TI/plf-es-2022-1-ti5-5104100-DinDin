@@ -97,11 +97,8 @@ export default {
             password: this.password,
           })
           .then((res) => {
-            let d = new Date();
-            d.setTime(d.getTime() + 1 * 24 * 60 * 60 * 1000);
-            document.cookie = "token= ";
-            document.cookie = "token=" + res.data.token;
-            this.$router.push("/dashboard");
+            this.$store.dispatch('login/userLogin', {loginData: res.data.token, router: this.$router});
+            this.$fire.auth.signInWithCustomToken(res.data.firebaseToken);
           })
           .catch((err) => {
             this.erroLogin = err.response.data.message;

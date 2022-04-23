@@ -56,15 +56,7 @@ export default {
     require("firebaseui/dist/firebaseui.css");
 
     const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(this.$fire.auth);
-
-    // const uiConfig = {
-    //   signInOptions: [this.$fireModule.auth.GoogleAuthProvider.PROVIDER_ID],
-    //   callbacks: {
-    //     on
-    //   }
-    // };
-
-    ui.start("#firebase-auth-button-container", {
+    const firebaseUiOptions = {
       signInOptions: [this.$fireModule.auth.GoogleAuthProvider.PROVIDER_ID],
       signInSuccessUrl: '/dashboard',
       callbacks: {
@@ -76,18 +68,19 @@ export default {
 
           authResult.user.getIdToken()
           .then((firebaseToken)=>{
-            console.log(firebaseToken)
             this.$axios
             .post("/user/auth", {
                 firebaseToken
               })
             .then((res)=>{
-              this.$store.dispatch('login/userLogin', {loginData: res.data.token, router: this.$router})
+              this.$store.dispatch('login/userLogin', {loginData: res.data.token, router: this.$router});
+              this.showOrDivider = false;
             })
-            .then(()=> this.showOrDivider = false)
             .catch((e)=>{
-              console.log(e)
-              this.$fire.auth.signOut()
+              this.$fire.auth.signOut();
+              ui.start("#firebase-auth-button-container", firebaseUiOptions);
+              // mudar pra algo com ui mais agradável depois
+              alert(`We failed to connect to your google account ;-; ${e}`)
             })
             .finally(()=> this.loading = false );
           })
@@ -96,7 +89,9 @@ export default {
           return false;
         }
       }
-    });
+    };
+    
+    ui.start("#firebase-auth-button-container", firebaseUiOptions);
   },
 };
 </script>
