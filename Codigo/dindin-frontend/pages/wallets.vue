@@ -14,7 +14,9 @@
           <v-row>
             <v-col cols="7" sm="0"> </v-col>
             <v-col>
-              <v-btn block color="white" @click.stop="acceptInivte()"> Join Wallet </v-btn>
+              <v-btn block color="white" @click.stop="acceptInivte()">
+                Join Wallet
+              </v-btn>
             </v-col>
             <v-col>
               <v-btn
@@ -54,14 +56,28 @@
                       <td>R${{ wallet.current_value }}</td>
                       <td>R${{ wallet.current_value }}</td>
                       <td>
-                        <!-- <v-tooltip top>
+                        <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn elevation="0" small v-bind="attrs" v-on="on">
-                              <i class="fa-solid fa-eye"></i>
+                            <v-btn
+                              elevation="0"
+                              small
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="inviteFiend()"
+                            >
+                              <i class="fa-solid fa-share"></i>
                             </v-btn>
                           </template>
-                          <span>View</span>
-                        </v-tooltip> -->
+                          <span>Share</span>
+                        </v-tooltip>
+                        <v-tooltip v-if="wallet.is_shared" top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn elevation="0" small v-bind="attrs" v-on="on">
+                              <i class="fa-solid fa-users"></i>
+                            </v-btn>
+                          </template>
+                          <span>Members</span>
+                        </v-tooltip>
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn
@@ -140,16 +156,19 @@ export default {
           id: 1,
           description: "Wallet",
           current_value: 1000,
+          is_shared: false,
         },
         {
           id: 2,
           description: "Personal",
           current_value: 1000,
+          is_shared: false,
         },
         {
           id: 3,
           description: "Family",
           current_value: 1000,
+          is_shared: true,
         },
       ],
       loading: false,
@@ -209,8 +228,8 @@ export default {
           autocapitalize: "off",
         },
         confirmButtonText: "Join",
-        confirmButtonColor: '#5BD098',
-        color: '#000',
+        confirmButtonColor: "#5BD098",
+        color: "#000",
         showLoaderOnConfirm: true,
         closeOnConfirm: true,
         closeOnCancel: true,
@@ -234,6 +253,17 @@ export default {
         //     imageUrl: result.value.avatar_url,
         //   });
         // }
+      });
+    },
+    inviteFiend() {
+      Swal.fire({
+        title: "<strong>New wallet invite</strong>",
+        icon: "info",
+        html:
+          "AAAA9999",
+        focusConfirm: false,
+        confirmButtonColor: "#5BD098",
+        confirmButtonText: 'Copy to clipboard',
       });
     },
     editWallet(wallet) {
