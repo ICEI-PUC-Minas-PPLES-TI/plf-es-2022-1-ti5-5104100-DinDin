@@ -3,10 +3,14 @@ const bcrypt = require("bcryptjs");
 
 const AppError = require("../../../errors/AppError");
 const User = require("../../../models/User");
+const FindUserAccountUseCase = require("../findAccount/FindUserAccountUseCase");
 
 class UpdateUserAccountUseCase {
 
   async update(id, name, password) {
+    const findUserAccountUseCase = new FindUserAccountUseCase();
+    await findUserAccountUseCase.find(id);
+
     const user = await User.scope('withPassword').findByPk(id);
 
     let bcryptPassword;

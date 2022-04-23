@@ -2,7 +2,6 @@ const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
 const UpdateGoalUseCase = require("./UpdateGoalUseCase");
-const FindGoalUseCase = require("../findGoal/FindGoalUseCase");
 
 const typeEnum = ["A", "B"];
 
@@ -16,8 +15,7 @@ class UpdateGoalController {
         .string("'description' must be string!")
         .max(30),
       value: yup
-        .number("'value' must be numeric!")
-        .required(),
+        .number("'value' must be numeric!"),
       type: yup
         .mixed()
         .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`),
@@ -40,8 +38,6 @@ class UpdateGoalController {
     const id = request?.params?.id;
     if (!id || !(id > 0))
       throw new AppError("Please send a valid id on url", 404);
-    const findGoalUseCase = new FindGoalUseCase();
-    await findGoalUseCase.find(id);
 
     const updateGoalUseCase = new UpdateGoalUseCase();
     const goal = await updateGoalUseCase.update(
