@@ -47,7 +47,7 @@ describe('Category API', () => {
         const createdCategory = await Category.create(mockCategory);
 
         mockCategory.description = 'Category Updated';
-        mockCategory.color = '1233erer'
+        mockCategory.color = '1233er'
 
         const response = await supertest(app)
             .put('/api/Category/' + createdCategory.id)
