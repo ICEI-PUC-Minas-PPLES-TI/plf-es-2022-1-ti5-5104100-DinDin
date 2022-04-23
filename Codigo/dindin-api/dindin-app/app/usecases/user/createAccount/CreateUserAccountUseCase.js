@@ -5,14 +5,12 @@ const AppError = require("../../../errors/AppError");
 const User = require("../../../models/User");
 
 class CreateUserAccountUseCase {
-
   async create(name, email, password) {
-
     const usedEmail = await User.findOne({
       where: {
-        email: email
-      }
-    }).catch(error => {
+        email: email,
+      },
+    }).catch((error) => {
       throw new AppError(error.message, 500, error);
     });
     if (usedEmail) {
@@ -24,12 +22,11 @@ class CreateUserAccountUseCase {
       name,
       email,
       password: bcryptPassword,
-    }).catch(error => {
+    }).catch((error) => {
       throw new AppError(error.message, 500, error);
     });
-    return { 'id': user.id };
+    return { id: user.id };
   }
-
 }
 
 module.exports = CreateUserAccountUseCase;

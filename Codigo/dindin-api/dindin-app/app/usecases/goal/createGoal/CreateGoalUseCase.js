@@ -9,7 +9,7 @@ class CreateGoalUseCase {
       status: "PENDING",
       type,
       expire_at,
-      wallet_id
+      wallet_id,
     }).catch((error) => {
       throw new AppError(error.message, 500, error);
     });

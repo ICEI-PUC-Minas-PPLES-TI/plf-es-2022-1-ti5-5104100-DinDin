@@ -5,7 +5,7 @@ class User extends Model {
     super.init(
       {
         id: {
-          field: 'id',
+          field: "id",
           type: DataTypes.INTEGER(11).UNSIGNED,
           autoIncrement: true,
           primaryKey: true,
@@ -14,38 +14,38 @@ class User extends Model {
           notEmpty: true,
           validate: {
             notEmpty: true,
-          }
+          },
         },
         name: {
-          field: 'name',
+          field: "name",
           type: DataTypes.STRING(100),
           notEmpty: true,
           allowNull: false,
           notEmpty: true,
           validate: {
             notEmpty: true,
-          }
+          },
         },
         email: {
-          field: 'email',
+          field: "email",
           type: DataTypes.STRING(150),
           unique: true,
           allowNull: false,
           notEmpty: true,
           validate: {
             notEmpty: true,
-            isEmail: true
-          }
+            isEmail: true,
+          },
         },
         password: {
-          field: 'password',
+          field: "password",
           type: DataTypes.STRING(64),
           allowNull: false,
           notEmpty: true,
           validate: {
             notEmpty: true,
           },
-          comment: 'Encrypted with 64 digits'
+          comment: "Encrypted with 64 digits",
         },
         created_at: {
           type: DataTypes.DATE,
@@ -59,12 +59,12 @@ class User extends Model {
           type: DataTypes.DATE,
           allowNull: true,
           defaultValue: null,
-        }
+        },
       },
       {
         tableName: "user",
-        charset: 'utf8mb4',
-        collate: 'utf8mb4_bin',
+        charset: "utf8mb4",
+        collate: "utf8mb4_bin",
         timestamps: true, // deleted_at and updatedAt need this
         paranoid: true, // deleted_at need this
         createdAt: "created_at",
@@ -74,9 +74,9 @@ class User extends Model {
         defaultScope: {
           attributes: {
             exclude: [
-              "password" // To not return password
-            ]
-          }
+              "password", // To not return password
+            ],
+          },
         },
         scopes: {
           withPassword: {
@@ -84,10 +84,10 @@ class User extends Model {
           },
           deleted: {
             where: {
-              deleted: true
-            }
+              deleted: true,
+            },
           },
-        }
+        },
       }
     );
   }

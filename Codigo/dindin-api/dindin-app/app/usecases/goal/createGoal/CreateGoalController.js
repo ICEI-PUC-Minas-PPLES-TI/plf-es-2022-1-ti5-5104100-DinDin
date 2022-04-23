@@ -15,9 +15,7 @@ class CreateGoalController {
         .string("'description' must be string!")
         .max(30)
         .required("'description' is a required field"),
-      value: yup
-        .number("'value' must be numeric!")
-        .required(),
+      value: yup.number("'value' must be numeric!").required(),
       type: yup
         .mixed()
         .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`)
@@ -41,7 +39,8 @@ class CreateGoalController {
 
     // ! Fix check if wallet exist
     // ! const wallet = "findWalletUseCase.find(wallet_id)";
-    if (wallet_id != 1) // ! Used for test
+    if (wallet_id != 1)
+      // ! Used for test
       throw new AppError("'wallet_id' does not exist", 422); // !
 
     const createGoalUseCase = new CreateGoalUseCase();

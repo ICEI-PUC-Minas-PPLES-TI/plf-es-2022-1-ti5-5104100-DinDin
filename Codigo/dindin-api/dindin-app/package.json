@@ -70,6 +70,9 @@
     "sequelize-cli": "^6.4.1",
     "supertest": "^6.2.2"
   },
+  "resolutions": {
+    "minimist": "1.2.6"
+  },
   "homepage": "https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin",
   "bugs": "https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin/issues",
   "repository": {

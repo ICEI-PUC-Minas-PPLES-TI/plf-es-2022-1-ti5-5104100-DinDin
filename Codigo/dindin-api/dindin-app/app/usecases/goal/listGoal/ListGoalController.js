@@ -18,11 +18,8 @@ class ListGoalController {
         .mixed()
         .oneOf(orderEnum, `'order' must be one of these: ${orderEnum}.`),
 
-      description: yup
-        .string("'description' must be string!")
-        .max(30),
-      value: yup
-        .number("'value' must be numeric!"),
+      description: yup.string("'description' must be string!").max(30),
+      value: yup.number("'value' must be numeric!"),
       status: yup
         .mixed()
         .oneOf(statusEnum, `'status' must be one of these: ${statusEnum}.`),
@@ -30,28 +27,19 @@ class ListGoalController {
         .mixed()
         .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`),
 
-      expire_at_start: yup
-        .date("'expire_at_start' must be date!"),
-      expire_at_end: yup
-        .date("'expire_at_end' must be date!"),
+      expire_at_start: yup.date("'expire_at_start' must be date!"),
+      expire_at_end: yup.date("'expire_at_end' must be date!"),
 
-      wallet_id: yup
-        .number("'wallet_id' must be numeric!"),
+      wallet_id: yup.number("'wallet_id' must be numeric!"),
 
-      created_at_start: yup
-        .date("'created_at_start' must be date!"),
-      created_at_end: yup
-        .date("'created_at_end' must be date!"),
+      created_at_start: yup.date("'created_at_start' must be date!"),
+      created_at_end: yup.date("'created_at_end' must be date!"),
 
-      updated_at_start: yup
-        .date("'updated_at_start' must be date!"),
-      updated_at_end: yup
-        .date("'updated_at_end' must be date!"),
+      updated_at_start: yup.date("'updated_at_start' must be date!"),
+      updated_at_end: yup.date("'updated_at_end' must be date!"),
 
-      deleted_at_start: yup
-        .date("'deleted_at_start' must be date!").nullable(),
-      deleted_at_end: yup
-        .date("'deleted_at_end' must be date!").nullable(),
+      deleted_at_start: yup.date("'deleted_at_start' must be date!").nullable(),
+      deleted_at_end: yup.date("'deleted_at_end' must be date!").nullable(),
     });
 
     try {

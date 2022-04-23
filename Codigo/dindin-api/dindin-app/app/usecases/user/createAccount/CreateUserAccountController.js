@@ -1,10 +1,9 @@
 const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
-const CreateUserAccountUseCase = require("./CreateUserAccountUseCase")
+const CreateUserAccountUseCase = require("./CreateUserAccountUseCase");
 
 class CreateUserAccountController {
-
   async create(request, response) {
     const scheme = yup.object().shape({
       name: yup
@@ -31,17 +30,12 @@ class CreateUserAccountController {
     const { name, email, password } = request.body;
 
     const createUserAccountUseCase = new CreateUserAccountUseCase();
-    const user = await createUserAccountUseCase.create(
-      name,
-      email,
-      password
-    );
+    const user = await createUserAccountUseCase.create(name, email, password);
 
     return response.status(201).json({
-      user
+      user,
     });
   }
-
 }
 
 module.exports = CreateUserAccountController;

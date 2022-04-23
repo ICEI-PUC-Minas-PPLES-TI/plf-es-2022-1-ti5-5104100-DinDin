@@ -1,11 +1,9 @@
-
 const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
-const AuthenticateUserAccountUseCase = require("./AuthenticateUserAccountUseCase")
+const AuthenticateUserAccountUseCase = require("./AuthenticateUserAccountUseCase");
 
 class AuthenticateUserAccountController {
-
   async login(request, response) {
     const scheme = yup.object().shape({
       email: yup
@@ -27,16 +25,12 @@ class AuthenticateUserAccountController {
     const { email, password } = request.body;
 
     const authenticateUserAccountUseCase = new AuthenticateUserAccountUseCase();
-    const token = await authenticateUserAccountUseCase.login(
-      email,
-      password
-    );
+    const token = await authenticateUserAccountUseCase.login(email, password);
 
     return response.status(200).json({
-      token
+      token,
     });
   }
-
 }
 
 module.exports = AuthenticateUserAccountController;

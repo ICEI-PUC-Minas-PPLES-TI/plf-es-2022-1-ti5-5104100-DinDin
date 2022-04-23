@@ -11,13 +11,15 @@ const AuthenticateUserAccountController = require("../usecases/user/authenticate
 const findUserAccountController = new FindUserAccountController();
 const createUserAccountController = new CreateUserAccountController();
 const updateUserAccountController = new UpdateUserAccountController();
-const authenticateUserAccountController = new AuthenticateUserAccountController();
+const authenticateUserAccountController =
+  new AuthenticateUserAccountController();
 
-
-userRoutes.get('/:id', /*[jwtAuthorization.verifyToken],*/ findUserAccountController.find)
-userRoutes.post('/', createUserAccountController.create)
-userRoutes.put('/:id', updateUserAccountController.update)
-userRoutes.post('/auth', authenticateUserAccountController.login)
-
+userRoutes.get(
+  "/:id",
+  /*[jwtAuthorization.verifyToken],*/ findUserAccountController.find
+);
+userRoutes.post("/", createUserAccountController.create);
+userRoutes.put("/:id", updateUserAccountController.update);
+userRoutes.post("/auth", authenticateUserAccountController.login);
 
 module.exports = userRoutes;

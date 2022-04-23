@@ -1,11 +1,10 @@
-
 require("dotenv").config();
 const express = require("express");
 require("express-async-errors");
 const cors = require("cors");
-const logger = require('morgan');
+const logger = require("morgan");
 
-const winstonLogger = require('./helpers/logger').logger;
+const winstonLogger = require("./helpers/logger").logger;
 
 // Create express instance
 const app = express();
@@ -16,18 +15,17 @@ const routes = require("./routes/index");
 // Define cors origin
 var corsOptions = {
   origin: "*",
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-if (process.env.APP_DEBUG)
-  app.use(logger('dev'));
+if (process.env.APP_DEBUG) app.use(logger("dev"));
 
 // Import API Routes
-app.use('/api', routes);
+app.use("/api", routes);
 
 app.use(function (error, request, response, next) {
   winstonLogger.error(error);
@@ -35,7 +33,7 @@ app.use(function (error, request, response, next) {
     return response.status(error.statusCode).json({
       status: "Error",
       message: error.message,
-      error: error
+      error: error,
     });
   } else {
     return response.status(error.statusCode).json({

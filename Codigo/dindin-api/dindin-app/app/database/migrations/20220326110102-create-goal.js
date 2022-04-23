@@ -1,43 +1,44 @@
-const DataTypes = require('sequelize/lib/data-types');
+const DataTypes = require("sequelize/lib/data-types");
 
-'use strict';
+("use strict");
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('goal',
+    await queryInterface.createTable(
+      "goal",
       {
         id: {
           type: DataTypes.INTEGER(11).UNSIGNED,
           primaryKey: true,
           autoIncrement: true,
-          allowNull: false
+          allowNull: false,
         },
         description: {
           type: DataTypes.STRING(30),
-          allowNull: false
+          allowNull: false,
         },
         value: {
           type: DataTypes.DOUBLE,
-          allowNull: false
+          allowNull: false,
         },
         status: {
           type: DataTypes.ENUM,
           values: ["FINISHED", "LOST", "PENDING"],
           defaultValue: "PENDING",
-          allowNull: false
+          allowNull: false,
         },
         type: {
           type: DataTypes.ENUM,
           values: ["A", "B"],
           defaultValue: "A",
-          allowNull: false
+          allowNull: false,
         },
         expire_at: {
           allowNull: true,
-          type: Sequelize.DATE
+          type: Sequelize.DATE,
         },
         wallet_id: {
           type: DataTypes.INTEGER(11).UNSIGNED,
-          allowNull: true//trocar depois
+          allowNull: true, //trocar depois
           // references: {
           //   model: Wallet,
           //   key: "id"
@@ -45,26 +46,26 @@ module.exports = {
         },
         created_at: {
           allowNull: false,
-          type: DataTypes.DATE
+          type: DataTypes.DATE,
         },
         updated_at: {
           allowNull: false,
-          type: DataTypes.DATE
+          type: DataTypes.DATE,
         },
         deleted_at: {
           allowNull: true,
           type: DataTypes.DATE,
           defaultValue: null,
-        }
+        },
       },
       {
-        engine: 'InnoDB', // default: 'InnoDB'
-        charset: 'utf8mb4', // default: null
-        collate: 'utf8mb4_bin' // default: null
+        engine: "InnoDB", // default: 'InnoDB'
+        charset: "utf8mb4", // default: null
+        collate: "utf8mb4_bin", // default: null
       }
     );
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('goal');
-  }
+    await queryInterface.dropTable("goal");
+  },
 };
