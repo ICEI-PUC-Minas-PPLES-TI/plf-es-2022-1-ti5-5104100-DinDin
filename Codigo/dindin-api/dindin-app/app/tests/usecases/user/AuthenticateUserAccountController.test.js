@@ -83,63 +83,105 @@ describe('POST /user/auth test suite', () => {
     expect(response.statusCode).toEqual(401);
   });
 
-  it('should fail validation', async () => {
-    const failValidationObjects = [{ email: "notAnEmail" }, { password: 'justAPassword' }];
+  it('should fail validation with a invalid email', async () => {
+    const body = {
+      email: "notAnEmail",
+      password: "1234567890"
+    }
 
-    await Promise.all(
-      failValidationObjects.map(async (body) => {
-        const response = await supertest(app)
-          .post('/api/user/auth')
-          .send(body);
+    const response = await supertest(app)
+      .post('/api/user/auth')
+      .send(body);
 
-        expect(response.statusCode).toEqual(422);
-      })
-    )
+    expect(response.statusCode).toEqual(422);
+  })
 
-  });
+  it('should fail validation with a little password', async () => {
+    const body = {
+      email: `${Math.random()}@email.com`,
+      password: "1234567"
+    }
 
-  it('should fail validation', async () => {
-    const failValidationObjects = [
-      {
-        email: "notAnEmail",
-        password: "1234567890"
-      },
-      {
-        email: "just@aEmail.com"
-      },
-      {
-        password: "justAPassword"
-      },
-      {
-        email: "",
-        password: ""
-      },
-      {
-        email: null,
-        password: null
-      },
-      {
-        email: undefined,
-        password: undefined
-      },
-      {
-        email: `${Math.random()}@1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901.com`,
-        password: "1234567"
-      },
-      {
-        email: `${Math.random()}@email.com`,
-        password: "1234567"
-      }
-    ];
+    const response = await supertest(app)
+      .post('/api/user/auth')
+      .send(body);
 
-    await Promise.all(
-      failValidationObjects.map(async (body) => {
-        const response = await supertest(app)
-          .post('/api/user/auth')
-          .send(body);
+    expect(response.statusCode).toEqual(422);
+  })
 
-        expect(response.statusCode).toEqual(422);
-      })
-    )
-  });
+  it('should fail validation without password', async () => {
+    const body = {
+      email: "just@aEmail.com"
+    }
+
+    const response = await supertest(app)
+      .post('/api/user/auth')
+      .send(body);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation without email', async () => {
+    const body = {
+      password: "justAPassword"
+    }
+
+    const response = await supertest(app)
+      .post('/api/user/auth')
+      .send(body);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation with email and password empty', async () => {
+    const body = {
+      email: "",
+      password: ""
+    }
+
+    const response = await supertest(app)
+      .post('/api/user/auth')
+      .send(body);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation with email and password null ', async () => {
+    const body = {
+      email: null,
+      password: null
+    }
+
+    const response = await supertest(app)
+      .post('/api/user/auth')
+      .send(body);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation with email and password undefined', async () => {
+    const body = {
+      email: undefined,
+      password: undefined
+    }
+
+    const response = await supertest(app)
+      .post('/api/user/auth')
+      .send(body);
+
+    expect(response.statusCode).toEqual(422);
+  })
+
+  it('should fail validation with a big email', async () => {
+    const body = {
+      email: `${Math.random()}@1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901.com`,
+      password: "1234567"
+    }
+
+    const response = await supertest(app)
+      .post('/api/user/auth')
+      .send(body);
+
+    expect(response.statusCode).toEqual(422);
+  })
 })
