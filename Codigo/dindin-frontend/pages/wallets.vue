@@ -52,6 +52,7 @@
                     <tr v-for="(wallet, gidx) in wallets" :key="gidx">
                       <td>
                         {{ wallet.description }}
+                        <span  v-if="wallet.is_shared">(shared)</span>
                       </td>
                       <td>R${{ wallet.current_value }}</td>
                       <td>R${{ wallet.current_value }}</td>
