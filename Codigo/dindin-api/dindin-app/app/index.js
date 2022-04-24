@@ -4,8 +4,6 @@ require("express-async-errors");
 const cors = require("cors");
 const logger = require("morgan");
 
-const winstonLogger = require("./helpers/logger").logger;
-
 // Create express instance
 const app = express();
 
