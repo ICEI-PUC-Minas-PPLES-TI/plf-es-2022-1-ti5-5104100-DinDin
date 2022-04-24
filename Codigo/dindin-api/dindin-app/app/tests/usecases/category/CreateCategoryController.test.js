@@ -12,3 +12,9 @@ beforeAll(async () => {
 afterAll(async () => {
   await close();
 });
+
+describe("POST /goal test suite", () => {
+  it("should create an A type goal", async () => {
+    expect("A").toEqual("A");
+  })
+})

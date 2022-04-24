@@ -6,13 +6,15 @@ class Category extends Model {
       {
         id: {
           type: DataTypes.INTEGER.UNSIGNED,
+          required:true,
           primaryKey: true,
           autoIncrement: true,
           allowNull: false,
+          notEmpty:true,
         },
         wallet_id: {
           type: DataTypes.INTEGER.UNSIGNED,
-          allowNull: true, //to change
+          allowNull: true, //! to change
           // references: {
           //   model: Wallet,
           //   key: "id"
@@ -20,7 +22,7 @@ class Category extends Model {
         },
         user_id: {
           type: DataTypes.INTEGER.UNSIGNED,
-          allowNull: true, //to change
+          allowNull: true, //! to change
           // references: {
           //   model: User,
           //   key: "id"

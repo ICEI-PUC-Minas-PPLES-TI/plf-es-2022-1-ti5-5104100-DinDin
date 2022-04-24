@@ -13,7 +13,7 @@ module.exports = {
         },
         wallet_id: {
           type: DataTypes.INTEGER(11).UNSIGNED,
-          allowNull: true, //to change
+          allowNull: true, //! to change
           // references: {
           //   model: Wallet,
           //   key: "id"
@@ -21,7 +21,7 @@ module.exports = {
         },
         user_id: {
           type: DataTypes.INTEGER(11).UNSIGNED,
-          allowNull: true, //to change
+          allowNull: true, //! to change
           // references: {
           //   model: user,
           //   key: "id"
