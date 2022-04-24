@@ -12,7 +12,7 @@ module.exports = {
           allowNull: false,
         },
         wallet_id: {
-          type: DataTypes.INTEGER(11).UNSIGNED,
+          type: DataTypes.BIGINT(11).UNSIGNED,
           allowNull: true, //! to change
           // references: {
           //   model: Wallet,
@@ -23,12 +23,12 @@ module.exports = {
           type: DataTypes.INTEGER(11).UNSIGNED,
           allowNull: true, //! to change
           // references: {
-          //   model: user,
+          //   model: User,
           //   key: "id"
           // }
         },
         description: {
-          type: DataTypes.STRING(100),
+          type: DataTypes.STRING(30),
           allowNull: false,
         },
         type: {
@@ -38,7 +38,6 @@ module.exports = {
         },
         color: {
           type: DataTypes.STRING(6),
-          allowNull: false,
         },
         created_at: {
           allowNull: false,

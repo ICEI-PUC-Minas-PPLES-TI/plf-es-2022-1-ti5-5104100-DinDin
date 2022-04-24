@@ -1,6 +1,6 @@
 const yup = require("yup");
 
-const AppError = require("../../errors/AppError");
+const AppError = require("../../../errors/AppError");
 const CreateCategoryUseCase = require("./CreateCategoryUseCase");
 
 class CreateCategoryController {

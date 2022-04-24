@@ -1,4 +1,4 @@
-const AppError = require("../../errors/AppError");
+const AppError = require("../../../errors/AppError");
 class DeleteCategoryUseCase {
   async delete(category) {
     await category.destroy().catch((error) => {

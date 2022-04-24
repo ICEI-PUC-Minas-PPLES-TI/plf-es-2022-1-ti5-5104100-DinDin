@@ -1,5 +1,5 @@
-const AppError = require("../../errors/AppError");
-const Category = require("../../models/Category");
+const AppError = require("../../../errors/AppError");
+const Category = require("../../../models/Category");
 
 class CreateCategoryUseCase {
   async create(wallet_id, user_id, description, type, color) {

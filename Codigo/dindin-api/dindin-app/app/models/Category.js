@@ -5,7 +5,7 @@ class Category extends Model {
     super.init(
       {
         id: {
-          type: DataTypes.INTEGER.UNSIGNED,
+          type: DataTypes.INTEGER(11).UNSIGNED,
           required:true,
           primaryKey: true,
           autoIncrement: true,
@@ -13,7 +13,7 @@ class Category extends Model {
           notEmpty:true,
         },
         wallet_id: {
-          type: DataTypes.INTEGER.UNSIGNED,
+          type: DataTypes.BIGINT(11).UNSIGNED,
           allowNull: true, //! to change
           // references: {
           //   model: Wallet,
@@ -21,7 +21,7 @@ class Category extends Model {
           // }
         },
         user_id: {
-          type: DataTypes.INTEGER.UNSIGNED,
+          type: DataTypes.INTEGER(11).UNSIGNED,
           allowNull: true, //! to change
           // references: {
           //   model: User,
@@ -29,7 +29,7 @@ class Category extends Model {
           // }
         },
         description: {
-          type: DataTypes.STRING(100),
+          type: DataTypes.STRING(30),
           allowNull: false,
         },
         type: {
@@ -39,7 +39,19 @@ class Category extends Model {
         },
         color: {
           type: DataTypes.STRING(6),
+        },
+        created_at: {
+          type: DataTypes.DATE,
           allowNull: false,
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+        },
+        deleted_at: {
+          type: DataTypes.DATE,
+          allowNull: true,
+          defaultValue: null,
         },
       },
       {
@@ -51,24 +63,9 @@ class Category extends Model {
         createdAt: "created_at",
         updatedAt: "updated_at",
         deletedAt: "deleted_at", // .destroy() and .destroy(); to softdelete
-        sequelize,
-        defaultScope: {
-          attributes: {
-            exclude: [
-              // To not return password
-            ],
-          },
-        },
-        scopes: {
-          deleted: {
-            where: {
-              deleted: true,
-            },
-          },
-        },
+        sequelize
       }
     );
   }
 }
-
 module.exports = Category;
