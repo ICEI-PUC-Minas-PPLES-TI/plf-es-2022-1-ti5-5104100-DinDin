@@ -11,7 +11,7 @@ module.exports = {
     },{
       description: 'Family Travels',
       shared: true,
-      initial_value: 500.45,
+      initial_value: 200.45,
       created_at: "2022-03-23 11:30:00",
       updated_at: "2023-04-05 11:30:00",
     }]
