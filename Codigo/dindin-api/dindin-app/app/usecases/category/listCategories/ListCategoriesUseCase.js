@@ -32,8 +32,8 @@ class ListCategoriesUseCase {
     }
 
     const attributes = Object.keys(Category.getAttributes);
-    const goalsQuantity = await Category.count();
-    const sortPaginateOptions = SortPaginate(query, attributes, goalsQuantity);
+    const categoriesQuantity = await Category.count();
+    const sortPaginateOptions = SortPaginate(query, attributes, categoriesQuantity);
     if (query.created_at_start || query.created_at_end)
       whre.created_at = sortPaginateOptions.where.created_at;
     if (query.updated_at_start || query.updated_at_end)
@@ -41,7 +41,7 @@ class ListCategoriesUseCase {
     if (query.deleted_at_start || query.deleted_at_end)
       whre.deleted_at = sortPaginateOptions.where.deleted_at;
 
-    const category = await Category.findAndCountAll({
+    const categories = await Category.findAndCountAll({
       where: whre,
       limit: sortPaginateOptions.limit,
       offset: sortPaginateOptions.offset,
@@ -53,10 +53,10 @@ class ListCategoriesUseCase {
     });
 
     return {
-      count: category.rows.length,
-      total: category.count,
-      pages: Math.ceil(category.count / sortPaginateOptions.limit),
-      categories: category.rows,
+      count: categories.rows.length,
+      total: categories.count,
+      pages: Math.ceil(categories.count / sortPaginateOptions.limit),
+      categories: categories.rows,
     };
   }
 }

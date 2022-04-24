@@ -17,6 +17,7 @@ class UpdateCategoryController {
     }
 
     const {description, type, color } = request.body;
+    
     // if(user_id && user_id != 1 && user_id != 2){
     //   throw new AppError("'user_id' does not exist", 422);
     // }

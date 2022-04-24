@@ -3,7 +3,6 @@ require("dotenv").config();
 
 const app = require('../../..');
 const { connect, close } = require('../../../database');
-const Category = require('../../../models/Category');
 
 beforeAll(async () => {
   await connect();
@@ -13,8 +12,116 @@ afterAll(async () => {
   await close();
 });
 
-describe("POST /goal test suite", () => {
-  it("should create an A type goal", async () => {
-    expect("A").toEqual("A");
-  })
+describe("GET /category test suite", () => {
+  it("should list the categories", async () => {
+    const response = await supertest(app).get("/api/category/").send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty("count");
+    expect(response.body).toHaveProperty("total");
+    expect(response.body).toHaveProperty("pages");
+    expect(response.body).toHaveProperty("categories");
+    expect(response.body.categories.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("should list the categories with limit", async () => {
+    const response = await supertest(app).get("/api/category/").send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty("count");
+    expect(response.body).toHaveProperty("total");
+    expect(response.body).toHaveProperty("pages");
+    expect(response.body).toHaveProperty("categories");
+    expect(response.body.categories.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("should list the categories with asc order id", async () => {
+    const response = await supertest(app)
+      .get("/api/category?attribute=id&order=ASC")
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty("count");
+    expect(response.body).toHaveProperty("total");
+    expect(response.body).toHaveProperty("pages");
+    expect(response.body).toHaveProperty("categories");
+    expect(response.body.categories[0].id).toEqual(1);
+  });
+
+  it("should list the categories with desc order id", async () => {
+    const response = await supertest(app)
+      .get("/api/category?attribute=id&order=DESC")
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty("count");
+    expect(response.body).toHaveProperty("total");
+    expect(response.body).toHaveProperty("pages");
+    expect(response.body).toHaveProperty("categories");
+    expect(response.body.categories[0].id).not.toEqual(1);
+  });
+
+  it("should list the categories with description search", async () => {
+    const response = await supertest(app)
+      .get("/api/category?description=Bar")
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty("count");
+    expect(response.body).toHaveProperty("total");
+    expect(response.body).toHaveProperty("pages");
+    expect(response.body).toHaveProperty("categories");
+    expect(response.body.categories.length).toBeGreaterThanOrEqual(1);
+  });
+  it("should list the categories with type search", async () => {
+    const response = await supertest(app).get("/api/category?type=IN").send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty("count");
+    expect(response.body).toHaveProperty("total");
+    expect(response.body).toHaveProperty("pages");
+    expect(response.body).toHaveProperty("categories");
+    expect(response.body.categories.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("should list the categories with wallet_id search", async () => {
+    const response = await supertest(app).get("/api/category?wallet_id=1").send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty("count");
+    expect(response.body).toHaveProperty("total");
+    expect(response.body).toHaveProperty("pages");
+    expect(response.body).toHaveProperty("categories");
+    expect(response.body.categories.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("should list the categories between a created_at search", async () => {
+    const response = await supertest(app)
+      .get(
+        "/api/category?created_at_start=2010-01-01 11:50:00&created_at_end=2099-01-01 11:50:00"
+      )
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty("count");
+    expect(response.body).toHaveProperty("total");
+    expect(response.body).toHaveProperty("pages");
+    expect(response.body).toHaveProperty("categories");
+    expect(response.body.categories.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("should list the categories between a updated_at search", async () => {
+    const response = await supertest(app)
+      .get(
+        "/api/category?updated_at_start=2010-01-01 11:50:00&updated_at_end=2099-01-01 11:50:00"
+      )
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toHaveProperty("count");
+    expect(response.body).toHaveProperty("total");
+    expect(response.body).toHaveProperty("pages");
+    expect(response.body).toHaveProperty("categories");
+    expect(response.body.categories.length).toBeGreaterThanOrEqual(1);
+  });
 })
