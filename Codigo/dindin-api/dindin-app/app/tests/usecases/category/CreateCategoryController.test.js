@@ -81,7 +81,7 @@ describe("POST /goal test suite", () => {
       user_id: 1,
       wallet_id: 1,
     });
-    expect(response.statusCode).toEqual(422);
+    expect(response.statusCode).toEqual(500);
   });
 
   it("should not create a new category with invalid type", async () => {
