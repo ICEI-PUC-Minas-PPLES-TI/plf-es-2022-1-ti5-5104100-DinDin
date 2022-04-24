@@ -28,7 +28,7 @@ class ListWalletController {
     }
 
     const listWalletUseCase = new ListWalletUseCase();
-    const wallets = await listWalletUseCase.list(request.query);
+    const wallets = await listWalletUseCase.list(request.query, request.userId);
 
     return response.status(200).json(wallets);
   }

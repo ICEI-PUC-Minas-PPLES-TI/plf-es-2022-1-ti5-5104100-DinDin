@@ -27,17 +27,14 @@ class UpdateWalletController {
     } catch (error) {
       throw new AppError(error.name, 422, error.errors);
     }
-
-
+    
     const { id } = request.params;
     const { description } = request.body;
     const updateWalletUseCase = new UpdateWalletUseCase();
-    console.log('here4')
     const wallet = await updateWalletUseCase.update(
       id,
       description
     );
-    console.log('here5')
 
     return response.status(200).json({
       wallet,

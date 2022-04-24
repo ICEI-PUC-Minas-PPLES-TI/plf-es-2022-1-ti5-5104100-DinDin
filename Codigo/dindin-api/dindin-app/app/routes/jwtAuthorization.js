@@ -3,7 +3,7 @@ const AppError = require("../errors/AppError");
 require("dotenv").config();
 
 const verifyToken = (request, response, next) => {
-  let token = request.headers["Authorization"];
+  let token = request.headers["authorization"];
 
   if (!token) {
     throw new AppError(

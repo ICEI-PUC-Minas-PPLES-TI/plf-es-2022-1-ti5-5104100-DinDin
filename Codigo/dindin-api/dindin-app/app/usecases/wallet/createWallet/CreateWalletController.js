@@ -24,12 +24,14 @@ class CreateWalletController {
     }
 
     const { description, initial_value } = request.body;
+
     
     const createWalletUseCase = new CreateWalletUseCase();
     const wallet = await createWalletUseCase.create(
       description,
       false, // It shouldn't start shared
-      initial_value
+      initial_value,
+      request.userId
     );
 
     return response.status(201).json({

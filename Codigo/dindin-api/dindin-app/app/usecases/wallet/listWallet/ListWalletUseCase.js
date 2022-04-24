@@ -3,9 +3,10 @@ const sequelize = require("sequelize");
 const AppError = require("../../../errors/AppError");
 const Wallet = require("../../../models/Wallet");
 const { SortPaginate } = require("../../../helpers/SortPaginate");
+const UserHasWallet = require("../../../models/UserHasWallet");
 
 class ListWalletUseCase {
-  async list(query) {
+  async list(query, userId) {
 
     let whre = {};
 
@@ -26,7 +27,17 @@ class ListWalletUseCase {
       offset: sortPaginateOptions.offset,
       order: sortPaginateOptions.order,
       paranoid: sortPaginateOptions.paranoid,
+      include: [
+        {
+          model: UserHasWallet,
+          as: 'usuarios',
+          where: {
+            user_id: userId
+          }
+        }
+      ]
     }).catch((error) => {
+      console.log(error)
       throw new AppError("Erro interno do servidor!", 500, error);
     });
 

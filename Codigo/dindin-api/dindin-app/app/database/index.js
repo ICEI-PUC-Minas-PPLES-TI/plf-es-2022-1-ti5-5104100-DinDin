@@ -7,6 +7,7 @@ const dbConfig = require("../config/config.js");
 const Goal = require('../models/Goal.js');
 const User = require("../models/User.js");
 const Wallet = require("../models/Wallet.js");
+const UserHasWallet = require("../models/UserHasWallet.js");
 
 const dbConfigEnviroment = process.env.NODE_ENV === "test" ? dbConfig.test : dbConfig.production;
 const sequelize = new Sequelize(dbConfigEnviroment.database, dbConfigEnviroment.username, dbConfigEnviroment.password, {
@@ -69,9 +70,11 @@ module.exports = {
       User.init(sequelize);
       Goal.init(sequelize);
       Wallet.init(sequelize);
+      UserHasWallet.init(sequelize);
 
       // Configure Associations here
       //Goal.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
+      Wallet.hasMany(UserHasWallet, { as: "usuarios", foreignKey: "wallet_id" });
 
       // await sequelize.sync({ alter: false }); // force: true to drop and re-create
       await sequelize.authenticate();
