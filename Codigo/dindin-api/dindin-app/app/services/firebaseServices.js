@@ -2,14 +2,15 @@
 
 const firebaseAdmin = require("firebase-admin");
 
-const firebaseCredentials = process.env.FIREBASE_CREDENTIALS_OBJ ? 
-    firebaseAdmin.credential.cert(
-        JSON.parse(process.env.FIREBASE_CREDENTIALS_OBJ)
-    ) : undefined ;
+const firebaseCredentials = {
+  projectId: "dindinfinance",
+  clientEmail: "firebase-adminsdk-xmgz0@dindinfinance.iam.gserviceaccount.com",
+  privateKey: process.env.FB_PRIVATE_KEY
+};
 
-const initializeApp = () => firebaseCredentials ? firebaseAdmin.initializeApp({
-    credential: firebaseCredentials
-}) : firebaseAdmin.initializeApp();
+const initializeApp = () => firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.cert(firebaseCredentials),
+});
 
 const getAuth = firebaseAdmin.auth;
 
