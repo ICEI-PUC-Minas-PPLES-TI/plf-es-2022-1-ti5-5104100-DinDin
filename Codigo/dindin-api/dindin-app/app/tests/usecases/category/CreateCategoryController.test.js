@@ -25,7 +25,7 @@ describe("POST /goal test suite", () => {
     expect(response.statusCode).toEqual(201);
     expect(response.body).toHaveProperty("id");
     const createdCategory = await Category.findByPk(parseInt(response.body.id));
-    expect(createdCategory.dataValues.type).toEqual("OUT")
+    expect(createdCategory.dataValues.type).toEqual("IN")
   });
 
   it("should create a new category OUT", async () => {
