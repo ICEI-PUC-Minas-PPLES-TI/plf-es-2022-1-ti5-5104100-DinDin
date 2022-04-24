@@ -53,7 +53,7 @@ jobs:
           echo NODE_PUBLIC_PORT=${{ secrets.NODE_PUBLIC_PORT }} >> .env
           echo NODE_APP_HOST=${{ secrets.NODE_APP_HOST }} >> .env
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
-          echo FB_PRIVATE_KEY="${{ secrets.FB_PRIVATE_KEY }}" >> .env
+          echo FB_PRIVATE_KEY="\"${{ secrets.FB_PRIVATE_KEY }}\"" >> .env
       
       - name: Create docker .env file
         working-directory: ./Codigo/dindin-api/dindin-app
@@ -66,7 +66,7 @@ jobs:
           echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
           echo DB_PORT=${{ secrets.DB_PORT }} >> .env
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
-          echo FB_PRIVATE_KEY="${{ secrets.FB_PRIVATE_KEY }}" >> .env
+          echo FB_PRIVATE_KEY="\"${{ secrets.FB_PRIVATE_KEY }}\"" >> .env
 
       
       - name: Set up MySQL 5.7
