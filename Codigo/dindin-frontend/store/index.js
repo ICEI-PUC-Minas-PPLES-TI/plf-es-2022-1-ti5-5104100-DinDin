@@ -20,25 +20,28 @@ export const mutations = {
 
 export const actions = {
     async nuxtServerInit({ dispatch, commit, getters }, { req, redirect }) {
-        let x = JSON.parse(getCookie('vuex', req.headers.cookie))
+        let x = JSON.parse(getCookie('dindin-cookies', req.headers.cookie))
 
         if (x && req.url != '/login' && req.url != '/register') {
-            if (!x.login.token) {
-                const firebaseUser = getAuth().currentUser;
-                if (firebaseUser) {
-                    const firebaseToken = await firebaseUser.getIdToken()
-                    const res = await axios
-                        .post('/auth/login', { token: firebaseToken })
-                    
-                    await dispatch('login/setToken', res.data.token)
+            if(x.login) {
+                if (!x.login.token) {
+                    const firebaseUser = getAuth().currentUser;
+                    if (firebaseUser) {
+                        const firebaseToken = await firebaseUser.getIdToken()
+                        const res = await axios
+                            .post('/auth/login', { token: firebaseToken })
+                        
+                        await dispatch('login/setToken', res.data.token)
+                    }
+                    else
+                        redirect('/login')
                 }
                 else
-                    redirect('/login')
-            }
-            else
-                await dispatch('login/setToken', x.login.token);
+                    await dispatch('login/setToken', x.login.token);
 
-            axios.defaults.headers.common['x-access-token'] = getters['login/token']
+                axios.defaults.headers.common['x-access-token'] = getters['login/token']
+            } else
+                redirect('/login')
 
         } else if (req.url != '/register')
             redirect('/login')

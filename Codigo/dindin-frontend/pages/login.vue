@@ -7,7 +7,7 @@
             <v-card class="py-0" elevation="0">
               <v-row class="py-4" align="center" justify="center">
                 <v-img max-width="25%" :src="image" alt="dindin"></v-img>
-                <v-text id="title">DinDin</v-text>
+                <h1 id="title">DinDin</h1>
               </v-row>
 
               <v-card-text>

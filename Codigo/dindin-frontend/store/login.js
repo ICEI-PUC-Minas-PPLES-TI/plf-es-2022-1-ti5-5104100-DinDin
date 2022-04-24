@@ -5,6 +5,9 @@ export const state = () => ({
 export const mutations = {
     LOGIN(state, token) {
       state.token = token
+    },
+    LOGOUT(state) {
+      state.token = null
     }
 }
   
@@ -16,7 +19,11 @@ export const actions = {
     },
     setToken({ commit }, token) {
       return commit('LOGIN', token)
-    }
+    },
+    async userLogout({ commit }, { router }) {
+      if (router) await router.push('/login')
+      commit('LOGOUT')
+    },
 }
   
 export const getters = {
