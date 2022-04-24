@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 require("express-async-errors");
 const cors = require("cors");
-const logger = require("morgan");
+const logger = require('morgan');
 
 // Create express instance
 const app = express();
@@ -26,7 +26,7 @@ if (process.env.APP_DEBUG) app.use(logger("dev"));
 app.use("/api", routes);
 
 app.use(function (error, request, response, next) {
-  winstonLogger.error(error);
+  console.log(error);
   if (process.env.APP_DEBUG) {
     return response.status(error.statusCode).json({
       status: "Error",
