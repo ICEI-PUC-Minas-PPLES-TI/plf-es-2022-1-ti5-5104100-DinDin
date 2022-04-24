@@ -26,7 +26,7 @@
                   <thead>
                     <tr>
                       <th class="text-left">Name</th>
-                      <th class="text-left">Options</th>
+                      <th class="text-right">Options</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -35,9 +35,9 @@
                     </tr>
                     <tr v-for="(category, idx) in categories" :key="idx">
                       <td>
-                        {{ category.description }}
+                        <div :style="swatchStyle(category.color)" /> &nbsp; {{ category.description }}
                       </td>
-                      <td>
+                      <td class="text-right">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn
@@ -107,16 +107,28 @@ export default {
       currentPage: 1,
       pages: 1,
       categories: [
-      { id: 1, description: "Trabalho" },
-      { id: 2, description: "Freela" },
-      { id: 3, description: "Progama" },
-      { id: 4, description: "Lazer" },
-    ],
+        { id: 1, description: "Trabalho", color: "#FF0000FF" },
+        { id: 2, description: "Freela", color: "#1976D2FF" },
+        { id: 3, description: "Progama", color: "#17C541FF" },
+        { id: 4, description: "Lazer", color: "#171AC5FF" },
+      ],
       loading: false,
       showModal: false,
       categoryId: 0,
     };
   },
+  //   computed: {
+  //     swatchStyle(color) {
+  //       return {
+  //         backgroundColor: color,
+  //         cursor: "pointer",
+  //         height: "30px",
+  //         width: "30px",
+  //         borderRadius: "4px",
+  //         transition: "border-radius 200ms ease-in-out",
+  //       };
+  //     },
+  //   },
   async fetch() {
     // this.loading = true;
     // await this.$axios
@@ -136,11 +148,14 @@ export default {
     // ];
   },
   methods: {
-    dateFormat(date) {
-      if (date) {
-        const dt = new Date(date);
-        return dt.toLocaleString();
-      } else return null;
+    swatchStyle(color) {
+      return {
+        display: "inline-block",
+        backgroundColor: color,
+        height: "25px",
+        width: "25px",
+        borderRadius: "10px"        
+      };
     },
     changePagination() {
       this.$fetch();

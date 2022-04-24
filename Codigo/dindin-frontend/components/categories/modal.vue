@@ -34,7 +34,7 @@
                 v-model="category.description"
                 hide-details="auto"
                 :clearable="true"
-                label="Description"
+                label="Games"
                 maxlength="40"
               />
             </v-row>
@@ -46,11 +46,42 @@
                 hide-details="auto"
                 outlined
                 :items="[
-                  { text: 'Saving', value: 'A' },
-                  { text: 'Achievement', value: 'B' },
+                  { text: 'IN', value: 'IN' },
+                  { text: 'OUT', value: 'OUT' },
                 ]"
                 label="Games bought"
               />
+            </v-row>
+            <v-row class="mb-0 pb-2">
+              <v-text-field
+                label="Color"
+                prepend-inner-icon="mdi-format-paint"
+                v-model="category.color"
+                v-mask="mask"
+                outlined
+                hide-details
+                class="ma-0 pa-0"                
+              >
+                <template v-slot:append>
+                  <v-menu
+                    v-model="menu"
+                    top
+                    nudge-bottom="110"
+                    nudge-left="-50"
+                    :close-on-content-click="false"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <div :style="swatchStyle" v-on="on" />
+                    </template>
+                    <v-card>
+                      <v-card-text class="pa-0">
+                        <v-color-picker v-model="category.color" flat />
+                      </v-card-text>
+                    </v-card>
+                  </v-menu>
+                </template>
+              </v-text-field>
+              <!-- <v-color-picker v-model="category.color"></v-color-picker> -->
             </v-row>
           </v-form>
         </v-container>
@@ -63,10 +94,14 @@
             >
           </v-col>
           <v-col v-if="categoryId" class="mr-2">
-            <v-btn block color="primary" @click.stop="editCategory()">Edit</v-btn>
+            <v-btn block color="primary" @click.stop="editCategory()"
+              >Edit</v-btn
+            >
           </v-col>
           <v-col v-else class="mr-2">
-            <v-btn block color="primary" @click.stop="saveCategory()">Save</v-btn>
+            <v-btn block color="primary" @click.stop="saveCategory()"
+              >Save</v-btn
+            >
           </v-col>
         </v-row>
       </v-card-actions>
@@ -85,11 +120,12 @@ export default {
     return {
       title: "New Goal",
       category: {
-        id:"",
+        id: "",
         description: "",
+        color: "#FF0000FF",
       },
-      choosenGoal: "",
       menu: false,
+      mask: '!#XXXXXXXX',
       rules: {
         required: (value) => !!value || "Required.",
       },
@@ -105,6 +141,18 @@ export default {
         this.$emit("input", value);
       },
     },
+    swatchStyle() {
+      const menu = this.menu;
+      const color = this.category.color ?? "#FF0000FF";
+      return {
+        backgroundColor: color,
+        cursor: 'pointer',
+        height: '30px',
+        width: '30px',
+        borderRadius: menu ? '50%' : '4px',
+        transition: 'border-radius 200ms ease-in-out'
+      }
+    }
   },
   watch: {
     categoryId: function (modalEdit) {
@@ -114,7 +162,7 @@ export default {
         this.title = "New Category";
         this.cleanForm();
       }
-    }
+    },
   },
   methods: {
     saveCategory() {
@@ -150,7 +198,7 @@ export default {
       this.errors = [];
       if (this.$refs.form.validate()) {
         this.$axios
-          .put("/goal/"+this.goal.id, this.goal)
+          .put("/goal/" + this.goal.id, this.goal)
           .then((res) => {
             Swal.fire({
               title: "Category Edited",
@@ -176,7 +224,7 @@ export default {
       }
     },
     fillForm(data) {
-      this.category.id=data.id;
+      this.category.id = data.id;
       this.category.description = data.description;
     },
     cleanForm() {
