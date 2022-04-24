@@ -18,7 +18,8 @@ var logger = new winston.createLogger({
       json: false,
       datePattern: 'yyyy-MM-DD',
       prepend: true,
-      maxFiles: 10
+      maxFiles: 10,
+      dirname: "./logs"
     }),
     new (winston.transports.DailyRotateFile)({
       name: 'error-file',
@@ -27,7 +28,8 @@ var logger = new winston.createLogger({
       json: false,
       datePattern: 'yyyy-MM-DD',
       prepend: true,
-      maxFiles: 10
+      maxFiles: 10,
+      dirname: "./logs"
     })
   ]
 });
