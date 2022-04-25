@@ -128,4 +128,19 @@ describe("GET /category test suite", () => {
         expect(response.body).toHaveProperty("categories");
         expect(response.body.categories.length).toBeGreaterThanOrEqual(1);
     });
+
+    it("should list the categories with all filters", async () => {
+        const response = await supertest(app)
+            .get(
+                "/api/category?page=1&limit=5&attribute=id&order=DESC&description=culture&type=IN&wallet_id=1&created_at_start=2010-01-01 11:50:00&created_at_end=2099-01-01 11:50:00&updated_at_start=2010-01-01 11:50:00&updated_at_end=2099-01-01 11:50:00"
+            )
+            .send();
+
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toHaveProperty("count");
+        expect(response.body).toHaveProperty("total");
+        expect(response.body).toHaveProperty("pages");
+        expect(response.body).toHaveProperty("categories");
+        expect(response.body.categories.length).toBeGreaterThanOrEqual(1);
+    });
 });

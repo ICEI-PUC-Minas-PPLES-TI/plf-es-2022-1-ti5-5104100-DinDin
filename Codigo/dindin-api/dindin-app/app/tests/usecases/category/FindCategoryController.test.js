@@ -16,11 +16,11 @@ afterAll(async () => {
 describe("GET /category/:id test suite", () => {
     it("should find and return the category", async () => {
         const mockCategory = {
+            user_id: 1,
+            wallet_id: 1,
             description: "teste",
             type: "IN",
             color: "qwe23",
-            user_id: 1,
-            wallet_id: 1,
         };
         const createdCategory = await Category.create(mockCategory);
 
@@ -29,8 +29,11 @@ describe("GET /category/:id test suite", () => {
             .send();
 
         expect(response.statusCode).toEqual(200);
+        expect(response.body.type).toEqual(mockCategory.user_id);
+        expect(response.body.type).toEqual(mockCategory.wallet_id);
         expect(response.body.description).toEqual(mockCategory.description);
         expect(response.body.type).toEqual(mockCategory.type);
+        expect(response.body.description).toEqual(mockCategory.color);
     });
 
     it("should not find a category", async () => {
