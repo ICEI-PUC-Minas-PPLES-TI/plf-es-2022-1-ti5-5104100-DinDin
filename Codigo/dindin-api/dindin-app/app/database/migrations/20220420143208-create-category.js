@@ -1,4 +1,5 @@
 const DataTypes = require("sequelize/lib/data-types");
+
 ("use strict");
 module.exports = {
     async up(queryInterface) {
@@ -6,26 +7,30 @@ module.exports = {
             "category",
             {
                 id: {
-                    type: DataTypes.INTEGER(11).UNSIGNED,
+                    type: DataTypes.BIGINT.UNSIGNED,
                     primaryKey: true,
                     autoIncrement: true,
                     allowNull: false,
                 },
                 wallet_id: {
-                    type: DataTypes.BIGINT(11).UNSIGNED,
-                    allowNull: true, //! to change
-                    // references: {
-                    //   model: Wallet,
-                    //   key: "id"
-                    // }
+                    type: DataTypes.BIGINT.UNSIGNED,
+                    allowNull: true, // ! trocar
+                    // ! references: {
+                    // !     model: {
+                    // !         tableName: "wallet",
+                    // !     },
+                    // !     key: "id",
+                    // ! },
                 },
                 user_id: {
                     type: DataTypes.INTEGER(11).UNSIGNED,
-                    allowNull: true, //! to change
-                    // references: {
-                    //   model: User,
-                    //   key: "id"
-                    // }
+                    allowNull: false,
+                    references: {
+                        model: {
+                            tableName: "user",
+                        },
+                        key: "id",
+                    },
                 },
                 description: {
                     type: DataTypes.STRING(30),
@@ -38,18 +43,19 @@ module.exports = {
                 },
                 color: {
                     type: DataTypes.STRING(6),
+                    allowNull: true,
                 },
                 created_at: {
-                    allowNull: false,
                     type: DataTypes.DATE,
+                    allowNull: false,
                 },
                 updated_at: {
-                    allowNull: false,
                     type: DataTypes.DATE,
+                    allowNull: false,
                 },
                 deleted_at: {
-                    allowNull: true,
                     type: DataTypes.DATE,
+                    allowNull: true,
                     defaultValue: null,
                 },
             },

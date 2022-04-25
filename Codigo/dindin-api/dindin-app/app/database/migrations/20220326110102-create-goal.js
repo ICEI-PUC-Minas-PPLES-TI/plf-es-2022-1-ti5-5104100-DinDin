@@ -7,7 +7,7 @@ module.exports = {
             "goal",
             {
                 id: {
-                    type: DataTypes.INTEGER(11).UNSIGNED,
+                    type: DataTypes.BIGINT.UNSIGNED,
                     primaryKey: true,
                     autoIncrement: true,
                     allowNull: false,
@@ -23,38 +23,40 @@ module.exports = {
                 status: {
                     type: DataTypes.ENUM,
                     values: ["FINISHED", "LOST", "PENDING"],
-                    defaultValue: "PENDING",
                     allowNull: false,
+                    defaultValue: "PENDING",
                 },
                 type: {
                     type: DataTypes.ENUM,
                     values: ["A", "B"],
-                    defaultValue: "A",
                     allowNull: false,
+                    defaultValue: "A",
                 },
                 expire_at: {
-                    allowNull: true,
                     type: DataTypes.DATE,
+                    allowNull: true,
                 },
                 wallet_id: {
-                    type: DataTypes.INTEGER(11).UNSIGNED,
-                    allowNull: true, //trocar depois
-                    // references: {
-                    //   model: Wallet,
-                    //   key: "id"
-                    // }
+                    type: DataTypes.BIGINT.UNSIGNED,
+                    allowNull: true, // ! trocar
+                    // ! references: {
+                    // !     model: {
+                    // !         tableName: "wallet",
+                    // !     },
+                    // !     key: "id",
+                    // ! },
                 },
                 created_at: {
-                    allowNull: false,
                     type: DataTypes.DATE,
+                    allowNull: false,
                 },
                 updated_at: {
-                    allowNull: false,
                     type: DataTypes.DATE,
+                    allowNull: false,
                 },
                 deleted_at: {
-                    allowNull: true,
                     type: DataTypes.DATE,
+                    allowNull: true,
                     defaultValue: null,
                 },
             },
