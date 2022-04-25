@@ -28,7 +28,7 @@ class UpdateCategoryController {
 
         const id = request?.params?.id;
         if (!id || !(id > 0))
-            return new AppError("Please send a valid id on url", 422);
+            throw new AppError("Please send a valid id on url", 422);
 
         const updateCategoryUseCase = new UpdateCategoryUseCase();
 
