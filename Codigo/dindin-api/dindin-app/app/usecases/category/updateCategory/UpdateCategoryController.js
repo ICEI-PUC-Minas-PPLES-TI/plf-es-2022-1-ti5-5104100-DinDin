@@ -6,9 +6,9 @@ const UpdateCategoryUseCase = require("./UpdateCategoryUseCase");
 class UpdateCategoryController {
     async update(request, response) {
         const scheme = yup.object().shape({
-            description: yup.string().max(100),
+            description: yup.string("'description' must be string!").max(30),
             type: yup.mixed().oneOf(["IN", "OUT"]),
-            color: yup.string().min(6).max(6),
+            color: yup.string("'color' must be string!").max(6).min(6),
         });
         try {
             await scheme.validate(request.body, { abortEarly: false });
@@ -31,7 +31,7 @@ class UpdateCategoryController {
             color
         );
 
-        return response.status(201).json(category);
+        return response.status(200).json(category);
     }
 }
 
