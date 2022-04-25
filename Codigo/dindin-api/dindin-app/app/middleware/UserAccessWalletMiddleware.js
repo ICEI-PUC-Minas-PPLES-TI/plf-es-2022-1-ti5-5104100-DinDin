@@ -13,7 +13,7 @@ const verifyWalletPermission = async (request, response, next) => {
     if(user)
       next();
     else
-      throw new AppError('User does not have this wallet permission', 403, error);
+      throw new AppError('User does not have this wallet permission', 403);
 };
 
 const jwtAuthorization = {

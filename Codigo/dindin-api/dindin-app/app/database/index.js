@@ -77,6 +77,7 @@ module.exports = {
       // Configure Associations here
       //Goal.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
       Wallet.hasMany(UserHasWallet, { as: "usuarios", foreignKey: "wallet_id" });
+      User.hasMany(UserHasWallet, { as: "wallets", foreignKey: "user_id" });
 
       // await sequelize.sync({ alter: false }); // force: true to drop and re-create
       await sequelize.authenticate();

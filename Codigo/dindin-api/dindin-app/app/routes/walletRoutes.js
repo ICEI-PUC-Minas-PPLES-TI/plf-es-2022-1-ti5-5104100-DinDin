@@ -11,6 +11,7 @@ const UpdateWalletController = require("../usecases/wallet/updateWallet/UpdateWa
 const DeleteWalletController = require("../usecases/wallet/deleteWallet/DeleteWalletController");
 
 const InviteWalletController = require("../usecases/wallet/inviteWallet/InviteWalletController");
+const ListWalletUsersController = require("../usecases/wallet/listWalletUsers/ListWalletUsersController");
 
 const createWalletController = new CreateWalletController();
 const listWalletController = new ListWalletController();
@@ -18,10 +19,12 @@ const updateWalletController = new UpdateWalletController();
 const deleteWalletController = new DeleteWalletController();
 const findWalletController = new FindWalletController();
 const inviteWalletController = new InviteWalletController();
+const listWalletUsersController = new ListWalletUsersController();
 
 walletRoutes.post('/', [jwtAuthorization.verifyToken], createWalletController.create)
 walletRoutes.get('/', [jwtAuthorization.verifyToken], listWalletController.list)
 walletRoutes.get('/:id', [jwtAuthorization.verifyToken, UserAccessWalletMiddleware.verifyWalletPermission], findWalletController.find)
+walletRoutes.get('/:id/users', [jwtAuthorization.verifyToken, UserAccessWalletMiddleware.verifyWalletPermission], listWalletUsersController.listUsers)
 walletRoutes.put('/:id', [jwtAuthorization.verifyToken, UserAccessWalletMiddleware.verifyWalletPermission], updateWalletController.update)
 walletRoutes.delete('/:id', [jwtAuthorization.verifyToken, UserAccessWalletMiddleware.verifyWalletPermission], deleteWalletController.delete)
 walletRoutes.post('/:id/invite', [jwtAuthorization.verifyToken, UserAccessWalletMiddleware.verifyWalletPermission], inviteWalletController.invite)
