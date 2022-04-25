@@ -1,4 +1,5 @@
 const DeleteGoalUseCase = require("./DeleteGoalUseCase");
+const AppError = require("../../../errors/AppError");
 
 class DeleteGoalController {
     async delete(request, response) {

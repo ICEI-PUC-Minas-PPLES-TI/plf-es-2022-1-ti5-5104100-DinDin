@@ -1,4 +1,5 @@
 const FindUserAccountUseCase = require("./FindUserAccountUseCase");
+const AppError = require("../../../errors/AppError");
 
 class FindUserAccountController {
     async find(request, response) {

@@ -1,5 +1,5 @@
 console.log("init test global-setup");
-const { connect, close, createDatabase } = require("../database/index");
+const { createDatabase } = require("../database/index");
 const migrate = require("../database/migrations/prog");
 const seeder = require("../database/seeders/prog");
 // Create the database

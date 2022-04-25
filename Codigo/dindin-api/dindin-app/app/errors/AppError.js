@@ -1,5 +1,3 @@
-const { ValidationError } = require("yup");
-
 class AppError {
     constructor(message, statusCode = 500, error) {
         if (message == "ValidationError") {

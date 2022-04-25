@@ -1,5 +1,4 @@
 const AppError = require("../../../errors/AppError");
-const Goal = require("../../../models/Goal");
 const FindGoalUseCase = require("../findGoal/FindGoalUseCase");
 
 class UpdateGoalUseCase {

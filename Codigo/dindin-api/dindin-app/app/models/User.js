@@ -21,7 +21,6 @@ class User extends Model {
                     type: DataTypes.STRING(100),
                     notEmpty: true,
                     allowNull: false,
-                    notEmpty: true,
                     validate: {
                         notEmpty: true,
                     },
