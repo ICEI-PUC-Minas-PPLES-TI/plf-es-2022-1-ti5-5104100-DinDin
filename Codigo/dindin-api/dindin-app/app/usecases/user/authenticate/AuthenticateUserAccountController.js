@@ -1,4 +1,3 @@
-
 const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
@@ -35,12 +34,12 @@ class AuthenticateUserAccountController {
       });
     }
     let { email, password, firebaseToken } = request.body;
-    
+
     const authenticateUseCase = new AuthenticateUserAccountUseCase();
     let token;
     if (email && password){
-      const { 
-        jwt, 
+      const {
+        jwt,
         firebaseToken: _firebaseToken
       } = await authenticateUseCase.executeForLocalAuth(
         email,

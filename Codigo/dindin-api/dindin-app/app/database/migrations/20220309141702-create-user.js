@@ -1,8 +1,8 @@
-const DataTypes = require('sequelize/lib/data-types');
+const DataTypes = require("sequelize/lib/data-types");
 
-'use strict';
+("use strict");
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface) {
     await queryInterface.createTable('user',
       {
         id: {
@@ -51,7 +51,7 @@ module.exports = {
       }
     );
   },
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('user');
   }
 };
