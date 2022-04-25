@@ -27,15 +27,25 @@ module.exports = {
     );
 
     let walletUsers = []
+    let walletInvite = []
     for(let i=0; i<data.length;i++) {
       walletUsers.push({
         wallet_id: wallets[0][i].id,
         user_id: users[0][0].id,
         created_at: "2022-03-23 11:30:00"
       })
+
+      walletInvite.push({
+        wallet_id: wallets[0][i].id,
+        user_id: users[0][0].id,
+        created_at: "2022-03-23 11:30:00",
+        expire_at: "2022-03-24 11:30:00",
+        code: (wallets[0][i].id + "12345678").substring(0,8)
+      })
     }
 
     await queryInterface.bulkInsert('user_has_wallet', walletUsers , {});
+    await queryInterface.bulkInsert('wallet_invite', walletInvite , {});
 
   },
 
@@ -47,5 +57,7 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
      await queryInterface.bulkDelete('wallet', null, {});
+     await queryInterface.bulkDelete('user_has_wallet', null, {});
+     await queryInterface.bulkDelete('wallet_invite', null, {});
   }
 };

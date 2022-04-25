@@ -2,7 +2,6 @@ const AppError = require("../errors/AppError");
 const UserHasWallet = require("../models/UserHasWallet");
 
 const verifyWalletPermission = async (request, response, next) => {
-    console.log(request.userId, request.params.id)
     const user = await UserHasWallet.findOne({
         where: {
           user_id: request.userId,
