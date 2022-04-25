@@ -4,6 +4,8 @@
   "description": "Node.js Rest Apis with Express, Sequelize and MySQL for DinDin application.",
   "main": "index.js",
   "scripts": {
+    "lint:check": "npx eslint --ext .js ./",
+    "lint:fix": "npx eslint --fix --ext .js ./",
     "test": "echo \"Jest: running all tests\" && cross-env NODE_ENV=test jest",
     "test:watch": "cross-env NODE_ENV=test jest --watch",
     "preteste": "npm run reset",
@@ -63,8 +65,13 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "eslint": "^8.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-jest": "^26.1.5",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.1",
     "nodemon": "^2.0.15",
+    "prettier": "^2.6.2",
     "sequelize-cli": "^6.4.1",
     "supertest": "^6.2.2"
   },
