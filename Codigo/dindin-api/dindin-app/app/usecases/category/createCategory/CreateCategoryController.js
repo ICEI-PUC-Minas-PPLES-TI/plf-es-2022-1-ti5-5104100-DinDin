@@ -3,14 +3,29 @@ const yup = require("yup");
 const AppError = require("../../../errors/AppError");
 const CreateCategoryUseCase = require("./CreateCategoryUseCase");
 
+const categoryTypes = ["IN", "OUT"];
+
 class CreateCategoryController {
     async create(request, response) {
         const scheme = yup.object().shape({
             wallet_id: yup.number("'wallet_id' must be numeric!").required(),
             user_id: yup.number("'user_id' must be numeric!").required(),
-            description: yup.string().required().max(100),
-            type: yup.mixed().oneOf(["IN", "OUT"]).required(),
-            color: yup.string().required().max(10),
+            description: yup
+                .string("'description' must be string!")
+                .max(100)
+                .required(),
+            type: yup
+                .mixed()
+                .oneOf(
+                    categoryTypes,
+                    `'type' must be one of these: ${categoryTypes}.`
+                )
+                .required(),
+            color: yup
+                .string("'color' must be string!")
+                .max(6)
+                .min(6)
+                .required(),
         });
 
         try {
@@ -22,7 +37,6 @@ class CreateCategoryController {
         const { wallet_id, user_id, description, type, color } = request.body;
 
         const createCategoryUseCase = new CreateCategoryUseCase();
-
         const category = await createCategoryUseCase.create(
             wallet_id,
             user_id,

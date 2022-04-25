@@ -18,4 +18,5 @@ categoryRoutes.get("/:id", findCategoryController.find);
 categoryRoutes.get("/", listCategoryController.list);
 categoryRoutes.put("/:id", updateCategoryController.update);
 categoryRoutes.delete("/:id", deleteCategoryController.delete);
+
 module.exports = categoryRoutes;

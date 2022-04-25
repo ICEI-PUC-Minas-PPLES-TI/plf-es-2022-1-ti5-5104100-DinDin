@@ -18,7 +18,7 @@ describe("POST /goal test suite", () => {
         const response = await supertest(app).post("/api/category").send({
             description: "teste",
             type: "IN",
-            color: "qwe23",
+            color: "FF0000",
             user_id: 1,
             wallet_id: 1,
         });
@@ -34,11 +34,10 @@ describe("POST /goal test suite", () => {
         const response = await supertest(app).post("/api/category").send({
             description: "teste",
             type: "OUT",
-            color: "qwe23",
+            color: "FFF000",
             user_id: 1,
             wallet_id: 1,
         });
-        console.log(response.body);
         expect(response.statusCode).toEqual(201);
         expect(response.body).toHaveProperty("id");
         const createdCategory = await Category.findByPk(
@@ -85,7 +84,7 @@ describe("POST /goal test suite", () => {
             user_id: 1,
             wallet_id: 1,
         });
-        expect(response.statusCode).toEqual(500);
+        expect(response.statusCode).toEqual(422);
     });
 
     it("should not create a new category with invalid type", async () => {
