@@ -12,7 +12,7 @@ class CreateCategoryController {
             user_id: yup.number("'user_id' must be numeric!").required(),
             description: yup
                 .string("'description' must be string!")
-                .max(100)
+                .max(30)
                 .required(),
             type: yup
                 .mixed()
