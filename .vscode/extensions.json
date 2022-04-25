@@ -1,0 +1,15 @@
+{
+	"recommendations": [
+		"dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode",
+		"dart-code.dart-code",
+		"dart-code.flutter",
+		"aaron-bond.better-comments",
+		"mikestead.dotenv",
+		"editorconfig.editorconfig",
+		"firsttris.vscode-jest-runner",
+		"ms-azuretools.vscode-docker",
+		"waderyan.nodejs-extension-pack",
+		"mubaidr.vuejs-extension-pack",
+	]
+}
