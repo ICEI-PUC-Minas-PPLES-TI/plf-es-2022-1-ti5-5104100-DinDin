@@ -87,9 +87,9 @@ module.exports = {
             Goal.init(sequelize);
             Category.init(sequelize);
             // * Configure Associations here
-            //Goal.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
-            Category.belongsTo(User, { as: "User", foreignKey: "user_id" });
-            //Category.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
+            // ! Goal.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
+            Category.belongsTo(User, { as: "user", foreignKey: "user_id" });
+            // ! Category.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
 
             // await sequelize.sync({ alter: false }); // force: true to drop and re-create
             await sequelize.authenticate();

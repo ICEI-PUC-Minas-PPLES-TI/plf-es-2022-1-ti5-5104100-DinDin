@@ -5,12 +5,20 @@ class Goal extends Model {
         super.init(
             {
                 id: {
-                    type: DataTypes.INTEGER(11).UNSIGNED,
+                    type: DataTypes.INTEGER.UNSIGNED,
                     required: true,
                     primaryKey: true,
                     autoIncrement: true,
                     notEmpty: true,
                     allowNull: false,
+                },
+                wallet_id: {
+                    type: DataTypes.INTEGER.UNSIGNED,
+                    allowNull: true, // ! to change
+                    // ! references: {
+                    // !  model: Wallet,
+                    // !  key: "id"
+                    // !}
                 },
                 description: {
                     type: DataTypes.STRING(30),
@@ -29,20 +37,12 @@ class Goal extends Model {
                 type: {
                     type: DataTypes.ENUM,
                     values: ["A", "B"],
-                    defaultValue: "A",
                     allowNull: false,
+                    defaultValue: "A",
                 },
                 expire_at: {
                     allowNull: true,
                     type: DataTypes.DATE,
-                },
-                wallet_id: {
-                    type: DataTypes.INTEGER(11).UNSIGNED,
-                    allowNull: true, // ! trocar depois
-                    // ! references: {
-                    // !  model: Wallet,
-                    // !  key: "id"
-                    // !}
                 },
                 created_at: {
                     type: DataTypes.DATE,

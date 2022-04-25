@@ -1,32 +1,33 @@
-"use strict";
 const { Model, DataTypes } = require("sequelize");
+const User = require("./User");
+
 class Category extends Model {
     static init(sequelize) {
         super.init(
             {
                 id: {
-                    type: DataTypes.INTEGER(11).UNSIGNED,
-                    required: true,
+                    type: DataTypes.BIGINT.UNSIGNED,
                     primaryKey: true,
                     autoIncrement: true,
                     allowNull: false,
+                    required: true,
                     notEmpty: true,
                 },
                 wallet_id: {
-                    type: DataTypes.BIGINT(11).UNSIGNED,
-                    allowNull: true, //! to change
-                    // references: {
-                    //   model: Wallet,
-                    //   key: "id"
-                    // }
+                    type: DataTypes.BIGINT.UNSIGNED,
+                    allowNull: true, // ! to change
+                    // ! references: {
+                    // !   model: Wallet,
+                    // !   key: "id"
+                    // ! }
                 },
                 user_id: {
-                    type: DataTypes.INTEGER(11).UNSIGNED,
-                    allowNull: true, //! to change
-                    // references: {
-                    //   model: User,
-                    //   key: "id"
-                    // }
+                    type: DataTypes.INTEGER.UNSIGNED,
+                    allowNull: false, //! to change
+                    references: {
+                        model: User,
+                        key: "id",
+                    },
                 },
                 description: {
                     type: DataTypes.STRING(30),
@@ -39,6 +40,7 @@ class Category extends Model {
                 },
                 color: {
                     type: DataTypes.STRING(6),
+                    allowNull: true,
                 },
                 created_at: {
                     type: DataTypes.DATE,
