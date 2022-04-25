@@ -11,6 +11,11 @@ module.exports = {
           autoIncrement: true,
           allowNull: false
         },
+        firebase_id: {
+          type: DataTypes.STRING(128),
+          allowNull: true,
+          unique: true,
+        },
         name: {
           type: DataTypes.STRING(100),
           allowNull: false
@@ -22,7 +27,7 @@ module.exports = {
         },
         password: {
           type: DataTypes.STRING(64),
-          allowNull: false,
+          allowNull: true,
           comment: 'Encrypted with 64 digits'
         },
         created_at: {

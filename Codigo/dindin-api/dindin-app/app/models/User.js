@@ -40,12 +40,22 @@ class User extends Model {
         password: {
           field: 'password',
           type: DataTypes.STRING(64),
-          allowNull: false,
           notEmpty: true,
+          allowNull: true,
           validate: {
             notEmpty: true,
           },
           comment: 'Encrypted with 64 digits'
+        },
+        firebaseId: {
+          field: 'firebase_id',
+          type: DataTypes.STRING(128),
+          notEmpty: true,
+          unique: true,
+          allowNull: true,
+          validate: {
+            notEmpty: true,
+          }
         },
         created_at: {
           type: DataTypes.DATE,

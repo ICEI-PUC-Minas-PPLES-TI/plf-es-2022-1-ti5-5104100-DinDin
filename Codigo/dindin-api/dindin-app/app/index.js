@@ -31,15 +31,14 @@ app.use('/api', routes);
 
 app.use(function (error, request, response, next) {
   winstonLogger.error(error);
-  const statusCode = error.statusCode? error.statusCode: 500
   if (process.env.APP_DEBUG) {
-    return response.status(statusCode).json({
+    return response.status(error.statusCode ?? 500).json({
       status: "Error",
       message: error.message,
       error: error
     });
   } else {
-    return response.status(statusCode).json({
+    return response.status(error.statusCode ?? 500).json({
       status: "Error",
       message: error.message,
     });
