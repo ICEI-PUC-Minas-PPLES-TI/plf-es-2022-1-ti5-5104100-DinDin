@@ -53,27 +53,27 @@ describe("DELETE /goal/:id test suite", () => {
             .delete("/api/goal/" + invalidId)
             .send();
 
-        expect(response.statusCode).toEqual(500);
+        expect(response.statusCode).toEqual(404);
 
         invalidId = -1;
         response = await supertest(app)
             .delete("/api/goal/" + invalidId)
             .send();
 
-        expect(response.statusCode).toEqual(500);
+        expect(response.statusCode).toEqual(404);
 
         invalidId = null;
         response = await supertest(app)
             .delete("/api/goal/" + invalidId)
             .send();
 
-        expect(response.statusCode).toEqual(500);
+        expect(response.statusCode).toEqual(404);
 
         invalidId = undefined;
         response = await supertest(app)
             .delete("/api/goal/" + invalidId)
             .send();
 
-        expect(response.statusCode).toEqual(500);
+        expect(response.statusCode).toEqual(404);
     });
 });
