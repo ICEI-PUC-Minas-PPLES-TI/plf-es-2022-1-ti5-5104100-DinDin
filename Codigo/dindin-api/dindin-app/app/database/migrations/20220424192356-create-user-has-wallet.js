@@ -2,7 +2,7 @@ const DataTypes = require('sequelize/lib/data-types');
 
 'use strict';
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface) {
     await queryInterface.createTable('user_has_wallet', {
       user_id: {
         type: DataTypes.INTEGER(11).UNSIGNED,
@@ -22,7 +22,7 @@ module.exports = {
       }
     });
   },
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('user_has_wallet');
   }
 };

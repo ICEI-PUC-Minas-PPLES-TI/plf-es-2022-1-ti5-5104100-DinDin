@@ -3,6 +3,7 @@ const { Op } = require('sequelize')
 const AppError = require("../../../errors/AppError");
 const UserHasWallet = require("../../../models/UserHasWallet");
 const WalletInvite = require("../../../models/WalletInvite");
+const UpdateWalletUseCase = require("../updateWallet/UpdateWalletUseCase");
 
 class InviteWalletUseCase {
 
@@ -57,6 +58,8 @@ class InviteWalletUseCase {
       }).catch((error) => {
         throw new AppError(error.message, 500, error);
       });
+      const updateWalletUseCase = new UpdateWalletUseCase();
+      updateWalletUseCase.update(invite.wallet_id,null,true)
       // Needs to send to others users a notification that a user has joined their wallet
       return userHasWallet;
     }

@@ -3,12 +3,13 @@ const FindWalletUseCase = require("../findWallet/FindWalletUseCase");
 
 
 class UpdateWalletUseCase {
-  async update(id, description) {
+  async update(id, description=null, shared=null) {
     const findWalletUseCase = new FindWalletUseCase();
     const wallet = await findWalletUseCase.find(id);
 
     wallet.update({
-      description
+      description: description? description: wallet.description,
+      shared: shared? shared: wallet.shared
     },
       {
         where: { id: id }

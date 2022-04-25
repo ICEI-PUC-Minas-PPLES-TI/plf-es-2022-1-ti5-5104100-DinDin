@@ -25,7 +25,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/axios.js', ssr: false },
+    { src: '~/plugins/axios.js', ssr: true },
     { src: '~/plugins/localStorage.js', ssr: false },
   ],
 
