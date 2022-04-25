@@ -22,7 +22,7 @@ describe("POST /user test suite", () => {
                 password: "userTestePassword",
             });
         expect(response.statusCode).toEqual(201);
-        expect(response.body).toHaveProperty("user.id");
+        expect(response.body).toHaveProperty("id");
     });
 
     it("should fail to create user as it did not send the name field", async () => {
@@ -134,7 +134,7 @@ describe("POST /user test suite", () => {
             password: "userTestePassword",
         });
         expect(responseOne.statusCode).toEqual(201);
-        expect(responseOne.body).toHaveProperty("user.id");
+        expect(responseOne.body).toHaveProperty("id");
         const responseTwo = await supertest(app).post("/api/user").send({
             name: "User teste",
             email: email,

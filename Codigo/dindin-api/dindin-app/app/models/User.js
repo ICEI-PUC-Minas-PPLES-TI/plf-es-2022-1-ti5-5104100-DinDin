@@ -79,7 +79,7 @@ class User extends Model {
                 },
                 scopes: {
                     withPassword: {
-                        attributes: {},
+                        attributes: { include: ["password"] },
                     },
                     deleted: {
                         where: {

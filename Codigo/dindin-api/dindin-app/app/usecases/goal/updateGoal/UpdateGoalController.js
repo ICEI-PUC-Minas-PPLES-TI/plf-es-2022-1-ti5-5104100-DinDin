@@ -50,9 +50,7 @@ class UpdateGoalController {
             wallet_id
         );
 
-        return response.status(200).json({
-            goal,
-        });
+        return response.status(200).json(goal);
     }
 }
 

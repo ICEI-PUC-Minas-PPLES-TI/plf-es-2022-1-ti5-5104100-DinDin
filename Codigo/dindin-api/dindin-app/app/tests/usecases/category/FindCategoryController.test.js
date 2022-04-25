@@ -20,7 +20,7 @@ describe("GET /category/:id test suite", () => {
             wallet_id: 1,
             description: "teste",
             type: "IN",
-            color: "qwe23",
+            color: "FFF000",
         };
         const createdCategory = await Category.create(mockCategory);
 
@@ -29,11 +29,13 @@ describe("GET /category/:id test suite", () => {
             .send();
 
         expect(response.statusCode).toEqual(200);
-        expect(response.body.type).toEqual(mockCategory.user_id);
-        expect(response.body.type).toEqual(mockCategory.wallet_id);
+        expect(response.body.user_id).toEqual(mockCategory.user_id);
+        expect(response.body.wallet_id.toString()).toEqual(
+            mockCategory.wallet_id.toString()
+        );
         expect(response.body.description).toEqual(mockCategory.description);
         expect(response.body.type).toEqual(mockCategory.type);
-        expect(response.body.description).toEqual(mockCategory.color);
+        expect(response.body.color).toEqual(mockCategory.color);
     });
 
     it("should not find a category", async () => {

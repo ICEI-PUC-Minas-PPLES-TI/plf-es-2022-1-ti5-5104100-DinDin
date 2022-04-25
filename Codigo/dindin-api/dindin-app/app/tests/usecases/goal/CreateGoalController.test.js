@@ -26,10 +26,8 @@ describe("POST /goal test suite", () => {
         const response = await supertest(app).post("/api/goal").send(mockGoal);
 
         expect(response.statusCode).toEqual(201);
-        expect(response.body).toHaveProperty("goal.id");
-        const createdGoal = await Goal.findByPk(
-            parseInt(response.body.goal.id)
-        );
+        expect(response.body).toHaveProperty("id");
+        const createdGoal = await Goal.findByPk(parseInt(response.body.id));
         expect(createdGoal.status).toEqual("PENDING");
         expect(createdGoal.type).toEqual("A");
     });
@@ -47,8 +45,8 @@ describe("POST /goal test suite", () => {
         const response = await supertest(app).post("/api/goal").send(mockGoal);
 
         expect(response.statusCode).toEqual(201);
-        expect(response.body).toHaveProperty("goal.id");
-        const createdGoal = await Goal.findByPk(response.body.goal.id);
+        expect(response.body).toHaveProperty("id");
+        const createdGoal = await Goal.findByPk(response.body.id);
         expect(createdGoal.status).toEqual("PENDING");
         expect(createdGoal.type).toEqual("B");
     });

@@ -24,9 +24,7 @@ class UpdateUserAccountController {
         const updateUserAccountUseCase = new UpdateUserAccountUseCase();
         const user = await updateUserAccountUseCase.update(id, name, password);
 
-        return response.status(200).json({
-            user,
-        });
+        return response.status(200).json(user);
     }
 }
 

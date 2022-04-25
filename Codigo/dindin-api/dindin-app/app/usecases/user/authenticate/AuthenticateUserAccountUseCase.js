@@ -6,7 +6,7 @@ const User = require("../../../models/User");
 
 class AuthenticateUserAccountUseCase {
     async login(email, password) {
-        const user = await User.findOne({
+        const user = await User.scope("withPassword").findOne({
             where: { email },
             attributes: {
                 include: "password",
@@ -19,7 +19,10 @@ class AuthenticateUserAccountUseCase {
                 401
             );
 
-        const arePasswordsEqual = await bcrypt.compare(password, user.password);
+        const arePasswordsEqual = await bcrypt.compare(
+            password,
+            user.dataValues.password
+        );
         if (!arePasswordsEqual) throw new AppError("Senha incorreta!", 401);
 
         // gerar jwt
