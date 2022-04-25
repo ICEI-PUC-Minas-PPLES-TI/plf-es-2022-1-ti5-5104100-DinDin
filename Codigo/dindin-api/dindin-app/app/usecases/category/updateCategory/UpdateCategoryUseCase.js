@@ -3,11 +3,10 @@ const FindCategoryUseCase = require("../findCategory/FindCategoryUseCase");
 
 class UpdateCategoryUseCase {
     async update(id, description, type, color) {
-        //check if category exists...
         const findCategoryUseCase = new FindCategoryUseCase();
         const category = await findCategoryUseCase.find(id);
 
-        category
+        await category
             .update(
                 {
                     description,
@@ -19,7 +18,6 @@ class UpdateCategoryUseCase {
                 }
             )
             .catch((error) => {
-                console.log("\n\n\nbuasdasdasd\n\n\n\n");
                 throw new AppError(error.message, 500, error);
             });
 

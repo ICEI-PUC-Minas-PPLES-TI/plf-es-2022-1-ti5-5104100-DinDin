@@ -9,6 +9,7 @@ class FindCategoryController {
         }
         const findCategoryUseCase = new FindCategoryUseCase();
         const category = await findCategoryUseCase.find(id);
+
         return response.status(200).json(category);
     }
 }

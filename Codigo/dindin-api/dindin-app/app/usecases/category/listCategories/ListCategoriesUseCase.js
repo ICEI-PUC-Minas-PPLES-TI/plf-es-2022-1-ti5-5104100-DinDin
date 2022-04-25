@@ -1,8 +1,8 @@
 const AppError = require("../../../errors/AppError");
 const Category = require("../../../models/Category");
 const sequelize = require("sequelize");
-const { Op } = require("sequelize");
 const { SortPaginate } = require("../../../helpers/SortPaginate");
+const User = require("../../../models/User");
 
 class ListCategoriesUseCase {
     async list(query) {
@@ -15,18 +15,15 @@ class ListCategoriesUseCase {
                 "%" + query.description.toLowerCase() + "%"
             );
         }
+
         if (query.type) {
             whre.type = query.type;
         }
-        if (query.expire_at_start || query.expire_at_end) {
-            const startDate = query.expire_at_start
-                ? new Date(query.expire_at_start)
-                : new Date(null); // * new Date(null) == 1970
-            const endDate = query.expire_at_end
-                ? new Date(query.expire_at_end)
-                : new Date("2999/01/01");
-            whre.expire_at = { [Op.between]: [startDate, endDate] };
+
+        if (query.user_id) {
+            whre.user_id = query.user_id;
         }
+
         if (query.wallet_id) {
             whre.wallet_id = query.wallet_id;
         }
@@ -51,7 +48,16 @@ class ListCategoriesUseCase {
             offset: sortPaginateOptions.offset,
             order: sortPaginateOptions.order,
             paranoid: sortPaginateOptions.paranoid,
-            // ! include: [wallet]
+            include: [
+                {
+                    model: User,
+                    as: "user",
+                },
+                // !   {
+                // !     model: Wallet,
+                // !     as: "wallet",
+                // ! },
+            ],
         }).catch((error) => {
             throw new AppError("Erro interno do servidor!", 500, error);
         });

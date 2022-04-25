@@ -22,13 +22,10 @@ class ListCategoriesController {
             wallet_id: yup.number("'wallet_id' must be numeric!"),
             user_id: yup.number("'user_id' must be numeric!"),
             description: yup.string().max(100),
-            color: yup.string().max(10),
+            color: yup.string().min(6).max(6),
             type: yup
                 .mixed()
                 .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`),
-
-            expire_at_start: yup.date("'expire_at_start' must be date!"),
-            expire_at_end: yup.date("'expire_at_end' must be date!"),
 
             created_at_start: yup.date("'created_at_start' must be date!"),
             created_at_end: yup.date("'created_at_end' must be date!"),

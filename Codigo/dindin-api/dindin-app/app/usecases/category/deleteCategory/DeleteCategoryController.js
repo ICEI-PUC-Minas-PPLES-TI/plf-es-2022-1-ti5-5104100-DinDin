@@ -8,9 +8,11 @@ class DeleteCategoryController {
             throw new AppError("Please send a valid id on url", 422);
 
         const deleteCategoryUseCase = new DeleteCategoryUseCase();
-        await deleteCategoryUseCase.delete(id);
+        const category = await deleteCategoryUseCase.delete(id);
 
-        return response.status(201).json({});
+        return response.status(204).json({
+            category,
+        });
     }
 }
 

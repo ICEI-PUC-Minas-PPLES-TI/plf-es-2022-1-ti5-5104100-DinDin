@@ -28,7 +28,7 @@ describe("DELETE /category:id test suite", () => {
             .delete("/api/category/" + createdCategory.id)
             .send();
 
-        expect(response.statusCode).toEqual(201);
+        expect(response.statusCode).toEqual(204);
 
         const tryToFindCategory = await Category.findByPk(createdCategory.id);
         expect(tryToFindCategory).toBeNull();
