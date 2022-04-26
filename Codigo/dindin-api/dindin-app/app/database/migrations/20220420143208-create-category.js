@@ -4,37 +4,13 @@ const DataTypes = require("sequelize/lib/data-types");
 module.exports = {
     async up(queryInterface) {
         await queryInterface.createTable(
-            "goal",
+            "category",
             {
                 id: {
                     type: DataTypes.BIGINT.UNSIGNED,
                     primaryKey: true,
                     autoIncrement: true,
                     allowNull: false,
-                },
-                description: {
-                    type: DataTypes.STRING(30),
-                    allowNull: false,
-                },
-                value: {
-                    type: DataTypes.DOUBLE,
-                    allowNull: false,
-                },
-                status: {
-                    type: DataTypes.ENUM,
-                    values: ["FINISHED", "LOST", "PENDING"],
-                    allowNull: false,
-                    defaultValue: "PENDING",
-                },
-                type: {
-                    type: DataTypes.ENUM,
-                    values: ["A", "B"],
-                    allowNull: false,
-                    defaultValue: "A",
-                },
-                expire_at: {
-                    type: DataTypes.DATE,
-                    allowNull: true,
                 },
                 wallet_id: {
                     type: DataTypes.BIGINT.UNSIGNED,
@@ -45,6 +21,29 @@ module.exports = {
                     // !     },
                     // !     key: "id",
                     // ! },
+                },
+                user_id: {
+                    type: DataTypes.INTEGER.UNSIGNED,
+                    allowNull: false,
+                    references: {
+                        model: {
+                            tableName: "user",
+                        },
+                        key: "id",
+                    },
+                },
+                description: {
+                    type: DataTypes.STRING(30),
+                    allowNull: false,
+                },
+                type: {
+                    type: DataTypes.ENUM,
+                    values: ["IN", "OUT"],
+                    allowNull: false,
+                },
+                color: {
+                    type: DataTypes.STRING(6),
+                    allowNull: true,
                 },
                 created_at: {
                     type: DataTypes.DATE,
@@ -68,6 +67,6 @@ module.exports = {
         );
     },
     async down(queryInterface) {
-        await queryInterface.dropTable("goal");
+        await queryInterface.dropTable("category");
     },
 };

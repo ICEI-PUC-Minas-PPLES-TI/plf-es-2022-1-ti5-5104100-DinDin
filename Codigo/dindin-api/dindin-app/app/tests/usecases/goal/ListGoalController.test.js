@@ -45,7 +45,7 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("total");
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("goals");
-        expect(response.body.goals[0].id).toEqual(1);
+        expect(response.body.goals[0].id).toEqual("1");
     });
 
     it("should list the goals with desc order id", async () => {

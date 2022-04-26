@@ -3,7 +3,7 @@ require("dotenv").config();
 
 const app = require("../../..");
 const { connect, close } = require("../../../database");
-const Goal = require("../../../models/Goal");
+const Category = require("../../../models/Category");
 
 beforeAll(async () => {
     await connect();
@@ -13,65 +13,64 @@ afterAll(async () => {
     await close();
 });
 
-describe("DELETE /goal/:id test suite", () => {
-    it("should delete a goal", async () => {
-        const mockGoal = {
-            description: "goal to find",
-            status: "PENDING",
-            value: 2000,
-            type: "A",
-            expire_at: "2030-10-10",
+describe("DELETE /category:id test suite", () => {
+    it("should delete a category", async () => {
+        const mockCategory = {
+            description: "teste",
+            type: "IN",
+            color: "qwe23",
+            user_id: 1,
             wallet_id: 1,
         };
-        const createdGoal = await Goal.create(mockGoal);
+        const createdCategory = await Category.create(mockCategory);
 
         const response = await supertest(app)
-            .delete("/api/goal/" + createdGoal.id)
+            .delete("/api/category/" + createdCategory.id)
             .send();
 
         expect(response.statusCode).toEqual(204);
 
-        const tryToFindGoal = await Goal.findByPk(createdGoal.id);
-        expect(tryToFindGoal).toBeNull();
+        const tryToFindCategory = await Category.findByPk(createdCategory.id);
+        expect(tryToFindCategory).toBeNull();
     });
 
-    it("should not find a non-existent goal when trying to delete it", async () => {
+    it("should not find a non-existent category when trying to delete it", async () => {
         const nonExistentId = 987654321;
         const response = await supertest(app)
-            .delete("/api/goal/" + nonExistentId)
+            .delete("/api/category/" + nonExistentId)
             .send();
 
         expect(response.statusCode).toEqual(404);
 
-        const tryToFindGoal = await Goal.findByPk(nonExistentId);
-        expect(tryToFindGoal).toBeNull();
+        const tryToFindCategory = await Category.findByPk(nonExistentId);
+        expect(tryToFindCategory).toBeNull();
     });
 
-    it("should fail when trying to delete goal with invalid id", async () => {
+    it("should fail when trying to delete Category with invalid id", async () => {
         let invalidId = 0;
         let response = await supertest(app)
-            .delete("/api/goal/" + invalidId)
+            .delete("/api/category/" + invalidId)
             .send();
 
         expect(response.statusCode).toEqual(422);
 
         invalidId = -1;
         response = await supertest(app)
-            .delete("/api/goal/" + invalidId)
+            .delete("/api/category/" + invalidId)
             .send();
 
         expect(response.statusCode).toEqual(422);
 
         invalidId = null;
         response = await supertest(app)
-            .delete("/api/goal/" + invalidId)
+            .delete("/api/category/" + invalidId)
             .send();
 
         expect(response.statusCode).toEqual(422);
 
         invalidId = undefined;
         response = await supertest(app)
-            .delete("/api/goal/" + invalidId)
+            .delete("/api/category/" + invalidId)
             .send();
 
         expect(response.statusCode).toEqual(422);

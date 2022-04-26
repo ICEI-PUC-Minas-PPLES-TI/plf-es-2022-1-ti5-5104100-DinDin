@@ -7,7 +7,7 @@ module.exports = {
             "user",
             {
                 id: {
-                    type: DataTypes.INTEGER(11).UNSIGNED,
+                    type: DataTypes.INTEGER.UNSIGNED,
                     primaryKey: true,
                     autoIncrement: true,
                     allowNull: false,

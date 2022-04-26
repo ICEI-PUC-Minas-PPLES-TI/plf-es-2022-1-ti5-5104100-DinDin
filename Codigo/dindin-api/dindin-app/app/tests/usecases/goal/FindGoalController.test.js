@@ -50,24 +50,24 @@ describe("GET /goal/:id test suite", () => {
         let response = await supertest(app)
             .get("/api/goal/" + invalidId)
             .send();
-        expect(response.statusCode).toEqual(404);
+        expect(response.statusCode).toEqual(422);
 
         invalidId = -1;
         response = await supertest(app)
             .get("/api/goal/" + invalidId)
             .send();
-        expect(response.statusCode).toEqual(404);
+        expect(response.statusCode).toEqual(422);
 
         invalidId = null;
         response = await supertest(app)
             .get("/api/goal/" + invalidId)
             .send();
-        expect(response.statusCode).toEqual(404);
+        expect(response.statusCode).toEqual(422);
 
         invalidId = undefined;
         response = await supertest(app)
             .get("/api/goal/" + invalidId)
             .send();
-        expect(response.statusCode).toEqual(404);
+        expect(response.statusCode).toEqual(422);
     });
 });
