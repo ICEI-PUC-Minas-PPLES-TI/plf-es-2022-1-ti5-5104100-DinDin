@@ -1,0 +1,27 @@
+name: Eslint API
+
+on:
+  pull_request:
+    branches: [master]
+    paths: 
+    - 'Codigo/dindin-api/**'
+
+jobs:
+  eslint:
+    name: Eslint API CI | OS ${{ matrix.os }} - Node Version ${{ matrix.node-version }} - MySQL 5.7
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04]
+        node-version: [14.x, 16.x]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: reviewdog/action-eslint@v1
+        with:
+          tool_name: eslint-github-pr-review
+          workdir: ./Codigo/dindin-api/dindin-app
+          reporter: github-pr-review
+          level: error
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+

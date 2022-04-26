@@ -4,16 +4,19 @@
   "description": "Node.js Rest Apis with Express, Sequelize and MySQL for DinDin application.",
   "main": "index.js",
   "scripts": {
+    "lint:check": "npx eslint --ext .js ./",
+    "lint:fix": "npx eslint --fix --ext .js ./",
     "test": "echo \"Jest: running all tests\" && cross-env NODE_ENV=test jest",
-    "test:watch": "jest --watch",
+    "test:watch": "cross-env NODE_ENV=test jest --watch",
     "preteste": "npm run reset",
+    "createDatabase": "node ./app/database/createDatabase.js",
     "undomigrations": "npx sequelize-cli db:migrate:undo:all --env 'production'",
     "migrations": "npx sequelize-cli db:migrate --env 'production'",
     "seeds": "npx sequelize-cli db:seed:all --env 'production'",
-    "reset": "echo \"Reseting database\" && npm run undomigrations && npm run migrations && npm run seeds",
-    "start": "echo \"----------------> Starting the DinDin API WITH auto-reloading <----------------\" && cross-env NODE_ENV=dev nodemon -L index.js",
-    "start:reset": "echo \"----------------> Starting the DinDin API WITH auto-reloading <----------------\" && cross-env NODE_ENV=dev npm run reset && nodemon -L index.js",
-    "start:prod": "echo \"----------------> Starting the DinDin API WITHOUT auto-reloading <----------------\" && cross-env NODE_ENV=prod node index.js"
+    "reset": "echo \"Reseting database\" && npm run createDatabase && npm run undomigrations && npm run migrations && npm run seeds",
+    "start": " cross-env NODE_ENV=dev nodemon -L index.js",
+    "start:reset": "cross-env NODE_ENV=dev npm run reset && nodemon -L index.js",
+    "start:prod": "cross-env NODE_ENV=prod node index.js"
   },
   "jest": {
     "testEnvironment": "node",
@@ -62,8 +65,13 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "eslint": "^8.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-jest": "^26.1.5",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.1",
     "nodemon": "^2.0.15",
+    "prettier": "^2.6.2",
     "sequelize-cli": "^6.4.1",
     "supertest": "^6.2.2"
   },
