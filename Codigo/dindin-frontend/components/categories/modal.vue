@@ -41,48 +41,44 @@
             <v-row class="mb-0 pb-2">
               <v-col cols="12" class="py-2">
                 <p>Type</p>
-                <v-btn-toggle
-                  v-model="category.type"
-                  tile
-                  color="deep-purple accent-3"
-                  group
-                >
+                <v-btn-toggle v-model="category.type" outlined mandatory>
                   <v-btn value="IN"> Incoming </v-btn>
                   <v-btn value="OUT"> Outcome </v-btn>
-
                 </v-btn-toggle>
               </v-col>
             </v-row>
             <v-row class="mb-0 pb-2">
-              <v-text-field
+              <v-combobox
+                :rules="[rules.required]"
+                v-model="category.color.name"
+                :filter="filter"
+                :hide-no-data="!search"
+                :items="colors"
+                :search-input.sync="search"
                 label="Color"
-                prepend-inner-icon="mdi-format-paint"
-                v-model="category.color"
-                v-mask="mask"
                 outlined
-                hide-details
-                class="ma-0 pa-0"
               >
-                <template v-slot:append>
-                  <v-menu
-                    v-model="menu"
-                    top
-                    nudge-bottom="110"
-                    nudge-left="-50"
-                    :close-on-content-click="false"
+                <template v-slot:selection="{ attrs, item, selected }">
+                  <v-chip
+                    v-if="item === Object(item)"
+                    v-bind="attrs"
+                    :color="`${item.hex}`"
+                    :input-value="selected"
+                    label
+                    small
                   >
-                    <template v-slot:activator="{ on }">
-                      <div :style="swatchStyle" v-on="on" />
-                    </template>
-                    <v-card>
-                      <v-card-text class="pa-0">
-                        <v-color-picker v-model="category.color" flat />
-                      </v-card-text>
-                    </v-card>
-                  </v-menu>
+                  </v-chip>
+                  <span class="pr-2">
+                    {{ item.text }}
+                  </span>
                 </template>
-              </v-text-field>
-              <!-- <v-color-picker v-model="category.color"></v-color-picker> -->
+                <template v-slot:item="{ item }">
+                  <v-chip :color="`${item.hex}`" dark label small> </v-chip>
+                  <span class="pl-2">
+                    {{ item.text }}
+                  </span>
+                </template>
+              </v-combobox>
             </v-row>
           </v-form>
         </v-container>
@@ -119,11 +115,15 @@ export default {
   },
   data() {
     return {
-      title: "New Goal",
+      title: "New Category",
       category: {
         id: "",
         description: "",
-        color: "#FF0000FF",
+        color: {
+          name: "",
+          hex: "",
+        },
+        type: "",
       },
       menu: false,
       mask: "!#XXXXXXXX",
@@ -131,6 +131,43 @@ export default {
         required: (value) => !!value || "Required.",
       },
       errors: [],
+
+      activator: null,
+      attach: null,
+      colors: [
+        {
+          text: "Red",
+          hex: "#EB5A46",
+        },
+        {
+          text: "Orange",
+          hex: "#FF9F1A",
+        },
+        {
+          text: "Blue",
+          hex: "#0079bf",
+        },
+        {
+          text: "Green",
+          hex: "#61bd4f",
+        },
+        {
+          text: "Purple",
+          hex: "#c377e0",
+        },
+        {
+          text: "Yellow",
+          hex: "#f2d600",
+        },
+        {
+          text: "Dark Blue",
+          hex: "#344563",
+        },
+        {
+          text: "Pink",
+          hex: "#ff78cb",
+        },
+      ],
     };
   },
   computed: {
@@ -144,7 +181,7 @@ export default {
     },
     swatchStyle() {
       const menu = this.menu;
-      const color = this.category.color ?? "#FF0000FF";
+      const color = this.category.color.hex ?? "#FF0000FF";
       return {
         backgroundColor: color,
         cursor: "pointer",
@@ -156,9 +193,10 @@ export default {
     },
   },
   watch: {
-    categoryId: function (modalEdit) {
-      if (modalEdit) {
+    categoryId: function (id) {
+      if (id) {
         this.title = "Edit Category";
+        this.getCategory(id);
       } else {
         this.title = "New Category";
         this.cleanForm();
@@ -224,12 +262,39 @@ export default {
         this.errors = ["Fields have invalid input"];
       }
     },
+    getCategory(id) {
+      this.$axios
+        .get("/category/" + id)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          this.erroLogin = err.response.data.message;
+          if (err.response.status == 500) {
+            this.erroLogin = "Erro interno do servidor";
+          }
+        });
+    },
     fillForm(data) {
       this.category.id = data.id;
       this.category.description = data.description;
     },
     cleanForm() {
       this.$refs.form.reset();
+    },
+
+    filter(item, queryText, itemText) {
+      if (item.header) return false;
+
+      const hasValue = (val) => (val != null ? val : "");
+
+      const text = hasValue(itemText);
+      const query = hasValue(queryText);
+
+      return (
+        text.toString().toLowerCase().indexOf(query.toString().toLowerCase()) >
+        -1
+      );
     },
   },
 };
