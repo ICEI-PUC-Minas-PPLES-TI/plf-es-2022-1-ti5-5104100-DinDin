@@ -35,7 +35,8 @@
                     </tr>
                     <tr v-for="(category, idx) in categories" :key="idx">
                       <td>
-                        <div :style="swatchStyle(category.color)" /> &nbsp; {{ category.description }}
+                        <div :style="swatchStyle('#' + category.color)" />
+                        &nbsp; {{ category.description }}
                       </td>
                       <td class="text-right">
                         <v-tooltip top>
@@ -60,7 +61,7 @@
                               color="error"
                               v-bind="attrs"
                               v-on="on"
-                              @click="removeCategory(categorie)"
+                              @click="removeCategory(category.id)"
                             >
                               <i class="fa-solid fa-trash"></i>
                             </v-btn>
@@ -106,46 +107,24 @@ export default {
     return {
       currentPage: 1,
       pages: 1,
-      categories: [
-        { id: 1, description: "Trabalho", color: "#FF0000FF" },
-        { id: 2, description: "Freela", color: "#1976D2FF" },
-        { id: 3, description: "Progama", color: "#17C541FF" },
-        { id: 4, description: "Lazer", color: "#171AC5FF" },
-      ],
+      categories: [],
       loading: false,
       showModal: false,
       categoryId: 0,
     };
   },
-  //   computed: {
-  //     swatchStyle(color) {
-  //       return {
-  //         backgroundColor: color,
-  //         cursor: "pointer",
-  //         height: "30px",
-  //         width: "30px",
-  //         borderRadius: "4px",
-  //         transition: "border-radius 200ms ease-in-out",
-  //       };
-  //     },
-  //   },
+
   async fetch() {
-    // this.loading = true;
-    // await this.$axios
-    //   .$get(`/goal?page=${this.currentPage}`)
-    //   .then((res) => {
-    //     this.pages = res.pages;
-    //     this.categories = res.categories;
-    //   })
-    //   .finally(() => {
-    //     this.loading = false;
-    //   });
-    // this.categories = [
-    //   { id: 1, description: Trabalho },
-    //   { id: 2, description: Freela },
-    //   { id: 3, description: Progama },
-    //   { id: 4, description: Lazer },
-    // ];
+    this.loading = true;
+    await this.$axios
+      .$get(`/category?page=${this.currentPage}`)
+      .then((res) => {
+        this.pages = res.pages;
+        this.categories = res.categories;
+      })
+      .finally(() => {
+        this.loading = false;
+      });
   },
   methods: {
     swatchStyle(color) {
@@ -154,13 +133,13 @@ export default {
         backgroundColor: color,
         height: "25px",
         width: "25px",
-        borderRadius: "10px"        
+        borderRadius: "10px",
       };
     },
     changePagination() {
       this.$fetch();
     },
-    removeCategory(goal) {
+    removeCategory(id) {
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -171,25 +150,25 @@ export default {
         confirmButtonText: "Yes, I want to delete!",
       }).then((result) => {
         if (result.isConfirmed) {
-          //this.$axios.delete("/goal/" + goal.id).then((res) => {
-          Swal.fire({
-            title: "Deleted!",
-            text: "The goal has been deleted.",
-            icon: "info",
-            showConfirmButton: false,
-            toast: true,
-            position: "top-end",
-            timer: 3000,
-            timerProgressBar: true,
+          this.$axios.delete("/category/" + id).then((res) => {
+            Swal.fire({
+              title: "Deleted!",
+              text: "The category has been deleted.",
+              icon: "info",
+              showConfirmButton: false,
+              toast: true,
+              position: "top-end",
+              timer: 3000,
+              timerProgressBar: true,
+            });
+            this.$fetch();
           });
-          // });
         }
-        this.$fetch();
       });
     },
     showModalCategory(id) {
       this.showModal = true;
-      this.categoryId = id;
+      this.categoryId = parseInt(id);
     },
   },
 };

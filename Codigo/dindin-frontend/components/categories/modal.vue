@@ -50,12 +50,12 @@
             <v-row class="mb-0 pb-2">
               <v-combobox
                 :rules="[rules.required]"
-                v-model="category.color.name"
+                v-model="category.color"
                 :filter="filter"
-                :hide-no-data="!search"
                 :items="colors"
-                :search-input.sync="search"
                 label="Color"
+                item-text="text"
+                item-value="hex"
                 outlined
               >
                 <template v-slot:selection="{ attrs, item, selected }">
@@ -90,7 +90,7 @@
               >Cancel</v-btn
             >
           </v-col>
-          <v-col v-if="categoryId" class="mr-2">
+          <v-col v-if="category.id" class="mr-2">
             <v-btn block color="primary" @click.stop="editCategory()"
               >Edit</v-btn
             >
@@ -119,14 +119,15 @@ export default {
       category: {
         id: "",
         description: "",
-        color: {
-          name: "",
-          hex: "",
-        },
         type: "",
+        color: {
+          hex: "",
+          text: "",
+        },
+        wallet_id: "",
+        user_id: "",
       },
       menu: false,
-      mask: "!#XXXXXXXX",
       rules: {
         required: (value) => !!value || "Required.",
       },
@@ -207,8 +208,16 @@ export default {
     saveCategory() {
       this.errors = [];
       if (this.$refs.form.validate()) {
+        const category = {
+          description: this.category.description,
+          type: this.category.type,
+          color: this.category.color.hex.replace("#", ""),
+          wallet_id: 1,
+          user_id: 1,
+        };
+
         this.$axios
-          .post("/goal", this.goal)
+          .post("/category", category)
           .then((res) => {
             Swal.fire({
               title: "Category Created",
@@ -221,7 +230,7 @@ export default {
             });
             this.$refs.form.reset();
             this.$emit("input", false);
-            this.$emit("created", this.goal);
+            this.$emit("created");
           })
           .catch((err) => {
             this.erroLogin = err.response.data.message;
@@ -236,8 +245,16 @@ export default {
     editCategory() {
       this.errors = [];
       if (this.$refs.form.validate()) {
+        const category = {
+          description: this.category.description,
+          type: this.category.type,
+          color: this.category.color.hex.replace("#", ""),
+          wallet_id: 1,
+          user_id: 1,
+        };
+
         this.$axios
-          .put("/goal/" + this.goal.id, this.goal)
+          .put("/category/" + this.category.id, category)
           .then((res) => {
             Swal.fire({
               title: "Category Edited",
@@ -250,7 +267,7 @@ export default {
             });
             this.$refs.form.reset();
             this.$emit("input", false);
-            this.$emit("created", this.goal);
+            this.$emit("created");
           })
           .catch((err) => {
             this.erroLogin = err.response.data.message;
@@ -266,7 +283,22 @@ export default {
       this.$axios
         .get("/category/" + id)
         .then((res) => {
-          console.log(res);
+          let data = res.data;
+          console.log(data);
+          this.category.id = id;
+          this.category.description = data.description;
+          this.category.type = data.type;
+          //this.category.user_id = data.user_id;
+          this.category.wallet_id = data.wallet_id;
+          this.category.color.hex = "#" + data.color;
+          let color = this.colors.filter(function (val) {
+            return val.hex == ("#"+data.color).replace(" ", "");
+          });
+          if (color && color[0]?.text) {
+            this.category.color.text = color[0].text;
+          } else {
+            this.category.color.text = "";
+          }
         })
         .catch((err) => {
           this.erroLogin = err.response.data.message;
@@ -280,9 +312,32 @@ export default {
       this.category.description = data.description;
     },
     cleanForm() {
+      this.category = {
+        id: "",
+        description: "",
+        type: "",
+        color: {
+          hex: "",
+          text: "",
+        },
+        wallet_id: "",
+        user_id: "",
+      };
       this.$refs.form.reset();
     },
-
+    getNameByHex(hex) {
+      console.log(hex);
+      let index = this.colors.indexOf((val) => {
+        return val.hex == "#344563";
+      });
+      console.log(index);
+      if (index == -1) {
+        this.colors.push({ text: "Personalized", hex: hex });
+      } else {
+        return this.colors[index].text;
+      }
+      return "Personalized";
+    },
     filter(item, queryText, itemText) {
       if (item.header) return false;
 
