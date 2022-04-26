@@ -39,18 +39,19 @@
               />
             </v-row>
             <v-row class="mb-0 pb-2">
-              <v-select
-                :rules="[rules.required]"
-                prepend-inner-icon="mdi-bullseye"
-                v-model="category.type"
-                hide-details="auto"
-                outlined
-                :items="[
-                  { text: 'IN', value: 'IN' },
-                  { text: 'OUT', value: 'OUT' },
-                ]"
-                label="Games bought"
-              />
+              <v-col cols="12" class="py-2">
+                <p>Type</p>
+                <v-btn-toggle
+                  v-model="category.type"
+                  tile
+                  color="deep-purple accent-3"
+                  group
+                >
+                  <v-btn value="IN"> Incoming </v-btn>
+                  <v-btn value="OUT"> Outcome </v-btn>
+
+                </v-btn-toggle>
+              </v-col>
             </v-row>
             <v-row class="mb-0 pb-2">
               <v-text-field
@@ -60,7 +61,7 @@
                 v-mask="mask"
                 outlined
                 hide-details
-                class="ma-0 pa-0"                
+                class="ma-0 pa-0"
               >
                 <template v-slot:append>
                   <v-menu
@@ -125,7 +126,7 @@ export default {
         color: "#FF0000FF",
       },
       menu: false,
-      mask: '!#XXXXXXXX',
+      mask: "!#XXXXXXXX",
       rules: {
         required: (value) => !!value || "Required.",
       },
@@ -146,13 +147,13 @@ export default {
       const color = this.category.color ?? "#FF0000FF";
       return {
         backgroundColor: color,
-        cursor: 'pointer',
-        height: '30px',
-        width: '30px',
-        borderRadius: menu ? '50%' : '4px',
-        transition: 'border-radius 200ms ease-in-out'
-      }
-    }
+        cursor: "pointer",
+        height: "30px",
+        width: "30px",
+        borderRadius: menu ? "50%" : "4px",
+        transition: "border-radius 200ms ease-in-out",
+      };
+    },
   },
   watch: {
     categoryId: function (modalEdit) {
