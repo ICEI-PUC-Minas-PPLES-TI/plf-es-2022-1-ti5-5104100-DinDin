@@ -38,7 +38,7 @@ class UpdateGoalController {
 
         const id = request?.params?.id;
         if (!id || !(id > 0))
-            throw new AppError("Please send a valid id on url", 404);
+            throw new AppError("Please send a valid id on url", 422);
 
         const updateGoalUseCase = new UpdateGoalUseCase();
         const goal = await updateGoalUseCase.update(
@@ -50,9 +50,7 @@ class UpdateGoalController {
             wallet_id
         );
 
-        return response.status(200).json({
-            goal,
-        });
+        return response.status(200).json(goal);
     }
 }
 

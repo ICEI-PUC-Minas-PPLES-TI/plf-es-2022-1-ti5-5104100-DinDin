@@ -6,6 +6,7 @@ const { Sequelize } = require("sequelize");
 const dbConfig = require("../config/config.js");
 const Goal = require("../models/Goal.js");
 const User = require("../models/User.js");
+const Category = require("../models/Category.js");
 
 const dbConfigEnviroment =
     process.env.NODE_ENV === "test" ? dbConfig.test : dbConfig.production;
@@ -81,12 +82,14 @@ module.exports = {
 
     async connect() {
         try {
-            // Start Models here
+            // * Start Models here
             User.init(sequelize);
             Goal.init(sequelize);
-
-            // Configure Associations here
-            //Goal.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
+            Category.init(sequelize);
+            // * Configure Associations here
+            // ! Goal.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
+            Category.belongsTo(User, { as: "user", foreignKey: "user_id" });
+            // ! Category.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
 
             // await sequelize.sync({ alter: false }); // force: true to drop and re-create
             await sequelize.authenticate();

@@ -35,11 +35,11 @@ describe("PUT /goal test suite", () => {
             .send(mockGoal);
 
         expect(response.statusCode).toEqual(200);
-        expect(response.body.goal.description).toEqual(mockGoal.description);
-        expect(response.body.goal.value).toEqual(mockGoal.value);
-        expect(response.body.goal.type).toEqual(mockGoal.type);
-        expect(response.body.goal.expire_at).toEqual(mockGoal.expire_at);
-        expect(response.body.goal.wallet_id).toEqual(mockGoal.wallet_id);
+        expect(response.body.description).toEqual(mockGoal.description);
+        expect(response.body.value).toEqual(mockGoal.value);
+        expect(response.body.type).toEqual(mockGoal.type);
+        expect(response.body.expire_at).toEqual(mockGoal.expire_at);
+        expect(response.body.wallet_id).toEqual(mockGoal.wallet_id);
     });
 
     it("should not update a goal's status", async () => {
@@ -60,7 +60,7 @@ describe("PUT /goal test suite", () => {
             .send(mockGoal);
 
         expect(response.statusCode).toEqual(200);
-        expect(response.body.goal.status).not.toEqual(mockGoal.status);
+        expect(response.body.status).not.toEqual(mockGoal.status);
     });
 
     it("should update only description", async () => {
@@ -80,11 +80,11 @@ describe("PUT /goal test suite", () => {
             .send(mockGoal);
 
         expect(response.statusCode).toEqual(200);
-        expect(response.body.goal.description).toEqual(mockGoal.description);
-        expect(response.body.goal.value).toEqual(mockGoal.value);
-        expect(response.body.goal.type).toEqual(mockGoal.type);
-        expect(response.body.goal.expire_at).toEqual(mockGoal.expire_at);
-        expect(response.body.goal.wallet_id).toEqual(mockGoal.wallet_id);
+        expect(response.body.description).toEqual(mockGoal.description);
+        expect(response.body.value).toEqual(mockGoal.value);
+        expect(response.body.type).toEqual(mockGoal.type);
+        expect(response.body.expire_at).toEqual(mockGoal.expire_at);
+        expect(response.body.wallet_id).toEqual(mockGoal.wallet_id);
     });
 
     it("should update only value", async () => {
@@ -104,11 +104,11 @@ describe("PUT /goal test suite", () => {
             .send(mockGoal);
 
         expect(response.statusCode).toEqual(200);
-        expect(response.body.goal.description).toEqual(mockGoal.description);
-        expect(response.body.goal.value).toEqual(mockGoal.value);
-        expect(response.body.goal.type).toEqual(mockGoal.type);
-        expect(response.body.goal.expire_at).toEqual(mockGoal.expire_at);
-        expect(response.body.goal.wallet_id).toEqual(mockGoal.wallet_id);
+        expect(response.body.description).toEqual(mockGoal.description);
+        expect(response.body.value).toEqual(mockGoal.value);
+        expect(response.body.type).toEqual(mockGoal.type);
+        expect(response.body.expire_at).toEqual(mockGoal.expire_at);
+        expect(response.body.wallet_id).toEqual(mockGoal.wallet_id);
     });
 
     it("should update only type", async () => {
@@ -128,11 +128,11 @@ describe("PUT /goal test suite", () => {
             .send(mockGoal);
 
         expect(response.statusCode).toEqual(200);
-        expect(response.body.goal.description).toEqual(mockGoal.description);
-        expect(response.body.goal.value).toEqual(mockGoal.value);
-        expect(response.body.goal.type).toEqual(mockGoal.type);
-        expect(response.body.goal.expire_at).toEqual(mockGoal.expire_at);
-        expect(response.body.goal.wallet_id).toEqual(mockGoal.wallet_id);
+        expect(response.body.description).toEqual(mockGoal.description);
+        expect(response.body.value).toEqual(mockGoal.value);
+        expect(response.body.type).toEqual(mockGoal.type);
+        expect(response.body.expire_at).toEqual(mockGoal.expire_at);
+        expect(response.body.wallet_id).toEqual(mockGoal.wallet_id);
     });
 
     it("should update only expire_at", async () => {
@@ -152,11 +152,11 @@ describe("PUT /goal test suite", () => {
             .send(mockGoal);
 
         expect(response.statusCode).toEqual(200);
-        expect(response.body.goal.description).toEqual(mockGoal.description);
-        expect(response.body.goal.value).toEqual(mockGoal.value);
-        expect(response.body.goal.type).toEqual(mockGoal.type);
-        expect(response.body.goal.expire_at).toEqual(mockGoal.expire_at);
-        expect(response.body.goal.wallet_id).toEqual(mockGoal.wallet_id);
+        expect(response.body.description).toEqual(mockGoal.description);
+        expect(response.body.value).toEqual(mockGoal.value);
+        expect(response.body.type).toEqual(mockGoal.type);
+        expect(response.body.expire_at).toEqual(mockGoal.expire_at);
+        expect(response.body.wallet_id).toEqual(mockGoal.wallet_id);
     });
 
     it("should update only wallet_id", async () => {
@@ -176,11 +176,11 @@ describe("PUT /goal test suite", () => {
             .send(mockGoal);
 
         expect(response.statusCode).toEqual(200);
-        expect(response.body.goal.description).toEqual(mockGoal.description);
-        expect(response.body.goal.value).toEqual(mockGoal.value);
-        expect(response.body.goal.type).toEqual(mockGoal.type);
-        expect(response.body.goal.expire_at).toEqual(mockGoal.expire_at);
-        expect(response.body.goal.wallet_id).toEqual(mockGoal.wallet_id);
+        expect(response.body.description).toEqual(mockGoal.description);
+        expect(response.body.value).toEqual(mockGoal.value);
+        expect(response.body.type).toEqual(mockGoal.type);
+        expect(response.body.expire_at).toEqual(mockGoal.expire_at);
+        expect(response.body.wallet_id).toEqual(mockGoal.wallet_id);
     });
 
     it("should not create a goal that has an unexisting wallet", async () => {

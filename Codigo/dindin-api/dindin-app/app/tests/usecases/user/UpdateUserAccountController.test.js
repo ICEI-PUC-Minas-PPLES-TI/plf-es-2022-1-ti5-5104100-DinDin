@@ -20,7 +20,7 @@ describe("PUT /user test suite", () => {
             password: "userTestePasswordUpdated",
         });
         expect(response.statusCode).toEqual(200);
-        expect(response.body).toHaveProperty("user.id");
+        expect(response.body).toHaveProperty("id");
     });
 
     it("should fail trying to update a non-existent user", async () => {
@@ -39,7 +39,7 @@ describe("PUT /user test suite", () => {
             password: "userTestePasswordUpdated",
         });
         expect(response.statusCode).toEqual(200);
-        expect(response.body).toHaveProperty("user.id");
+        expect(response.body).toHaveProperty("id");
     });
 
     it("should not fail to update user as it did not send the password field", async () => {
@@ -47,7 +47,7 @@ describe("PUT /user test suite", () => {
             name: "User test updated",
         });
         expect(response.statusCode).toEqual(200);
-        expect(response.body).toHaveProperty("user.id");
+        expect(response.body).toHaveProperty("id");
     });
 
     it("should not update a user email", async () => {
@@ -61,7 +61,7 @@ describe("PUT /user test suite", () => {
                 password: "userTestePasswordUpdated",
             });
         expect(response.statusCode).toEqual(200);
-        expect(response.body).toHaveProperty("user.id");
+        expect(response.body).toHaveProperty("id");
         const getResponse = await supertest(app).get("/api/user/1");
         expect(getResponse.body.email).toEqual(oldEmail);
     });

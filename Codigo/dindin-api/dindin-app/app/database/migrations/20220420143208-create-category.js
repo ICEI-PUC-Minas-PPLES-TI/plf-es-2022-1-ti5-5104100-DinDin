@@ -4,32 +4,46 @@ const DataTypes = require("sequelize/lib/data-types");
 module.exports = {
     async up(queryInterface) {
         await queryInterface.createTable(
-            "user",
+            "category",
             {
                 id: {
-                    type: DataTypes.INTEGER.UNSIGNED,
+                    type: DataTypes.BIGINT.UNSIGNED,
                     primaryKey: true,
                     autoIncrement: true,
                     allowNull: false,
                 },
-                firebase_id: {
-                    type: DataTypes.STRING(128),
-                    allowNull: true,
-                    unique: true,
+                wallet_id: {
+                    type: DataTypes.BIGINT.UNSIGNED,
+                    allowNull: true, // ! trocar
+                    // ! references: {
+                    // !     model: {
+                    // !         tableName: "wallet",
+                    // !     },
+                    // !     key: "id",
+                    // ! },
                 },
-                name: {
-                    type: DataTypes.STRING(100),
+                user_id: {
+                    type: DataTypes.INTEGER.UNSIGNED,
+                    allowNull: false,
+                    references: {
+                        model: {
+                            tableName: "user",
+                        },
+                        key: "id",
+                    },
+                },
+                description: {
+                    type: DataTypes.STRING(30),
                     allowNull: false,
                 },
-                email: {
-                    type: DataTypes.STRING(150),
+                type: {
+                    type: DataTypes.ENUM,
+                    values: ["IN", "OUT"],
                     allowNull: false,
-                    unique: true,
                 },
-                password: {
-                    type: DataTypes.STRING(64),
+                color: {
+                    type: DataTypes.STRING(6),
                     allowNull: true,
-                    comment: "Encrypted with 64 digits",
                 },
                 created_at: {
                     type: DataTypes.DATE,
@@ -53,6 +67,6 @@ module.exports = {
         );
     },
     async down(queryInterface) {
-        await queryInterface.dropTable("user");
+        await queryInterface.dropTable("category");
     },
 };
