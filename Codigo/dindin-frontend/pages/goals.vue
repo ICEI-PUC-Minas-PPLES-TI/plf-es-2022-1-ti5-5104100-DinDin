@@ -60,7 +60,7 @@
                               small
                               v-bind="attrs"
                               v-on="on"
-                              @click.stop="showGoal = true"
+                              @click="viewGoal(goal)"
                             >
                               <i class="fa-solid fa-eye"></i>
                             </v-btn>
@@ -125,17 +125,119 @@
       v-model="showModal"
       @created="$fetch"
     />
-    <v-dialog v-model="showGoal" max-width="600px">
-      <v-card>
-        <v-card-text>
+
+    <v-dialog v-model="viewGoalDetails" max-width="600px">
+      <v-card v-if="goalToView != null">
+        <v-card-text elevation="4">
           <v-container fluid>
             <v-row>
-              <v-col> oi </v-col>
-              <v-col> oi2 </v-col>
+              <v-col>
+                <h2 class="mt-3 black--text">{{ goalToView.description }}</h2>
+                <p class="text-subtitle-2 mb-1 goal-status">
+                  Status: {{ goalToView.status }}
+                </p>
+                <v-progress-linear
+                  :value="this.goalProgressValue"
+                  color="#28FF8B"
+                  height="35"
+                  rounded
+                >
+                  <strong>{{ Math.ceil(goalProgressValue) }}%</strong>
+                </v-progress-linear>
+                <p class="text-subtitle-2 mt-1 text-center black--text">
+                  R$9000.fake
+                </p>
+              </v-col>
             </v-row>
             <v-row>
-              <v-col> oi </v-col>
-              <v-col> oi2 </v-col>
+              <v-col>
+                <v-row>
+                  <v-col :sm="3">
+                    <v-icon
+                      x-large
+                      dense
+                      color="#DED370"
+                      class="mr-1 fa-solid fa-bullseye"
+                    ></v-icon>
+                  </v-col>
+                  <v-col>
+                    <p class="mb-0 black--text">Goal Type</p>
+                    <h5 class="mt-0 text-subtitle-2 font-weight-black">
+                      {{ goalToView.type }}
+                    </h5>
+                  </v-col>
+                </v-row>
+              </v-col>
+
+              <v-col>
+                <v-row>
+                  <v-col :sm="3">
+                    <v-icon
+                      x-large
+                      dense
+                      color="#E15151"
+                      class="mr-1 fa-solid fa-wallet"
+                    ></v-icon>
+                  </v-col>
+                  <v-col>
+                    <p class="mb-0 black--text">Wallet</p>
+                    <h5 class="mt-0 text-subtitle-2 font-weight-black">
+                      {{ goalToView.wallet_id }}
+                    </h5>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-row>
+                  <v-col :sm="3">
+                    <v-icon
+                      x-large
+                      dense
+                      color="#59A6ED"
+                      class="mr-1 fa-solid fa-dollar-sign"
+                    ></v-icon>
+                  </v-col>
+                  <v-col>
+                    <p class="mb-0 black--text">Amount</p>
+                    <h5 class="mt-0 text-subtitle-2 font-weight-black">
+                      R${{ goalToView.value }}
+                    </h5>
+                  </v-col>
+                </v-row>
+              </v-col>
+
+              <v-col>
+                <v-row>
+                  <v-col :sm="3">
+                    <v-icon
+                      x-large
+                      dense
+                      color="#60AB6C"
+                      class="mr-1 fa-solid fa-calendar-day"
+                    ></v-icon>
+                  </v-col>
+                  <v-col>
+                    <p class="mb-0 black--text">Limit date</p>
+                    <h5 class="mt-0 text-subtitle-2 font-weight-black">
+                      {{
+                        new Date(goalToView.expire_at)
+                          .toISOString()
+                          .split("T")[0]
+                      }}
+                    </h5>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col class="text-right">
+                <v-btn color="#5BD098" dark large @click="editGoal(goalToView)">
+                  Edit
+                </v-btn>
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -161,7 +263,9 @@ export default {
       showModal: false,
       goalToEdit: null,
       modalEdit: false,
-      showGoal: false,
+      viewGoalDetails: false,
+      goalToView: null,
+      goalProgressValue: 60,
     };
   },
   async fetch() {
@@ -214,9 +318,17 @@ export default {
       });
     },
     editGoal(goal) {
+      this.viewGoalDetails = false;
       this.goalToEdit = goal;
       this.modalEdit = true;
       this.showModal = true;
+    },
+    viewGoal(goal) {
+      goal.type = goal.type=="A" ? "Achievement" : "Saving";
+      this.goalToView = goal;
+      console.log(this.goalToView)
+      this.viewGoalDetails = true;
+      // this.showModal = true;
     },
   },
 };
@@ -228,5 +340,8 @@ export default {
   &::first-letter {
     text-transform: uppercase;
   }
+}
+.goal-status {
+  color: #ded370;
 }
 </style>
