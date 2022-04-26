@@ -133,7 +133,10 @@
             <v-row>
               <v-col>
                 <h2 class="mt-3 black--text">{{ goalToView.description }}</h2>
-                <p class="text-subtitle-2 mb-1 goal-status">
+                <p
+                  class="text-subtitle-2 mb-1"
+                  :style="{ color: viewStatusColor }"
+                >
                   Status: {{ goalToView.status }}
                 </p>
                 <v-progress-linear
@@ -163,7 +166,7 @@
                   <v-col>
                     <p class="mb-0 black--text">Goal Type</p>
                     <h5 class="mt-0 text-subtitle-2 font-weight-black">
-                      {{ goalToView.type }}
+                      {{ goalToView.type == "A" ? "Achievement" : "Saving" }}
                     </h5>
                   </v-col>
                 </v-row>
@@ -221,11 +224,7 @@
                   <v-col>
                     <p class="mb-0 black--text">Limit date</p>
                     <h5 class="mt-0 text-subtitle-2 font-weight-black">
-                      {{
-                        new Date(goalToView.expire_at)
-                          .toISOString()
-                          .split("T")[0]
-                      }}
+                      {{ dateFormat(goalToView.expire_at) }}
                     </h5>
                   </v-col>
                 </v-row>
@@ -324,11 +323,17 @@ export default {
       this.showModal = true;
     },
     viewGoal(goal) {
-      goal.type = goal.type=="A" ? "Achievement" : "Saving";
       this.goalToView = goal;
-      console.log(this.goalToView)
       this.viewGoalDetails = true;
-      // this.showModal = true;
+    },
+  },
+  computed: {
+    viewStatusColor() {
+      return this.goalToView.status == "PENDING"
+        ? "#DED370" /* Yellow == PENDING */
+        : this.goalToView.status == "FINISHED"
+        ? "#5BD098" /* Green == FINISHED */
+        : "#FF4B55"; /* Red == LOST */
     },
   },
 };
@@ -340,8 +345,5 @@ export default {
   &::first-letter {
     text-transform: uppercase;
   }
-}
-.goal-status {
-  color: #ded370;
 }
 </style>
