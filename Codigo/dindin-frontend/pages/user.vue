@@ -28,7 +28,7 @@
               >
                 <v-row class="pb-2">
                   <v-text-field
-                    :rules="(value) => !!value || 'Required'"
+                    :rules="[rules.required]"
                     outlined
                     v-model="user.name"
                     hide-details="auto"
@@ -56,7 +56,7 @@
           <!-- Card title -->
           <v-card-title class="text-h5 wallets-modal-title">
             <h4>
-              <span> User Data </span>
+              <span> User Password </span>
             </h4>
           </v-card-title>
           <v-card-text>
@@ -69,34 +69,43 @@
               >
                 <v-row class="pb-2">
                   <v-text-field
-                    :rules="(value) => !!value || 'Required'"
+                    :rules="[rules.required]"
                     outlined
                     v-model="user.oldPassword"
                     hide-details="auto"
                     :clearable="true"
                     label="Old Password"
+                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show1 ? 'text' : 'password'"
+                    @click:append="show1 = !show1"
                     maxlength="40"
                   />
                 </v-row>
                 <v-row class="pb-2">
                   <v-text-field
-                    :rules="(value) => !!value || 'Required'"
+                    :rules="[rules.required, rules.min]"
                     outlined
-                    v-model="user.password"
+                    v-model="user.newPassword"
                     hide-details="auto"
                     :clearable="true"
                     label="Password"
+                    :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show2 ? 'text' : 'password'"
+                    @click:append="show2 = !show2"
                     maxlength="40"
                   />
                 </v-row>
                 <v-row class="pb-2">
                   <v-text-field
-                    :rules="(value) => !!value || 'Required'"
+                    :rules="[rules.required, rules.equal]"
                     outlined
                     v-model="user.confirmPassword"
                     hide-details="auto"
                     :clearable="true"
                     label="Confirm Password"
+                    :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show3 ? 'text' : 'password'"
+                    @click:append="show3 = !show3"
                     maxlength="40"
                   />
                 </v-row>
@@ -119,10 +128,15 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
+
 export default {
   layout: "home",
   data() {
     return {
+      show1: false,
+      show2: false,
+      show3: false,
       user: {
         id: "",
         name: "",
@@ -130,22 +144,41 @@ export default {
         confirmPassword: "",
         newPassword: "",
       },
+
+      rules: {
+        required: (value) => !!value || "Required",
+        min: (v) => {
+          if (
+            v &&
+            v.length >= 6
+          )
+            return true;
+          else
+            return "Min 6 chars";
+        },
+        equal: (v) => v === this.user.newPassword || "Password don't match!",
+      },
     };
   },
-  mounted: {
-    //pegar usuario na sessao e chamar o edit
-    //this.getUser(id)
-  },
+  // mounted: {
+  //   //pegar usuario na sessao e chamar o edit
+  //   //this.getUser(id)
+  // },
   methods: {
     updateUserPassword() {
       //...
-      if (this.$refs.form.formUserPassword()) {
-        this.$axios.put("/user/" + this.user.id);
+      if (this.$refs.formUserPassword.validate()) {
+        const user = {
+          id: this.user.id,
+          name: this.user.name,
+          password: this.user.newPassword,
+        };
+        this.$axios.put("/user/" + this.user.id).then(res);
       }
     },
     updateUserName() {
       //...
-      if (this.$refs.form.formUserName()) {
+      if (this.$refs.formUserName.validate()) {
       }
     },
     getUser(id) {
@@ -166,5 +199,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
