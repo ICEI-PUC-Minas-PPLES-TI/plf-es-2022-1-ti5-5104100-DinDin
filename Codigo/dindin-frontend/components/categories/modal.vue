@@ -34,7 +34,7 @@
                 v-model="category.description"
                 hide-details="auto"
                 :clearable="true"
-                label="Games"
+                placeholder="Games"
                 maxlength="40"
               />
             </v-row>
