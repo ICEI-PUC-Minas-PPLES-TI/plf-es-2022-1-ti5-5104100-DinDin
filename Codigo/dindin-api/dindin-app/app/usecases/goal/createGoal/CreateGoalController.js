@@ -52,9 +52,7 @@ class CreateGoalController {
             wallet_id
         );
 
-        return response.status(201).json({
-            goal,
-        });
+        return response.status(201).json(goal);
     }
 }
 

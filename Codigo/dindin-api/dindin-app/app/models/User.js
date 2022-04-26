@@ -6,7 +6,7 @@ class User extends Model {
             {
                 id: {
                     field: "id",
-                    type: DataTypes.INTEGER(11).UNSIGNED,
+                    type: DataTypes.INTEGER.UNSIGNED,
                     autoIncrement: true,
                     primaryKey: true,
                     allowNull: false,
@@ -79,7 +79,7 @@ class User extends Model {
                 },
                 scopes: {
                     withPassword: {
-                        attributes: {},
+                        attributes: { include: ["password"] },
                     },
                     deleted: {
                         where: {
