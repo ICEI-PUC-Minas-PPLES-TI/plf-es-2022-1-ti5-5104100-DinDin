@@ -13,7 +13,14 @@
           <!-- Table top toolbar -->
           <v-row>
             <v-col cols="2" offset="10">
-              <v-btn block color="success" @click.stop="showModal = true;modalEdit=false">
+              <v-btn
+                block
+                color="success"
+                @click.stop="
+                  showModal = true;
+                  modalEdit = false;
+                "
+              >
                 New Goal
               </v-btn>
             </v-col>
@@ -46,14 +53,20 @@
                       <td>{{ dateFormat(goal.expire_at) }}</td>
                       <td class="table-goals-status">{{ goal.status }}</td>
                       <td>
-                        <!-- <v-tooltip top>
+                        <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn elevation="0" small v-bind="attrs" v-on="on">
+                            <v-btn
+                              elevation="0"
+                              small
+                              v-bind="attrs"
+                              v-on="on"
+                              @click.stop="showGoal = true"
+                            >
                               <i class="fa-solid fa-eye"></i>
                             </v-btn>
                           </template>
                           <span>View</span>
-                        </v-tooltip> -->
+                        </v-tooltip>
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn
@@ -106,7 +119,28 @@
         </v-card>
       </v-col>
     </v-row>
-    <modal :goalToEdit="this.goalToEdit" :modalEdit="this.modalEdit" v-model="showModal" @created="$fetch" />
+    <modal
+      :goalToEdit="this.goalToEdit"
+      :modalEdit="this.modalEdit"
+      v-model="showModal"
+      @created="$fetch"
+    />
+    <v-dialog v-model="showGoal" max-width="600px">
+      <v-card>
+        <v-card-text>
+          <v-container fluid>
+            <v-row>
+              <v-col> oi </v-col>
+              <v-col> oi2 </v-col>
+            </v-row>
+            <v-row>
+              <v-col> oi </v-col>
+              <v-col> oi2 </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -127,6 +161,7 @@ export default {
       showModal: false,
       goalToEdit: null,
       modalEdit: false,
+      showGoal: false,
     };
   },
   async fetch() {
@@ -180,7 +215,7 @@ export default {
     },
     editGoal(goal) {
       this.goalToEdit = goal;
-      this.modalEdit=true;
+      this.modalEdit = true;
       this.showModal = true;
     },
   },
