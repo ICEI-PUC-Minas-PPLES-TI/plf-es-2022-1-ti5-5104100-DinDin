@@ -89,9 +89,7 @@
                     hide-details="auto"
                     :clearable="true"
                     label="Password"
-                    :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="show2 ? 'text' : 'password'"
-                    @click:append="show2 = !show2"
+                    type="password"
                     maxlength="40"
                   />
                 </v-row>
@@ -135,7 +133,6 @@ export default {
   data() {
     return {
       show1: false,
-      show2: false,
       show3: false,
       user: {
         id: "",
