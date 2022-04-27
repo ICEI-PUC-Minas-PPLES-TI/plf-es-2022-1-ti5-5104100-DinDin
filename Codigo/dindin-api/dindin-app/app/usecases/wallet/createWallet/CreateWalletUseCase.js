@@ -12,7 +12,7 @@ class CreateWalletUseCase {
             throw new AppError(error.message, 500, error);
         });
 
-        const userHasWallet = await UserHasWallet.create({
+        await UserHasWallet.create({
             wallet_id: wallet.id,
             user_id: userID,
         }).catch((error) => {

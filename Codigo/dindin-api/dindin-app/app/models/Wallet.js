@@ -21,7 +21,6 @@ class Wallet extends Model {
                     type: DataTypes.STRING(30),
                     notEmpty: true,
                     allowNull: false,
-                    notEmpty: true,
                     validate: {
                         notEmpty: true,
                     },
@@ -41,7 +40,6 @@ class Wallet extends Model {
                     type: DataTypes.DOUBLE,
                     allowNull: false,
                     defaultValue: 0,
-                    allowNull: false,
                     notEmpty: true,
                     validate: {
                         notEmpty: true,

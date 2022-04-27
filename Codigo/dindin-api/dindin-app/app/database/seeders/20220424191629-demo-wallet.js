@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = {
-    async up(queryInterface, Sequelize) {
+    async up(queryInterface) {
         const data = [
             {
                 description: "Personal",
@@ -51,7 +51,7 @@ module.exports = {
         await queryInterface.bulkInsert("wallet_invite", walletInvite, {});
     },
 
-    async down(queryInterface, Sequelize) {
+    async down(queryInterface) {
         /**
          * Add commands to revert seed here.
          *

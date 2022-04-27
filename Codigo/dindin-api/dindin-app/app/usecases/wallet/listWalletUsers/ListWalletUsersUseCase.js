@@ -1,5 +1,6 @@
 const User = require("../../../models/User");
 const UserHasWallet = require("../../../models/UserHasWallet");
+const AppError = require("../../../errors/AppError");
 
 class ListWalletUsersUseCase {
     async list(walletId) {
