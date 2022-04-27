@@ -52,7 +52,9 @@
                     <tr v-for="(wallet, gidx) in wallets" :key="gidx">
                       <td>
                         {{ wallet.description }}
-                        <span class="shared-wallet" v-if="wallet.shared">(shared)</span>
+                        <span class="shared-wallet" v-if="wallet.shared"
+                          >(shared)</span
+                        >
                       </td>
                       <td>R${{ wallet.initial_value }}</td>
                       <td>R${{ wallet.initial_value }}</td>
@@ -73,7 +75,13 @@
                         </v-tooltip>
                         <v-tooltip v-if="wallet.shared" top>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn elevation="0" small v-bind="attrs" v-on="on">
+                            <v-btn
+                              elevation="0"
+                              small
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="openMembersModal(wallet.id)"
+                            >
                               <i class="fa-solid fa-users"></i>
                             </v-btn>
                           </template>
@@ -140,16 +148,22 @@
       v-model="showModal"
       @created="$fetch"
     />
+    <membersModal
+      v-model="showMembersModal"
+      :walletId="this.walletToShowMembersId"
+    />
   </v-container>
 </template>
 
 <script>
 import modal from "@/components/wallet/modal.vue";
+import membersModal from "@/components/wallet/membersModal.vue";
 import Swal from "sweetalert2";
 export default {
   layout: "home",
   components: {
     modal,
+    membersModal,
   },
   data() {
     return {
@@ -160,6 +174,8 @@ export default {
       showModal: false,
       walletToEdit: null,
       modalEdit: false,
+      showMembersModal: false,
+      walletToShowMembersId: "",
     };
   },
   async fetch() {
@@ -189,7 +205,8 @@ export default {
         confirmButtonText: "Yes, I want to delete!",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.$axios.delete("/wallet/" + wallet.id)
+          this.$axios
+            .delete("/wallet/" + wallet.id)
             .then(() => {
               Swal.fire({
                 title: "Deleted!",
@@ -201,13 +218,13 @@ export default {
                 timer: 3000,
                 timerProgressBar: true,
               });
-              this.$fetch()
+              this.$fetch();
             })
-            .catch(err => {
+            .catch((err) => {
               Swal.fire({
                 title: "Wallet removal failed!",
                 text: err.response.data.message,
-                icon: "error"
+                icon: "error",
               });
             });
         }
@@ -228,9 +245,10 @@ export default {
         closeOnCancel: true,
         preConfirm: (code) => {
           this.$axios
-            .$post('/wallet/invite', {
-              code
-            }).then(res => {
+            .$post("/wallet/invite", {
+              code,
+            })
+            .then((res) => {
               Swal.fire({
                 title: "Wallet Joined",
                 icon: "success",
@@ -240,14 +258,15 @@ export default {
                 timer: 3000,
                 timerProgressBar: true,
               });
-              this.$fetch()
-            }).catch(err => {
+              this.$fetch();
+            })
+            .catch((err) => {
               Swal.fire({
                 title: "Wallet join failed!",
                 text: err.response.data.message,
-                icon: "error"
+                icon: "error",
               });
-            })
+            });
           // return fetch(`//api.github.com/users/${login}`)
           //   .then((response) => {
           //     if (!response.ok) {
@@ -262,38 +281,43 @@ export default {
         allowOutsideClick: () => !Swal.isLoading(),
       }).then((result) => {
         if (result.isConfirmed) {
-          
         }
       });
     },
     inviteFiend(walletId) {
       this.$axios
         .$post(`/wallet/${walletId}/invite`)
-        .then(res => {
+        .then((res) => {
           Swal.fire({
             title: "<strong>New wallet invite</strong>",
             icon: "info",
-            html: `${res.invite.code} <br> <small> Expires at ${new Date(res.invite.expire_at).toLocaleDateString()} </small>`,
+            html: `${res.invite.code} <br> <small> Expires at ${new Date(
+              res.invite.expire_at
+            ).toLocaleDateString()} </small>`,
             focusConfirm: false,
             confirmButtonColor: "#5BD098",
             confirmButtonText: "Copy to clipboard",
           }).then((result) => {
             if (result.isConfirmed)
-              navigator.clipboard.writeText(res.invite.code)
-            
+              navigator.clipboard.writeText(res.invite.code);
           });
-        }).catch(err => {
+        })
+        .catch((err) => {
           Swal.fire({
             title: "Invite creation failed!",
             text: err.response.data.message,
-            icon: "error"
+            icon: "error",
           });
-        })
+        });
     },
     editWallet(wallet) {
       this.walletToEdit = wallet;
       this.modalEdit = true;
       this.showModal = true;
+    },
+    openMembersModal(id) {
+      this.showMembersModal = true;
+      this.walletToShowMembersId = id;
     },
   },
 };
@@ -307,6 +331,6 @@ export default {
   }
 }
 .shared-wallet {
-  font-size: .6rem;
+  font-size: 0.6rem;
 }
 </style>
