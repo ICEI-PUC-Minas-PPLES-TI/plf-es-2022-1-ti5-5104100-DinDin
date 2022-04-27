@@ -39,6 +39,7 @@ services:
       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - DB_NAME=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
+      - FB_PRIVATE_KEY=$FB_PRIVATE_KEY
     stdin_open: true
     tty: true
     command: /bin/bash -c "/usr/wait-for-it.sh --timeout=0 mysqldb:3306 && npm install && npm run $NPM_DOCKER_CMD"

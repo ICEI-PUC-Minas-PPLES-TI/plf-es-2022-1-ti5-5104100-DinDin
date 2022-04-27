@@ -132,3 +132,6 @@ dist
 .pnp.*
 
 package-lock.json
+
+# firebase 
+dindinfinance-firebase-adminsdk-xmgz0-b8333543bc.json
