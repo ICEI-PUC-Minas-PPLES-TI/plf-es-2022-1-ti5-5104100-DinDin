@@ -55,7 +55,6 @@
                 :items="colors"
                 label="Color"
                 item-text="text"
-                item-value="hex"
                 outlined
               >
                 <template v-slot:selection="{ attrs, item, selected }">
@@ -284,21 +283,20 @@ export default {
         .get("/category/" + id)
         .then((res) => {
           let data = res.data;
-          console.log(data);
+          //console.log(data);
           this.category.id = id;
           this.category.description = data.description;
           this.category.type = data.type;
           //this.category.user_id = data.user_id;
           this.category.wallet_id = data.wallet_id;
-          this.category.color.hex = "#" + data.color;
+          //this.category.color.hex = "#" + data.color;
+
           let color = this.colors.filter(function (val) {
-            return val.hex == ("#"+data.color).replace(" ", "");
+            return val.hex == ("#" + data.color);
           });
-          if (color && color[0]?.text) {
-            this.category.color.text = color[0].text;
-          } else {
-            this.category.color.text = "";
-          }
+
+          this.category.color = color[0];
+          
         })
         .catch((err) => {
           this.erroLogin = err.response.data.message;
@@ -324,19 +322,6 @@ export default {
         user_id: "",
       };
       this.$refs.form.reset();
-    },
-    getNameByHex(hex) {
-      console.log(hex);
-      let index = this.colors.indexOf((val) => {
-        return val.hex == "#344563";
-      });
-      console.log(index);
-      if (index == -1) {
-        this.colors.push({ text: "Personalized", hex: hex });
-      } else {
-        return this.colors[index].text;
-      }
-      return "Personalized";
     },
     filter(item, queryText, itemText) {
       if (item.header) return false;
