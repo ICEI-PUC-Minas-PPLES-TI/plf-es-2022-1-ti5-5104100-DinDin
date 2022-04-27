@@ -15,11 +15,10 @@ const verifyToken = (request, response, next) => {
 
   jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
     if (err) {
-      throw new AppError(
-        "Falha ao autenticar no sistema!!",
-        403,
-        ["Falha ao autenticar o token!!", err]
-      );
+      throw new AppError("Falha ao autenticar no sistema!!", 403, [
+        "Falha ao autenticar o token!!",
+        err,
+      ]);
     }
     request.user = decoded;
     request.userId = decoded.id;
@@ -33,11 +32,11 @@ const logIn = (id) => {
   const seconds = 86400 * days;
   const token = jwt.sign(
     {
-      id: id
+      id: id,
     },
     process.env.SECRET_KEY,
     {
-      expiresIn: seconds
+      expiresIn: seconds,
     }
   );
   return token;
@@ -45,7 +44,7 @@ const logIn = (id) => {
 
 const jwtAuthorization = {
   verifyToken,
-  logIn
+  logIn,
 };
 
 module.exports = jwtAuthorization;
