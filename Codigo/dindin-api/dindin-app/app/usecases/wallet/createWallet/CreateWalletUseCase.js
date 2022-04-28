@@ -3,10 +3,10 @@ const Wallet = require("../../../models/Wallet");
 const UserHasWallet = require("../../../models/UserHasWallet");
 
 class CreateWalletUseCase {
-    async create(description, shared, initial_value, userID) {
+    async create(description, initial_value, userID) {
         const wallet = await Wallet.create({
             description,
-            shared,
+            shared: false,
             initial_value,
         }).catch((error) => {
             throw new AppError(error.message, 500, error);

@@ -94,17 +94,25 @@ module.exports = {
             WalletInvite.init(sequelize);
 
             // * Configure Associations here
-            // ! Goal.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
+            Goal.belongsTo(Wallet, {
+                as: "wallet",
+                foreignKey: "wallet_id",
+            });
             Category.belongsTo(User, { as: "user", foreignKey: "user_id" });
             Wallet.hasMany(UserHasWallet, {
-                as: "usuarios",
+                as: "users",
                 foreignKey: "wallet_id",
             });
             User.hasMany(UserHasWallet, {
                 as: "wallets",
                 foreignKey: "user_id",
             });
-            // ! Category.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
+            Category.belongsTo(Wallet, {
+                as: "wallet",
+                foreignKey: "wallet_id",
+            });
+            // ! TransactionRecurrencies.belongsTo(Wallet, { as: "wallet", foreignKey: "wallet_id" });
+            // ! Transaction.belongsTo(Wallet, { as: "wallet", foreignKey: "wallet_id" });
 
             // await sequelize.sync({ alter: false }); // force: true to drop and re-create
             await sequelize.authenticate();

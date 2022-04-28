@@ -5,7 +5,7 @@ module.exports = {
     async up(queryInterface) {
         await queryInterface.createTable("user_has_wallet", {
             user_id: {
-                type: DataTypes.INTEGER(11).UNSIGNED,
+                type: DataTypes.INTEGER.UNSIGNED,
                 allowNull: false,
                 primaryKey: true,
                 references: { model: "user", key: "id" },

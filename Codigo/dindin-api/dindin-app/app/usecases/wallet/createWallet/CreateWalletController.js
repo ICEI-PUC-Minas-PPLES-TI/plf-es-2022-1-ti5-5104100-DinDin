@@ -27,7 +27,6 @@ class CreateWalletController {
         const createWalletUseCase = new CreateWalletUseCase();
         const wallet = await createWalletUseCase.create(
             description,
-            false, // It shouldn't start shared
             initial_value,
             request.userId
         );

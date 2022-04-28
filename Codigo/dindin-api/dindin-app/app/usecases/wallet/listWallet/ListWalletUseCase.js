@@ -37,7 +37,7 @@ class ListWalletUseCase {
             include: [
                 {
                     model: UserHasWallet,
-                    as: "usuarios",
+                    as: "users",
                     where: {
                         user_id: userId,
                     },
