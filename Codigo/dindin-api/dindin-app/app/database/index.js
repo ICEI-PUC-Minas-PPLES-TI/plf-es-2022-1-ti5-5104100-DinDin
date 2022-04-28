@@ -6,6 +6,9 @@ const { Sequelize } = require("sequelize");
 const dbConfig = require("../config/config.js");
 const Goal = require("../models/Goal.js");
 const User = require("../models/User.js");
+const Wallet = require("../models/Wallet.js");
+const UserHasWallet = require("../models/UserHasWallet.js");
+const WalletInvite = require("../models/WalletInvite");
 const Category = require("../models/Category.js");
 
 const dbConfigEnviroment =
@@ -86,9 +89,21 @@ module.exports = {
             User.init(sequelize);
             Goal.init(sequelize);
             Category.init(sequelize);
+            Wallet.init(sequelize);
+            UserHasWallet.init(sequelize);
+            WalletInvite.init(sequelize);
+
             // * Configure Associations here
             // ! Goal.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
             Category.belongsTo(User, { as: "user", foreignKey: "user_id" });
+            Wallet.hasMany(UserHasWallet, {
+                as: "usuarios",
+                foreignKey: "wallet_id",
+            });
+            User.hasMany(UserHasWallet, {
+                as: "wallets",
+                foreignKey: "user_id",
+            });
             // ! Category.belongsTo(Wallet, {as: "wallet", foreignKey: "wallet_id" });
 
             // await sequelize.sync({ alter: false }); // force: true to drop and re-create

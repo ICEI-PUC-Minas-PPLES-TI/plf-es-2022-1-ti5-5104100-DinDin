@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model="show"
+    v-model="value"
     max-width="600px"
     @click:outside="$emit('input', false);$emit('modalEdit', false)"
     @keydown.esc="$emit('input', false);$emit('modalEdit', false)"
@@ -8,7 +8,7 @@
     <v-card class="pa-2">
       <v-card-title class="text-h5 wallets-modal-title">
         <h4>
-          <span> {{ title }}</span>
+          <span> {{ walletToEdit ? 'Edit Wallet': 'New Wallet' }}</span>
         </h4>
         <v-btn icon @click="$emit('input', false)">
           <v-icon>mdi-close</v-icon>
@@ -45,7 +45,7 @@
                 outlined
                 type="number"
                 maxlength="40"
-                v-model="wallet.current_value"
+                v-model="wallet.initial_value"
                 hide-details="auto"
                 :clearable="true"
                 label="Current Value"
@@ -83,13 +83,10 @@ export default {
   },
   data() {
     return {
-      title: "New Wallet",
       wallet: {
-        id:"",
-        description: "",
-        current_value:""
+        description: null,
+        initial_value: null
       },
-      choosenWallet:"",
       menu: false,
       rules: {
         required: (value) => !!value || "Required.",
@@ -97,49 +94,74 @@ export default {
       errors: [],
     };
   },
-  computed: {
-    show: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.$emit("input", value);
-      },
-    },
-  },
   watch: {
     modalEdit: function (modalEdit) {
-      if (modalEdit) {
-        this.title = "Edit Wallet";
-      } else {
-        this.choosenWallet = null;
-        let emptyWallet = {
-          description: "",
-          current_value: "",
-        };
-        this.fillForm(emptyWallet);
+      if (!modalEdit) {
         this.cleanForm();
-        this.title = "New Wallet";
       }
     },
     walletToEdit: function (walletToEdit) {
       if (walletToEdit) {
-        this.choosenWallet = walletToEdit;
-        this.fillForm(this.choosenWallet);
+        this.wallet.id=walletToEdit.id;
+        this.wallet.description = walletToEdit.description;
+        this.wallet.initial_value = walletToEdit.initial_value;
       }
     },
   },
   methods: {
     saveWallet() {
+      this.$axios
+        .$post('/wallet', this.wallet)
+        .then(() => {
+          Swal.fire({
+            title: "Wallet Created",
+            icon: "success",
+            showConfirmButton: false,
+            toast: true,
+            position: "top-end",
+            timer: 3000,
+            timerProgressBar: true,
+          });
+          this.cleanForm()
+          this.$emit("input", false);
+          this.$emit("created", true);
+        }).catch(err => {
+          Swal.fire({
+            title: "Wallet creation failed!",
+            text: err.response.data.message,
+            icon: "error"
+          });
+        })
     },
     editWallet() {
-    },
-    fillForm(data) {
-      this.wallet.id=data.id;
-      this.wallet.description = data.description;
-      this.wallet.current_value = data.current_value;
+      this.$axios
+        .$put(`/wallet/${this.wallet.id}`, this.wallet)
+        .then(() => {
+          Swal.fire({
+            title: "Wallet Updated",
+            icon: "success",
+            showConfirmButton: false,
+            toast: true,
+            position: "top-end",
+            timer: 3000,
+            timerProgressBar: true,
+          });
+          this.cleanForm()
+          this.$emit("input", false);
+          this.$emit("created", true);
+        }).catch(err => {
+          Swal.fire({
+            title: "Wallet update failed!",
+            text: err.response.data.message,
+            icon: "error"
+          });
+        })
     },
     cleanForm() {
+      this.wallet = {
+        description: null,
+        initial_value: null
+      }
       this.$refs.form.reset();
     },
   },
