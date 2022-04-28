@@ -88,23 +88,11 @@
                     v-model="user.newPassword"
                     hide-details="auto"
                     :clearable="true"
-                    label="Password"
-                    type="password"
+                    label="New Password"
                     maxlength="40"
-                  />
-                </v-row>
-                <v-row class="pb-2">
-                  <v-text-field
-                    :rules="[rules.required, rules.equal]"
-                    outlined
-                    v-model="user.confirmPassword"
-                    hide-details="auto"
-                    :clearable="true"
-                    label="Confirm Password"
                     :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
                     :type="show3 ? 'text' : 'password'"
                     @click:append="show3 = !show3"
-                    maxlength="40"
                   />
                 </v-row>
               </v-form>
@@ -138,8 +126,7 @@ export default {
         id: "",
         name: "",
         oldPassword: "",
-        confirmPassword: "",
-        newPassword: "",
+        newPassword: ""
       },
 
       rules: {
@@ -147,11 +134,11 @@ export default {
         min: (v) => {
           if (
             v &&
-            v.length >= 6
+            v.length >= 8
           )
             return true;
           else
-            return "Min 6 chars";
+            return "Min 8 chars";
         },
         equal: (v) => v === this.user.newPassword || "Password don't match!",
       },
