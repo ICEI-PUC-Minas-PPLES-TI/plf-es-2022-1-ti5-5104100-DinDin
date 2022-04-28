@@ -7,7 +7,7 @@
             <v-card class="py-0" elevation="0">
               <v-row class="py-4" align="center" justify="center">
                 <v-img max-width="25%" :src="image" alt="dindin"></v-img>
-                <v-text id="title">DinDin</v-text>
+                <h1 id="title">DinDin</h1>
               </v-row>
 
               <v-card-text>
@@ -59,6 +59,9 @@
                     >
                   </v-card-actions>
                 </v-form>
+                
+                <FirebaseAuthButton />
+
               </v-card-text>
             </v-card>
           </v-col>
@@ -94,11 +97,8 @@ export default {
             password: this.password,
           })
           .then((res) => {
-            let d = new Date();
-            d.setTime(d.getTime() + 1 * 24 * 60 * 60 * 1000);
-            document.cookie = "token= ";
-            document.cookie = "token=" + res.data.token;
-            this.$router.push("/dashboard");
+            this.$store.dispatch('login/userLogin', {loginData: res.data.token, router: this.$router});
+            this.$fire.auth.signInWithCustomToken(res.data.firebaseToken);
           })
           .catch((err) => {
             this.erroLogin = err.response.data.message;

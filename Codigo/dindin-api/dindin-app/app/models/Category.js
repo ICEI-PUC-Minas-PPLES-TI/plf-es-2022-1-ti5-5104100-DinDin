@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const User = require("./User");
+// const Wallet = require("./Wallet");
 
 class Category extends Model {
     static init(sequelize) {
@@ -16,10 +17,10 @@ class Category extends Model {
                 wallet_id: {
                     type: DataTypes.BIGINT.UNSIGNED,
                     allowNull: true, // ! to change
-                    // ! references: {
-                    // !   model: Wallet,
-                    // !   key: "id"
-                    // ! }
+                    /*references: {
+                      model: Wallet,
+                      key: "id"
+                    }*/
                 },
                 user_id: {
                     type: DataTypes.INTEGER.UNSIGNED,
