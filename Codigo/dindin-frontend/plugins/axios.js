@@ -4,13 +4,13 @@ export default function({ $axios, store, req, redirect, $fire }) {
       if (cookies) {
         $axios.defaults.headers.common[
           'Authorization'
-        ] = `Bearer ${cookies.login.token}`
+        ] = `${cookies.login.token}`
       }
     }
   
     $axios.onRequest(config => {
       if (!req)
-        config.headers.common['Authorization'] = `Bearer ${store.getters['login/token']}`
+        config.headers.common['Authorization'] = `${store.getters['login/token']}`
     })
   
     $axios.onError(error => {
