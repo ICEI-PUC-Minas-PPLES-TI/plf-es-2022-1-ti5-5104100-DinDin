@@ -25,7 +25,9 @@ describe("GET /wallet users test suite", () => {
     });
 
     it("should list the wallets users with limit", async () => {
-        const response = await supertest(app).get("/api/wallet/1/users?limit=1").send();
+        const response = await supertest(app)
+            .get("/api/wallet/1/users?limit=1")
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");

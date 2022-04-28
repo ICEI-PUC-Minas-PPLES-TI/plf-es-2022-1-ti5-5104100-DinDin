@@ -4,9 +4,28 @@ require("dotenv").config();
 const app = require("../../..");
 const { connect, close } = require("../../../database");
 const Wallet = require("../../../models/Wallet");
+var defaults = require("superagent-defaults");
+var request = defaults(supertest(app)); // or url
 
 beforeAll(async () => {
     await connect();
+    const mockmail = `${Math.random()}@email.com`;
+    const mockPassword = `${Math.random()}@ultrapassword`;
+
+    await supertest(app).post("/api/user").send({
+        name: "User Test",
+        email: mockmail,
+        password: mockPassword,
+    });
+
+    const response = await supertest(app).post("/api/user/auth").send({
+        email: mockmail,
+        password: mockPassword,
+    });
+    request.set("Authorization", response.body.token);
+    //request(app)
+    //request(app).set("Authorization", response.body.token);
+    //request(app).post("/api").set("Authorization", response.body.token); // Works.
 });
 
 afterAll(async () => {
@@ -20,13 +39,16 @@ describe("POST /wallet test suite", () => {
             initial_value: 2000,
         };
 
-        const response = await supertest(app)
+        const response = await request
             .post("/api/wallet")
+            // Works.
             .send(mockWallet);
 
         expect(response.statusCode).toEqual(201);
-        expect(response.body).toHaveProperty("id");
-        const createdWallet = await Wallet.findByPk(parseInt(response.body.id));
+        expect(response.body.wallet).toHaveProperty("id");
+        const createdWallet = await Wallet.findByPk(
+            parseInt(response.body.wallet.id)
+        );
         expect(createdWallet.description).toEqual("my1wallet");
         expect(createdWallet.initial_value).toEqual(2000);
     });
@@ -37,13 +59,13 @@ describe("POST /wallet test suite", () => {
             initial_value: 10000,
         };
 
-        const response = await supertest(app)
-            .post("/api/wallet")
-            .send(mockWallet);
+        const response = await request.post("/api/wallet").send(mockWallet);
 
         expect(response.statusCode).toEqual(201);
-        expect(response.body).toHaveProperty("id");
-        const createdWallet = await Wallet.findByPk(parseInt(response.body.id));
+        expect(response.body.wallet).toHaveProperty("id");
+        const createdWallet = await Wallet.findByPk(
+            parseInt(response.body.wallet.id)
+        );
         expect(createdWallet.description).toEqual("my2wallet");
         expect(createdWallet.initial_value).toEqual(10000);
     });
@@ -53,9 +75,7 @@ describe("POST /wallet test suite", () => {
             initial_value: 2000,
         };
 
-        const response = await supertest(app)
-            .post("/api/wallet")
-            .send(mockWallet);
+        const response = await request.post("/api/wallet").send(mockWallet);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -65,9 +85,7 @@ describe("POST /wallet test suite", () => {
             description: "wallet3",
         };
 
-        const response = await supertest(app)
-            .post("/api/wallet")
-            .send(mockWallet);
+        const response = await request.post("/api/wallet").send(mockWallet);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -78,9 +96,7 @@ describe("POST /wallet test suite", () => {
             initial_value: null,
         };
 
-        const response = await supertest(app)
-            .post("/api/wallet")
-            .send(mockWallet);
+        const response = await request.post("/api/wallet").send(mockWallet);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -91,9 +107,7 @@ describe("POST /wallet test suite", () => {
             initial_value: 500,
         };
 
-        const response = await supertest(app)
-            .post("/api/wallet")
-            .send(mockWallet);
+        const response = await request.post("/api/wallet").send(mockWallet);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -104,24 +118,19 @@ describe("POST /wallet test suite", () => {
             initial_value: "wallet1",
         };
 
-        const response = await supertest(app)
-            .post("/api/wallet")
-            .send(mockWallet);
+        const response = await request.post("/api/wallet").send(mockWallet);
 
         expect(response.statusCode).toEqual(422);
     });
 
     it("should fail validation with initial value less than 0", async () => {
-      const mockWallet = {
-          description: "wallet1",
-          initial_value: -50,
-      };
+        const mockWallet = {
+            description: "wallet1",
+            initial_value: -50,
+        };
 
-      const response = await supertest(app)
-          .post("/api/wallet")
-          .send(mockWallet);
+        const response = await request.post("/api/wallet").send(mockWallet);
 
-      expect(response.statusCode).toEqual(422);
-  });
-
+        expect(response.statusCode).toEqual(422);
+    });
 });

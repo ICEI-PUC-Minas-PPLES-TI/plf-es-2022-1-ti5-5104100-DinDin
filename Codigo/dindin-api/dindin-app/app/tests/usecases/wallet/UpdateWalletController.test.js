@@ -30,7 +30,7 @@ describe("put /wallet test suite", () => {
         expect(response.statusCode).toEqual(200);
 
         expect(response.body.description).toEqual(mockWallet.description);
-        expect(response.body.initial_value).toEqual(mockGoal.initial_value);
+        expect(response.body.initial_value).toEqual(mockWallet.initial_value);
     });
 
     it("should fail validation to update send empty description", async () => {
@@ -81,6 +81,8 @@ describe("put /wallet test suite", () => {
 
         expect(response.statusCode).toEqual(200);
         expect(response.body.description).toEqual(mockWallet.description);
-        expect(response.body.initial_value).not.toEqual(mockGoal.initial_value);
+        expect(response.body.initial_value).not.toEqual(
+            mockWallet.initial_value
+        );
     });
 });
