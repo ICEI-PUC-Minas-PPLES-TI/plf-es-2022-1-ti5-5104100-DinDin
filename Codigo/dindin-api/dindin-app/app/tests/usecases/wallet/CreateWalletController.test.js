@@ -122,15 +122,4 @@ describe("POST /wallet test suite", () => {
 
         expect(response.statusCode).toEqual(422);
     });
-
-    it("should fail validation with initial value less than 0", async () => {
-        const mockWallet = {
-            description: "wallet1",
-            initial_value: -50,
-        };
-
-        const response = await request.post("/api/wallet").send(mockWallet);
-
-        expect(response.statusCode).toEqual(422);
-    });
 });

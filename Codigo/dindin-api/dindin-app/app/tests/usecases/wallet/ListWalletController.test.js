@@ -3,9 +3,27 @@ require("dotenv").config();
 
 const app = require("../../..");
 const { connect, close } = require("../../../database");
+const Wallet = require("../../../models/Wallet");
+var defaults = require("superagent-defaults");
+var request = defaults(supertest(app)); // or url
 
 beforeAll(async () => {
     await connect();
+
+    const mockmail = `${Math.random()}@email.com`;
+    const mockPassword = `${Math.random()}@ultrapassword`;
+
+    await supertest(app).post("/api/user").send({
+        name: "User Test",
+        email: mockmail,
+        password: mockPassword,
+    });
+
+    const response = await supertest(app).post("/api/user/auth").send({
+        email: mockmail,
+        password: mockPassword,
+    });
+    request.set("Authorization", response.body.token);
 });
 
 afterAll(async () => {
@@ -14,8 +32,9 @@ afterAll(async () => {
 
 describe("GET /wallet test suite", () => {
     it("should list the wallets", async () => {
-        const response = await supertest(app).get("/api/wallet/").send();
-
+        const response = await request.get("/api/wallet/").send();
+        console.log('oiii');
+        console.log(response.body);
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
         expect(response.body).toHaveProperty("total");
@@ -25,7 +44,7 @@ describe("GET /wallet test suite", () => {
     });
 
     it("should list the wallets with limit", async () => {
-        const response = await supertest(app).get("/api/wallet?limit=1").send();
+        const response = await request.get("/api/wallet?limit=1").send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -36,7 +55,7 @@ describe("GET /wallet test suite", () => {
     });
 
     it("should list the wallets with asc order id", async () => {
-        const response = await supertest(app)
+        const response = await request
             .get("/api/wallet?attribute=id&order=ASC")
             .send();
 
@@ -49,7 +68,7 @@ describe("GET /wallet test suite", () => {
     });
 
     it("should list the wallets with desc order id", async () => {
-        const response = await supertest(app)
+        const response = await request
             .get("/api/wallet?attribute=id&order=DESC")
             .send();
 
@@ -62,7 +81,7 @@ describe("GET /wallet test suite", () => {
     });
 
     // it("should list the wallets with description search", async () => {
-    //     const response = await supertest(app)
+    //     const response = await request
     //         .get("/api/wallet?description=wallet 1")
     //         .send();
 
@@ -75,7 +94,7 @@ describe("GET /wallet test suite", () => {
     // });
 
     // it("should list the wallets with value search", async () => {
-    //     const response = await supertest(app)
+    //     const response = await request
     //         .get("/api/wallet?value=50000.55")
     //         .send();
 
@@ -88,7 +107,7 @@ describe("GET /wallet test suite", () => {
     // });
 
     // it("should list the wallets with status search", async () => {
-    //     const response = await supertest(app)
+    //     const response = await request
     //         .get("/api/wallet?status=FINISHED")
     //         .send();
 
@@ -101,7 +120,7 @@ describe("GET /wallet test suite", () => {
     // });
 
     // it("should list the wallets with type search", async () => {
-    //     const response = await supertest(app).get("/api/wallet?type=A").send();
+    //     const response = await request.get("/api/wallet?type=A").send();
 
     //     expect(response.statusCode).toEqual(200);
     //     expect(response.body).toHaveProperty("count");
@@ -112,7 +131,7 @@ describe("GET /wallet test suite", () => {
     // });
 
     // it("should list the wallets between a expire_at search", async () => {
-    //     const response = await supertest(app)
+    //     const response = await request
     //         .get(
     //             "/api/wallet?expire_at_start=2010-01-01 11:50:00&expire_at_end=2099-01-01 11:50:00"
     //         )
@@ -127,7 +146,7 @@ describe("GET /wallet test suite", () => {
     // });
 
     // it("should list the wallets with wallet_id search", async () => {
-    //     const response = await supertest(app)
+    //     const response = await request
     //         .get("/api/wallet?wallet_id=1")
     //         .send();
 
@@ -140,7 +159,7 @@ describe("GET /wallet test suite", () => {
     // });
 
     // it("should list the wallets between a created_at search", async () => {
-    //     const response = await supertest(app)
+    //     const response = await request
     //         .get(
     //             "/api/wallet?created_at_start=2010-01-01 11:50:00&created_at_end=2099-01-01 11:50:00"
     //         )
@@ -155,7 +174,7 @@ describe("GET /wallet test suite", () => {
     // });
 
     // it("should list the wallets between a updated_at search", async () => {
-    //     const response = await supertest(app)
+    //     const response = await request
     //         .get(
     //             "/api/wallet?updated_at_start=2010-01-01 11:50:00&updated_at_end=2099-01-01 11:50:00"
     //         )
@@ -170,7 +189,7 @@ describe("GET /wallet test suite", () => {
     // });
 
     // it("should list the wallets between a deleted_at search", async () => {
-    //     const response = await supertest(app)
+    //     const response = await request
     //         .get(
     //             "/api/wallet?deleted_at_start=2010-01-01 11:50:00&deleted_at_end=2099-01-01 11:50:00"
     //         )
@@ -185,7 +204,7 @@ describe("GET /wallet test suite", () => {
     // });
 
     // it("should list the wallets with all filters", async () => {
-    //     const response = await supertest(app)
+    //     const response = await request
     //         .get(
     //             "/api/wallet?page=1&limit=5&attribute=id&order=DESC&description=wallet&value=50000.55&status=FINISHED&type=A&expire_at_start=2010-01-01 11:50:00&expire_at_end=2099-01-01 11:50:00&wallet_id=1&created_at_start=2010-01-01 11:50:00&created_at_end=2099-01-01 11:50:00&updated_at_start=2010-01-01 11:50:00&updated_at_end=2099-01-01 11:50:00&deleted_at_start=2010-01-01 11:50:00&deleted_at_end=2099-01-01 11:50:00"
     //         )
