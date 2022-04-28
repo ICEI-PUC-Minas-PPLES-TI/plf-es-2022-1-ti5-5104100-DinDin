@@ -12,9 +12,6 @@ class WalletInvite extends Model {
                     allowNull: false,
                     required: true,
                     notEmpty: true,
-                    validate: {
-                        notEmpty: true,
-                    },
                 },
                 wallet_id: {
                     field: "wallet_id",
@@ -24,21 +21,15 @@ class WalletInvite extends Model {
                     allowNull: false,
                     required: true,
                     notEmpty: true,
-                    validate: {
-                        notEmpty: true,
-                    },
                 },
                 user_id: {
                     field: "user_id",
-                    type: DataTypes.INTEGER(11).UNSIGNED,
+                    type: DataTypes.INTEGER.UNSIGNED,
                     autoIncrement: false,
                     primaryKey: true,
                     allowNull: false,
                     required: true,
                     notEmpty: true,
-                    validate: {
-                        notEmpty: true,
-                    },
                 },
                 code: {
                     type: DataTypes.STRING(8),

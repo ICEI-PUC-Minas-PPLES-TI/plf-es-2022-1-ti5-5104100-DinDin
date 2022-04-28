@@ -12,38 +12,25 @@ class Wallet extends Model {
                     allowNull: false,
                     required: true,
                     notEmpty: true,
-                    validate: {
-                        notEmpty: true,
-                    },
                 },
                 description: {
                     field: "description",
                     type: DataTypes.STRING(30),
                     notEmpty: true,
                     allowNull: false,
-                    validate: {
-                        notEmpty: true,
-                    },
                 },
                 shared: {
                     field: "shared",
                     type: DataTypes.BOOLEAN,
                     notEmpty: true,
                     allowNull: false,
-                    notEmpty: true,
                     defaultValue: false,
-                    validate: {
-                        notEmpty: true,
-                    },
                 },
                 initial_value: {
                     type: DataTypes.DOUBLE,
                     allowNull: false,
                     defaultValue: 0,
                     notEmpty: true,
-                    validate: {
-                        notEmpty: true,
-                    },
                 },
                 created_at: {
                     type: DataTypes.DATE,

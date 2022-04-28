@@ -1,4 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
+const Wallet = require("./Wallet");
+const User = require("./User");
 
 class UserHasWallet extends Model {
     static init(sequelize) {
@@ -12,20 +14,22 @@ class UserHasWallet extends Model {
                     allowNull: false,
                     required: true,
                     notEmpty: true,
-                    validate: {
-                        notEmpty: true,
+                    references: {
+                        model: Wallet,
+                        key: "id",
                     },
                 },
                 user_id: {
                     field: "user_id",
-                    type: DataTypes.INTEGER(11).UNSIGNED,
+                    type: DataTypes.INTEGER.UNSIGNED,
                     autoIncrement: false,
                     primaryKey: true,
                     allowNull: false,
                     required: true,
                     notEmpty: true,
-                    validate: {
-                        notEmpty: true,
+                    references: {
+                        model: User,
+                        key: "id",
                     },
                 },
                 created_at: {
