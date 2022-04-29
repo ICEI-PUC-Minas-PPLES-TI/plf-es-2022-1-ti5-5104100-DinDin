@@ -4,11 +4,11 @@ on:
   push:
     branches: [master]
     paths: 
-    - 'Codigo/dindin-api/dindin-app/**'
+    - 'Codigo/dindin-api/**'
   pull_request:
     branches: [master]
     paths: 
-    - 'Codigo/dindin-api/dindin-app/**'
+    - 'Codigo/dindin-api/**'
 
 jobs:
 
@@ -21,8 +21,8 @@ jobs:
       
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-20.04]
-        node-version: [14.x, 16.x]
+        os: [ubuntu-latest]
+        node-version: [16.x]
 
     permissions:
       contents: 'read'
@@ -40,7 +40,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Create node .env file
-        working-directory: ./Codigo/dindin-api/dindin-app
+        working-directory: ./Codigo/dindin-api
         run: |
           touch .env
           echo DB_HOST=${{ secrets.DB_HOST }} >> .env
@@ -56,7 +56,7 @@ jobs:
           echo FB_PRIVATE_KEY="\"${{ secrets.FB_PRIVATE_KEY }}\"" >> .env
       
       - name: Create docker .env file
-        working-directory: ./Codigo/dindin-api/dindin-app
+        working-directory: ./Codigo/dindin-api
         run: |
           touch .env
           echo DB_HOST=${{ secrets.DB_HOST }} >> .env
@@ -83,7 +83,7 @@ jobs:
           mysql password: ${{ secrets.DB_PASSWORD }} # Required if "mysql user" exists. The password for the "mysql user"
 
       - name: npm install, build, and test
-        working-directory: ./Codigo/dindin-api/dindin-app
+        working-directory: ./Codigo/dindin-api
         run: |
           npm install
           npm test
