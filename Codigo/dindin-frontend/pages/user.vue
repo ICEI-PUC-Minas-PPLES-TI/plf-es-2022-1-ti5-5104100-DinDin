@@ -23,14 +23,14 @@
             <v-container fluids>
               <v-form
                 ref="formUserName"
-                v-on:submit.prevent="updateUserName"
                 lazy-validation
+                @submit.prevent="updateUserName"
               >
                 <v-row class="pb-2">
                   <v-text-field
+                    v-model="user.name"
                     :rules="[rules.required]"
                     outlined
-                    v-model="user.name"
                     hide-details="auto"
                     :clearable="true"
                     label="Full name"
@@ -64,28 +64,28 @@
             <v-container fluids>
               <v-form
                 ref="formUserPassword"
-                v-on:submit.prevent="updateUserPassword"
                 lazy-validation
+                @submit.prevent="updateUserPassword"
               >
                 <v-row class="pb-2">
                   <v-text-field
+                    v-model="user.oldPassword"
                     :rules="[rules.required]"
                     outlined
-                    v-model="user.oldPassword"
                     hide-details="auto"
                     :clearable="true"
                     label="Old Password"
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                     :type="show1 ? 'text' : 'password'"
-                    @click:append="show1 = !show1"
                     maxlength="40"
+                    @click:append="show1 = !show1"
                   />
                 </v-row>
                 <v-row class="pb-2">
                   <v-text-field
+                    v-model="user.newPassword"
                     :rules="[rules.required, rules.min]"
                     outlined
-                    v-model="user.newPassword"
                     hide-details="auto"
                     :clearable="true"
                     label="New Password"

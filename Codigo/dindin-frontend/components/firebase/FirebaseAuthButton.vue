@@ -44,7 +44,7 @@ function signInSuccessWithAuthResult(authResult, redirectUrl){
 }
 
 export default {
-  name: "auth",
+  name: "Auth",
   data() {
     return {
       showOrDivider: false,

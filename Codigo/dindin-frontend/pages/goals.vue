@@ -29,7 +29,7 @@
           <v-row>
             <v-col>
               <v-simple-table>
-                <template v-slot:default>
+                <template #default>
                   <thead>
                     <tr>
                       <th class="text-left">Name</th>
@@ -54,7 +54,7 @@
                       <td class="table-goals-status">{{ goal.status }}</td>
                       <td>
                         <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
+                          <template #activator="{ on, attrs }">
                             <v-btn
                               elevation="0"
                               small
@@ -68,7 +68,7 @@
                           <span>View</span>
                         </v-tooltip>
                         <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
+                          <template #activator="{ on, attrs }">
                             <v-btn
                               elevation="0"
                               small
@@ -82,7 +82,7 @@
                           <span>Edit</span>
                         </v-tooltip>
                         <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
+                          <template #activator="{ on, attrs }">
                             <v-btn
                               elevation="0"
                               small
@@ -120,9 +120,9 @@
       </v-col>
     </v-row>
     <modal
-      :goalToEdit="this.goalToEdit"
-      :modalEdit="this.modalEdit"
       v-model="showModal"
+      :goal-to-edit="goalToEdit"
+      :modal-edit="modalEdit"
       @created="$fetch"
     />
 
@@ -140,7 +140,7 @@
                   Status: {{ goalToView.status }}
                 </p>
                 <v-progress-linear
-                  :value="this.goalProgressValue"
+                  :value="goalProgressValue"
                   color="#28FF8B"
                   height="35"
                   rounded
@@ -249,10 +249,10 @@
 import modal from "@/components/goals/modal.vue";
 import Swal from "sweetalert2";
 export default {
-  layout: "home",
   components: {
     modal,
   },
+  layout: "home",
   data() {
     return {
       currentPage: 1,
@@ -278,6 +278,15 @@ export default {
       .finally(() => {
         this.loading = false;
       });
+  },
+  computed: {
+    viewStatusColor() {
+      return this.goalToView.status == "PENDING"
+        ? "#DED370" /* Yellow == PENDING */
+        : this.goalToView.status == "FINISHED"
+        ? "#5BD098" /* Green == FINISHED */
+        : "#FF4B55"; /* Red == LOST */
+    },
   },
   methods: {
     dateFormat(date) {
@@ -325,15 +334,6 @@ export default {
     viewGoal(goal) {
       this.goalToView = goal;
       this.viewGoalDetails = true;
-    },
-  },
-  computed: {
-    viewStatusColor() {
-      return this.goalToView.status == "PENDING"
-        ? "#DED370" /* Yellow == PENDING */
-        : this.goalToView.status == "FINISHED"
-        ? "#5BD098" /* Green == FINISHED */
-        : "#FF4B55"; /* Red == LOST */
     },
   },
 };

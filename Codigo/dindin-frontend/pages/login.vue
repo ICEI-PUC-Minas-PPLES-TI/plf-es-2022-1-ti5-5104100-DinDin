@@ -11,8 +11,9 @@
               </v-row>
 
               <v-card-text>
-                <v-form ref="formulario" v-on:submit.prevent="handleSubmit">
+                <v-form ref="formulario" @submit.prevent="handleSubmit">
                   <v-text-field
+                    v-model="email"
                     label="Login"
                     name="email"
                     prepend-inner-icon="mdi-account-circle"
@@ -21,11 +22,11 @@
                     outlined
                     placeholder="email@email.com"
                     :rules="[rules.required]"
-                    v-model="email"
                   ></v-text-field>
 
                   <v-text-field
                     ref="password"
+                    v-model="password"
                     :error-messages="erroLogin"
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                     :rules="[rules.required]"
@@ -35,17 +36,16 @@
                     :type="show1 ? 'text' : 'password'"
                     outlined
                     class="rounded-0"
-                    v-model="password"
                     @click:append="show1 = !show1"
                   ></v-text-field>
 
                   <v-btn
-                    @click.native="handleSubmit"
                     class="rounded-0 mt-2"
                     color="#5BD098"
                     x-large
                     block
                     dark
+                    @click.native="handleSubmit"
                   >
                     Login
                   </v-btn>
@@ -74,7 +74,7 @@
 <script>
 import image from "/static/logoEstreito.svg";
 export default {
-  name: "login",
+  name: "Login",
   data() {
     return {
       email: "",

@@ -25,13 +25,13 @@
         </v-alert>
         <!-- wallet Add Form -->
         <v-container fluids>
-          <v-form ref="form" v-on:submit.prevent="saveWallet" lazy-validation>
+          <v-form ref="form" lazy-validation @submit.prevent="saveWallet">
             <v-row class="pb-2">
               <v-text-field
+                v-model="wallet.description"
                 :rules="[rules.required]"
                 prepend-inner-icon="mdi-tag"
                 outlined
-                v-model="wallet.description"
                 hide-details="auto"
                 :clearable="true"
                 label="Description"
@@ -40,12 +40,12 @@
             </v-row>
             <v-row v-if="walletToEdit == null" class="pb-2">
               <v-text-field
+                v-model="wallet.initial_value"
                 :rules="[rules.required]"
                 prepend-inner-icon="mdi-cash"
                 outlined
                 type="number"
                 maxlength="40"
-                v-model="wallet.initial_value"
                 hide-details="auto"
                 :clearable="true"
                 label="Current Value"

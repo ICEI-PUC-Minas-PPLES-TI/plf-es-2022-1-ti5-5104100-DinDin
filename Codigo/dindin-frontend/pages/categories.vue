@@ -22,7 +22,7 @@
           <v-row>
             <v-col>
               <v-simple-table>
-                <template v-slot:default>
+                <template #default>
                   <thead>
                     <tr>
                       <th class="text-left">Name</th>
@@ -40,7 +40,7 @@
                       </td>
                       <td class="text-right">
                         <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
+                          <template #activator="{ on, attrs }">
                             <v-btn
                               elevation="0"
                               small
@@ -54,7 +54,7 @@
                           <span>Edit</span>
                         </v-tooltip>
                         <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
+                          <template #activator="{ on, attrs }">
                             <v-btn
                               elevation="0"
                               small
@@ -91,7 +91,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <modal :categoryId="categoryId" v-model="showModal" @created="$fetch" />
+    <modal v-model="showModal" :category-id="categoryId" @created="$fetch" />
   </v-container>
 </template>
 
@@ -99,10 +99,10 @@
 import modal from "@/components/categories/modal.vue";
 import Swal from "sweetalert2";
 export default {
-  layout: "home",
   components: {
     modal,
   },
+  layout: "home",
   data() {
     return {
       currentPage: 1,

@@ -25,13 +25,13 @@
         </v-alert>
         <!-- Categorie Add Form -->
         <v-container fluids>
-          <v-form ref="form" v-on:submit.prevent="saveCategory" lazy-validation>
+          <v-form ref="form" lazy-validation @submit.prevent="saveCategory">
             <v-row class="pb-2">
               <v-text-field
+                v-model="category.description"
                 :rules="[rules.required]"
                 prepend-inner-icon="mdi-tag"
                 outlined
-                v-model="category.description"
                 hide-details="auto"
                 :clearable="true"
                 label="Description"
@@ -49,15 +49,15 @@
             </v-row>
             <v-row class="mb-0 pb-2">
               <v-combobox
-                :rules="[rules.required]"
                 v-model="category.color"
+                :rules="[rules.required]"
                 :filter="filter"
                 :items="colors"
                 label="Color"
                 item-text="text"
                 outlined
               >
-                <template v-slot:selection="{ attrs, item, selected }">
+                <template #selection="{ attrs, item, selected }">
                   <v-chip
                     v-if="item === Object(item)"
                     v-bind="attrs"
@@ -71,7 +71,7 @@
                     {{ item.text }}
                   </span>
                 </template>
-                <template v-slot:item="{ item }">
+                <template #item="{ item }">
                   <v-chip :color="`${item.hex}`" dark label small> </v-chip>
                   <span class="pl-2">
                     {{ item.text }}

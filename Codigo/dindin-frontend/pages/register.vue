@@ -13,9 +13,9 @@
               <v-row>
                 <v-col cols="12" sm="12" md="12">
                   <v-text-field
+                    v-model="user.name"
                     dense
                     hide-details="auto"
-                    v-model="user.name"
                     label="Name"
                     placeholder="Full name"
                     outlined
@@ -25,9 +25,9 @@
                 <!--LOGIN-->
                 <v-col cols="12" sm="12">
                   <v-text-field
+                    v-model="user.email"
                     dense
                     hide-details="auto"
-                    v-model="user.email"
                     label="Email"
                     placeholder="Enter Email Address"
                     outlined
@@ -37,8 +37,8 @@
                 <!--SENHA-->
                 <v-col cols="12" sm="12">
                   <v-text-field
-                    dense
                     v-model="user.password"
+                    dense
                     :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                     :rules="[
                       (value) => !!value || 'Password is requried',
@@ -48,16 +48,16 @@
                     label="Password"
                     hint="At least 8 caracteres"
                     hide-details="auto"
-                    @click:append="show1 = !show1"
                     outlined
+                    @click:append="show1 = !show1"
                   ></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12" sm="12">
                   <v-text-field
-                    dense
                     v-model="user.confirmPassword"
+                    dense
                     :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
                     :rules="[
                       (value) => !!value || 'Confirm Password is requried',
@@ -67,8 +67,8 @@
                     label="Confirm Password"
                     hint="At least 8 caracteres"
                     hide-details="auto"
-                    @click:append="show2 = !show2"
                     outlined
+                    @click:append="show2 = !show2"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -78,11 +78,11 @@
                     v-model="user.agree"
                     :rules="[(v) => !!v || 'You must agree to continue!']"
                   >
-                    <template v-slot:label>
+                    <template #label>
                       <div>
                         I’ve read and agree to the
                         <v-tooltip bottom>
-                          <template v-slot:activator="{ on }">
+                          <template #activator="{ on }">
                             <a
                               target="_blank"
                               href="https://vuetifyjs.com"
@@ -123,7 +123,7 @@
     <v-snackbar v-model="toast" shaped>
       {{ toastMensagem }}
 
-      <template v-slot:action="{ attrs }">
+      <template #action="{ attrs }">
         <v-btn
           color="blue"
           text

@@ -25,13 +25,13 @@
         </v-alert>
         <!-- Goal Add Form -->
         <v-container fluids>
-          <v-form ref="form" v-on:submit.prevent="saveGoal" lazy-validation>
+          <v-form ref="form" lazy-validation @submit.prevent="saveGoal">
             <v-row class="pb-2">
               <v-text-field
+                v-model="goal.description"
                 :rules="[rules.required]"
                 prepend-inner-icon="mdi-tag"
                 outlined
-                v-model="goal.description"
                 hide-details="auto"
                 :clearable="true"
                 label="Description"
@@ -40,8 +40,8 @@
             </v-row>
             <v-row class="pb-2">
               <v-text-field
-                :rules="[rules.required]"
                 v-model="goal.value"
+                :rules="[rules.required]"
                 prepend-inner-icon="mdi-currency-usd"
                 outlined
                 type="number"
@@ -58,7 +58,7 @@
                 offset-y
                 min-width="290px"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template #activator="{ on, attrs }">
                   <v-text-field
                     :rules="[rules.wrongDate]"
                     prepend-inner-icon="mdi-calendar-range"
@@ -67,8 +67,8 @@
                     type="text"
                     :value="date"
                     v-bind="attrs"
-                    v-on="on"
                     label="Expire at"
+                    v-on="on"
                   />
                 </template>
                 <v-date-picker
@@ -80,9 +80,9 @@
             </v-row>
             <v-row class="mb-0 pb-2">
               <v-select
+                v-model="goal.type"
                 :rules="[rules.required]"
                 prepend-inner-icon="mdi-bullseye"
-                v-model="goal.type"
                 hide-details="auto"
                 outlined
                 :items="[
@@ -94,8 +94,8 @@
             </v-row>
             <v-row class="mt-0 pt-0">
               <v-select
-                :rules="[rules.required]"
                 v-model="goal.walletId"
+                :rules="[rules.required]"
                 prepend-inner-icon="mdi-wallet"
                 outlined
                 hide-details="auto"
@@ -195,6 +195,15 @@ export default {
         this.fillForm(this.choosenGoal);
       }
     },
+  },
+  mounted() {
+    let dateToday = new Date(
+      Date.now() - new Date().getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .substr(0, 10);
+    const [year, month, day] = dateToday.split("-");
+    this.today = `${day}/${month}/${year}`;
   },
   methods: {
     saveGoal() {
@@ -299,15 +308,6 @@ export default {
     cleanForm() {
       this.$refs.form.reset();
     },
-  },
-  mounted() {
-    let dateToday = new Date(
-      Date.now() - new Date().getTimezoneOffset() * 60000
-    )
-      .toISOString()
-      .substr(0, 10);
-    const [year, month, day] = dateToday.split("-");
-    this.today = `${day}/${month}/${year}`;
   },
 };
 </script>

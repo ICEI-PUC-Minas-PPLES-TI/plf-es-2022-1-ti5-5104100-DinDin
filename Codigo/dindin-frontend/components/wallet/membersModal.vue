@@ -18,7 +18,7 @@
         <!-- wallet Add Form -->
         <v-container fluids>
           <v-simple-table v-if="members.length > 0">
-            <template v-slot:default>
+            <template #default>
               <thead>
                 <tr>
                   <th class="text-left">Name</th>
@@ -35,7 +35,7 @@
                   </td>
                   <td class="text-right">
                     <v-tooltip top>
-                      <template v-slot:activator="{ on, attrs }">
+                      <template #activator="{ on, attrs }">
                         <v-btn
                           elevation="0"
                           small
@@ -54,7 +54,7 @@
               </tbody>
             </template>
           </v-simple-table>
-          <span class="text-center" v-else-if="!loading">
+          <span v-else-if="!loading" class="text-center">
             No members in wallet
           </span>
         </v-container>

@@ -36,7 +36,7 @@
           <v-row>
             <v-col>
               <v-simple-table v-if="wallets.length > 0">
-                <template v-slot:default>
+                <template #default>
                   <thead>
                     <tr>
                       <th class="text-left">Name</th>
@@ -52,7 +52,7 @@
                     <tr v-for="(wallet, gidx) in wallets" :key="gidx">
                       <td>
                         {{ wallet.description }}
-                        <span class="shared-wallet" v-if="wallet.shared"
+                        <span v-if="wallet.shared" class="shared-wallet"
                           >(shared)</span
                         >
                       </td>
@@ -60,7 +60,7 @@
                       <td>R${{ wallet.initial_value }}</td>
                       <td>
                         <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
+                          <template #activator="{ on, attrs }">
                             <v-btn
                               elevation="0"
                               small
@@ -74,7 +74,7 @@
                           <span class="caption">Shared</span>
                         </v-tooltip>
                         <v-tooltip v-if="wallet.shared" top>
-                          <template v-slot:activator="{ on, attrs }">
+                          <template #activator="{ on, attrs }">
                             <v-btn
                               elevation="0"
                               small
@@ -88,7 +88,7 @@
                           <span>Members</span>
                         </v-tooltip>
                         <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
+                          <template #activator="{ on, attrs }">
                             <v-btn
                               elevation="0"
                               small
@@ -102,7 +102,7 @@
                           <span>Edit</span>
                         </v-tooltip>
                         <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
+                          <template #activator="{ on, attrs }">
                             <v-btn
                               elevation="0"
                               small
@@ -121,7 +121,7 @@
                   </tbody>
                 </template>
               </v-simple-table>
-              <span class="text-center" v-else-if="!loading">
+              <span v-else-if="!loading" class="text-center">
                 No wallets created
               </span>
             </v-col>
@@ -143,14 +143,14 @@
       </v-col>
     </v-row>
     <modal
-      :walletToEdit="this.walletToEdit"
-      :modalEdit="this.modalEdit"
       v-model="showModal"
+      :wallet-to-edit="walletToEdit"
+      :modal-edit="modalEdit"
       @created="$fetch"
     />
     <membersModal
       v-model="showMembersModal"
-      :walletId="this.walletToShowMembersId"
+      :wallet-id="walletToShowMembersId"
     />
   </v-container>
 </template>
@@ -160,11 +160,11 @@ import modal from "@/components/wallet/modal.vue";
 import membersModal from "@/components/wallet/membersModal.vue";
 import Swal from "sweetalert2";
 export default {
-  layout: "home",
   components: {
     modal,
     membersModal,
   },
+  layout: "home",
   data() {
     return {
       currentPage: 1,
