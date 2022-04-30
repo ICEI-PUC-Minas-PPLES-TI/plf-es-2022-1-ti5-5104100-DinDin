@@ -27,7 +27,7 @@
         <v-container fluids>
           <v-form ref="form" v-on:submit.prevent="saveGoal" lazy-validation>
             <v-row>
-              <v-radio-group row v-model="transaction.recurrent" mandatory>
+              <v-radio-group row v-model="transaction.type" mandatory>
                 <v-radio
                   label="Income"
                   value="IN"
@@ -65,11 +65,11 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    :rules="[rules.wrongDate]"
+                    :rules="[rules.required]"
                     prepend-inner-icon="mdi-calendar-range"
                     outlined
                     hide-details="auto"
-                    type="text"
+                    type="date"
                     :value="date"
                     v-bind="attrs"
                     v-on="on"
@@ -168,6 +168,7 @@ export default {
       transaction: {
         id: "",
         value: "",
+        type: "",
         category: "",
         recurrent: false,
       },
@@ -177,8 +178,8 @@ export default {
       menu: false,
       rules: {
         required: (value) => !!value || "Required.",
-        wrongDate: (value) =>
-          this.compareDates(value, this.today) || "Date expired.",
+        // wrongDate: (value) =>
+        //   this.compareDates(value, this.today) || "Date expired.",
       },
       errors: [],
     };

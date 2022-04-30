@@ -23,7 +23,7 @@
         <v-card elevation="0" class="p-20">
           <!-- Table top toolbar -->
           <v-row>
-            <v-col cols="12" md="3" sm="6" lg="2">
+            <v-col cols="12" md="2" sm="6" lg="2">
               <v-select
                 v-model="filters.wallet"
                 :items="listWalletsFilter"
@@ -33,7 +33,7 @@
                 outlined
               ></v-select>
             </v-col>
-            <v-col cols="12" md="3" sm="6" lg="2">
+            <v-col cols="12" md="2" sm="6" lg="2">
               <v-select
                 v-model="filters.category"
                 :items="listCategoriesFilter"
@@ -50,6 +50,7 @@
                 :nudge-right="40"
                 transition="scale-transition"
                 offset-y
+                class="modal-input-date"
                 min-width="auto"
               >
                 <template v-slot:activator="{ on, attrs }">
@@ -61,6 +62,7 @@
                     type="date"
                     min="2017-06-01"
                     max="2050-06-30"
+                    class="modal-input-date"
                   >
                     <span slot="append">
                       <v-icon v-bind="attrs" v-on="on"> mdi-calendar </v-icon>
@@ -73,7 +75,7 @@
                 ></v-date-picker>
               </v-menu>
             </v-col>
-            <v-col cols="12" md="4" sm="6" lg="3">
+            <v-col cols="12" md="3" sm="6" lg="3">
               <v-menu
                 v-model="menuData2"
                 :close-on-content-click="false"
@@ -81,6 +83,7 @@
                 transition="scale-transition"
                 offset-y
                 min-width="auto"
+                class="modal-input-date"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -91,6 +94,7 @@
                     type="date"
                     min="2017-06-01"
                     max="2050-06-30"
+                    class="modal-input-date"
                   >
                     <span slot="append">
                       <v-icon v-bind="attrs" v-on="on"> mdi-calendar </v-icon>
@@ -164,13 +168,7 @@
                       <td class="text-right">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
-                            <v-btn
-                              elevation="0"
-                              small
-                              v-bind="attrs"
-                              v-on="on"
-                              @click="openModal(category.id)"
-                            >
+                            <v-btn elevation="0" small v-bind="attrs" v-on="on">
                               <i class="fa-solid fa-pen-to-square"></i>
                             </v-btn>
                           </template>
@@ -184,7 +182,7 @@
                               color="error"
                               v-bind="attrs"
                               v-on="on"
-                              @click="removeTransaction(category.id)"
+                              @click="removeTransaction(transaction.id)"
                             >
                               <i class="fa-solid fa-trash"></i>
                             </v-btn>
@@ -236,6 +234,7 @@ export default {
       pages: 1,
       transactions: [
         {
+          id: "1",
           description: "Be Biquinis",
           date: "30/04/2022",
           amount: "+R$1000",
@@ -253,6 +252,7 @@ export default {
           },
         },
         {
+          id: "2",
           description: "Uber Monthly",
           date: "30/04/2022",
           amount: "+R$2000",
@@ -270,6 +270,7 @@ export default {
           },
         },
         {
+          id: "3",
           description: "Verdemar",
           date: "30/04/2022",
           amount: "-R$2000",
@@ -351,31 +352,31 @@ export default {
       this.$fetch();
     },
     removeTransaction(id) {
-      // Swal.fire({
-      //   title: "Are you sure?",
-      //   text: "You won't be able to revert this!",
-      //   icon: "warning",
-      //   showCancelButton: true,
-      //   confirmButtonColor: "#d33",
-      //   reverseButtons: true,
-      //   confirmButtonText: "Yes, I want to delete!",
-      // }).then((result) => {
-      //   if (result.isConfirmed) {
-      //     this.$axios.delete("/category/" + id).then((res) => {
-      //       Swal.fire({
-      //         title: "Deleted!",
-      //         text: "The category has been deleted.",
-      //         icon: "info",
-      //         showConfirmButton: false,
-      //         toast: true,
-      //         position: "top-end",
-      //         timer: 3000,
-      //         timerProgressBar: true,
-      //       });
-      //       this.$fetch();
-      //     });
-      //   }
-      // });
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        reverseButtons: true,
+        confirmButtonText: "Yes, I want to delete!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // this.$axios.delete("/category/" + id).then((res) => {
+          //   Swal.fire({
+          //     title: "Deleted!",
+          //     text: "The category has been deleted.",
+          //     icon: "info",
+          //     showConfirmButton: false,
+          //     toast: true,
+          //     position: "top-end",
+          //     timer: 3000,
+          //     timerProgressBar: true,
+          //   });
+          //   this.$fetch();
+          // });
+        }
+      });
     },
     openModal(id) {
       this.showModal = true;
@@ -385,11 +386,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.table-transactions-status {
-  text-transform: lowercase;
-  &::first-letter {
-    text-transform: uppercase;
-  }
+<style>
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none !important;
+  -webkit-appearance: none !important;
+}
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none !important;
+  -webkit-appearance: none !important;
 }
 </style>
