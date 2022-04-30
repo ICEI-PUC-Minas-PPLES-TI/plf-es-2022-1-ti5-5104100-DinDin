@@ -5,7 +5,7 @@
     @click:outside="$emit('input', false)"
     @keydown.esc="$emit('input', false)"
   >
-    <v-card v-if="this.wallets.length>0" class="pa-2">
+    <v-card v-if="this.wallets.length > 0" class="pa-2">
       <v-card-title class="text-h5 goals-modal-title">
         <h4>
           <span> {{ title }}</span>
@@ -40,14 +40,14 @@
             </v-row>
             <v-row class="pb-2">
               <v-text-field
-                :rules="[rules.required]"
+                :rules="[rules.required,rules.higherThanZero]"
                 v-model="goal.value"
                 prepend-inner-icon="mdi-currency-usd"
                 outlined
                 type="number"
                 hide-details="auto"
                 :clearable="true"
-                label="0,00"
+                label="Target value"
                 maxlength="40"
               />
             </v-row>
@@ -60,7 +60,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    :rules="[rules.required,rules.wrongDate]"
+                    :rules="[rules.required, rules.wrongDate]"
                     prepend-inner-icon="mdi-calendar-range"
                     outlined
                     hide-details="auto"
@@ -129,7 +129,6 @@
       <v-card-title class="text-h5 goals-modal-title">
         <h4>
           <span>You must create a wallet first!</span>
-          
         </h4>
         <v-btn icon @click="$emit('input', false)">
           <v-icon>mdi-close</v-icon>
@@ -178,7 +177,7 @@ export default {
         value: "",
         type: "",
         wallet_id: "",
-        status: "PENDING"
+        status: "PENDING",
       },
       wallets: [],
       choosenGoal: "",
@@ -189,6 +188,11 @@ export default {
         required: (value) => !!value || "Required.",
         wrongDate: (value) =>
           this.compareDates(value, this.today) || "Date expired.",
+        higherThanZero: (value) => {
+          if (value <= 0) {
+            return "Target value must be higer than 0";
+          }
+        },
       },
       errors: [],
     };
@@ -265,7 +269,7 @@ export default {
       this.errors = [];
       if (this.$refs.form.validate()) {
         this.$axios
-          .put("/goal/"+this.goal.id, this.goal)
+          .put("/goal/" + this.goal.id, this.goal)
           .then((res) => {
             Swal.fire({
               title: "Goal Edited",
@@ -296,8 +300,8 @@ export default {
       this.date = `${day}/${month}/${year}`;
     },
     shortDate(date) {
-      if(!date){
-        return null
+      if (!date) {
+        return null;
       }
       let parse = date.substring(0, 10);
       const [year, month, day] = parse.split("-");
@@ -310,19 +314,19 @@ export default {
       let date1Split = date1.split("/");
       let date2Split = date2.split("/");
       let resp = false;
-      if(parseInt(date1Split[2]) > parseInt(date2Split[2])){
-          return true;
+      if (parseInt(date1Split[2]) > parseInt(date2Split[2])) {
+        return true;
       }
-      if(parseInt(date1Split[1]) > parseInt(date2Split[1])){
-          return true;
+      if (parseInt(date1Split[1]) > parseInt(date2Split[1])) {
+        return true;
       }
       if (parseInt(date1Split[0]) >= parseInt(date2Split[0])) {
-          return true;
+        return true;
       }
       return resp;
     },
     fillForm(data) {
-      this.goal.id=data.id;
+      this.goal.id = data.id;
       this.goal.description = data.description;
       this.goal.value = data.value;
       this.date = this.shortDate(data.expire_at);
@@ -333,14 +337,11 @@ export default {
     cleanForm() {
       this.$refs.form.reset();
     },
-    async getWallets(){
-      await this.$axios
-      .$get(`/wallet`)
-      .then((res) => {
+    async getWallets() {
+      await this.$axios.$get(`/wallet`).then((res) => {
         this.wallets = res.wallets;
-    })
-    }
-
+      });
+    },
   },
   mounted() {
     let dateToday = new Date(
@@ -352,7 +353,6 @@ export default {
     this.today = `${day}/${month}/${year}`;
     this.getWallets();
   },
-  
 };
 </script>
 
