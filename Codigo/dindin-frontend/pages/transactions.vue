@@ -1,12 +1,273 @@
 <template>
-  <v-container fluid> Transactions </v-container>
+  <v-container fluid>
+    <!-- Page Title -->
+    <v-row>
+      <v-col>
+        <h2 class="page-title">Transactions</h2>
+      </v-col>
+    </v-row>
+    <!-- Balance Selection -->
+    <v-row>
+      <v-col>
+        <v-card elevation="0" class="p-20">
+          <div class="text-center"><h3>Your Balance</h3></div>
+          <div class="text-center">
+            <h1><b> R$ 25.000,00 </b></h1>
+          </div>
+        </v-card>
+      </v-col>
+    </v-row>
+    <!-- Table Section -->
+    <v-row>
+      <v-col>
+        <v-card elevation="0" class="p-20">
+          <!-- Table top toolbar -->
+          <v-row>
+            <v-col cols="2" offset="10">
+              <v-btn block color="success" @click.stop="openModal(0)">
+                New Transaction
+              </v-btn>
+            </v-col>
+          </v-row>
+          <!-- Table -->
+          <v-row>
+            <v-col>
+              <v-simple-table>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">Name</th>
+                      <th class="text-left">Date</th>
+                      <th class="text-left">Amount</th>
+                      <th class="text-left">Category</th>
+                      <th class="text-left">Wallet</th>
+                      <th class="text-right">Options</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-if="loading">
+                      <td colspan="6">Loading...</td>
+                    </tr>
+                    <tr v-for="(transaction, idx) in transactions" :key="idx">
+                      <td>
+                        <v-avatar
+                          :color="transaction.category.type == 'IN' ? 'primary' : 'error' "
+                          size="30"
+                        >
+                          <v-icon color="white">
+                            mdi-arrow-{{
+                              transaction.category.type == 'IN' ? 'up' : 'down'
+                            }}-thin
+                          </v-icon>
+                        </v-avatar>
+                        &nbsp; {{ transaction.description }}
+                      </td>
+                      <td>
+                        {{ transaction.date }}
+                      </td>
+                      <td>
+                        {{ transaction.amount }}
+                      </td>
+                      <td>
+                        <div
+                          :style="swatchStyle('#' + transaction.category.color)"
+                        />
+                        &nbsp; {{ transaction.category.description }}
+                      </td>
+                      <td>
+                        {{ transaction.wallet.description }}
+                      </td>
+                      <td class="text-right">
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                              elevation="0"
+                              small
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="showModal(category.id)"
+                            >
+                              <i class="fa-solid fa-pen-to-square"></i>
+                            </v-btn>
+                          </template>
+                          <span>Edit</span>
+                        </v-tooltip>
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                              elevation="0"
+                              small
+                              color="error"
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="removeCategory(category.id)"
+                            >
+                              <i class="fa-solid fa-trash"></i>
+                            </v-btn>
+                          </template>
+                          <span>Delete</span>
+                        </v-tooltip>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-col>
+          </v-row>
+          <!-- Pagination -->
+          <v-row>
+            <v-col cols="12" md="8" offset-md="4">
+              <div class="mw-100">
+                <v-pagination
+                  v-model="currentPage"
+                  class="my-4"
+                  :length="pages"
+                  @input="changePagination"
+                ></v-pagination>
+              </div>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+import Swal from "sweetalert2";
 export default {
   layout: "home",
+  components: {
+    //modal,
+  },
+  data() {
+    return {
+      currentPage: 1,
+      pages: 1,
+      transactions: [
+        {
+          description: "Be Biquinis",
+          date: "30/04/2022",
+          amount: "+R$1000",
+          category: {
+            id: "",
+            description: "Category X",
+            type: "IN",
+            color: "0079bf",
+            wallet_id: "",
+            user_id: "",
+          },
+          wallet: {
+            id: "",
+            description: "Wallet X",
+          },
+        },
+        {
+          description: "Uber Monthly",
+          date: "30/04/2022",
+          amount: "+R$2000",
+          category: {
+            id: "",
+            description: "Category Y",
+            type: "IN",
+            color: "344563",
+            wallet_id: "",
+            user_id: "",
+          },
+          wallet: {
+            id: "",
+            description: "Wallet Y",
+          },
+        },
+        {
+          description: "Verdemar",
+          date: "30/04/2022",
+          amount: "-R$2000",
+          category: {
+            id: "",
+            description: "Category Z",
+            type: "OUT",
+            color: "c377e0",
+            wallet_id: "",
+            user_id: "",
+          },
+          wallet: {
+            id: "",
+            description: "Wallet Z",
+          },
+        },
+      ],
+      loading: false,
+      showModal: false,
+      categoryId: 0,
+    };
+  },
+
+  async fetch() {
+    // this.loading = true;
+    // await this.$axios
+    //   .$get(`/category?page=${this.currentPage}`)
+    //   .then((res) => {
+    //     this.pages = res.pages;
+    //     this.transactions = res.transactions;
+    //   })
+    //   .finally(() => {
+    //     this.loading = false;
+    //   });
+  },
+  methods: {
+    swatchStyle(color) {
+      return {
+        display: "inline-block",
+        backgroundColor: color,
+        height: "25px",
+        width: "25px",
+        borderRadius: "10px",
+      };
+    },
+    changePagination() {
+      this.$fetch();
+    },
+    removeCategory(id) {
+      // Swal.fire({
+      //   title: "Are you sure?",
+      //   text: "You won't be able to revert this!",
+      //   icon: "warning",
+      //   showCancelButton: true,
+      //   confirmButtonColor: "#d33",
+      //   reverseButtons: true,
+      //   confirmButtonText: "Yes, I want to delete!",
+      // }).then((result) => {
+      //   if (result.isConfirmed) {
+      //     this.$axios.delete("/category/" + id).then((res) => {
+      //       Swal.fire({
+      //         title: "Deleted!",
+      //         text: "The category has been deleted.",
+      //         icon: "info",
+      //         showConfirmButton: false,
+      //         toast: true,
+      //         position: "top-end",
+      //         timer: 3000,
+      //         timerProgressBar: true,
+      //       });
+      //       this.$fetch();
+      //     });
+      //   }
+      // });
+    },
+    openModal(id) {
+      // this.showModal = true;
+      // this.categoryId = parseInt(id);
+    },
+  },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.table-transactions-status {
+  text-transform: lowercase;
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
 </style>
