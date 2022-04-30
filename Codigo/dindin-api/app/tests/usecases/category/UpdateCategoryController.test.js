@@ -1,12 +1,12 @@
-const supertest = require("supertest"); // "requester"
 require("dotenv").config();
 
-const app = require("../../..");
-const { connect, close } = require("../../../database");
+let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+const { close } = require("../../../database");
+
 const Category = require("../../../models/Category");
 
 beforeAll(async () => {
-    await connect();
+    await connectAndLogin();
 });
 
 afterAll(async () => {
@@ -27,7 +27,7 @@ describe("PUT /category test suite", () => {
         mockCategory.description = "Category Updated";
         mockCategory.color = "1233er";
 
-        const response = await supertest(app)
+        const response = await request
             .put("/api/Category/" + createdCategory.id)
             .send(mockCategory);
 
@@ -37,7 +37,7 @@ describe("PUT /category test suite", () => {
     });
 
     it("should fail validation with big description", async () => {
-        const response = await supertest(app).put("/api/category/1").send({
+        const response = await request.put("/api/category/1").send({
             description: "MaisDe30CaracteresParaRetornar422",
             type: "OUT",
             color: "FF0000",
@@ -46,7 +46,7 @@ describe("PUT /category test suite", () => {
     });
 
     it("should not update a new category with invalid type", async () => {
-        const response = await supertest(app).put("/api/category/1").send({
+        const response = await request.put("/api/category/1").send({
             description: "test",
             type: "invalid",
             color: "FF0000",
@@ -55,7 +55,7 @@ describe("PUT /category test suite", () => {
     });
 
     it("should not update a new category with invalid color (small)", async () => {
-        const response = await supertest(app).put("/api/category/1").send({
+        const response = await request.put("/api/category/1").send({
             description: "test",
             type: "OUT",
             color: "so3",
@@ -64,7 +64,7 @@ describe("PUT /category test suite", () => {
     });
 
     it("should not update a new category with invalid color (big)", async () => {
-        const response = await supertest(app).put("/api/category/1").send({
+        const response = await request.put("/api/category/1").send({
             description: "test",
             type: "OUT",
             color: "maisde6",
@@ -76,7 +76,7 @@ describe("PUT /category test suite", () => {
         const category = await Category.findByPk(1);
         const oldWalletId = category.wallet_id;
         const oldUserId = category.wallet_id;
-        const response = await supertest(app).put("/api/category/1").send({
+        const response = await request.put("/api/category/1").send({
             user_id: "24898489",
             wallet_id: "24898489",
         });
@@ -84,7 +84,7 @@ describe("PUT /category test suite", () => {
         expect(response.body).toHaveProperty("id");
         expect(response.body).toHaveProperty("user_id");
         expect(response.body).toHaveProperty("wallet_id");
-        const getResponse = await supertest(app).get("/api/category/1");
+        const getResponse = await request.get("/api/category/1");
         expect(getResponse.body.wallet_id).toEqual(oldUserId);
         expect(getResponse.body.wallet_id).toEqual(oldWalletId);
     });

@@ -21,6 +21,14 @@
           <!-- Table -->
           <v-row>
             <v-col>
+              <v-tabs>
+                <v-tab @change="type='IN'; $fetch()">Incoming</v-tab>
+                <v-tab @change="type='OUT'; $fetch()">Outcoming</v-tab>
+              </v-tabs>              
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
               <v-simple-table>
                 <template v-slot:default>
                   <thead>
@@ -111,13 +119,17 @@ export default {
       loading: false,
       showModal: false,
       categoryId: 0,
+      type: "",
     };
   },
-
   async fetch() {
     this.loading = true;
+    let typeFilter = "";
+    if (this.type) {
+      typeFilter = `&type=${this.type}`;
+    }
     await this.$axios
-      .$get(`/category?page=${this.currentPage}`)
+      .$get(`/category?page=${this.currentPage}` + typeFilter)
       .then((res) => {
         this.pages = res.pages;
         this.categories = res.categories;

@@ -1,12 +1,12 @@
-const supertest = require("supertest"); // "requester"
 require("dotenv").config();
 
-const app = require("../../..");
-const { connect, close } = require("../../../database");
+let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+const { close } = require("../../../database");
+
 const Category = require("../../../models/Category");
 
 beforeAll(async () => {
-    await connect();
+    await connectAndLogin();
 });
 
 afterAll(async () => {
@@ -24,7 +24,7 @@ describe("DELETE /category:id test suite", () => {
         };
         const createdCategory = await Category.create(mockCategory);
 
-        const response = await supertest(app)
+        const response = await request
             .delete("/api/category/" + createdCategory.id)
             .send();
 
@@ -36,7 +36,7 @@ describe("DELETE /category:id test suite", () => {
 
     it("should not find a non-existent category when trying to delete it", async () => {
         const nonExistentId = 987654321;
-        const response = await supertest(app)
+        const response = await request
             .delete("/api/category/" + nonExistentId)
             .send();
 
@@ -48,30 +48,24 @@ describe("DELETE /category:id test suite", () => {
 
     it("should fail when trying to delete Category with invalid id", async () => {
         let invalidId = 0;
-        let response = await supertest(app)
+        let response = await request
             .delete("/api/category/" + invalidId)
             .send();
 
         expect(response.statusCode).toEqual(422);
 
         invalidId = -1;
-        response = await supertest(app)
-            .delete("/api/category/" + invalidId)
-            .send();
+        response = await request.delete("/api/category/" + invalidId).send();
 
         expect(response.statusCode).toEqual(422);
 
         invalidId = null;
-        response = await supertest(app)
-            .delete("/api/category/" + invalidId)
-            .send();
+        response = await request.delete("/api/category/" + invalidId).send();
 
         expect(response.statusCode).toEqual(422);
 
         invalidId = undefined;
-        response = await supertest(app)
-            .delete("/api/category/" + invalidId)
-            .send();
+        response = await request.delete("/api/category/" + invalidId).send();
 
         expect(response.statusCode).toEqual(422);
     });

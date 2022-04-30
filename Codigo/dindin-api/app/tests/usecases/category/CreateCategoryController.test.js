@@ -1,12 +1,12 @@
-const supertest = require("supertest"); // "requester"
 require("dotenv").config();
 
-const app = require("../../..");
-const { connect, close } = require("../../../database");
+let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+const { close } = require("../../../database");
+
 const Category = require("../../../models/Category");
 
 beforeAll(async () => {
-    await connect();
+    await connectAndLogin();
 });
 
 afterAll(async () => {
@@ -15,7 +15,7 @@ afterAll(async () => {
 
 describe("POST /goal test suite", () => {
     it("should create a new category IN", async () => {
-        const response = await supertest(app).post("/api/category").send({
+        const response = await request.post("/api/category").send({
             user_id: 1,
             wallet_id: 1,
             description: "teste IN",
@@ -35,7 +35,7 @@ describe("POST /goal test suite", () => {
     });
 
     it("should create a new category OUT", async () => {
-        const response = await supertest(app).post("/api/category").send({
+        const response = await request.post("/api/category").send({
             user_id: 2,
             wallet_id: 2,
             description: "teste OUT",
@@ -55,7 +55,7 @@ describe("POST /goal test suite", () => {
     });
 
     it("should fail validation missing user_id", async () => {
-        const response = await supertest(app).post("/api/category").send({
+        const response = await request.post("/api/category").send({
             wallet_id: 1,
             description: "teste",
             type: "IN",
@@ -65,7 +65,7 @@ describe("POST /goal test suite", () => {
     });
 
     it("should fail validation missing wallet_id", async () => {
-        const response = await supertest(app).post("/api/category").send({
+        const response = await request.post("/api/category").send({
             user_id: 1,
             description: "teste",
             type: "IN",
@@ -75,7 +75,7 @@ describe("POST /goal test suite", () => {
     });
 
     it("should fail validation missing description", async () => {
-        const response = await supertest(app).post("/api/category").send({
+        const response = await request.post("/api/category").send({
             user_id: 1,
             wallet_id: 1,
             type: "OUT",
@@ -85,7 +85,7 @@ describe("POST /goal test suite", () => {
     });
 
     it("should fail validation missing type", async () => {
-        const response = await supertest(app).post("/api/category").send({
+        const response = await request.post("/api/category").send({
             user_id: 1,
             wallet_id: 1,
             description: "teste",
@@ -95,7 +95,7 @@ describe("POST /goal test suite", () => {
     });
 
     it("should fail validation with big description", async () => {
-        const response = await supertest(app).post("/api/category").send({
+        const response = await request.post("/api/category").send({
             user_id: 1,
             wallet_id: 1,
             description: "MaisDe30CaracteresParaRetornar422",
@@ -106,7 +106,7 @@ describe("POST /goal test suite", () => {
     });
 
     it("should not create a new category with invalid type", async () => {
-        const response = await supertest(app).post("/api/category").send({
+        const response = await request.post("/api/category").send({
             user_id: 1,
             wallet_id: 1,
             description: "test",
@@ -117,7 +117,7 @@ describe("POST /goal test suite", () => {
     });
 
     it("should not create a new category with invalid color (small)", async () => {
-        const response = await supertest(app).post("/api/category").send({
+        const response = await request.post("/api/category").send({
             user_id: 1,
             wallet_id: 1,
             description: "test",
@@ -128,7 +128,7 @@ describe("POST /goal test suite", () => {
     });
 
     it("should not create a new category with invalid color (big)", async () => {
-        const response = await supertest(app).post("/api/category").send({
+        const response = await request.post("/api/category").send({
             user_id: 1,
             wallet_id: 1,
             description: "test",
@@ -139,7 +139,7 @@ describe("POST /goal test suite", () => {
     });
 
     it("should not create a new category with not existent user id", async () => {
-        const response = await supertest(app).post("/api/category").send({
+        const response = await request.post("/api/category").send({
             user_id: 53219872725,
             wallet_id: 1,
             description: "test",
