@@ -23,7 +23,87 @@
         <v-card elevation="0" class="p-20">
           <!-- Table top toolbar -->
           <v-row>
-            <v-col cols="2" offset="10">
+            <v-col cols="12" md="3" sm="6" lg="2">
+              <v-select
+                v-model="filters.wallet"
+                :items="listWalletsFilter"
+                label="Wallet"
+                item-value="id"
+                item-text="description"
+                outlined
+              ></v-select>
+            </v-col>
+            <v-col cols="12" md="3" sm="6" lg="2">
+              <v-select
+                v-model="filters.category"
+                :items="listCategoriesFilter"
+                label="Category"
+                item-value="id"
+                item-text="description"
+                outlined
+              ></v-select>
+            </v-col>
+            <v-col cols="12" md="3" sm="6" lg="3">
+              <v-menu
+                v-model="menuData1"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="filters.dateFrom"
+                    outlined
+                    hide-details="auto"
+                    label="From"
+                    type="date"
+                    min="2017-06-01"
+                    max="2050-06-30"
+                  >
+                    <span slot="append">
+                      <v-icon v-bind="attrs" v-on="on"> mdi-calendar </v-icon>
+                    </span>
+                  </v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="filters.dateFrom"
+                  @input="menuData1 = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col cols="12" md="4" sm="6" lg="3">
+              <v-menu
+                v-model="menuData2"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="filters.dateTo"
+                    outlined
+                    hide-details="auto"
+                    label="To"
+                    type="date"
+                    min="2017-06-01"
+                    max="2050-06-30"
+                  >
+                    <span slot="append">
+                      <v-icon v-bind="attrs" v-on="on"> mdi-calendar </v-icon>
+                    </span>
+                  </v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="filters.dateTo"
+                  @input="menuData2 = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col cols="12" md="2" sm="6" lg="2">
               <v-btn block color="success" @click.stop="openModal(0)">
                 New Transaction
               </v-btn>
@@ -51,12 +131,16 @@
                     <tr v-for="(transaction, idx) in transactions" :key="idx">
                       <td>
                         <v-avatar
-                          :color="transaction.category.type == 'IN' ? 'primary' : 'error' "
+                          :color="
+                            transaction.category.type == 'IN'
+                              ? 'primary'
+                              : 'error'
+                          "
                           size="30"
                         >
                           <v-icon color="white">
                             mdi-arrow-{{
-                              transaction.category.type == 'IN' ? 'up' : 'down'
+                              transaction.category.type == "IN" ? "up" : "down"
                             }}-thin
                           </v-icon>
                         </v-avatar>
@@ -85,7 +169,7 @@
                               small
                               v-bind="attrs"
                               v-on="on"
-                              @click="showModal(category.id)"
+                              @click="openModal(category.id)"
                             >
                               <i class="fa-solid fa-pen-to-square"></i>
                             </v-btn>
@@ -100,7 +184,7 @@
                               color="error"
                               v-bind="attrs"
                               v-on="on"
-                              @click="removeCategory(category.id)"
+                              @click="removeTransaction(category.id)"
                             >
                               <i class="fa-solid fa-trash"></i>
                             </v-btn>
@@ -130,15 +214,21 @@
         </v-card>
       </v-col>
     </v-row>
+    <modal
+      :transactionId="transactionId"
+      v-model="showModal"
+      @created="$fetch"
+    />
   </v-container>
 </template>
 
 <script>
 import Swal from "sweetalert2";
+import modal from "@/components/transactions/modal.vue";
 export default {
   layout: "home",
   components: {
-    //modal,
+    modal,
   },
   data() {
     return {
@@ -197,9 +287,41 @@ export default {
           },
         },
       ],
+
+      listWalletsFilter: [
+        {
+          id: "1",
+          description: "Wallet X",
+        },
+        {
+          id: "2",
+          description: "Wallet Y",
+        },
+      ],
+
+      listCategoriesFilter: [
+        {
+          id: "1",
+          description: "Category X",
+        },
+        {
+          id: "2",
+          description: "Category Y",
+        },
+      ],
+      menuData1: false,
+      menuData2: false,
       loading: false,
+
       showModal: false,
-      categoryId: 0,
+      transactionId: 0,
+
+      filters: {
+        wallet: "",
+        category: "",
+        dateFrom: "",
+        dateTo: "",
+      },
     };
   },
 
@@ -228,7 +350,7 @@ export default {
     changePagination() {
       this.$fetch();
     },
-    removeCategory(id) {
+    removeTransaction(id) {
       // Swal.fire({
       //   title: "Are you sure?",
       //   text: "You won't be able to revert this!",
@@ -256,8 +378,8 @@ export default {
       // });
     },
     openModal(id) {
-      // this.showModal = true;
-      // this.categoryId = parseInt(id);
+      this.showModal = true;
+      // this.transactionId = parseInt(id);
     },
   },
 };
