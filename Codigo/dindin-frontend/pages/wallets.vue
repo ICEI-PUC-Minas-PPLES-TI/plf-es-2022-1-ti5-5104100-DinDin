@@ -1,158 +1,224 @@
 <template>
-  <v-container fluid>
-    <!-- Page Title -->
-    <v-row>
-      <v-col>
-        <h2 class="page-title">Wallet</h2>
-      </v-col>
-    </v-row>
-    <!-- Table Section -->
-    <v-row>
-      <v-col>
-        <v-card elevation="0" class="p-20">
-          <!-- Table top toolbar -->
-          <v-row>
-            <v-col cols="7" sm="0"> </v-col>
+    <v-container fluid>
+        <!-- Page Title -->
+        <v-row>
             <v-col>
-              <v-btn block color="white" @click.stop="acceptInivte()">
-                Join Wallet
-              </v-btn>
+                <h2 class="page-title">Wallet</h2>
             </v-col>
+        </v-row>
+        <!-- Table Section -->
+        <v-row>
             <v-col>
-              <v-btn
-                block
-                color="#5BD098"
-                @click.stop="
-                  showModal = true;
-                  modalEdit = false;
-                  walletToEdit = null;
-                "
-              >
-                New Wallet
-              </v-btn>
+                <v-card elevation="0" class="p-20">
+                    <!-- Table top toolbar -->
+                    <v-row>
+                        <v-col cols="7" sm="0"> </v-col>
+                        <v-col>
+                            <v-btn
+                                block
+                                color="white"
+                                @click.stop="acceptInivte()"
+                            >
+                                Join Wallet
+                            </v-btn>
+                        </v-col>
+                        <v-col>
+                            <v-btn
+                                block
+                                color="#5BD098"
+                                @click.stop="
+                                    showModal = true;
+                                    modalEdit = false;
+                                    walletToEdit = null;
+                                "
+                            >
+                                New Wallet
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                    <!-- Table -->
+                    <v-row>
+                        <v-col>
+                            <v-simple-table v-if="wallets.length > 0">
+                                <template #default>
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left">Name</th>
+                                            <th class="text-left">
+                                                Total Amount
+                                            </th>
+                                            <th class="text-left">
+                                                Current Month Amount
+                                            </th>
+                                            <th class="text-left">Options</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-if="loading">
+                                            <td colspan="6">Loading...</td>
+                                        </tr>
+                                        <tr
+                                            v-for="(wallet, gidx) in wallets"
+                                            :key="gidx"
+                                        >
+                                            <td>
+                                                {{ wallet.description }}
+                                                <span
+                                                    v-if="wallet.shared"
+                                                    class="shared-wallet"
+                                                    >(shared)</span
+                                                >
+                                            </td>
+                                            <td>
+                                                R${{ wallet.initial_value }}
+                                            </td>
+                                            <td>
+                                                R${{ wallet.initial_value }}
+                                            </td>
+                                            <td>
+                                                <v-tooltip top>
+                                                    <template
+                                                        #activator="{
+                                                            on,
+                                                            attrs,
+                                                        }"
+                                                    >
+                                                        <v-btn
+                                                            elevation="0"
+                                                            small
+                                                            v-bind="attrs"
+                                                            v-on="on"
+                                                            @click="
+                                                                inviteFiend(
+                                                                    wallet.id
+                                                                )
+                                                            "
+                                                        >
+                                                            <i
+                                                                class="fa-solid fa-share"
+                                                            ></i>
+                                                        </v-btn>
+                                                    </template>
+                                                    <span class="caption"
+                                                        >Shared</span
+                                                    >
+                                                </v-tooltip>
+                                                <v-tooltip
+                                                    v-if="wallet.shared"
+                                                    top
+                                                >
+                                                    <template
+                                                        #activator="{
+                                                            on,
+                                                            attrs,
+                                                        }"
+                                                    >
+                                                        <v-btn
+                                                            elevation="0"
+                                                            small
+                                                            v-bind="attrs"
+                                                            v-on="on"
+                                                            @click="
+                                                                openMembersModal(
+                                                                    wallet.id
+                                                                )
+                                                            "
+                                                        >
+                                                            <i
+                                                                class="fa-solid fa-users"
+                                                            ></i>
+                                                        </v-btn>
+                                                    </template>
+                                                    <span>Members</span>
+                                                </v-tooltip>
+                                                <v-tooltip top>
+                                                    <template
+                                                        #activator="{
+                                                            on,
+                                                            attrs,
+                                                        }"
+                                                    >
+                                                        <v-btn
+                                                            elevation="0"
+                                                            small
+                                                            v-bind="attrs"
+                                                            v-on="on"
+                                                            @click="
+                                                                editWallet(
+                                                                    wallet
+                                                                )
+                                                            "
+                                                        >
+                                                            <i
+                                                                class="fa-solid fa-pen-to-square"
+                                                            ></i>
+                                                        </v-btn>
+                                                    </template>
+                                                    <span>Edit</span>
+                                                </v-tooltip>
+                                                <v-tooltip top>
+                                                    <template
+                                                        #activator="{
+                                                            on,
+                                                            attrs,
+                                                        }"
+                                                    >
+                                                        <v-btn
+                                                            elevation="0"
+                                                            small
+                                                            color="error"
+                                                            v-bind="attrs"
+                                                            v-on="on"
+                                                            @click="
+                                                                removeWallet(
+                                                                    wallet
+                                                                )
+                                                            "
+                                                        >
+                                                            <i
+                                                                class="fa-solid fa-trash"
+                                                            ></i>
+                                                        </v-btn>
+                                                    </template>
+                                                    <span>Delete</span>
+                                                </v-tooltip>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </template>
+                            </v-simple-table>
+                            <span v-else-if="!loading" class="text-center">
+                                No wallets created
+                            </span>
+                        </v-col>
+                    </v-row>
+                    <!-- Pagination -->
+                    <v-row>
+                        <v-col cols="12" md="8" offset-md="4">
+                            <div class="mw-100">
+                                <v-pagination
+                                    v-model="currentPage"
+                                    class="my-4"
+                                    :length="pages"
+                                    @input="changePagination"
+                                ></v-pagination>
+                            </div>
+                        </v-col>
+                    </v-row>
+                </v-card>
             </v-col>
-          </v-row>
-          <!-- Table -->
-          <v-row>
-            <v-col>
-              <v-simple-table v-if="wallets.length > 0">
-                <template #default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">Name</th>
-                      <th class="text-left">Total Amount</th>
-                      <th class="text-left">Current Month Amount</th>
-                      <th class="text-left">Options</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-if="loading">
-                      <td colspan="6">Loading...</td>
-                    </tr>
-                    <tr v-for="(wallet, gidx) in wallets" :key="gidx">
-                      <td>
-                        {{ wallet.description }}
-                        <span v-if="wallet.shared" class="shared-wallet"
-                          >(shared)</span
-                        >
-                      </td>
-                      <td>R${{ wallet.initial_value }}</td>
-                      <td>R${{ wallet.initial_value }}</td>
-                      <td>
-                        <v-tooltip top>
-                          <template #activator="{ on, attrs }">
-                            <v-btn
-                              elevation="0"
-                              small
-                              v-bind="attrs"
-                              v-on="on"
-                              @click="inviteFiend(wallet.id)"
-                            >
-                              <i class="fa-solid fa-share"></i>
-                            </v-btn>
-                          </template>
-                          <span class="caption">Shared</span>
-                        </v-tooltip>
-                        <v-tooltip v-if="wallet.shared" top>
-                          <template #activator="{ on, attrs }">
-                            <v-btn
-                              elevation="0"
-                              small
-                              v-bind="attrs"
-                              v-on="on"
-                              @click="openMembersModal(wallet.id)"
-                            >
-                              <i class="fa-solid fa-users"></i>
-                            </v-btn>
-                          </template>
-                          <span>Members</span>
-                        </v-tooltip>
-                        <v-tooltip top>
-                          <template #activator="{ on, attrs }">
-                            <v-btn
-                              elevation="0"
-                              small
-                              v-bind="attrs"
-                              v-on="on"
-                              @click="editWallet(wallet)"
-                            >
-                              <i class="fa-solid fa-pen-to-square"></i>
-                            </v-btn>
-                          </template>
-                          <span>Edit</span>
-                        </v-tooltip>
-                        <v-tooltip top>
-                          <template #activator="{ on, attrs }">
-                            <v-btn
-                              elevation="0"
-                              small
-                              color="error"
-                              v-bind="attrs"
-                              v-on="on"
-                              @click="removeWallet(wallet)"
-                            >
-                              <i class="fa-solid fa-trash"></i>
-                            </v-btn>
-                          </template>
-                          <span>Delete</span>
-                        </v-tooltip>
-                      </td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-              <span v-else-if="!loading" class="text-center">
-                No wallets created
-              </span>
-            </v-col>
-          </v-row>
-          <!-- Pagination -->
-          <v-row>
-            <v-col cols="12" md="8" offset-md="4">
-              <div class="mw-100">
-                <v-pagination
-                  v-model="currentPage"
-                  class="my-4"
-                  :length="pages"
-                  @input="changePagination"
-                ></v-pagination>
-              </div>
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-col>
-    </v-row>
-    <modal
-      v-model="showModal"
-      :wallet-to-edit="walletToEdit"
-      :modal-edit="modalEdit"
-      @created="$fetch"
-    />
-    <membersModal
-      v-model="showMembersModal"
-      :wallet-id="walletToShowMembersId"
-    />
-  </v-container>
+        </v-row>
+        <modal
+            v-model="showModal"
+            :wallet-to-edit="walletToEdit"
+            :modal-edit="modalEdit"
+            @created="$fetch"
+        />
+        <membersModal
+            v-model="showMembersModal"
+            :wallet-id="walletToShowMembersId"
+        />
+    </v-container>
 </template>
 
 <script>
@@ -160,177 +226,179 @@ import modal from "@/components/wallet/modal.vue";
 import membersModal from "@/components/wallet/membersModal.vue";
 import Swal from "sweetalert2";
 export default {
-  components: {
-    modal,
-    membersModal,
-  },
-  layout: "home",
-  data() {
-    return {
-      currentPage: 1,
-      pages: 1,
-      wallets: [],
-      loading: false,
-      showModal: false,
-      walletToEdit: null,
-      modalEdit: false,
-      showMembersModal: false,
-      walletToShowMembersId: "",
-    };
-  },
-  async fetch() {
-    this.loading = true;
-    await this.$axios
-      .$get(`/wallet?page=${this.currentPage}`)
-      .then((res) => {
-        this.pages = res.pages;
-        this.wallets = res.wallets;
-      })
-      .finally(() => {
-        this.loading = false;
-      });
-  },
-  methods: {
-    changePagination() {
-      this.$fetch();
+    components: {
+        modal,
+        membersModal,
     },
-    removeWallet(wallet) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        reverseButtons: true,
-        confirmButtonText: "Yes, I want to delete!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.$axios
-            .delete("/wallet/" + wallet.id)
-            .then(() => {
-              Swal.fire({
-                title: "Deleted!",
-                text: "The wallet has been deleted.",
-                icon: "info",
-                showConfirmButton: false,
-                toast: true,
-                position: "top-end",
-                timer: 3000,
-                timerProgressBar: true,
-              });
-              this.$fetch();
-            })
-            .catch((err) => {
-              Swal.fire({
-                title: "Wallet removal failed!",
-                text: err.response.data.message,
-                icon: "error",
-              });
-            });
-        }
-      });
+    layout: "home",
+    data() {
+        return {
+            currentPage: 1,
+            pages: 1,
+            wallets: [],
+            loading: false,
+            showModal: false,
+            walletToEdit: null,
+            modalEdit: false,
+            showMembersModal: false,
+            walletToShowMembersId: "",
+        };
     },
-    acceptInivte() {
-      Swal.fire({
-        title: "Join Wallet",
-        input: "text",
-        inputAttributes: {
-          autocapitalize: "off",
-        },
-        confirmButtonText: "Join",
-        confirmButtonColor: "#5BD098",
-        color: "#000",
-        showLoaderOnConfirm: true,
-        closeOnConfirm: true,
-        closeOnCancel: true,
-        preConfirm: (code) => {
-          this.$axios
-            .$post("/wallet/invite", {
-              code,
-            })
+    async fetch() {
+        this.loading = true;
+        await this.$axios
+            .$get(`/wallet?page=${this.currentPage}`)
             .then((res) => {
-              Swal.fire({
-                title: "Wallet Joined",
-                icon: "success",
-                showConfirmButton: false,
-                toast: true,
-                position: "top-end",
-                timer: 3000,
-                timerProgressBar: true,
-              });
-              this.$fetch();
+                this.pages = res.pages;
+                this.wallets = res.wallets;
             })
-            .catch((err) => {
-              Swal.fire({
-                title: "Wallet join failed!",
-                text: err.response.data.message,
-                icon: "error",
-              });
+            .finally(() => {
+                this.loading = false;
             });
-          // return fetch(`//api.github.com/users/${login}`)
-          //   .then((response) => {
-          //     if (!response.ok) {
-          //       throw new Error(response.statusText);
-          //     }
-          //     return response.json();
-          //   })
-          //   .catch((error) => {
-          //     Swal.showValidationMessage(`Request failed: ${error}`);
-          //   });
+    },
+    methods: {
+        changePagination() {
+            this.$fetch();
         },
-        allowOutsideClick: () => !Swal.isLoading(),
-      }).then((result) => {
-        if (result.isConfirmed) {
-        }
-      });
+        removeWallet(wallet) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                reverseButtons: true,
+                confirmButtonText: "Yes, I want to delete!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$axios
+                        .delete("/wallet/" + wallet.id)
+                        .then(() => {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "The wallet has been deleted.",
+                                icon: "info",
+                                showConfirmButton: false,
+                                toast: true,
+                                position: "top-end",
+                                timer: 3000,
+                                timerProgressBar: true,
+                            });
+                            this.$fetch();
+                        })
+                        .catch((err) => {
+                            Swal.fire({
+                                title: "Wallet removal failed!",
+                                text: err.response.data.message,
+                                icon: "error",
+                            });
+                        });
+                }
+            });
+        },
+        acceptInivte() {
+            Swal.fire({
+                title: "Join Wallet",
+                input: "text",
+                inputAttributes: {
+                    autocapitalize: "off",
+                },
+                confirmButtonText: "Join",
+                confirmButtonColor: "#5BD098",
+                color: "#000",
+                showLoaderOnConfirm: true,
+                closeOnConfirm: true,
+                closeOnCancel: true,
+                preConfirm: (code) => {
+                    this.$axios
+                        .$post("/wallet/invite", {
+                            code,
+                        })
+                        .then((/*res*/) => {
+                            Swal.fire({
+                                title: "Wallet Joined",
+                                icon: "success",
+                                showConfirmButton: false,
+                                toast: true,
+                                position: "top-end",
+                                timer: 3000,
+                                timerProgressBar: true,
+                            });
+                            this.$fetch();
+                        })
+                        .catch((err) => {
+                            Swal.fire({
+                                title: "Wallet join failed!",
+                                text: err.response.data.message,
+                                icon: "error",
+                            });
+                        });
+                    // return fetch(`//api.github.com/users/${login}`)
+                    //   .then((response) => {
+                    //     if (!response.ok) {
+                    //       throw new Error(response.statusText);
+                    //     }
+                    //     return response.json();
+                    //   })
+                    //   .catch((error) => {
+                    //     Swal.showValidationMessage(`Request failed: ${error}`);
+                    //   });
+                },
+                allowOutsideClick: () => !Swal.isLoading(),
+            }).then((/*result*/) => {
+                // if (result.isConfirmed) {
+                // }
+            });
+        },
+        inviteFiend(walletId) {
+            this.$axios
+                .$post(`/wallet/${walletId}/invite`)
+                .then((res) => {
+                    Swal.fire({
+                        title: "<strong>New wallet invite</strong>",
+                        icon: "info",
+                        html: `${
+                            res.invite.code
+                        } <br> <small> Expires at ${new Date(
+                            res.invite.expire_at
+                        ).toLocaleDateString()} </small>`,
+                        focusConfirm: false,
+                        confirmButtonColor: "#5BD098",
+                        confirmButtonText: "Copy to clipboard",
+                    }).then((result) => {
+                        if (result.isConfirmed)
+                            navigator.clipboard.writeText(res.invite.code);
+                    });
+                })
+                .catch((err) => {
+                    Swal.fire({
+                        title: "Invite creation failed!",
+                        text: err.response.data.message,
+                        icon: "error",
+                    });
+                });
+        },
+        editWallet(wallet) {
+            this.walletToEdit = wallet;
+            this.modalEdit = true;
+            this.showModal = true;
+        },
+        openMembersModal(id) {
+            this.showMembersModal = true;
+            this.walletToShowMembersId = id;
+        },
     },
-    inviteFiend(walletId) {
-      this.$axios
-        .$post(`/wallet/${walletId}/invite`)
-        .then((res) => {
-          Swal.fire({
-            title: "<strong>New wallet invite</strong>",
-            icon: "info",
-            html: `${res.invite.code} <br> <small> Expires at ${new Date(
-              res.invite.expire_at
-            ).toLocaleDateString()} </small>`,
-            focusConfirm: false,
-            confirmButtonColor: "#5BD098",
-            confirmButtonText: "Copy to clipboard",
-          }).then((result) => {
-            if (result.isConfirmed)
-              navigator.clipboard.writeText(res.invite.code);
-          });
-        })
-        .catch((err) => {
-          Swal.fire({
-            title: "Invite creation failed!",
-            text: err.response.data.message,
-            icon: "error",
-          });
-        });
-    },
-    editWallet(wallet) {
-      this.walletToEdit = wallet;
-      this.modalEdit = true;
-      this.showModal = true;
-    },
-    openMembersModal(id) {
-      this.showMembersModal = true;
-      this.walletToShowMembersId = id;
-    },
-  },
 };
 </script>
 
 <style lang="scss" scoped>
 .table-wallets-status {
-  text-transform: lowercase;
-  &::first-letter {
-    text-transform: uppercase;
-  }
+    text-transform: lowercase;
+    &::first-letter {
+        text-transform: uppercase;
+    }
 }
 .shared-wallet {
-  font-size: 0.6rem;
+    font-size: 0.6rem;
 }
 </style>

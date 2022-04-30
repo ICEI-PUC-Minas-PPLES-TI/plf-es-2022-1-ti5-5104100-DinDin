@@ -3,15 +3,26 @@ module.exports = {
     env: {
         node: true,
         browser: true,
+        commonjs: true,
+        es2021: true,
     },
-    extends: ["plugin:vue/recommended", "eslint:recommended", "prettier"],
+    extends: ["plugin:vue/essential", "eslint:recommended", "prettier"],
+    plugins: ["prettier"],
     rules: {
-        "vue/component-name-in-template-casing": ["error", "PascalCase"],
+        "prettier/prettier": "error",
     },
+    overrides: [
+        {
+            files: ["*.vue"],
+            rules: {
+                "vue/multi-word-component-names": 0,
+            },
+        },
+    ],
     globals: {
         $nuxt: true,
     },
     parserOptions: {
-        parser: "babel-eslint",
+        ecmaVersion: 11,
     },
 };
