@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const categoryRoutes = Router();
 
+const jwtAuthorization = require("./jwtAuthorization");
+
 const CreateCategoryController = require("../usecases/category/createCategory/CreateCategoryController");
 const DeleteCategoryController = require("../usecases/category/deleteCategory/DeleteCategoryController");
 const FindCategoryController = require("../usecases/category/findCategory/FindCategoryController");
@@ -13,10 +15,30 @@ const listCategoryController = new ListCategoryController();
 const deleteCategoryController = new DeleteCategoryController();
 const updateCategoryController = new UpdateCategoryController();
 
-categoryRoutes.post("/", createCategoryController.create);
-categoryRoutes.get("/:id", findCategoryController.find);
-categoryRoutes.get("/", listCategoryController.list);
-categoryRoutes.put("/:id", updateCategoryController.update);
-categoryRoutes.delete("/:id", deleteCategoryController.delete);
+categoryRoutes.post(
+    "/",
+    [jwtAuthorization.verifyToken],
+    createCategoryController.create
+);
+categoryRoutes.get(
+    "/:id",
+    [jwtAuthorization.verifyToken],
+    findCategoryController.find
+);
+categoryRoutes.get(
+    "/",
+    [jwtAuthorization.verifyToken],
+    listCategoryController.list
+);
+categoryRoutes.put(
+    "/:id",
+    [jwtAuthorization.verifyToken],
+    updateCategoryController.update
+);
+categoryRoutes.delete(
+    "/:id",
+    [jwtAuthorization.verifyToken],
+    deleteCategoryController.delete
+);
 
 module.exports = categoryRoutes;
