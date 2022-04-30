@@ -60,7 +60,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    :rules="[rules.wrongDate]"
+                    :rules="[rules.required,rules.wrongDate]"
                     prepend-inner-icon="mdi-calendar-range"
                     outlined
                     hide-details="auto"
@@ -95,14 +95,14 @@
             <v-row class="mt-0 pt-0">
               <v-select
                 :rules="[rules.required]"
-                v-model="goal.walletId"
+                v-model="goal.wallet_id"
+                name="wallets"
                 prepend-inner-icon="mdi-wallet"
                 outlined
                 hide-details="auto"
-                :items="[
-                  { text: 'Personal', value: 1 },
-                  { text: 'Public', value: 2 },
-                ]"
+                :items="wallets"
+                item-text="description"
+                item-value="id"
                 label="Wallet"
               />
             </v-row>
@@ -140,14 +140,14 @@ export default {
     return {
       title: "New Goal",
       goal: {
-        id:"",
         description: "",
         expire_at: "",
         value: "",
-        type: 0,
-        walletId: 0,
+        type: "",
+        wallet_id: "",
         status: "PENDING"
       },
+      wallets: [],
       choosenGoal: "",
       today: "",
       date: "",
@@ -181,7 +181,7 @@ export default {
           expire_at: this.goal.expire_at,
           value: "",
           type: "",
-          walletId: "",
+          wallet_id: "",
           status: "PENDING",
         };
         this.fillForm(emptyGoal);
@@ -199,6 +199,8 @@ export default {
   methods: {
     saveGoal() {
       this.errors = [];
+      this.goal.value = parseFloat(this.goal.value);
+      this.goal.wallet_id = parseFloat(this.goal.wallet_id);
       if (this.$refs.form.validate()) {
         this.$axios
           .post("/goal", this.goal)
@@ -278,12 +280,11 @@ export default {
       if(parseInt(date1Split[2]) > parseInt(date2Split[2])){
           return true;
       }
-      if (parseInt(date1Split[2]) == parseInt(date2Split[2])) {
-        if ((parseInt(date1Split[1]) >= parseInt(date2Split[1]))) {
-          if (parseInt(date1Split[0]) >= parseInt(date2Split[0])) {
-            resp = true;
-          }
-        }
+      if(parseInt(date1Split[1]) > parseInt(date2Split[1])){
+          return true;
+      }
+      if (parseInt(date1Split[0]) >= parseInt(date2Split[0])) {
+          return true;
       }
       return resp;
     },
@@ -294,11 +295,19 @@ export default {
       this.date = this.shortDate(data.expire_at);
       this.goal.expire_at = data.expire_at.substring(0, 10);
       this.goal.type = data.type;
-      this.goal.walletId = data.walletId;
+      this.goal.wallet_id = data.wallet_id;
     },
     cleanForm() {
       this.$refs.form.reset();
     },
+    async getWallets(){
+      await this.$axios
+      .$get(`/wallet`)
+      .then((res) => {
+        this.wallets = res.wallets;
+    })
+    }
+
   },
   mounted() {
     let dateToday = new Date(
@@ -308,7 +317,9 @@ export default {
       .substr(0, 10);
     const [year, month, day] = dateToday.split("-");
     this.today = `${day}/${month}/${year}`;
+    this.getWallets();
   },
+  
 };
 </script>
 

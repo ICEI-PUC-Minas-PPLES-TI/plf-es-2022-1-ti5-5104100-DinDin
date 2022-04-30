@@ -1,6 +1,7 @@
 const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
+const FindWalletUseCase = require("../../wallet/findWallet/FindWalletUseCase");
 const CreateGoalUseCase = require("./CreateGoalUseCase");
 
 const typeEnum = ["A", "B"];
@@ -37,12 +38,11 @@ class CreateGoalController {
 
         const { description, value, type, expire_at, wallet_id } = request.body;
 
-        // ! Fix check if wallet exist
-        // ! const wallet = "findWalletUseCase.find(wallet_id)";
-        if (wallet_id != 1)
-            // ! Used for test
-            throw new AppError("'wallet_id' does not exist", 422); // !
-
+        const findWalletUseCase = new FindWalletUseCase();
+        const wallet = findWalletUseCase.find(wallet_id);
+        if (!wallet) {
+            throw new AppError("'wallet_id' does not exist", 422);
+        }
         const createGoalUseCase = new CreateGoalUseCase();
         const goal = await createGoalUseCase.create(
             description,
