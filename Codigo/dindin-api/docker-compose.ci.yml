@@ -18,7 +18,7 @@ services:
     depends_on:
       - mysqldb
     build:
-      context: ./dindin-app
+      context: ./
       dockerfile: Dockerfile
     networks:
       - db-net
@@ -29,7 +29,7 @@ services:
     restart: always
     env_file: ./.env
     volumes:
-      - ./dindin-app:/usr/src/dindin-api
+      - ./:/usr/src/dindin-api
       - node_modules:/usr/src/dindin-api/node_modules
     ports:
       - $NODE_LOCAL_PORT:$NODE_PUBLIC_PORT

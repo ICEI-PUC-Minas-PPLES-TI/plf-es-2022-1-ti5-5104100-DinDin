@@ -23,3 +23,15 @@ If you need to stop and remove all containers, networks, and all images used by 
 ```bash
 docker-compose down --rmi all
 ```
+
+# Node.js Rest APIs with Express, Sequelize & MySQL DinDin
+
+## Project setup
+```
+npm install
+```
+
+### Run
+```
+node index.js
+```

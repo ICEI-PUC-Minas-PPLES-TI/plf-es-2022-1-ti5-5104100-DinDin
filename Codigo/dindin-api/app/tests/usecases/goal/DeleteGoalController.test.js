@@ -1,12 +1,12 @@
-const supertest = require("supertest"); // "requester"
 require("dotenv").config();
 
-const app = require("../../..");
-const { connect, close } = require("../../../database");
+let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+const { close } = require("../../../database");
+
 const Goal = require("../../../models/Goal");
 
 beforeAll(async () => {
-    await connect();
+    await connectAndLogin();
 });
 
 afterAll(async () => {
@@ -25,7 +25,7 @@ describe("DELETE /goal/:id test suite", () => {
         };
         const createdGoal = await Goal.create(mockGoal);
 
-        const response = await supertest(app)
+        const response = await request
             .delete("/api/goal/" + createdGoal.id)
             .send();
 
@@ -37,7 +37,7 @@ describe("DELETE /goal/:id test suite", () => {
 
     it("should not find a non-existent goal when trying to delete it", async () => {
         const nonExistentId = 987654321;
-        const response = await supertest(app)
+        const response = await request
             .delete("/api/goal/" + nonExistentId)
             .send();
 
@@ -49,30 +49,22 @@ describe("DELETE /goal/:id test suite", () => {
 
     it("should fail when trying to delete goal with invalid id", async () => {
         let invalidId = 0;
-        let response = await supertest(app)
-            .delete("/api/goal/" + invalidId)
-            .send();
+        let response = await request.delete("/api/goal/" + invalidId).send();
 
         expect(response.statusCode).toEqual(422);
 
         invalidId = -1;
-        response = await supertest(app)
-            .delete("/api/goal/" + invalidId)
-            .send();
+        response = await request.delete("/api/goal/" + invalidId).send();
 
         expect(response.statusCode).toEqual(422);
 
         invalidId = null;
-        response = await supertest(app)
-            .delete("/api/goal/" + invalidId)
-            .send();
+        response = await request.delete("/api/goal/" + invalidId).send();
 
         expect(response.statusCode).toEqual(422);
 
         invalidId = undefined;
-        response = await supertest(app)
-            .delete("/api/goal/" + invalidId)
-            .send();
+        response = await request.delete("/api/goal/" + invalidId).send();
 
         expect(response.statusCode).toEqual(422);
     });

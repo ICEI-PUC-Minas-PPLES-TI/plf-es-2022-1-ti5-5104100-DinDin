@@ -77,7 +77,7 @@ module.exports = {
     },
 };
 
-// Directory for commands: ./dindin-api/dindin-app
+// Directory for commands: ./dindin-api/
 
 // Create migration: npx sequelize-cli model:generate --name user --attributes name:string  --config config.json
 
