@@ -28,11 +28,7 @@
           <v-form ref="form" v-on:submit.prevent="saveGoal" lazy-validation>
             <v-row>
               <v-radio-group row v-model="transaction.type" mandatory>
-                <v-radio
-                  label="Income"
-                  value="IN"
-                >
-                </v-radio>
+                <v-radio label="Income" value="IN"> </v-radio>
                 <v-radio label="Outcome" value="OUT"> </v-radio>
               </v-radio-group>
               <!--active-class="v-icon notranslate mdi mdi-checkbox-marked theme--light primary--text" -->
