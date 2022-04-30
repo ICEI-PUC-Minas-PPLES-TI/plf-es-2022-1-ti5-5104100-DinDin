@@ -5,7 +5,7 @@
     @click:outside="$emit('input', false)"
     @keydown.esc="$emit('input', false)"
   >
-    <v-card class="pa-2">
+    <v-card v-if="this.wallets.length>0" class="pa-2">
       <v-card-title class="text-h5 goals-modal-title">
         <h4>
           <span> {{ title }}</span>
@@ -121,6 +121,39 @@
           </v-col>
           <v-col v-else class="mr-2">
             <v-btn block color="primary" @click.stop="saveGoal()">Save</v-btn>
+          </v-col>
+        </v-row>
+      </v-card-actions>
+    </v-card>
+    <v-card v-else class="pa-2">
+      <v-card-title class="text-h5 goals-modal-title">
+        <h4>
+          <span>You must create a wallet first!</span>
+          
+        </h4>
+        <v-btn icon @click="$emit('input', false)">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-card-title>
+      <v-card-text>
+        <v-alert v-if="errors.length > 0" type="error">
+          Error:
+          <ul>
+            <li v-for="(er, eidx) in errors" :key="eidx">
+              {{ er }}
+            </li>
+          </ul>
+        </v-alert>
+      </v-card-text>
+      <v-card-actions>
+        <v-row>
+          <v-col cols="4" align="center">
+            <v-btn text color="black" @click.stop="$emit('input', false)"
+              >Cancel</v-btn
+            >
+          </v-col>
+          <v-col>
+            <v-btn block color="primary" href="/wallets">Create Wallet</v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
