@@ -32,10 +32,13 @@ class UpdateGoalController {
         const { description, value, type, expire_at, wallet_id } = request.body;
 
         const findWalletUseCase = new FindWalletUseCase();
-        const wallet = findWalletUseCase.find(wallet_id);
-        if (!wallet) {
+
+        try {
+            await findWalletUseCase.find(wallet_id);
+        } catch (error) {
             throw new AppError("'wallet_id' does not exist", 422);
         }
+
         const id = request?.params?.id;
         if (!id || !(id > 0))
             throw new AppError("Please send a valid id on url", 422);
