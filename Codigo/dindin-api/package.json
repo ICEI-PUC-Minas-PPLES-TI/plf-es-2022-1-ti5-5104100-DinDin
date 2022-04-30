@@ -74,7 +74,8 @@
     "nodemon": "^2.0.15",
     "prettier": "^2.6.2",
     "sequelize-cli": "^6.4.1",
-    "supertest": "^6.2.2"
+    "superagent-defaults": "^0.1.14",
+    "supertest": "^6.2.3"
   },
   "resolutions": {
     "minimist": "1.2.6"

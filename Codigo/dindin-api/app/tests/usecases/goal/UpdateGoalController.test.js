@@ -1,12 +1,12 @@
-const supertest = require("supertest"); // "requester"
 require("dotenv").config();
 
-const app = require("../../..");
-const { connect, close } = require("../../../database");
+let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+const { close } = require("../../../database");
+
 const Goal = require("../../../models/Goal");
 
 beforeAll(async () => {
-    await connect();
+    await connectAndLogin();
 });
 
 afterAll(async () => {
@@ -30,7 +30,7 @@ describe("PUT /goal test suite", () => {
         mockGoal.expire_at = "2040-01-01T14:50:00.000Z";
         mockGoal.wallet_id = 2;
 
-        const response = await supertest(app)
+        const response = await request
             .put("/api/goal/" + createdGoal.id)
             .send(mockGoal);
 
@@ -55,7 +55,7 @@ describe("PUT /goal test suite", () => {
 
         mockGoal.status = "FINISHED";
 
-        const response = await supertest(app)
+        const response = await request
             .put("/api/goal/" + createdGoal.id)
             .send(mockGoal);
 
@@ -75,7 +75,7 @@ describe("PUT /goal test suite", () => {
 
         mockGoal.description = "goal updated 1";
 
-        const response = await supertest(app)
+        const response = await request
             .put("/api/goal/" + createdGoal.id)
             .send(mockGoal);
 
@@ -99,7 +99,7 @@ describe("PUT /goal test suite", () => {
 
         mockGoal.value = 3000;
 
-        const response = await supertest(app)
+        const response = await request
             .put("/api/goal/" + createdGoal.id)
             .send(mockGoal);
 
@@ -123,7 +123,7 @@ describe("PUT /goal test suite", () => {
 
         mockGoal.type = "A";
 
-        const response = await supertest(app)
+        const response = await request
             .put("/api/goal/" + createdGoal.id)
             .send(mockGoal);
 
@@ -147,7 +147,7 @@ describe("PUT /goal test suite", () => {
 
         mockGoal.expire_at = "2040-01-01T14:50:00.000Z";
 
-        const response = await supertest(app)
+        const response = await request
             .put("/api/goal/" + createdGoal.id)
             .send(mockGoal);
 
@@ -171,7 +171,7 @@ describe("PUT /goal test suite", () => {
 
         mockGoal.wallet_id = 2;
 
-        const response = await supertest(app)
+        const response = await request
             .put("/api/goal/" + createdGoal.id)
             .send(mockGoal);
 
@@ -192,7 +192,7 @@ describe("PUT /goal test suite", () => {
             wallet_id: 125999002, //unexisting wallet
         };
 
-        const response = await supertest(app).put("/api/goal/1").send(mockGoal);
+        const response = await request.put("/api/goal/1").send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -206,7 +206,7 @@ describe("PUT /goal test suite", () => {
             wallet_id: 1,
         };
 
-        const response = await supertest(app).put("/api/goal/1").send(mockGoal);
+        const response = await request.put("/api/goal/1").send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -220,7 +220,7 @@ describe("PUT /goal test suite", () => {
             wallet_id: 1,
         };
 
-        const response = await supertest(app).put("/api/goal/1").send(mockGoal);
+        const response = await request.put("/api/goal/1").send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -234,7 +234,7 @@ describe("PUT /goal test suite", () => {
             wallet_id: 1,
         };
 
-        const response = await supertest(app).put("/api/goal/1").send(mockGoal);
+        const response = await request.put("/api/goal/1").send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -248,7 +248,7 @@ describe("PUT /goal test suite", () => {
             wallet_id: 1,
         };
 
-        const response = await supertest(app).put("/api/goal/1").send(mockGoal);
+        const response = await request.put("/api/goal/1").send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -262,7 +262,7 @@ describe("PUT /goal test suite", () => {
             wallet_id: 1,
         };
 
-        const response = await supertest(app).put("/api/goal/1").send(mockGoal);
+        const response = await request.put("/api/goal/1").send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -276,7 +276,7 @@ describe("PUT /goal test suite", () => {
             wallet_id: "notAId",
         };
 
-        const response = await supertest(app).put("/api/goal/1").send(mockGoal);
+        const response = await request.put("/api/goal/1").send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
