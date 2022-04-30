@@ -10,32 +10,6 @@
 </template>
 
 <script>
-async function getServerAuthByFirebaseAccessToken(accessToken) {
-    console.log("fazer requisição", accessToken);
-    // fazer chamada no backend passando o accessToken do firebase
-    // essa requisição retorna o jwt
-    return this.$axios
-        .post("/user/auth", {
-            token,
-        })
-        .then((res) => {
-            console.log(res);
-        });
-}
-
-function signInSuccessWithAuthResult(authResult, redirectUrl) {
-    console.log(authResult, authResult.credential.accessToken);
-    console.log(this);
-    this.loading = true;
-    getServerAuthByFirebaseAccessToken(authResult.credential.accessToken)
-        .then(() => (this.showOrDivider = false))
-        .finally(() => (this.loading = false));
-
-    console.log("tentei ir meu fi");
-
-    return false;
-}
-
 export default {
     name: "Auth",
     data() {
@@ -58,7 +32,7 @@ export default {
             signInSuccessUrl: "/dashboard",
             callbacks: {
                 uiShown: () => (this.showOrDivider = true),
-                signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+                signInSuccessWithAuthResult: (authResult) => {
                     console.log(
                         authResult,
                         authResult.credential.accessToken,
