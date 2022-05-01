@@ -1,5 +1,5 @@
 import 'package:dindin/pages/wallet/update.dart';
-
+import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -23,7 +23,54 @@ class HexColor extends Color {
 }
 
 class _WalletViewState extends State<WalletView> {
+  String inviteCode = "AAAA12333";
+  String inviteExpireDate = "17/05/2022";
   final GlobalKey<FormState> _formKey = GlobalKey();
+  showInviteDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const FaIcon(
+                    FontAwesomeIcons.envelope,
+                    size: 50.0,
+                    color: Colors.green,
+                  ),
+                  SizedBox(height: 5),
+                  const Text('Invite a Friend'),
+                  Text('Code: $inviteCode'),
+                  Text('Expires at: $inviteExpireDate'),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () async => {
+                    await Share.share('This is my Wallet Code: $inviteCode')
+                  },
+                  child: const Card(
+                    
+                    child: ListTile(
+                        leading: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: FaIcon(
+                            FontAwesomeIcons.paperPlane,
+                            size: 30.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                        title: Text('Share Wallet')),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,18 +183,21 @@ class _WalletViewState extends State<WalletView> {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Card(
-                    child: ListTile(
-                        leading: Padding(
-                          padding: EdgeInsets.only(top: 4.0, left: 4.0),
-                          child: FaIcon(
-                            FontAwesomeIcons.envelope,
-                            size: 30.0,
-                            color: Colors.black,
+                  GestureDetector(
+                    onTap: () => {showInviteDialog(context)},
+                    child: const Card(
+                      child: ListTile(
+                          leading: Padding(
+                            padding: EdgeInsets.only(top: 4.0, left: 4.0),
+                            child: FaIcon(
+                              FontAwesomeIcons.envelope,
+                              size: 30.0,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        title: Text('Share Wallet'),
-                        subtitle: Text('zejoao@protonmail.com')),
+                          title: Text('Share Wallet'),
+                          subtitle: Text('zejoao@protonmail.com')),
+                    ),
                   ),
                 ],
               ),
