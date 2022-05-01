@@ -115,7 +115,7 @@ class _LoginState extends State<Login> {
                                   child: ElevatedButton(
                                     child: const Text("Login"),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Colors.grey,
+                                      primary: Color.fromARGB(255, 84, 179, 88),
                                     ),
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
@@ -125,6 +125,7 @@ class _LoginState extends State<Login> {
                                             content: Text('User not Found'));
                                         userAuth(email, password)
                                             .then((res) => {
+                                              print(res),
                                                   if (res == true)
                                                     {
                                                       _scaffoldKey.currentState!
@@ -205,7 +206,6 @@ class _LoginState extends State<Login> {
 }
 
 Future<bool> userAuth(String email, String password) async {
-  return true;
   var url = "http://localhost:3001/api/user/auth";
   final Uri uri = Uri.parse(url);
   var response =
