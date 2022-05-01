@@ -40,8 +40,10 @@ class _WalletViewState extends State<WalletView> {
                     size: 50.0,
                     color: Colors.green,
                   ),
-                  SizedBox(height: 5),
-                  const Text('Invite a Friend'),
+                  const Text(
+                    'New Invite',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
                   Text('Code: $inviteCode'),
                   Text('Expires at: $inviteExpireDate'),
                 ],
@@ -53,7 +55,6 @@ class _WalletViewState extends State<WalletView> {
                     await Share.share('This is my Wallet Code: $inviteCode')
                   },
                   child: const Card(
-                    
                     child: ListTile(
                         leading: Padding(
                           padding: EdgeInsets.all(8.0),
