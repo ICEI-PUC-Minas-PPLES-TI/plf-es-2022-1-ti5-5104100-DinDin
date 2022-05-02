@@ -152,7 +152,7 @@
             >
           </v-col>
           <v-col>
-            <v-btn block color="primary" href="/wallets">Create Wallet</v-btn>
+            <v-btn block color="primary" to="/wallets">Create Wallet</v-btn>
           </v-col>
         </v-row>
       </v-card-actions>
