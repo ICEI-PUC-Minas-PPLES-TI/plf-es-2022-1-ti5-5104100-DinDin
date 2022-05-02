@@ -12,18 +12,12 @@ class User extends Model {
                     allowNull: false,
                     required: true,
                     notEmpty: true,
-                    validate: {
-                        notEmpty: true,
-                    },
                 },
                 name: {
                     field: "name",
                     type: DataTypes.STRING(100),
                     notEmpty: true,
                     allowNull: false,
-                    validate: {
-                        notEmpty: true,
-                    },
                 },
                 email: {
                     field: "email",
@@ -32,7 +26,6 @@ class User extends Model {
                     allowNull: false,
                     notEmpty: true,
                     validate: {
-                        notEmpty: true,
                         isEmail: true,
                     },
                 },
@@ -41,9 +34,6 @@ class User extends Model {
                     type: DataTypes.STRING(64),
                     notEmpty: true,
                     allowNull: true,
-                    validate: {
-                        notEmpty: true,
-                    },
                     comment: "Encrypted with 64 digits",
                 },
                 firebaseId: {
@@ -52,9 +42,6 @@ class User extends Model {
                     notEmpty: true,
                     unique: true,
                     allowNull: true,
-                    validate: {
-                        notEmpty: true,
-                    },
                 },
                 created_at: {
                     type: DataTypes.DATE,
