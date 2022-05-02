@@ -9,9 +9,9 @@ module.exports = {
             {
                 id: {
                     type: DataTypes.BIGINT.UNSIGNED,
-                    allowNull: false,
-                    autoIncrement: true,
                     primaryKey: true,
+                    autoIncrement: true,
+                    allowNull: false,
                 },
                 user_id: {
                     type: DataTypes.INTEGER.UNSIGNED,
