@@ -9,6 +9,7 @@ class User extends Model {
                     type: DataTypes.INTEGER.UNSIGNED,
                     autoIncrement: true,
                     primaryKey: true,
+                    unique: true,
                     allowNull: false,
                     required: true,
                     notEmpty: true,

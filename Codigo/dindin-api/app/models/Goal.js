@@ -8,6 +8,7 @@ class Goal extends Model {
                     type: DataTypes.INTEGER.UNSIGNED,
                     required: true,
                     primaryKey: true,
+                    unique: true,
                     autoIncrement: true,
                     notEmpty: true,
                     allowNull: false,

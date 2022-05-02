@@ -9,6 +9,7 @@ class Wallet extends Model {
                     type: DataTypes.BIGINT.UNSIGNED,
                     autoIncrement: true,
                     primaryKey: true,
+                    unique: true,
                     allowNull: false,
                     required: true,
                     notEmpty: true,

@@ -9,6 +9,7 @@ class Category extends Model {
                 id: {
                     type: DataTypes.BIGINT.UNSIGNED,
                     primaryKey: true,
+                    unique: true,
                     autoIncrement: true,
                     allowNull: false,
                     required: true,
