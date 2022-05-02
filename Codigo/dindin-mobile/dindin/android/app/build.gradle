@@ -22,6 +22,9 @@ if (flutterVersionName == null) {
 }
 
 def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
+if (flutterMinSdkVersion == null) {
+    flutterMinSdkVersion = '21'
+}
 def flutterTargetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion')
 
 apply plugin: 'com.android.application'
