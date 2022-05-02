@@ -24,7 +24,7 @@ class Category extends Model {
                 },
                 user_id: {
                     type: DataTypes.INTEGER.UNSIGNED,
-                    allowNull: false, //! to change
+                    allowNull: false,
                     references: {
                         model: User,
                         key: "id",
