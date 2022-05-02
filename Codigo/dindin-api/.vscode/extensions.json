@@ -1,0 +1,14 @@
+{
+	"recommendations": [
+		"dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode",
+		"waderyan.nodejs-extension-pack",
+		"firsttris.vscode-jest-runner",
+		"ms-azuretools.vscode-docker",
+		"mikestead.dotenv",
+		"editorconfig.editorconfig",
+		"aaron-bond.better-comments",
+    "codezombiech.gitignore",
+    "eamodio.gitlens",
+	]
+}

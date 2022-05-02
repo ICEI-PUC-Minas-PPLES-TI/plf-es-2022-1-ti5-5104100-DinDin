@@ -19,14 +19,14 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-20.04]
+        os: [ubuntu-latest]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v1
 
       - name: Create node .env file
-        working-directory: ./Codigo/dindin-api/dindin-app
+        working-directory: ./Codigo/dindin-api
         run: |
           touch .env
           echo DB_HOST=${{ secrets.DB_HOST }} >> .env

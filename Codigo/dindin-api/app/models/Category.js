@@ -1,48 +1,47 @@
 const { Model, DataTypes } = require("sequelize");
+const User = require("./User");
+// const Wallet = require("./Wallet");
 
-class Goal extends Model {
+class Category extends Model {
     static init(sequelize) {
         super.init(
             {
                 id: {
-                    type: DataTypes.INTEGER.UNSIGNED,
-                    required: true,
+                    type: DataTypes.BIGINT.UNSIGNED,
                     primaryKey: true,
                     autoIncrement: true,
-                    notEmpty: true,
                     allowNull: false,
+                    required: true,
+                    notEmpty: true,
                 },
                 wallet_id: {
-                    type: DataTypes.INTEGER.UNSIGNED,
+                    type: DataTypes.BIGINT.UNSIGNED,
                     allowNull: true, // ! to change
-                    // ! references: {
-                    // !  model: Wallet,
-                    // !  key: "id"
-                    // !}
+                    /*references: {
+                      model: Wallet,
+                      key: "id"
+                    }*/
+                },
+                user_id: {
+                    type: DataTypes.INTEGER.UNSIGNED,
+                    allowNull: false, //! to change
+                    references: {
+                        model: User,
+                        key: "id",
+                    },
                 },
                 description: {
                     type: DataTypes.STRING(30),
                     allowNull: false,
                 },
-                value: {
-                    type: DataTypes.DOUBLE,
-                    allowNull: false,
-                },
-                status: {
-                    type: DataTypes.ENUM,
-                    values: ["FINISHED", "LOST", "PENDING"],
-                    defaultValue: "PENDING",
-                    allowNull: false,
-                },
                 type: {
                     type: DataTypes.ENUM,
-                    values: ["A", "B"],
+                    values: ["IN", "OUT"],
                     allowNull: false,
-                    defaultValue: "A",
                 },
-                expire_at: {
+                color: {
+                    type: DataTypes.STRING(6),
                     allowNull: true,
-                    type: DataTypes.DATE,
                 },
                 created_at: {
                     type: DataTypes.DATE,
@@ -59,7 +58,7 @@ class Goal extends Model {
                 },
             },
             {
-                tableName: "goal",
+                tableName: "category",
                 charset: "utf8mb4",
                 collate: "utf8mb4_bin",
                 timestamps: true, // deleted_at and updatedAt need this
@@ -72,5 +71,4 @@ class Goal extends Model {
         );
     }
 }
-
-module.exports = Goal;
+module.exports = Category;
