@@ -40,13 +40,13 @@ module.exports = {
                 },
                 wallet_id: {
                     type: DataTypes.BIGINT.UNSIGNED,
-                    allowNull: true, // ! trocar
-                    // ! references: {
-                    // !     model: {
-                    // !         tableName: "wallet",
-                    // !     },
-                    // !     key: "id",
-                    // ! },
+                    allowNull: false,
+                    references: {
+                        model: {
+                            tableName: "wallet",
+                        },
+                        key: "id",
+                    },
                 },
                 created_at: {
                     type: DataTypes.DATE,
