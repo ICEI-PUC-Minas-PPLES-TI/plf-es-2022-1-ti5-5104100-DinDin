@@ -37,6 +37,7 @@ class AuthenticateUserAccountUseCase {
         return {
             jwt,
             firebaseToken,
+            userId: user.id
         };
     }
 

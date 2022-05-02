@@ -34,6 +34,22 @@ function getFirebaseInstance() {
         async getFirebaseUserById(uid) {
             return getAuth().getUser(uid);
         },
+
+        async sendCloudMessage(userId, title, message){
+            const messaging = firebaseAdmin.messaging()
+            var payload = {
+                notification: {
+                    title: `DinDin - ${title}`,
+                    body: message
+                },
+                topic: `U_${userId}`
+            };
+            messaging.send(payload)
+                .then((result) => {
+                    console.log('sent',result)
+                })
+
+        }
     };
 }
 

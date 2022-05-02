@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 late FirebaseMessaging messaging;
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 Future<void> _messageHandler(RemoteMessage message) async {
   print('background message ${message.notification!.body}');
@@ -21,18 +22,14 @@ void main() async {
 
   await Firebase.initializeApp();
 
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  
   const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
   final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid,);
+
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
 
-  // Firebase Cloud Messaging
-  messaging = FirebaseMessaging.instance;
-  messaging.getToken().then((value){
-    print(value);
-  });
   runApp(const MyApp());
 }
 
