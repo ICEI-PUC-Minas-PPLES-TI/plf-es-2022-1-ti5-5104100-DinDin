@@ -39,12 +39,7 @@ class CreateGoalController {
         const { description, value, type, expire_at, wallet_id } = request.body;
 
         const findWalletUseCase = new FindWalletUseCase();
-
-        try {
-            await findWalletUseCase.find(wallet_id);
-        } catch (error) {
-            throw new AppError("'wallet_id' does not exist", 422);
-        }
+        await findWalletUseCase.find(wallet_id);
 
         const createGoalUseCase = new CreateGoalUseCase();
         const goal = await createGoalUseCase.create(
