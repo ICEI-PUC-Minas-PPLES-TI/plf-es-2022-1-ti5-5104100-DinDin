@@ -16,13 +16,13 @@ module.exports = {
                 },
                 wallet_id: {
                     type: DataTypes.BIGINT.UNSIGNED,
-                    allowNull: true, // ! trocar
-                    // ! references: {
-                    // !     model: {
-                    // !         tableName: "wallet",
-                    // !     },
-                    // !     key: "id",
-                    // ! },
+                    allowNull: true,
+                    references: {
+                        model: {
+                            tableName: "wallet",
+                        },
+                        key: "id",
+                    },
                 },
                 user_id: {
                     type: DataTypes.INTEGER.UNSIGNED,
