@@ -8,10 +8,10 @@ module.exports = {
             "wallet",
             {
                 id: {
+                    type: DataTypes.BIGINT.UNSIGNED,
                     allowNull: false,
                     autoIncrement: true,
                     primaryKey: true,
-                    type: DataTypes.BIGINT.UNSIGNED,
                 },
                 description: {
                     type: DataTypes.STRING(30),
@@ -27,12 +27,12 @@ module.exports = {
                     defaultValue: 0,
                 },
                 created_at: {
-                    allowNull: false,
                     type: DataTypes.DATE,
+                    allowNull: false,
                 },
                 updated_at: {
-                    allowNull: false,
                     type: DataTypes.DATE,
+                    allowNull: false,
                 },
                 deleted_at: {
                     type: DataTypes.DATE,

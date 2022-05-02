@@ -10,13 +10,11 @@ module.exports = {
                 user_id: {
                     type: DataTypes.INTEGER.UNSIGNED,
                     allowNull: false,
-                    primaryKey: true,
                     references: { model: "user", key: "id" },
                 },
                 wallet_id: {
                     type: DataTypes.BIGINT.UNSIGNED,
                     allowNull: false,
-                    primaryKey: true,
                     references: { model: "wallet", key: "id" },
                 },
                 created_at: {

@@ -8,21 +8,19 @@ module.exports = {
             "wallet_invite",
             {
                 id: {
+                    type: DataTypes.BIGINT.UNSIGNED,
                     allowNull: false,
                     autoIncrement: true,
                     primaryKey: true,
-                    type: DataTypes.BIGINT.UNSIGNED,
                 },
                 user_id: {
                     type: DataTypes.INTEGER.UNSIGNED,
                     allowNull: false,
-                    primaryKey: true,
                     references: { model: "user", key: "id" },
                 },
                 wallet_id: {
                     type: DataTypes.BIGINT.UNSIGNED,
                     allowNull: false,
-                    primaryKey: true,
                     references: { model: "wallet", key: "id" },
                 },
                 code: {
