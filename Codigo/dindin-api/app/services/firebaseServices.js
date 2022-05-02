@@ -35,21 +35,19 @@ function getFirebaseInstance() {
             return getAuth().getUser(uid);
         },
 
-        async sendCloudMessage(userId, title, message){
-            const messaging = firebaseAdmin.messaging()
+        async sendCloudMessage(userId, title, message) {
+            const messaging = firebaseAdmin.messaging();
             var payload = {
                 notification: {
                     title: `DinDin - ${title}`,
-                    body: message
+                    body: message,
                 },
-                topic: `U_${userId}`
+                topic: `U_${userId}`,
             };
-            messaging.send(payload)
-                .then((result) => {
-                    console.log('sent',result)
-                })
-
-        }
+            messaging.send(payload).then((result) => {
+                console.log("sent", result);
+            });
+        },
     };
 }
 

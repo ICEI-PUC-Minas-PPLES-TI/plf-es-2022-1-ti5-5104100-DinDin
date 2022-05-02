@@ -41,8 +41,11 @@ class AuthenticateUserAccountController {
         let token;
         let uid;
         if (email && password) {
-            const { jwt, firebaseToken: _firebaseToken, userId } =
-                await authenticateUseCase.executeForLocalAuth(email, password);
+            const {
+                jwt,
+                firebaseToken: _firebaseToken,
+                userId,
+            } = await authenticateUseCase.executeForLocalAuth(email, password);
 
             token = jwt;
             uid = userId;

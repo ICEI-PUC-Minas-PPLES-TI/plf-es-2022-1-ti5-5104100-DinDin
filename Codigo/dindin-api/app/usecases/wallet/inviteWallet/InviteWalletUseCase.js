@@ -4,7 +4,6 @@ const AppError = require("../../../errors/AppError");
 const UserHasWallet = require("../../../models/UserHasWallet");
 const WalletInvite = require("../../../models/WalletInvite");
 const UpdateWalletUseCase = require("../updateWallet/UpdateWalletUseCase");
-const FindUserAccountUseCase = require("../../user/findAccount/FindUserAccountUseCase");
 const { firebaseServices } = require("../../../services/firebaseServices");
 
 class InviteWalletUseCase {
@@ -65,8 +64,6 @@ class InviteWalletUseCase {
             const updateWalletUseCase = new UpdateWalletUseCase();
             updateWalletUseCase.update(invite.wallet_id, null, true);
 
-            
-
             /*
              await firebaseServices.
             */
@@ -75,13 +72,14 @@ class InviteWalletUseCase {
                 where: {
                     wallet_id: invite.wallet_id,
                 },
-                order: [
-                    ['created_at', 'ASC']
-                ]
-            })
+                order: [["created_at", "ASC"]],
+            });
 
-            console.log(firstuser.user_id, 'Invite Accepted', 'A new user has joined your wallet')
-            await firebaseServices.sendCloudMessage(firstuser.user_id, 'Invite Accepted', 'A new user has joined your wallet');
+            await firebaseServices.sendCloudMessage(
+                firstuser.user_id,
+                "Invite Accepted",
+                "A new user has joined your wallet"
+            );
 
             // Needs to send to others users a notification that a user has joined their wallet
             return userHasWallet;
