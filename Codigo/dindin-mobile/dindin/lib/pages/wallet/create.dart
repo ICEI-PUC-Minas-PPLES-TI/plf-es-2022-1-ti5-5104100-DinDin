@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class WalletCreate extends StatefulWidget {
   const WalletCreate({Key? key}) : super(key: key);
-
   @override
   State<StatefulWidget> createState() {
     return _WalletCreateState();
@@ -11,12 +10,18 @@ class WalletCreate extends StatefulWidget {
 }
 
 class _WalletCreateState extends State<WalletCreate> {
+  bool _isShared = false;
+  void changeButtonState() {
+    setState(() {
+      _isShared = !_isShared;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
             title: const Text(
-              'Create Goal',
+              'Create Wallet',
             ),
             backgroundColor: Theme.of(context).primaryColor),
         body: Form(
@@ -27,10 +32,72 @@ class _WalletCreateState extends State<WalletCreate> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Description field
-                    const Text('Description',
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                changeButtonState();
+                              },
+                              style: _isShared
+                                  ? ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                      Colors.grey,
+                                    ))
+                                  : ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Theme.of(context).primaryColor),
+                                    ),
+                              child: const Text(
+                                "Create new",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  changeButtonState();
+                                },
+                                style: _isShared
+                                    ? ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Theme.of(context).primaryColor),
+                                      )
+                                    : ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.grey),
+                                      ),
+                                child: const Text("Join",
+                                    style: TextStyle(fontSize: 20))),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                    //only visible if shared
+                    if(_isShared) Text('Wallet invite code',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    const TextField(
+                    if(_isShared) const TextField(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'ex: AAA323#',
+                          suffixIcon:
+                              Icon(FontAwesomeIcons.penToSquare, size: 20.0)),
+                    ),
+                    if(_isShared) const SizedBox(height: 20),
+                    // Description field
+                    if(!_isShared) const Text('Description',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    if(!_isShared) const TextField(
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: 'ex: Money under the mattress',
@@ -38,11 +105,11 @@ class _WalletCreateState extends State<WalletCreate> {
                               Icon(FontAwesomeIcons.penToSquare, size: 20.0)),
                     ),
                     // End description dield
-                    const SizedBox(height: 20),
+                    if(!_isShared) const SizedBox(height: 20),
                     // Numeric input Starting Amount
-                    const Text('Starting Amount',
+                    if(!_isShared) const Text('Starting Amount',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    const TextField(
+                    if(!_isShared) const TextField(
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -50,7 +117,7 @@ class _WalletCreateState extends State<WalletCreate> {
                           suffixIcon:
                               Icon(FontAwesomeIcons.penToSquare, size: 20.0)),
                     ),
-                    const SizedBox(height: 20),
+                    if(!_isShared) const SizedBox(height: 20),
                     SizedBox(
                       height: 40,
                       width: double.infinity,
