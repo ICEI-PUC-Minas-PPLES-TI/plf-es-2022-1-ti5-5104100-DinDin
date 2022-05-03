@@ -47,10 +47,17 @@
                 maxlength="40"
               />
             </v-row>
-            <v-row>
-              <v-radio-group v-model="transaction.recurrent">
-                <v-radio label="Recurrent"> </v-radio>
-              </v-radio-group>
+            <v-row class="pb-2">
+              <v-text-field
+                :rules="[rules.required]"
+                prepend-inner-icon="mdi-tag"
+                outlined
+                v-model="goal.description"
+                hide-details="auto"
+                :clearable="true"
+                label="Description"
+                maxlength="40"
+              />
             </v-row>
             <v-row class="pb-2">
               <v-menu
@@ -66,15 +73,15 @@
                     outlined
                     hide-details="auto"
                     type="date"
-                    :value="date"
+                    v-model="transaction.date"
                     v-bind="attrs"
                     v-on="on"
                     label="Date"
                   />
                 </template>
                 <v-date-picker
-                  v-model="goal.expire_at"
-                  @click.native="parseDate(goal.expire_at)"
+                  v-model="transaction.date"
+                  @click.native="parseDate(transaction.date)"
                   @input="menu = false"
                 ></v-date-picker>
               </v-menu>
@@ -82,7 +89,7 @@
             <v-row class="pb-2">
               <v-select
                 :rules="[rules.required]"
-                v-model="goal.walletId"
+                v-model="transaction.wallet_id"
                 prepend-inner-icon="mdi-wallet"
                 outlined
                 hide-details="auto"
@@ -96,8 +103,8 @@
             <v-row class="pb-2">
               <v-select
                 :rules="[rules.required]"
-                v-model="goal.walletId"
-                prepend-inner-icon="mdi-car"
+                v-model="transaction.walletId"
+                prepend-inner-icon="mdi-tag"
                 outlined
                 hide-details="auto"
                 :items="[
@@ -107,16 +114,22 @@
                 label="Category"
               />
             </v-row>
-            <v-row class="">
+            <v-row>
+              <v-checkbox label="Recurrent" v-model="transaction.recurrent">
+              </v-checkbox>
+            </v-row>
+                        <v-row class="pb-2" v-show="transaction.recurrent">
               <v-text-field
                 :rules="[rules.required]"
-                prepend-inner-icon="mdi-tag"
+                v-model="transaction.month_recurrency"
+                prepend-inner-icon="mdi-calendar-range"
                 outlined
-                v-model="goal.description"
+                type="number"
                 hide-details="auto"
                 :clearable="true"
-                label="Description"
-                maxlength="40"
+                placeholder="1 months"
+                maxlength="2"
+                label="Month recurrency"
               />
             </v-row>
           </v-form>
@@ -148,6 +161,7 @@ export default {
     value: Boolean,
     goalToEdit: Object,
     modalEdit: Boolean,
+    transactionId: String,
   },
   data() {
     return {
@@ -164,8 +178,11 @@ export default {
       transaction: {
         id: "",
         value: "",
+        description: "",
+        date: "",
         type: "",
-        category: "",
+        category_id: "",
+        wallet_id: "",
         recurrent: false,
       },
       choosenGoal: "",
@@ -190,33 +207,25 @@ export default {
       },
     },
   },
+  mounted() {
+    console.log("oi");
+    this.setCurrentDate();
+  },
   watch: {
-    modalEdit: function (modalEdit) {
-      if (modalEdit) {
-        this.title = "Edit Transaction";
+    transactionId(val) {
+      console.log(val);
+      if (val) {
+        //load transaction
       } else {
-        this.choosenGoal = null;
-        let emptyGoal = {
-          description: "",
-          expire_at: this.goal.expire_at,
-          value: "",
-          type: "",
-          walletId: "",
-          status: "PENDING",
-        };
-        this.fillForm(emptyGoal);
         this.cleanForm();
-        this.title = "New Transaction";
-      }
-    },
-    goalToEdit: function (goalToEdit) {
-      if (goalToEdit) {
-        this.choosenGoal = goalToEdit;
-        this.fillForm(this.choosenGoal);
+        this.setCurrentDate();
       }
     },
   },
   methods: {
+    setCurrentDate() {
+      this.parseDate(new Date().toLocaleDateString());
+    },
     saveGoal() {
       this.errors = [];
       if (this.$refs.form.validate()) {
@@ -276,9 +285,10 @@ export default {
       }
     },
     parseDate(date) {
+      console.log("oii");
       if (!date) return null;
       const [year, month, day] = date.split("-");
-      this.date = `${day}/${month}/${year}`;
+      this.transaction.date = `${day}/${month}/${year}`;
     },
     shortDate(date) {
       if (!date) {

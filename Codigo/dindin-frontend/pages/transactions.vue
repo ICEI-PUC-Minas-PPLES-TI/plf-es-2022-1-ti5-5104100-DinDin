@@ -23,7 +23,7 @@
         <v-card elevation="0" class="p-20">
           <!-- Table top toolbar -->
           <v-row>
-            <v-col cols="12" md="2" sm="6" lg="2">
+            <v-col cols="9" md="4" sm="6" lg="2">
               <v-select
                 v-model="filters.wallet"
                 :items="listWalletsFilter"
@@ -33,9 +33,10 @@
                 outlined
               ></v-select>
             </v-col>
-            <v-col cols="12" md="2" sm="6" lg="2">
+            <v-col cols="9" md="4" sm="6" lg="2">
               <v-select
                 v-model="filters.category"
+                :item-disabled="filters.category"
                 :items="listCategoriesFilter"
                 label="Category"
                 item-value="id"
@@ -43,7 +44,7 @@
                 outlined
               ></v-select>
             </v-col>
-            <v-col cols="12" md="3" sm="6" lg="3">
+            <v-col cols="9" md="4" sm="6" lg="2">
               <v-menu
                 v-model="menuData1"
                 :close-on-content-click="false"
@@ -75,7 +76,7 @@
                 ></v-date-picker>
               </v-menu>
             </v-col>
-            <v-col cols="12" md="3" sm="6" lg="3">
+            <v-col cols="9" md="4" sm="6" lg="2">
               <v-menu
                 v-model="menuData2"
                 :close-on-content-click="false"
@@ -107,7 +108,7 @@
                 ></v-date-picker>
               </v-menu>
             </v-col>
-            <v-col cols="12" md="2" sm="6" lg="2">
+            <v-col cols="9" md="2" sm="4" lg="2" offset-lg="2" offset-md="4">
               <v-btn block color="success" @click.stop="openModal(0)">
                 New Transaction
               </v-btn>
@@ -315,7 +316,7 @@ export default {
       loading: false,
 
       showModal: false,
-      transactionId: 0,
+      transactionId: "",
 
       filters: {
         wallet: "",
