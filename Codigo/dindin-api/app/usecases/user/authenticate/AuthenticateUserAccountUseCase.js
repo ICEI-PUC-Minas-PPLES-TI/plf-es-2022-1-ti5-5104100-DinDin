@@ -75,7 +75,11 @@ class AuthenticateUserAccountUseCase {
         }
 
         // gerar jwt
-        return jwtAuthorization.logIn(user.id);
+        return {
+            jwt: jwtAuthorization.logIn(user.id),
+            firebaseToken,
+            userId: user.id,
+        }
     }
 }
 
