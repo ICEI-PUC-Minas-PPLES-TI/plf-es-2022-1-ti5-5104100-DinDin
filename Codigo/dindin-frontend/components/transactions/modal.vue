@@ -81,7 +81,6 @@
                 </template>
                 <v-date-picker
                   v-model="transaction.date"
-                  @click.native="parseDate(transaction.date)"
                   @input="menu = false"
                 ></v-date-picker>
               </v-menu>
@@ -118,7 +117,7 @@
               <v-checkbox label="Recurrent" v-model="transaction.recurrent">
               </v-checkbox>
             </v-row>
-                        <v-row class="pb-2" v-show="transaction.recurrent">
+            <v-row class="pb-2" v-show="transaction.recurrent">
               <v-text-field
                 :rules="[rules.required]"
                 v-model="transaction.month_recurrency"
@@ -127,8 +126,9 @@
                 type="number"
                 hide-details="auto"
                 :clearable="true"
+                min="1"
                 placeholder="1 months"
-                maxlength="2"
+                maxlength="3"
                 label="Month recurrency"
               />
             </v-row>
@@ -197,6 +197,18 @@ export default {
       errors: [],
     };
   },
+  watch: {
+    transactionId(val) {
+      console.log('oi');
+      console.log(val);
+      if (val) {
+        //load transaction
+      } else {
+        this.cleanForm();
+        this.setCurrentDate();
+      }
+    },
+  },
   computed: {
     show: {
       get() {
@@ -210,17 +222,6 @@ export default {
   mounted() {
     console.log("oi");
     this.setCurrentDate();
-  },
-  watch: {
-    transactionId(val) {
-      console.log(val);
-      if (val) {
-        //load transaction
-      } else {
-        this.cleanForm();
-        this.setCurrentDate();
-      }
-    },
   },
   methods: {
     setCurrentDate() {
@@ -285,7 +286,7 @@ export default {
       }
     },
     parseDate(date) {
-      console.log("oii");
+      //console.log("oii");
       if (!date) return null;
       const [year, month, day] = date.split("-");
       this.transaction.date = `${day}/${month}/${year}`;

@@ -36,7 +36,7 @@
             <v-col cols="9" md="4" sm="6" lg="2">
               <v-select
                 v-model="filters.category"
-                :item-disabled="filters.category"
+                :disabled="!filters.wallet"
                 :items="listCategoriesFilter"
                 label="Category"
                 item-value="id"
@@ -344,6 +344,7 @@ export default {
       return {
         display: "inline-block",
         backgroundColor: color,
+        marginBottom: "-7px",
         height: "25px",
         width: "25px",
         borderRadius: "10px",
@@ -352,6 +353,12 @@ export default {
     changePagination() {
       this.$fetch();
     },
+    // parseDate(date) {
+    //   //console.log("oii");
+    //   if (!date) return null;
+    //   const [year, month, day] = date.split("-");
+    //   this.transaction.date = `${day}/${month}/${year}`;
+    // },
     removeTransaction(id) {
       Swal.fire({
         title: "Are you sure?",
