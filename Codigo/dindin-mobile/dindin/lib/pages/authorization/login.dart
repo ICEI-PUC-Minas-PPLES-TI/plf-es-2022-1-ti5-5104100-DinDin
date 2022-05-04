@@ -24,7 +24,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       body: Column(
         children: [
@@ -118,9 +118,15 @@ class _LoginState extends State<Login> {
                                   child: ElevatedButton(
                                     child: const Text("Login"),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Colors.grey,
+                                      primary: Color.fromARGB(255, 84, 179, 88),
                                     ),
                                     onPressed: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Dashboard()),
+                                      );
                                       if (formKey.currentState!.validate()) {
                                         const snackBarTrue =
                                             SnackBar(content: Text('Loging'));
@@ -128,6 +134,7 @@ class _LoginState extends State<Login> {
                                             content: Text('User not Found'));
                                         userAuth(email, password)
                                             .then((res) => {
+                                              print(res),
                                                   if (res == true)
                                                     {
                                                       _scaffoldKey.currentState!
@@ -164,43 +171,44 @@ class _LoginState extends State<Login> {
                   ),
                 )),
           ),
-          Wrap(
-              children: [Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Wrap(
-                          children: const [
-                            Text("Don't have an account?"),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                text: "REGISTER ",
-                                style: TextStyle(color: Colors.green[800]),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.pushNamed(context, "/register");
-                                  },
-                              ),
+          Wrap(children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(
+                        children: const [
+                          Text("Don't have an account?"),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: "REGISTER ",
+                              style: TextStyle(color: Colors.green[800]),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.pushNamed(context, "/register");
+                                },
                             ),
-                            const Icon(
-                              Icons.arrow_forward,
-                              color: Colors.green,
-                              size: 30.0,
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              )])
+                          ),
+                          const Icon(
+                            Icons.arrow_forward,
+                            color: Colors.green,
+                            size: 30.0,
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
+          ])
         ],
       ),
     );

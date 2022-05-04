@@ -39,7 +39,7 @@
               />
             </v-row>
             <v-row class="mb-0 pb-2">
-              <v-col cols="12" class="py-2">
+              <v-col cols="12" class="pl-0 py-2">
                 <p>Type</p>
                 <v-btn-toggle v-model="category.type" outlined mandatory>
                   <v-btn value="IN"> Incoming </v-btn>
@@ -292,11 +292,10 @@ export default {
           //this.category.color.hex = "#" + data.color;
 
           let color = this.colors.filter(function (val) {
-            return val.hex == ("#" + data.color);
+            return val.hex == "#" + data.color;
           });
 
           this.category.color = color[0];
-          
         })
         .catch((err) => {
           this.erroLogin = err.response.data.message;
