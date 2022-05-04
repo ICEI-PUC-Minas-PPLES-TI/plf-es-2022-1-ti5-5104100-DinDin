@@ -11,20 +11,20 @@ on:
       - "Codigo/dindin-mobile/**"
 
 jobs:
-  ios-build:
-    name: Build for iOS
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: "2.x"
-          channel: "stable" # or: 'beta' or 'master'
-      - name: install, test and build
-        working-directory: ./Codigo/dindin-mobile/dindin
-        run: |
-          flutter pub get
-          flutter build ios --release --no-codesign
+  #ios-build:
+  #  name: Build for iOS
+  #  runs-on: macos-latest
+  #  steps:
+  #    - uses: actions/checkout@v2
+  #    - uses: subosito/flutter-action@v2
+  #      with:
+  #        flutter-version: "2.x"
+  #        channel: "stable" # or: 'beta' or 'master'
+  #    - name: install, test and build
+  #      working-directory: ./Codigo/dindin-mobile/dindin
+  #      run: |
+  #        flutter pub get
+  #        flutter build ios --release --no-codesign
 
   android-build:
     name: Build for Android
