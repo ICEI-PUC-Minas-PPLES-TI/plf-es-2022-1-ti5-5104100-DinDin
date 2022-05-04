@@ -240,7 +240,7 @@ export default {
     },
     mounted() {
         const ctx = document.getElementById("chart2");
-        const myChart = new Chart(ctx, {
+        new Chart(ctx, {
             type: "pie",
             data: {
                 labels: ["Incomes", "Expenses"],
@@ -271,7 +271,7 @@ export default {
             },
         });
         const ctx2 = document.getElementById("chart3");
-        const myChart2 = new Chart(ctx2, {
+        new Chart(ctx2, {
             type: "pie",
             data: {
                 labels: ["Food", "Transportation", "Education", "House"],
@@ -330,7 +330,7 @@ export default {
                 backgroundColor: "#E15151",
             },
         ];
-        const myChart3 = new Chart(ctx3, {
+        new Chart(ctx3, {
             type: "bar",
             data: {
                 labels: labels,
@@ -360,7 +360,7 @@ export default {
         });
 
         const ctxMain = document.getElementById("chartMain");
-        const myChartMain = new Chart(ctxMain, {
+        new Chart(ctxMain, {
             type: "pie",
             data: {
                 labels: ["Incomes", "Expenses"],

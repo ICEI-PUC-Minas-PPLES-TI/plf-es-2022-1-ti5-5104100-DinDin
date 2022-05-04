@@ -1,6 +1,6 @@
 <template>
     <v-dialog
-        v-model="value"
+        :value="value"
         max-width="600px"
         @click:outside="
             $emit('input', false);
