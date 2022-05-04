@@ -19,6 +19,7 @@
                 @click.stop="
                   showModal = true;
                   modalEdit = false;
+                  goalToEdit = null;
                 "
               >
                 New Goal

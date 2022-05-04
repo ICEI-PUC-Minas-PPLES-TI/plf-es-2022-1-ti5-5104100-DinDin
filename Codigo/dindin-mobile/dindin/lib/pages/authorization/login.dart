@@ -123,9 +123,15 @@ class _LoginState extends State<Login> {
                                   child: ElevatedButton(
                                     child: const Text("Login"),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Colors.grey,
+                                      primary: Color.fromARGB(255, 84, 179, 88),
                                     ),
                                     onPressed: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Dashboard()),
+                                      );
                                       if (formKey.currentState!.validate()) {
                                         const snackBarTrue =
                                             SnackBar(content: Text('Loging'));
@@ -133,6 +139,7 @@ class _LoginState extends State<Login> {
                                             content: Text('User not Found'));
                                         userAuth(email, password)
                                             .then((res) => {
+                                                  print(res),
                                                   if (res == true)
                                                     {
                                                       _scaffoldKey.currentState!
