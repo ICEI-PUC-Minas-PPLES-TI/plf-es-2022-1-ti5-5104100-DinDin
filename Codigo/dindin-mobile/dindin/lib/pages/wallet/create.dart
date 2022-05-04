@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 class WalletCreate extends StatefulWidget {
   const WalletCreate({Key? key}) : super(key: key);
@@ -125,6 +127,11 @@ class _WalletCreateState extends State<WalletCreate> {
                       TextField(
                         controller: startingAmount,
                         keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                                  CurrencyTextInputFormatter(
+                                    locale: 'pt_BR',
+                                    decimalDigits: 2,
+                                  )],
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: 'ex: 9999,99',
