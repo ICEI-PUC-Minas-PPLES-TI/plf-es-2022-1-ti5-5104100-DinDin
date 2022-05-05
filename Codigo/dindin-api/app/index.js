@@ -25,25 +25,26 @@ if (process.env.APP_DEBUG) app.use(logger("dev"));
 // Import API Routes
 app.use("/api", routes);
 
-app.use(function (error, response) {
+app.get("/", (req, res) => {
+    res.json({ message: "Welcome to DinDin application API." });
+});
+
+app.use(function (error, req, response, next) {
     console.log(error);
     if (process.env.APP_DEBUG) {
-        return response.status(error.statusCode).json({
+        return response.status(error.statusCode ?? 500).json({
             status: "Error",
             message: error.message,
             error: error,
         });
     } else {
-        return response.status(error.statusCode).json({
+        return response.status(error.statusCode ?? 500).json({
             status: "Error",
             message: error.message,
         });
     }
 });
 
-app.get("/", (req, res) => {
-    res.json({ message: "Welcome to DinDin application API." });
-});
 
 // Export express app
 module.exports = app;

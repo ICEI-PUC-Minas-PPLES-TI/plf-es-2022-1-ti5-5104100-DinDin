@@ -6,14 +6,20 @@ const User = require("../../../models/User");
 const FindUserAccountUseCase = require("../findAccount/FindUserAccountUseCase");
 
 class UpdateUserAccountUseCase {
-    async update(id, name, password) {
+    async update(id, name, password, oldPassword) {
         const findUserAccountUseCase = new FindUserAccountUseCase();
         await findUserAccountUseCase.find(id);
 
         const user = await User.scope("withPassword").findByPk(id);
 
         let bcryptPassword;
-        if (password) bcryptPassword = bcrypt.hashSync(password, 8);
+        if (password){
+            if (!oldPassword)
+                throw new AppError("Current password is required when changing the password!", 409);
+            else if ( !(await bcrypt.compare(oldPassword, user.password )) )
+                throw new AppError("The current password is wrong!", 409);
+            bcryptPassword = await bcrypt.hash(password, 8);   
+        }
         await user
             .update({
                 name,
