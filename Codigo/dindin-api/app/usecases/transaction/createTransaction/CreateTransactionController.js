@@ -18,8 +18,8 @@ class CreateTransactionController {
                 .max(30)
                 .required("'description' is a required field"),
             day: yup.number("'day' must be numeric!").min(1).nullable(true),
-            recurrence: yup
-                .number("'recurrence' must be numeric!")
+            interval: yup
+                .number("'interval' must be numeric!")
                 .min(1)
                 .nullable(true),
             category_id: yup.number("'category_id' must be numeric!").min(1),
@@ -31,21 +31,20 @@ class CreateTransactionController {
             throw new AppError(error.name, 422, error.errors);
         }
 
-        const { value, description, day, recurrence, category_id } =
-            request.body;
+        const { value, description, day, interval, category_id } = request.body;
         const wallet_id = request.params.id; // * wallet_id of the transaction
         const user_id = request.userId;
 
-        // * If the transaction is recurrency, need the day and recurrence
-        if ((day && !recurrence) || (!day && recurrence)) {
+        // * If the transaction is recurrency, need the day and interval
+        if ((day && !interval) || (!day && interval)) {
             throw new AppError(
                 "ValidationError",
                 422,
-                "If the transaction is recurrency, need the 'day' and 'recurrence'"
+                "If the transaction is recurrency, need the 'day' and 'interval'"
             );
         }
 
-        const isRecurrencyTransaction = day && recurrence ? true : false;
+        const isRecurrencyTransaction = day && interval ? true : false;
         let transaction = null;
 
         if (isRecurrencyTransaction) {
@@ -56,7 +55,7 @@ class CreateTransactionController {
                 value,
                 description,
                 day,
-                recurrence,
+                interval,
                 category_id,
                 user_id
             );

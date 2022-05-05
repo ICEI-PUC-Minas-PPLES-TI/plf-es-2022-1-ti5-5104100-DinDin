@@ -50,7 +50,7 @@ class TransactionRecurrencies extends Model {
                     type: DataTypes.TINYINT.UNSIGNED,
                     allowNull: false,
                 },
-                recurrence: {
+                interval: {
                     type: DataTypes.TINYINT(2).UNSIGNED,
                     allowNull: false,
                 },

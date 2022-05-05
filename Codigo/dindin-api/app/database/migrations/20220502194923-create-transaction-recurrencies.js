@@ -45,7 +45,7 @@ module.exports = {
                 type: DataTypes.TINYINT.UNSIGNED,
                 allowNull: false,
             },
-            recurrence: {
+            interval: {
                 type: DataTypes.TINYINT(2).UNSIGNED,
                 allowNull: false,
             },
@@ -58,6 +58,11 @@ module.exports = {
                     },
                     key: "id",
                 },
+            },
+            expired_at: {
+                type: DataTypes.DATE,
+                allowNull: true,
+                defaultValue: null,
             },
             created_at: {
                 type: DataTypes.DATE,
