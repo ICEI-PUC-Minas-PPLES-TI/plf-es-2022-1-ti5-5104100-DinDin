@@ -13,12 +13,15 @@ class UpdateUserAccountUseCase {
         const user = await User.scope("withPassword").findByPk(id);
 
         let bcryptPassword;
-        if (password){
+        if (password) {
             if (!oldPassword)
-                throw new AppError("Current password is required when changing the password!", 409);
-            else if ( !(await bcrypt.compare(oldPassword, user.password )) )
+                throw new AppError(
+                    "Current password is required when changing the password!",
+                    409
+                );
+            else if (!(await bcrypt.compare(oldPassword, user.password)))
                 throw new AppError("The current password is wrong!", 409);
-            bcryptPassword = await bcrypt.hash(password, 8);   
+            bcryptPassword = await bcrypt.hash(password, 8);
         }
         await user
             .update({

@@ -23,7 +23,12 @@ class UpdateUserAccountController {
             throw new AppError("Please send a valid id on url", 422);
 
         const updateUserAccountUseCase = new UpdateUserAccountUseCase();
-        const user = await updateUserAccountUseCase.update(id, name, password, oldPassword);
+        const user = await updateUserAccountUseCase.update(
+            id,
+            name,
+            password,
+            oldPassword
+        );
 
         return response.status(200).json(user);
     }
