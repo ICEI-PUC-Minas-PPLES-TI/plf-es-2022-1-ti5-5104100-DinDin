@@ -44,9 +44,9 @@ const logIn = (id) => {
     return token;
 };
 
-const jwtAuthorization = {
+const JwtAuthorization = {
     verifyToken,
     logIn,
 };
 
-module.exports = jwtAuthorization;
+module.exports = JwtAuthorization;

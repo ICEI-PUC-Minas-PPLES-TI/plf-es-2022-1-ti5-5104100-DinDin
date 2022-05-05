@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const walletRoutes = Router();
 
-const jwtAuthorization = require("../middleware/jwtAuthorizationMiddleware");
+const JwtAuthorization = require("../middleware/JwtAuthorizationMiddleware");
 const UserAccessWalletMiddleware = require("../middleware/UserAccessWalletMiddleware");
 
 const CreateWalletController = require("../usecases/wallet/createWallet/CreateWalletController");
@@ -23,18 +23,18 @@ const listWalletUsersController = new ListWalletUsersController();
 
 walletRoutes.post(
     "/",
-    [jwtAuthorization.verifyToken],
+    [JwtAuthorization.verifyToken],
     createWalletController.create
 );
 walletRoutes.get(
     "/",
-    [jwtAuthorization.verifyToken],
+    [JwtAuthorization.verifyToken],
     listWalletController.list
 );
 walletRoutes.get(
     "/:id",
     [
-        jwtAuthorization.verifyToken,
+        JwtAuthorization.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     findWalletController.find
@@ -42,7 +42,7 @@ walletRoutes.get(
 walletRoutes.get(
     "/:id/users",
     [
-        jwtAuthorization.verifyToken,
+        JwtAuthorization.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     listWalletUsersController.listUsers
@@ -50,7 +50,7 @@ walletRoutes.get(
 walletRoutes.put(
     "/:id",
     [
-        jwtAuthorization.verifyToken,
+        JwtAuthorization.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     updateWalletController.update
@@ -58,7 +58,7 @@ walletRoutes.put(
 walletRoutes.delete(
     "/:id",
     [
-        jwtAuthorization.verifyToken,
+        JwtAuthorization.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     deleteWalletController.delete
@@ -66,14 +66,14 @@ walletRoutes.delete(
 walletRoutes.post(
     "/:id/invite",
     [
-        jwtAuthorization.verifyToken,
+        JwtAuthorization.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     inviteWalletController.invite
 );
 walletRoutes.post(
     "/invite",
-    [jwtAuthorization.verifyToken],
+    [JwtAuthorization.verifyToken],
     inviteWalletController.accept
 );
 

@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const categoryRoutes = Router();
 
-const jwtAuthorization = require("./jwtAuthorization");
+const JwtAuthorization = require("../middleware/JwtAuthorizationMiddleware");
 
 const CreateCategoryController = require("../usecases/category/createCategory/CreateCategoryController");
 const DeleteCategoryController = require("../usecases/category/deleteCategory/DeleteCategoryController");
@@ -17,27 +17,27 @@ const updateCategoryController = new UpdateCategoryController();
 
 categoryRoutes.post(
     "/",
-    [jwtAuthorization.verifyToken],
+    [JwtAuthorization.verifyToken],
     createCategoryController.create
 );
 categoryRoutes.get(
     "/:id",
-    [jwtAuthorization.verifyToken],
+    [JwtAuthorization.verifyToken],
     findCategoryController.find
 );
 categoryRoutes.get(
     "/",
-    [jwtAuthorization.verifyToken],
+    [JwtAuthorization.verifyToken],
     listCategoryController.list
 );
 categoryRoutes.put(
     "/:id",
-    [jwtAuthorization.verifyToken],
+    [JwtAuthorization.verifyToken],
     updateCategoryController.update
 );
 categoryRoutes.delete(
     "/:id",
-    [jwtAuthorization.verifyToken],
+    [JwtAuthorization.verifyToken],
     deleteCategoryController.delete
 );
 

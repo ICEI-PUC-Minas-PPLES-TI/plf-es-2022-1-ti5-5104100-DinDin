@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const transactionRoutes = Router();
 
-const jwtAuthorization = require("../middleware/jwtAuthorizationMiddleware");
+const JwtAuthorization = require("../middleware/JwtAuthorizationMiddleware");
 const UserAccessWalletMiddleware = require("../middleware/UserAccessWalletMiddleware");
 const CategoryBelongsWalletMiddleware = require("../middleware/CategoryBelongsWalletMiddleware");
 
@@ -12,7 +12,7 @@ const createTransactionController = new CreateTransactionController();
 transactionRoutes.post(
     "/:id/transaction",
     [
-        jwtAuthorization.verifyToken,
+        JwtAuthorization.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
         CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],

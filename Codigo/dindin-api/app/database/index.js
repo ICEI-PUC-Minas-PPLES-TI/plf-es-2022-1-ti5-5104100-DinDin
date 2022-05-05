@@ -87,9 +87,9 @@ module.exports = {
         try {
             // * Start Models here
             User.init(sequelize);
+            Wallet.init(sequelize);
             Goal.init(sequelize);
             Category.init(sequelize);
-            Wallet.init(sequelize);
             UserHasWallet.init(sequelize);
             WalletInvite.init(sequelize);
 

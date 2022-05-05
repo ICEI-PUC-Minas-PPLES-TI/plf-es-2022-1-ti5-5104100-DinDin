@@ -1,9 +1,7 @@
 const { Router } = require("express");
 const userRoutes = Router();
 
-const jwtAuthorization = require("./jwtAuthorization");
-
-// ! const jwtAuthorization = require("./jwtAuthorization");
+const JwtAuthorization = require("../middleware/JwtAuthorizationMiddleware");
 
 const FindUserAccountController = require("../usecases/user/findAccount/FindUserAccountController");
 const CreateUserAccountController = require("../usecases/user/createAccount/CreateUserAccountController");
@@ -18,13 +16,13 @@ const authenticateUserAccountController =
 
 userRoutes.get(
     "/:id",
-    [jwtAuthorization.verifyToken],
+    [JwtAuthorization.verifyToken],
     findUserAccountController.find
 );
 userRoutes.post("/", createUserAccountController.create);
 userRoutes.put(
     "/:id",
-    [jwtAuthorization.verifyToken],
+    [JwtAuthorization.verifyToken],
     updateUserAccountController.update
 );
 userRoutes.post("/auth", authenticateUserAccountController.login);

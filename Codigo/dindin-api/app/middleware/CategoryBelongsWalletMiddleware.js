@@ -20,8 +20,8 @@ const verifyCategoryBelongsWallet = async (request, response, next) => {
         );
 };
 
-const jwtAuthorization = {
+const JwtAuthorization = {
     verifyCategoryBelongsWallet,
 };
 
-module.exports = jwtAuthorization;
+module.exports = JwtAuthorization;

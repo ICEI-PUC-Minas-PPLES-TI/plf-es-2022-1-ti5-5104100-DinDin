@@ -1,7 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const User = require("./User");
 const Wallet = require("./Wallet");
-// const Wallet = require("./Wallet");
 
 class Category extends Model {
     static init(sequelize) {
