@@ -51,12 +51,8 @@ class AuthenticateUserAccountController {
             userId = _userId;
             firebaseToken = _firebaseToken;
         } else {
-            const {
-                jwt,
-                userId: _userId,
-            } = await authenticateUseCase.executeForFirebaseAuth(
-                firebaseToken
-            );
+            const { jwt, userId: _userId } =
+                await authenticateUseCase.executeForFirebaseAuth(firebaseToken);
 
             token = jwt;
             userId = _userId;

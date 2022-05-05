@@ -79,7 +79,7 @@ class AuthenticateUserAccountUseCase {
             jwt: jwtAuthorization.logIn(user.id),
             firebaseToken,
             userId: user.id,
-        }
+        };
     }
 }
 
