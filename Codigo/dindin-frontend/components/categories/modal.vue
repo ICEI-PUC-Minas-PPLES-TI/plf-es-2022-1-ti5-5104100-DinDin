@@ -27,15 +27,15 @@
                 <v-container fluids>
                     <v-form
                         ref="form"
+                        v-on:submit.prevent="saveCategory"
                         lazy-validation
-                        @submit.prevent="saveCategory"
                     >
                         <v-row class="pb-2">
                             <v-text-field
-                                v-model="category.description"
                                 :rules="[rules.required]"
                                 prepend-inner-icon="mdi-tag"
                                 outlined
+                                v-model="category.description"
                                 hide-details="auto"
                                 :clearable="true"
                                 label="Description"
@@ -43,7 +43,7 @@
                             />
                         </v-row>
                         <v-row class="mb-0 pb-2">
-                            <v-col cols="12" class="py-2">
+                            <v-col cols="12" class="pl-0 py-2">
                                 <p>Type</p>
                                 <v-btn-toggle
                                     v-model="category.type"
@@ -57,8 +57,8 @@
                         </v-row>
                         <v-row class="mb-0 pb-2">
                             <v-combobox
-                                v-model="category.color"
                                 :rules="[rules.required]"
+                                v-model="category.color"
                                 :filter="filter"
                                 :items="colors"
                                 label="Color"
@@ -66,7 +66,7 @@
                                 outlined
                             >
                                 <template
-                                    #selection="{ attrs, item, selected }"
+                                    v-slot:selection="{ attrs, item, selected }"
                                 >
                                     <v-chip
                                         v-if="item === Object(item)"
@@ -81,7 +81,7 @@
                                         {{ item.text }}
                                     </span>
                                 </template>
-                                <template #item="{ item }">
+                                <template v-slot:item="{ item }">
                                     <v-chip
                                         :color="`${item.hex}`"
                                         dark
@@ -156,7 +156,6 @@ export default {
                 required: (value) => !!value || "Required.",
             },
             errors: [],
-
             activator: null,
             attach: null,
             colors: [
@@ -239,10 +238,9 @@ export default {
                     wallet_id: 1,
                     user_id: 1,
                 };
-
                 this.$axios
                     .post("/category", category)
-                    .then((/*res*/) => {
+                    .then(() => {
                         Swal.fire({
                             title: "Category Created",
                             icon: "success",
@@ -276,10 +274,9 @@ export default {
                     wallet_id: 1,
                     user_id: 1,
                 };
-
                 this.$axios
                     .put("/category/" + this.category.id, category)
-                    .then((/*res*/) => {
+                    .then(() => {
                         Swal.fire({
                             title: "Category Edited",
                             icon: "success",
@@ -315,11 +312,9 @@ export default {
                     //this.category.user_id = data.user_id;
                     this.category.wallet_id = data.wallet_id;
                     //this.category.color.hex = "#" + data.color;
-
                     let color = this.colors.filter(function (val) {
                         return val.hex == "#" + data.color;
                     });
-
                     this.category.color = color[0];
                 })
                 .catch((err) => {
@@ -349,12 +344,9 @@ export default {
         },
         filter(item, queryText, itemText) {
             if (item.header) return false;
-
             const hasValue = (val) => (val != null ? val : "");
-
             const text = hasValue(itemText);
             const query = hasValue(queryText);
-
             return (
                 text
                     .toString()
@@ -365,7 +357,6 @@ export default {
     },
 };
 </script>
-
 <style>
 .categories-modal-title h4 {
     width: calc(100% - 37px);

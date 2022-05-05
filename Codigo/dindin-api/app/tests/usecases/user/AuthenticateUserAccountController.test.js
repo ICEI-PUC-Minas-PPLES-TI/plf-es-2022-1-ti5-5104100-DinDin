@@ -1,11 +1,10 @@
-const supertest = require("supertest"); // "requester"
 require("dotenv").config();
 
-const app = require("../../..");
-const { connect, close } = require("../../../database");
+let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+const { close } = require("../../../database");
 
 beforeAll(async () => {
-    await connect();
+    await connectAndLogin();
 });
 
 afterAll(async () => {
@@ -17,13 +16,13 @@ describe("POST /user/auth test suite", () => {
         const mockmail = `${Math.random()}@email.com`;
         const mockPassword = `${Math.random()}@ultrapassword`;
 
-        await supertest(app).post("/api/user").send({
+        await request.post("/api/user").send({
             name: "User Test",
             email: mockmail,
             password: mockPassword,
         });
 
-        const response = await supertest(app).post("/api/user/auth").send({
+        const response = await request.post("/api/user/auth").send({
             email: mockmail,
             password: mockPassword,
         });
@@ -37,13 +36,13 @@ describe("POST /user/auth test suite", () => {
         const mockPassword = `${Math.random()}@ultrapassword`;
         const mockWrongPassword = `wrong@ultrapassword`;
 
-        await supertest(app).post("/api/user/auth").send({
+        await request.post("/api/user").send({
             name: "User Test",
             email: mockmail,
             password: mockPassword,
         });
 
-        const response = await supertest(app).post("/api/user/auth").send({
+        const response = await request.post("/api/user/auth").send({
             email: mockmail,
             password: mockWrongPassword,
         });
@@ -57,13 +56,13 @@ describe("POST /user/auth test suite", () => {
         const mockWrongMail = `${Math.random()}@email.com.br`;
         const mockWrongPassword = `${Math.random()}@thewrongpassword`;
 
-        await supertest(app).post("/api/user/auth").send({
+        await request.post("/api/user/").send({
             name: "Username dos Santos",
             email: mockmail,
             password: mockPassword,
         });
 
-        const response = await supertest(app).post("/api/user/auth").send({
+        const response = await request.post("/api/user/auth").send({
             email: mockWrongMail,
             password: mockWrongPassword,
         });
@@ -77,7 +76,7 @@ describe("POST /user/auth test suite", () => {
             password: "1234567890",
         };
 
-        const response = await supertest(app).post("/api/user/auth").send(body);
+        const response = await request.post("/api/user/auth").send(body);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -88,7 +87,7 @@ describe("POST /user/auth test suite", () => {
             password: "1234567",
         };
 
-        const response = await supertest(app).post("/api/user/auth").send(body);
+        const response = await request.post("/api/user/auth").send(body);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -98,7 +97,7 @@ describe("POST /user/auth test suite", () => {
             email: "just@aEmail.com",
         };
 
-        const response = await supertest(app).post("/api/user/auth").send(body);
+        const response = await request.post("/api/user/auth").send(body);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -108,7 +107,7 @@ describe("POST /user/auth test suite", () => {
             password: "justAPassword",
         };
 
-        const response = await supertest(app).post("/api/user/auth").send(body);
+        const response = await request.post("/api/user/auth").send(body);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -119,7 +118,7 @@ describe("POST /user/auth test suite", () => {
             password: "",
         };
 
-        const response = await supertest(app).post("/api/user/auth").send(body);
+        const response = await request.post("/api/user/auth").send(body);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -130,7 +129,7 @@ describe("POST /user/auth test suite", () => {
             password: null,
         };
 
-        const response = await supertest(app).post("/api/user/auth").send(body);
+        const response = await request.post("/api/user/auth").send(body);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -141,7 +140,7 @@ describe("POST /user/auth test suite", () => {
             password: undefined,
         };
 
-        const response = await supertest(app).post("/api/user/auth").send(body);
+        const response = await request.post("/api/user/auth").send(body);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -152,7 +151,7 @@ describe("POST /user/auth test suite", () => {
             password: "1234567",
         };
 
-        const response = await supertest(app).post("/api/user/auth").send(body);
+        const response = await request.post("/api/user/auth").send(body);
 
         expect(response.statusCode).toEqual(422);
     });

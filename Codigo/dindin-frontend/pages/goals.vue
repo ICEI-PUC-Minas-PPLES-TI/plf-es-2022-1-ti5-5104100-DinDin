@@ -19,6 +19,7 @@
                                 @click.stop="
                                     showModal = true;
                                     modalEdit = false;
+                                    goalToEdit = null;
                                 "
                             >
                                 New Goal
@@ -29,7 +30,7 @@
                     <v-row>
                         <v-col>
                             <v-simple-table>
-                                <template #default>
+                                <template v-slot:default>
                                     <thead>
                                         <tr>
                                             <th class="text-left">Name</th>
@@ -64,7 +65,7 @@
                                             <td>
                                                 <v-tooltip top>
                                                     <template
-                                                        #activator="{
+                                                        v-slot:activator="{
                                                             on,
                                                             attrs,
                                                         }"
@@ -87,7 +88,7 @@
                                                 </v-tooltip>
                                                 <v-tooltip top>
                                                     <template
-                                                        #activator="{
+                                                        v-slot:activator="{
                                                             on,
                                                             attrs,
                                                         }"
@@ -110,7 +111,7 @@
                                                 </v-tooltip>
                                                 <v-tooltip top>
                                                     <template
-                                                        #activator="{
+                                                        v-slot:activator="{
                                                             on,
                                                             attrs,
                                                         }"
@@ -156,9 +157,9 @@
             </v-col>
         </v-row>
         <modal
+            :goalToEdit="this.goalToEdit"
+            :modalEdit="this.modalEdit"
             v-model="showModal"
-            :goal-to-edit="goalToEdit"
-            :modal-edit="modalEdit"
             @created="$fetch"
         />
 
@@ -178,7 +179,7 @@
                                     Status: {{ goalToView.status }}
                                 </p>
                                 <v-progress-linear
-                                    :value="goalProgressValue"
+                                    :value="this.goalProgressValue"
                                     color="#28FF8B"
                                     height="35"
                                     rounded
@@ -316,10 +317,10 @@
 import modal from "@/components/goals/modal.vue";
 import Swal from "sweetalert2";
 export default {
+    layout: "home",
     components: {
         modal,
     },
-    layout: "home",
     data() {
         return {
             currentPage: 1,
@@ -346,15 +347,6 @@ export default {
                 this.loading = false;
             });
     },
-    computed: {
-        viewStatusColor() {
-            return this.goalToView.status == "PENDING"
-                ? "#DED370" /* Yellow == PENDING */
-                : this.goalToView.status == "FINISHED"
-                ? "#5BD098" /* Green == FINISHED */
-                : "#FF4B55"; /* Red == LOST */
-        },
-    },
     methods: {
         dateFormat(date) {
             if (date) {
@@ -376,7 +368,7 @@ export default {
                 confirmButtonText: "Yes, I want to delete!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.$axios.delete("/goal/" + goal.id).then((/*res*/) => {
+                    this.$axios.delete("/goal/" + goal.id).then(() => {
                         Swal.fire({
                             title: "Deleted!",
                             text: "The goal has been deleted.",
@@ -401,6 +393,15 @@ export default {
         viewGoal(goal) {
             this.goalToView = goal;
             this.viewGoalDetails = true;
+        },
+    },
+    computed: {
+        viewStatusColor() {
+            return this.goalToView.status == "PENDING"
+                ? "#DED370" /* Yellow == PENDING */
+                : this.goalToView.status == "FINISHED"
+                ? "#5BD098" /* Green == FINISHED */
+                : "#FF4B55"; /* Red == LOST */
         },
     },
 };

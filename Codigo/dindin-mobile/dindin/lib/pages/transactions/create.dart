@@ -1,7 +1,8 @@
 import 'package:dindin/widgets/category_drop.dart';
 import 'package:dindin/widgets/wallet_drop.dart';
-
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CreateTransaction extends StatefulWidget {
   const CreateTransaction({Key? key}) : super(key: key);
@@ -119,6 +120,12 @@ class _CreateTransactionState extends State<CreateTransaction> {
                           child: ListView(
                             children: [
                               TextField(
+                                inputFormatters: <TextInputFormatter>[
+                                  CurrencyTextInputFormatter(
+                                    locale: 'pt_BR',
+                                    decimalDigits: 2,
+                                  ),
+                                ],
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                     labelText: "Amount",

@@ -5,7 +5,7 @@
         @click:outside="$emit('input', false)"
         @keydown.esc="$emit('input', false)"
     >
-        <v-card class="pa-2">
+        <v-card v-if="this.wallets.length > 0" class="pa-2">
             <v-card-title class="text-h5 goals-modal-title">
                 <h4>
                     <span> {{ title }}</span>
@@ -27,15 +27,15 @@
                 <v-container fluids>
                     <v-form
                         ref="form"
+                        v-on:submit.prevent="saveGoal"
                         lazy-validation
-                        @submit.prevent="saveGoal"
                     >
                         <v-row class="pb-2">
                             <v-text-field
-                                v-model="goal.description"
                                 :rules="[rules.required]"
                                 prepend-inner-icon="mdi-tag"
                                 outlined
+                                v-model="goal.description"
                                 hide-details="auto"
                                 :clearable="true"
                                 label="Description"
@@ -44,14 +44,14 @@
                         </v-row>
                         <v-row class="pb-2">
                             <v-text-field
+                                :rules="[rules.required, rules.higherThanZero]"
                                 v-model="goal.value"
-                                :rules="[rules.required]"
                                 prepend-inner-icon="mdi-currency-usd"
                                 outlined
                                 type="number"
                                 hide-details="auto"
                                 :clearable="true"
-                                label="0,00"
+                                label="Target value"
                                 maxlength="40"
                             />
                         </v-row>
@@ -62,17 +62,20 @@
                                 offset-y
                                 min-width="290px"
                             >
-                                <template #activator="{ on, attrs }">
+                                <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
-                                        :rules="[rules.wrongDate]"
+                                        :rules="[
+                                            rules.required,
+                                            rules.wrongDate,
+                                        ]"
                                         prepend-inner-icon="mdi-calendar-range"
                                         outlined
                                         hide-details="auto"
                                         type="text"
                                         :value="date"
                                         v-bind="attrs"
-                                        label="Expire at"
                                         v-on="on"
+                                        label="Expire at"
                                     />
                                 </template>
                                 <v-date-picker
@@ -84,9 +87,9 @@
                         </v-row>
                         <v-row class="mb-0 pb-2">
                             <v-select
-                                v-model="goal.type"
                                 :rules="[rules.required]"
                                 prepend-inner-icon="mdi-bullseye"
+                                v-model="goal.type"
                                 hide-details="auto"
                                 outlined
                                 :items="[
@@ -98,15 +101,15 @@
                         </v-row>
                         <v-row class="mt-0 pt-0">
                             <v-select
-                                v-model="goal.walletId"
                                 :rules="[rules.required]"
+                                v-model="goal.wallet_id"
+                                name="wallets"
                                 prepend-inner-icon="mdi-wallet"
                                 outlined
                                 hide-details="auto"
-                                :items="[
-                                    { text: 'Personal', value: 1 },
-                                    { text: 'Public', value: 2 },
-                                ]"
+                                :items="wallets"
+                                item-text="description"
+                                item-value="id"
                                 label="Wallet"
                             />
                         </v-row>
@@ -136,6 +139,43 @@
                 </v-row>
             </v-card-actions>
         </v-card>
+        <v-card v-else class="pa-2">
+            <v-card-title class="text-h5 goals-modal-title">
+                <h4>
+                    <span>You must create a wallet first!</span>
+                </h4>
+                <v-btn icon @click="$emit('input', false)">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+            </v-card-title>
+            <v-card-text>
+                <v-alert v-if="errors.length > 0" type="error">
+                    Error:
+                    <ul>
+                        <li v-for="(er, eidx) in errors" :key="eidx">
+                            {{ er }}
+                        </li>
+                    </ul>
+                </v-alert>
+            </v-card-text>
+            <v-card-actions>
+                <v-row>
+                    <v-col cols="4" align="center">
+                        <v-btn
+                            text
+                            color="black"
+                            @click.stop="$emit('input', false)"
+                            >Cancel</v-btn
+                        >
+                    </v-col>
+                    <v-col>
+                        <v-btn block color="primary" to="/wallets"
+                            >Create Wallet</v-btn
+                        >
+                    </v-col>
+                </v-row>
+            </v-card-actions>
+        </v-card>
     </v-dialog>
 </template>
 
@@ -151,14 +191,14 @@ export default {
         return {
             title: "New Goal",
             goal: {
-                id: "",
                 description: "",
                 expire_at: "",
                 value: "",
-                type: 0,
-                walletId: 0,
+                type: "",
+                wallet_id: "",
                 status: "PENDING",
             },
+            wallets: [],
             choosenGoal: "",
             today: "",
             date: "",
@@ -167,6 +207,11 @@ export default {
                 required: (value) => !!value || "Required.",
                 wrongDate: (value) =>
                     this.compareDates(value, this.today) || "Date expired.",
+                higherThanZero: (value) => {
+                    if (value <= 0) {
+                        return "Target value must be higer than 0";
+                    }
+                },
             },
             errors: [],
         };
@@ -192,7 +237,7 @@ export default {
                     expire_at: this.goal.expire_at,
                     value: "",
                     type: "",
-                    walletId: "",
+                    wallet_id: "",
                     status: "PENDING",
                 };
                 this.fillForm(emptyGoal);
@@ -207,22 +252,15 @@ export default {
             }
         },
     },
-    mounted() {
-        let dateToday = new Date(
-            Date.now() - new Date().getTimezoneOffset() * 60000
-        )
-            .toISOString()
-            .substr(0, 10);
-        const [year, month, day] = dateToday.split("-");
-        this.today = `${day}/${month}/${year}`;
-    },
     methods: {
         saveGoal() {
             this.errors = [];
+            this.goal.value = parseFloat(this.goal.value);
+            this.goal.wallet_id = parseFloat(this.goal.wallet_id);
             if (this.$refs.form.validate()) {
                 this.$axios
                     .post("/goal", this.goal)
-                    .then((/*res*/) => {
+                    .then(() => {
                         Swal.fire({
                             title: "Goal Created",
                             icon: "success",
@@ -251,7 +289,7 @@ export default {
             if (this.$refs.form.validate()) {
                 this.$axios
                     .put("/goal/" + this.goal.id, this.goal)
-                    .then((/*res*/) => {
+                    .then(() => {
                         Swal.fire({
                             title: "Goal Edited",
                             icon: "success",
@@ -298,12 +336,11 @@ export default {
             if (parseInt(date1Split[2]) > parseInt(date2Split[2])) {
                 return true;
             }
-            if (parseInt(date1Split[2]) == parseInt(date2Split[2])) {
-                if (parseInt(date1Split[1]) >= parseInt(date2Split[1])) {
-                    if (parseInt(date1Split[0]) >= parseInt(date2Split[0])) {
-                        resp = true;
-                    }
-                }
+            if (parseInt(date1Split[1]) > parseInt(date2Split[1])) {
+                return true;
+            }
+            if (parseInt(date1Split[0]) >= parseInt(date2Split[0])) {
+                return true;
             }
             return resp;
         },
@@ -314,11 +351,26 @@ export default {
             this.date = this.shortDate(data.expire_at);
             this.goal.expire_at = data.expire_at.substring(0, 10);
             this.goal.type = data.type;
-            this.goal.walletId = data.walletId;
+            this.goal.wallet_id = data.wallet_id;
         },
         cleanForm() {
             this.$refs.form.reset();
         },
+        async getWallets() {
+            await this.$axios.$get(`/wallet`).then((res) => {
+                this.wallets = res.wallets;
+            });
+        },
+    },
+    mounted() {
+        let dateToday = new Date(
+            Date.now() - new Date().getTimezoneOffset() * 60000
+        )
+            .toISOString()
+            .substr(0, 10);
+        const [year, month, day] = dateToday.split("-");
+        this.today = `${day}/${month}/${year}`;
+        this.getWallets();
     },
 };
 </script>

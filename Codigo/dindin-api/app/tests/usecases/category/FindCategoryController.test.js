@@ -1,12 +1,12 @@
-const supertest = require("supertest"); // "requester"
 require("dotenv").config();
 
-const app = require("../../..");
-const { connect, close } = require("../../../database");
+let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+const { close } = require("../../../database");
+
 const Category = require("../../../models/Category");
 
 beforeAll(async () => {
-    await connect();
+    await connectAndLogin();
 });
 
 afterAll(async () => {
@@ -24,7 +24,7 @@ describe("GET /category/:id test suite", () => {
         };
         const createdCategory = await Category.create(mockCategory);
 
-        const response = await supertest(app)
+        const response = await request
             .get("/api/category/" + createdCategory.id)
             .send();
 
@@ -40,7 +40,7 @@ describe("GET /category/:id test suite", () => {
 
     it("should not find a category", async () => {
         const unexistingCategoryId = 987654321;
-        const response = await supertest(app)
+        const response = await request
             .get("/api/category/" + unexistingCategoryId)
             .send();
 
@@ -49,27 +49,19 @@ describe("GET /category/:id test suite", () => {
 
     it("should fail when trying to find category with invalid id", async () => {
         let invalidId = 0;
-        let response = await supertest(app)
-            .get("/api/category/" + invalidId)
-            .send();
+        let response = await request.get("/api/category/" + invalidId).send();
         expect(response.statusCode).toEqual(422);
 
         invalidId = -1;
-        response = await supertest(app)
-            .get("/api/category/" + invalidId)
-            .send();
+        response = await request.get("/api/category/" + invalidId).send();
         expect(response.statusCode).toEqual(422);
 
         invalidId = null;
-        response = await supertest(app)
-            .get("/api/category/" + invalidId)
-            .send();
+        response = await request.get("/api/category/" + invalidId).send();
         expect(response.statusCode).toEqual(422);
 
         invalidId = undefined;
-        response = await supertest(app)
-            .get("/api/category/" + invalidId)
-            .send();
+        response = await request.get("/api/category/" + invalidId).send();
         expect(response.statusCode).toEqual(422);
     });
 });

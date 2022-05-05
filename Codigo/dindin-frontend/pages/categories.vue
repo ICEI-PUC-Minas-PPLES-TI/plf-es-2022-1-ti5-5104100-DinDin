@@ -25,8 +25,28 @@
                     <!-- Table -->
                     <v-row>
                         <v-col>
+                            <v-tabs>
+                                <v-tab
+                                    @change="
+                                        type = 'IN';
+                                        $fetch();
+                                    "
+                                    >Incoming</v-tab
+                                >
+                                <v-tab
+                                    @change="
+                                        type = 'OUT';
+                                        $fetch();
+                                    "
+                                    >Outcoming</v-tab
+                                >
+                            </v-tabs>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
                             <v-simple-table>
-                                <template #default>
+                                <template v-slot:default>
                                     <thead>
                                         <tr>
                                             <th class="text-left">Name</th>
@@ -57,7 +77,7 @@
                                             <td class="text-right">
                                                 <v-tooltip top>
                                                     <template
-                                                        #activator="{
+                                                        v-slot:activator="{
                                                             on,
                                                             attrs,
                                                         }"
@@ -82,7 +102,7 @@
                                                 </v-tooltip>
                                                 <v-tooltip top>
                                                     <template
-                                                        #activator="{
+                                                        v-slot:activator="{
                                                             on,
                                                             attrs,
                                                         }"
@@ -129,11 +149,7 @@
                 </v-card>
             </v-col>
         </v-row>
-        <modal
-            v-model="showModal"
-            :category-id="categoryId"
-            @created="$fetch"
-        />
+        <modal :categoryId="categoryId" v-model="showModal" @created="$fetch" />
     </v-container>
 </template>
 
@@ -141,10 +157,10 @@
 import modal from "@/components/categories/modal.vue";
 import Swal from "sweetalert2";
 export default {
+    layout: "home",
     components: {
         modal,
     },
-    layout: "home",
     data() {
         return {
             currentPage: 1,
@@ -153,13 +169,17 @@ export default {
             loading: false,
             showModal: false,
             categoryId: 0,
+            type: "",
         };
     },
-
     async fetch() {
         this.loading = true;
+        let typeFilter = "";
+        if (this.type) {
+            typeFilter = `&type=${this.type}`;
+        }
         await this.$axios
-            .$get(`/category?page=${this.currentPage}`)
+            .$get(`/category?page=${this.currentPage}` + typeFilter)
             .then((res) => {
                 this.pages = res.pages;
                 this.categories = res.categories;
@@ -192,7 +212,7 @@ export default {
                 confirmButtonText: "Yes, I want to delete!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.$axios.delete("/category/" + id).then((/*res*/) => {
+                    this.$axios.delete("/category/" + id).then(() => {
                         Swal.fire({
                             title: "Deleted!",
                             text: "The category has been deleted.",
