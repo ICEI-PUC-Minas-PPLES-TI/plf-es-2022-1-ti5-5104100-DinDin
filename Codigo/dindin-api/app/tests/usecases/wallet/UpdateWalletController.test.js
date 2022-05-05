@@ -1,29 +1,10 @@
-const supertest = require("supertest"); // "requester"
 require("dotenv").config();
 
-const app = require("../../..");
-const { connect, close } = require("../../../database");
-const Wallet = require("../../../models/Wallet");
-var defaults = require("superagent-defaults");
-var request = defaults(supertest(app)); // or url
+let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+const { close } = require("../../../database");
 
 beforeAll(async () => {
-    await connect();
-
-    const mockmail = `${Math.random()}@email.com`;
-    const mockPassword = `${Math.random()}@ultrapassword`;
-
-    await supertest(app).post("/api/user").send({
-        name: "User Test",
-        email: mockmail,
-        password: mockPassword,
-    });
-
-    const response = await supertest(app).post("/api/user/auth").send({
-        email: mockmail,
-        password: mockPassword,
-    });
-    request.set("Authorization", response.body.token);
+    await connectAndLogin();
 });
 
 afterAll(async () => {
@@ -42,6 +23,54 @@ describe("put /wallet test suite", () => {
             .send(mockWallet);
 
         mockWallet.description = "my2wallet";
+        delete mockWallet.initial_value;
+
+        const response = await request
+            .put("/api/wallet/" + responseCreateWallet.body.wallet.id)
+            .send(mockWallet);
+
+        expect(response.statusCode).toEqual(200);
+        expect(response.body.wallet.description).toEqual(
+            mockWallet.description
+        );
+        //expect(response.body.initial_value).toEqual(mockWallet.initial_value);
+    });
+
+    it("should update an wallet a description of my2wallet to my3wallet", async () => {
+        const mockWallet = {
+            description: "my2wallet",
+            initial_value: 2000,
+        };
+        //const createdWallet = await Wallet.create(mockWallet);
+        const responseCreateWallet = await request
+            .post("/api/wallet")
+            .send(mockWallet);
+
+        mockWallet.description = "my3wallet";
+        delete mockWallet.initial_value;
+
+        const response = await request
+            .put("/api/wallet/" + responseCreateWallet.body.wallet.id)
+            .send(mockWallet);
+
+        expect(response.statusCode).toEqual(200);
+        expect(response.body.wallet.description).toEqual(
+            mockWallet.description
+        );
+        //expect(response.body.initial_value).toEqual(mockWallet.initial_value);
+    });
+
+    it("should update an wallet a description of mywallet8 to mywallet9", async () => {
+        const mockWallet = {
+            description: "mywallet8",
+            initial_value: 2000,
+        };
+        //const createdWallet = await Wallet.create(mockWallet);
+        const responseCreateWallet = await request
+            .post("/api/wallet")
+            .send(mockWallet);
+
+        mockWallet.description = "mywallet9";
         delete mockWallet.initial_value;
 
         const response = await request
