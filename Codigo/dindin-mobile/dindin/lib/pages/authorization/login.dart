@@ -3,6 +3,9 @@ import 'package:dindin/pages/dashboard.dart';
 import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'dart:convert';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -21,7 +24,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      resizeToAvoidBottomInset : false,
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       body: Column(
         children: [
@@ -115,9 +118,15 @@ class _LoginState extends State<Login> {
                                   child: ElevatedButton(
                                     child: const Text("Login"),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Colors.grey,
+                                      primary: Color.fromARGB(255, 84, 179, 88),
                                     ),
                                     onPressed: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Dashboard()),
+                                      );
                                       if (formKey.currentState!.validate()) {
                                         const snackBarTrue =
                                             SnackBar(content: Text('Loging'));
@@ -125,6 +134,7 @@ class _LoginState extends State<Login> {
                                             content: Text('User not Found'));
                                         userAuth(email, password)
                                             .then((res) => {
+                                              print(res),
                                                   if (res == true)
                                                     {
                                                       _scaffoldKey.currentState!
@@ -161,43 +171,44 @@ class _LoginState extends State<Login> {
                   ),
                 )),
           ),
-          Wrap(
-              children: [Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Wrap(
-                          children: const [
-                            Text("Don't have an account?"),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                text: "REGISTER ",
-                                style: TextStyle(color: Colors.green[800]),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.pushNamed(context, "/register");
-                                  },
-                              ),
+          Wrap(children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(
+                        children: const [
+                          Text("Don't have an account?"),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: "REGISTER ",
+                              style: TextStyle(color: Colors.green[800]),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.pushNamed(context, "/register");
+                                },
                             ),
-                            const Icon(
-                              Icons.arrow_forward,
-                              color: Colors.green,
-                              size: 30.0,
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              )])
+                          ),
+                          const Icon(
+                            Icons.arrow_forward,
+                            color: Colors.green,
+                            size: 30.0,
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )
+          ])
         ],
       ),
     );
@@ -205,14 +216,19 @@ class _LoginState extends State<Login> {
 }
 
 Future<bool> userAuth(String email, String password) async {
-  return true;
   var url = "http://localhost:3001/api/user/auth";
   final Uri uri = Uri.parse(url);
+
+  // Firebase Cloud Messaging
+  var messaging = FirebaseMessaging.instance;
   var response =
-      await http.post(uri, body: {'email': email, 'password': password});
+  await http.post(uri, body: {'email': email, 'password': password});
   var status = response.statusCode;
   if (status == 200) {
+    final userId = jsonDecode(response.body)['userId'];
+    print(userId);
+    await messaging.subscribeToTopic('U_' + userId);
     return true;
   }
-  return false;
+  return false;;
 }

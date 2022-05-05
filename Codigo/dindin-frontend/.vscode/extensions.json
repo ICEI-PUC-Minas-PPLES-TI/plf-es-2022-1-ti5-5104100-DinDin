@@ -1,0 +1,13 @@
+{
+	"recommendations": [
+		"dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode",
+		"octref.vetur",
+		"waderyan.nodejs-extension-pack",
+		"aaron-bond.better-comments",
+		"mikestead.dotenv",
+		"editorconfig.editorconfig",
+		"eamodio.gitlens",
+		"ms-azuretools.vscode-docker",
+	]
+}
