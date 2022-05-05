@@ -18,9 +18,7 @@ class UpdateUserAccountController {
         }
 
         const { name, password, oldPassword } = request.body;
-        const id = request.params.id;
-        if (!id || !(id > 0))
-            throw new AppError("Please send a valid id on url", 422);
+        const id = request.userId;
 
         const updateUserAccountUseCase = new UpdateUserAccountUseCase();
         const user = await updateUserAccountUseCase.update(
