@@ -16,7 +16,7 @@ module.exports = {
                 },
                 wallet_id: {
                     type: DataTypes.BIGINT.UNSIGNED,
-                    allowNull: true,
+                    allowNull: false,
                     references: {
                         model: {
                             tableName: "wallet",
