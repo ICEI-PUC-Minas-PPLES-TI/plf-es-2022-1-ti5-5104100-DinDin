@@ -75,7 +75,36 @@ class _MembersListState extends State<MembersList> {
           );
         });
   }
+  showDeleteDialog(BuildContext context) {
 
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: const Text("No"),
+    onPressed:  () {Navigator.of(context).pop();},
+  );
+  Widget continueButton = TextButton(
+    child: const Text("Yes"),
+    onPressed:  () {Navigator.of(context).pop();},
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Delete User"),
+    content: Text("Would you like to delete user from wallet?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
   @override
   void initState() {
     super.initState();
@@ -107,6 +136,14 @@ class _MembersListState extends State<MembersList> {
                             padding: EdgeInsets.only(top: 5.0),
                             child: FaIcon(FontAwesomeIcons.user,
                                 size: 20.0, color: Colors.black),
+                          ),
+                          trailing: GestureDetector(
+                            onTap: () => {showDeleteDialog(context)},
+                            child: const Padding(
+                              padding: EdgeInsets.only(top: 5.0),
+                              child: FaIcon(FontAwesomeIcons.trash,
+                                  size: 20.0, color: Colors.red),
+                            ),
                           ),
                           title: Text((snapshot.data[index].name)),
                         ),
