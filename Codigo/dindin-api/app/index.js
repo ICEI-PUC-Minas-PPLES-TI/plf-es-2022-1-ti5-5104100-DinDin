@@ -10,7 +10,7 @@ const routes = require("./routes/index"); // Require API routes
 const app = express();
 
 // Define cors origin
-var corsOptions = {
+const corsOptions = {
     origin: "*",
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
