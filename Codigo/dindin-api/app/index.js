@@ -24,7 +24,8 @@ if (process.env.APP_DEBUG) app.use(logger("dev"));
 // Import API Routes
 app.use("/api", routes);
 
-app.use(function (error, response) {
+// eslint-disable-next-line no-unused-vars
+app.use(function (error, request, response, next) {
     console.log(error);
     if (process.env.APP_DEBUG) {
         return response.status(error.statusCode).json({
