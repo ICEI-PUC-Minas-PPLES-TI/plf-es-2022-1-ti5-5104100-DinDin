@@ -46,8 +46,11 @@ module.exports = {
                 allowNull: false,
             },
             interval: {
-                type: DataTypes.TINYINT(2).UNSIGNED,
+                type: DataTypes.ENUM,
+                values: ["D", "W", "B", "M", "S", "A"],
                 allowNull: false,
+                comment:
+                    "D == daily, W == weekly, B == biweekly, M == monthly, S == semi-annual, A == annual",
             },
             category_id: {
                 type: DataTypes.BIGINT.UNSIGNED,

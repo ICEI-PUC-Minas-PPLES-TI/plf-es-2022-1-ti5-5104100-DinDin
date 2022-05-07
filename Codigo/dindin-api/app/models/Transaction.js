@@ -1,7 +1,7 @@
 const { Model, DataTypes } = require("sequelize");
+
 const Category = require("./Category");
 const TransactionRecurrencies = require("./TransactionRecurrencies");
-
 const User = require("./User");
 const Wallet = require("./Wallet");
 
@@ -81,7 +81,7 @@ class Transaction extends Model {
                 },
             },
             {
-                tableName: "user",
+                tableName: "transaction",
                 charset: "utf8mb4",
                 collate: "utf8mb4_bin",
                 timestamps: true, // deleted_at and updatedAt need this

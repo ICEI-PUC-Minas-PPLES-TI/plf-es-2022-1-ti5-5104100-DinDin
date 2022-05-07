@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
-const Category = require("./Category");
 
+const Category = require("./Category");
 const User = require("./User");
 const Wallet = require("./Wallet");
 
@@ -51,8 +51,11 @@ class TransactionRecurrencies extends Model {
                     allowNull: false,
                 },
                 interval: {
-                    type: DataTypes.TINYINT(2).UNSIGNED,
+                    type: DataTypes.ENUM,
+                    values: ["D", "W", "B", "M", "S", "A"],
                     allowNull: false,
+                    comment:
+                        "D == daily, W == weekly, B == biweekly, M == monthly, S == semi-annual, A == annual",
                 },
                 category_id: {
                     field: "category_id",
@@ -62,6 +65,11 @@ class TransactionRecurrencies extends Model {
                         model: Category,
                         key: "id",
                     },
+                },
+                expired_at: {
+                    type: DataTypes.DATE,
+                    allowNull: true,
+                    defaultValue: null,
                 },
                 created_at: {
                     type: DataTypes.DATE,
@@ -78,7 +86,7 @@ class TransactionRecurrencies extends Model {
                 },
             },
             {
-                tableName: "user",
+                tableName: "transaction_recurrencies",
                 charset: "utf8mb4",
                 collate: "utf8mb4_bin",
                 timestamps: true, // deleted_at and updatedAt need this
