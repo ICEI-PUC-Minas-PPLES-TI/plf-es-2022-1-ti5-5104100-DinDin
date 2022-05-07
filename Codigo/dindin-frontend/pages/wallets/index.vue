@@ -166,6 +166,31 @@
                                                         <v-btn
                                                             elevation="0"
                                                             small
+                                                            v-bind="attrs"
+                                                            v-on="on"
+                                                            @click="
+                                                                redirecToCategories(
+                                                                    wallet
+                                                                )
+                                                            "
+                                                        >
+                                                            <i
+                                                                class="fa-solid fa-align-justify"
+                                                            ></i>
+                                                        </v-btn>
+                                                    </template>
+                                                    <span>Categories</span>
+                                                </v-tooltip>
+                                                <v-tooltip top>
+                                                    <template
+                                                        #activator="{
+                                                            on,
+                                                            attrs,
+                                                        }"
+                                                    >
+                                                        <v-btn
+                                                            elevation="0"
+                                                            small
                                                             color="error"
                                                             v-bind="attrs"
                                                             v-on="on"
@@ -386,6 +411,9 @@ export default {
         openMembersModal(id) {
             this.showMembersModal = true;
             this.walletToShowMembersId = id;
+        },
+        redirecToCategories(wallet) {
+            this.$router.push(`wallets/${wallet.id}/categories`);
         },
     },
 };

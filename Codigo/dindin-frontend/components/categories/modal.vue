@@ -235,7 +235,7 @@ export default {
                     description: this.category.description,
                     type: this.category.type,
                     color: this.category.color.hex.replace("#", ""),
-                    wallet_id: 1,
+                    wallet_id: this.$route.params.id,
                     user_id: 1,
                 };
                 this.$axios

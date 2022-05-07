@@ -174,7 +174,7 @@ export default {
     },
     async fetch() {
         this.loading = true;
-        let typeFilter = "";
+        let typeFilter = `&wallet_id=${this.$route.params.id}`;
         if (this.type) {
             typeFilter = `&type=${this.type}`;
         }
@@ -183,6 +183,9 @@ export default {
             .then((res) => {
                 this.pages = res.pages;
                 this.categories = res.categories;
+            })
+            .catch((err) => {
+                console.log(err.response.data);
             })
             .finally(() => {
                 this.loading = false;
