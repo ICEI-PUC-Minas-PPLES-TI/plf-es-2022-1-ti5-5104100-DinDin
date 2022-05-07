@@ -124,6 +124,14 @@ export default {
             }
         },
     },
+    beforeMount() {
+        const dindin = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("dindin-cookies="));
+        if (dindin != undefined) {
+            this.$router.push("/dashboard");
+        }
+    },
 };
 </script>
 
