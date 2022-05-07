@@ -22,7 +22,7 @@ class CreateTransactionController {
             day: yup
                 .number("'day' must be numeric!")
                 .min(1)
-                .max(28)
+                .max(31)
                 .nullable(true),
             interval: yup
                 .mixed()
