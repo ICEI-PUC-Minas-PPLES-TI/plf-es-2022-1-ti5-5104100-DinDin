@@ -3,7 +3,7 @@ const Category = require("../models/Category");
 
 const verifyCategoryBelongsWallet = async (request, response, next) => {
     const category_id = request.body.category_id;
-    if (!category_id) next(); // * optional, if not sent, do not check
+    if (!category_id) return next(); // * optional, if not sent, do not check
     const category = await Category.findOne({
         where: {
             id: category_id,
