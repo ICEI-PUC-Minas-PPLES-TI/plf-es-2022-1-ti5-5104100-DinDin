@@ -1,33 +1,32 @@
 export const state = () => ({
     token: null,
-})
-  
+});
+
 export const mutations = {
     LOGIN(state, token) {
-      state.token = token
+        state.token = token;
     },
     LOGOUT(state) {
-      state.token = null
-    }
-}
-  
+        state.token = null;
+    },
+};
+
 export const actions = {
-    userLogin({ commit }, { loginData, router, axios }) {
-      commit('LOGIN', loginData)
-      router.push('/dashboard')
-      
+    userLogin({ commit }, { loginData, router /*, axios*/ }) {
+        commit("LOGIN", loginData);
+        router.push("/dashboard");
     },
     setToken({ commit }, token) {
-      return commit('LOGIN', token)
+        return commit("LOGIN", token);
     },
     async userLogout({ commit }, { router }) {
-      if (router) await router.push('/login')
-      commit('LOGOUT')
+        if (router) await router.push("/login");
+        commit("LOGOUT");
     },
-}
-  
+};
+
 export const getters = {
     token(state) {
-      return state.token
+        return state.token;
     },
-}
+};

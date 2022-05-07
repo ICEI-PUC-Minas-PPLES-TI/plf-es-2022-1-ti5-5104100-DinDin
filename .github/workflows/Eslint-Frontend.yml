@@ -1,0 +1,26 @@
+name: Eslint Frontend
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "Codigo/dindin-frontend/**"
+
+jobs:
+  eslint:
+    name: Eslint Frontend CI | OS ${{ matrix.os }} - Node Version ${{ matrix.node-version }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: reviewdog/action-eslint@v1
+        with:
+          tool_name: eslint-github-pr-review
+          workdir: ./Codigo/dindin-frontend
+          reporter: github-pr-review
+          level: error
+          github_token: ${{ secrets.GITHUB_TOKEN }}

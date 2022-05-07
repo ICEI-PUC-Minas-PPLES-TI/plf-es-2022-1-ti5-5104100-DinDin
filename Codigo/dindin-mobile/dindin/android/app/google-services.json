@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "125881301157",
+    "project_id": "dindinfinance",
+    "storage_bucket": "dindinfinance.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:125881301157:android:341d2495adf25dcadcf54c",
+        "android_client_info": {
+          "package_name": "com.example.dindin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "125881301157-qrh3qr5r9r1h6jk1m3hfevts43s8n620.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8Qp9LVOITzG6m8a3FJ6c1m7NWDqAPU0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "125881301157-qrh3qr5r9r1h6jk1m3hfevts43s8n620.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

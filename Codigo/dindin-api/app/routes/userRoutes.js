@@ -32,7 +32,7 @@ userRoutes.get(
 
 userRoutes.post("/", createUserAccountController.create);
 userRoutes.put(
-    "/:id",
+    "/",
     [jwtAuthorization.verifyToken],
     updateUserAccountController.update
 );
