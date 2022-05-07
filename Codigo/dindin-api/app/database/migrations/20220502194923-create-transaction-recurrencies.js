@@ -43,7 +43,7 @@ module.exports = {
             },
             day: {
                 type: DataTypes.TINYINT.UNSIGNED,
-                allowNull: false,
+                allowNull: true,
             },
             interval: {
                 type: DataTypes.ENUM,
