@@ -100,6 +100,7 @@ class CreateTransactionController {
                 wallet_id,
                 value,
                 description,
+                date,
                 category_id,
                 user_id
             );

@@ -4,14 +4,17 @@ const walletRoutes = Router();
 const JwtAuthorization = require("../middleware/JwtAuthorizationMiddleware");
 const UserAccessWalletMiddleware = require("../middleware/UserAccessWalletMiddleware");
 
+const CategoryBelongsWalletMiddleware = require("../middleware/CategoryBelongsWalletMiddleware");
+
 const CreateWalletController = require("../usecases/wallet/createWallet/CreateWalletController");
 const FindWalletController = require("../usecases/wallet/findWallet/FindWalletController");
 const ListWalletController = require("../usecases/wallet/listWallet/ListWalletController");
 const UpdateWalletController = require("../usecases/wallet/updateWallet/UpdateWalletController");
 const DeleteWalletController = require("../usecases/wallet/deleteWallet/DeleteWalletController");
-
 const InviteWalletController = require("../usecases/wallet/inviteWallet/InviteWalletController");
 const ListWalletUsersController = require("../usecases/wallet/listWalletUsers/ListWalletUsersController");
+
+const CreateTransactionController = require("../usecases/transaction/createTransaction/CreateTransactionController");
 
 const createWalletController = new CreateWalletController();
 const listWalletController = new ListWalletController();
@@ -20,6 +23,8 @@ const deleteWalletController = new DeleteWalletController();
 const findWalletController = new FindWalletController();
 const inviteWalletController = new InviteWalletController();
 const listWalletUsersController = new ListWalletUsersController();
+
+const createTransactionController = new CreateTransactionController();
 
 walletRoutes.post(
     "/",
@@ -75,6 +80,16 @@ walletRoutes.post(
     "/invite",
     [JwtAuthorization.verifyToken],
     inviteWalletController.accept
+);
+
+walletRoutes.post(
+    "/:id/transaction",
+    [
+        JwtAuthorization.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+        CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
+    ],
+    createTransactionController.create
 );
 
 module.exports = walletRoutes;

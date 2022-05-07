@@ -7,6 +7,7 @@ class CreateTransactionUseCase {
         wallet_id,
         value,
         description,
+        date,
         category_id,
         user_id,
         transaction_recurrencies_id
@@ -15,6 +16,7 @@ class CreateTransactionUseCase {
             wallet_id: wallet_id,
             value: value,
             description: description,
+            date: date,
             category_id: category_id,
             user_id: user_id,
             transaction_recurrencies_id: transaction_recurrencies_id,
