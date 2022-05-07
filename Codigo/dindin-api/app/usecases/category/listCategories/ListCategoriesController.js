@@ -46,7 +46,7 @@ class ListCategoriesController {
             throw new AppError(error.name, 422, error.errors);
         }
         const listCategoriesUseCase = new ListCategoriesUseCase();
-        const categories = await listCategoriesUseCase.list(request.query);
+        const categories = await listCategoriesUseCase.list(request.query, request.userId);
         return response.status(200).json(categories);
     }
 }

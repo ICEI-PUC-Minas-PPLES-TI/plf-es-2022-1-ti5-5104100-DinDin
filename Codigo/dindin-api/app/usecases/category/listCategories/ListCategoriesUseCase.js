@@ -5,7 +5,7 @@ const { SortPaginate } = require("../../../helpers/SortPaginate");
 const User = require("../../../models/User");
 
 class ListCategoriesUseCase {
-    async list(query) {
+    async list(query, userId) {
         let whre = {};
 
         if (query.description) {
@@ -52,6 +52,10 @@ class ListCategoriesUseCase {
                 {
                     model: User,
                     as: "user",
+                    required: true,
+                    where: {
+                        id: userId
+                    }
                 },
                 // !   {
                 // !     model: Wallet,
