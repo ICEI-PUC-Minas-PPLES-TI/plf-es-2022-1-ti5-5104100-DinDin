@@ -22,8 +22,8 @@
       <v-col>
         <v-card elevation="0" class="p-20">
           <!-- Table top toolbar -->
-          <v-row>
-            <v-col cols="9" md="4" sm="6" lg="2">
+          <v-row justify="center">
+            <v-col cols="9" md="4" sm="12" lg="2">
               <v-select
                 v-model="filters.wallet"
                 :items="listWalletsFilter"
@@ -33,7 +33,7 @@
                 outlined
               ></v-select>
             </v-col>
-            <v-col cols="9" md="4" sm="6" lg="2">
+            <v-col cols="9" md="4" sm="12" lg="2">
               <v-select
                 v-model="filters.category"
                 :disabled="!filters.wallet"
@@ -44,7 +44,7 @@
                 outlined
               ></v-select>
             </v-col>
-            <v-col cols="9" md="4" sm="6" lg="2">
+            <v-col cols="9" md="4" sm="12" lg="2">
               <v-menu
                 v-model="menuData1"
                 :close-on-content-click="false"
@@ -76,7 +76,7 @@
                 ></v-date-picker>
               </v-menu>
             </v-col>
-            <v-col cols="9" md="4" sm="6" lg="2">
+            <v-col cols="9" md="4" sm="12" lg="2">
               <v-menu
                 v-model="menuData2"
                 :close-on-content-click="false"
@@ -108,7 +108,7 @@
                 ></v-date-picker>
               </v-menu>
             </v-col>
-            <v-col cols="9" md="2" sm="4" lg="2" offset-lg="2" offset-md="4">
+            <v-col cols="9" md="2" sm="12" lg="2" offset-lg="1" offset-md="4">
               <v-btn block color="success" @click.stop="openModal(0)">
                 New Transaction
               </v-btn>

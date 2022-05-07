@@ -119,7 +119,7 @@
             </v-row>
             <v-row class="pb-2" v-show="transaction.recurrent">
               <v-text-field
-                :rules="[rules.required]"
+                :rules="transaction.recurrent == true ? [rules.required] : []"
                 v-model="transaction.month_recurrency"
                 prepend-inner-icon="mdi-calendar-range"
                 outlined
@@ -199,7 +199,7 @@ export default {
   },
   watch: {
     transactionId(val) {
-      console.log('oi');
+      console.log("oi");
       console.log(val);
       if (val) {
         //load transaction
