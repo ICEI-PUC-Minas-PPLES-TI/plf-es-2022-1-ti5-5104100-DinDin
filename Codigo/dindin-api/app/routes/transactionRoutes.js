@@ -10,7 +10,7 @@ const CreateTransactionController = require("../usecases/transaction/createTrans
 const createTransactionController = new CreateTransactionController();
 
 transactionRoutes.post(
-    "/:id/transaction",
+    "/wallet/:id/transaction",
     [
         JwtAuthorization.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
