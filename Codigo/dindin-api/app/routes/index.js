@@ -6,11 +6,11 @@ const router = Router();
 const userRoutes = require("./userRoutes");
 const goalRoutes = require("./goalRoutes");
 const walletRoutes = require("./walletRoutes");
-const categoryRoytes = require("./categoryRoutes");
+const walletCategoryRoutes = require("./walletCategoryRoutes");
 
 router.use("/user", userRoutes);
 router.use("/goal", goalRoutes);
-router.use("/category", categoryRoytes);
 router.use("/wallet", walletRoutes);
+router.use("/wallet/:id/category", walletCategoryRoutes);
 
 module.exports = router;
