@@ -4,11 +4,10 @@ require("express-async-errors");
 const cors = require("cors");
 const logger = require("morgan");
 
+const routes = require("./routes/index"); // Require API routes
+
 // Create express instance
 const app = express();
-
-// Require API routes
-const routes = require("./routes/index");
 
 // Define cors origin
 var corsOptions = {

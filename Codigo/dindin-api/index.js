@@ -3,13 +3,18 @@ const sequelizeDatabase = require("./app/database/index");
 
 // Create express instance
 const app = require("./app");
+//  Require cron jobs
+const cron = require("./app/cron/index");
 
 async function databaseInitialization() {
     await sequelizeDatabase.createDatabase();
     await sequelizeDatabase.connect();
 }
 
-databaseInitialization();
+databaseInitialization().then(() => {
+    // Start cron jobs
+    cron.startCronJobs();
+});
 
 // Start standalone server if directly running
 if (require.main === module) {
