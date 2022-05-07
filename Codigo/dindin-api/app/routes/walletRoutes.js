@@ -15,6 +15,7 @@ const InviteWalletController = require("../usecases/wallet/inviteWallet/InviteWa
 const ListWalletUsersController = require("../usecases/wallet/listWalletUsers/ListWalletUsersController");
 
 const CreateTransactionController = require("../usecases/transaction/createTransaction/CreateTransactionController");
+const UpdateTransactionController = require("../usecases/transaction/updateTransaction/UpdateTransactionController");
 
 const createWalletController = new CreateWalletController();
 const listWalletController = new ListWalletController();
@@ -25,6 +26,7 @@ const inviteWalletController = new InviteWalletController();
 const listWalletUsersController = new ListWalletUsersController();
 
 const createTransactionController = new CreateTransactionController();
+const updateTransactionController = new UpdateTransactionController();
 
 walletRoutes.post(
     "/",
@@ -90,6 +92,16 @@ walletRoutes.post(
         CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],
     createTransactionController.create
+);
+
+walletRoutes.put(
+    "/:id/transaction/:tid",
+    [
+        JwtAuthorization.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+        CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
+    ],
+    updateTransactionController.update
 );
 
 module.exports = walletRoutes;
