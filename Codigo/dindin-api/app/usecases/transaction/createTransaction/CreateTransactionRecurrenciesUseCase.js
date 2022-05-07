@@ -10,6 +10,7 @@ class CreateTransactionRecurrenciesUseCase {
         day,
         interval,
         category_id,
+        expired_at,
         user_id
     ) {
         const transactionRecurrencies = await TransactionRecurrencies.create({
@@ -19,6 +20,7 @@ class CreateTransactionRecurrenciesUseCase {
             day: day,
             interval: interval,
             category_id: category_id,
+            expired_at: expired_at,
             user_id: user_id,
         }).catch((error) => {
             throw new AppError(error.message, 500, error);
