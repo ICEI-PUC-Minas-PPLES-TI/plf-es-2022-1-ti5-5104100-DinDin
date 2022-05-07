@@ -76,6 +76,7 @@ const generateTransactions = cron.schedule(EVERY_DAY_03AM, async () => {
             user_id: transactionRecurrency.user_id,
             description: transactionRecurrency.description,
             value: transactionRecurrency.value,
+            date: new Date(),
             category_id: transactionRecurrency.category_id,
             transaction_recurrencies_id: transactionRecurrency.id,
             created_at: new Date(),

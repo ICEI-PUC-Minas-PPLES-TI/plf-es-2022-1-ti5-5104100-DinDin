@@ -42,6 +42,10 @@ module.exports = {
                     type: DataTypes.DOUBLE,
                     allowNull: false,
                 },
+                date: {
+                    type: DataTypes.DATE,
+                    allowNull: false,
+                },
                 category_id: {
                     type: DataTypes.BIGINT.UNSIGNED,
                     allowNull: true,

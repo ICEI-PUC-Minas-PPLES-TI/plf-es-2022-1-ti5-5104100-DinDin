@@ -48,6 +48,10 @@ class Transaction extends Model {
                     type: DataTypes.DOUBLE,
                     allowNull: false,
                 },
+                date: {
+                    type: DataTypes.DATE,
+                    allowNull: false,
+                },
                 category_id: {
                     field: "category_id",
                     type: DataTypes.BIGINT.UNSIGNED,

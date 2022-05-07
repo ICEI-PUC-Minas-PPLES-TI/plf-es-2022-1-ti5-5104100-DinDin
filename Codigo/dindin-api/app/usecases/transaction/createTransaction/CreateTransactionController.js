@@ -24,6 +24,7 @@ class CreateTransactionController {
                 .min(1)
                 .max(31)
                 .nullable(true),
+            date: yup.date("'date' must be date!").nullable(true),
             interval: yup
                 .mixed()
                 .oneOf(
@@ -41,8 +42,15 @@ class CreateTransactionController {
             throw new AppError(error.name, 422, error.errors);
         }
 
-        let { value, description, day, interval, category_id, expired_at } =
-            request.body;
+        let {
+            value,
+            description,
+            day,
+            date,
+            interval,
+            category_id,
+            expired_at,
+        } = request.body;
         const wallet_id = request.params.id; // * wallet_id of the transaction
         const user_id = request.userId;
 
@@ -50,7 +58,7 @@ class CreateTransactionController {
             throw new AppError(
                 "ValidationError",
                 422,
-                "Only monthly interval = [M] and daily interval = [D] recurring transactions are implemented."
+                "Only monthly 'interval' = [M] and daily 'interval' = [D] recurring transactions are implemented."
             );
 
         if (interval == "M" && !day) {
@@ -64,6 +72,14 @@ class CreateTransactionController {
 
         const isRecurrencyTransaction = day || (interval && day) ? true : false;
         let transaction = null;
+
+        if (!isRecurrencyTransaction && !date) {
+            throw new AppError(
+                "ValidationError",
+                422,
+                "To create a non-recurring transaction you must enter a 'date'."
+            );
+        }
 
         if (isRecurrencyTransaction) {
             const createTransactionRecurrenciesUseCase =
