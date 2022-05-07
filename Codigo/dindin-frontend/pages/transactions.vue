@@ -427,25 +427,25 @@ export default {
                 confirmButtonText: "Yes, I want to delete!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // this.$axios.delete("/category/" + id).then((res) => {
-                    //   Swal.fire({
-                    //     title: "Deleted!",
-                    //     text: "The category has been deleted.",
-                    //     icon: "info",
-                    //     showConfirmButton: false,
-                    //     toast: true,
-                    //     position: "top-end",
-                    //     timer: 3000,
-                    //     timerProgressBar: true,
-                    //   });
-                    //   this.$fetch();
-                    // });
+                    this.$axios.delete("/transaction/" + id).then(() => {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "The Transaction has been deleted.",
+                            icon: "info",
+                            showConfirmButton: false,
+                            toast: true,
+                            position: "top-end",
+                            timer: 3000,
+                            timerProgressBar: true,
+                        });
+                        this.$fetch();
+                    });
                 }
             });
         },
         openModal(id) {
             this.showModal = true;
-            // this.transactionId = parseInt(id);
+            this.transactionId = id;
         },
     },
 };
