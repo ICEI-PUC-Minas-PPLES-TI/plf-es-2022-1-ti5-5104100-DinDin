@@ -174,12 +174,15 @@ export default {
     },
     async fetch() {
         this.loading = true;
-        let typeFilter = `&wallet_id=${this.$route.params.id}`;
+        let typeFilter = "";
         if (this.type) {
             typeFilter = `&type=${this.type}`;
         }
         await this.$axios
-            .$get(`/category?page=${this.currentPage}` + typeFilter)
+            .$get(
+                `wallet/${this.$route.params.id}/category?page=${this.currentPage}` +
+                    typeFilter
+            )
             .then((res) => {
                 this.pages = res.pages;
                 this.categories = res.categories;
@@ -215,19 +218,23 @@ export default {
                 confirmButtonText: "Yes, I want to delete!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.$axios.delete("/category/" + id).then(() => {
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: "The category has been deleted.",
-                            icon: "info",
-                            showConfirmButton: false,
-                            toast: true,
-                            position: "top-end",
-                            timer: 3000,
-                            timerProgressBar: true,
+                    this.$axios
+                        .delete(
+                            `wallet/${this.$route.params.id}/category/${id}`
+                        )
+                        .then(() => {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "The category has been deleted.",
+                                icon: "info",
+                                showConfirmButton: false,
+                                toast: true,
+                                position: "top-end",
+                                timer: 3000,
+                                timerProgressBar: true,
+                            });
+                            this.$fetch();
                         });
-                        this.$fetch();
-                    });
                 }
             });
         },
