@@ -25,24 +25,26 @@ if (process.env.APP_DEBUG) app.use(logger("dev"));
 // Import API Routes
 app.use("/api", routes);
 
-app.use(function (error, request, response, next) {
+app.get("/", (req, res) => {
+    res.json({ message: "Welcome to DinDin application API." });
+});
+
+// é necessário desabilitar a linha eslint abaixo pq ele reclama do next não ser usado, mas ao tirar ele, o callback para de ser um middleware de erro. (err, req, res, next) -> (req, res, next)
+// eslint-disable-next-line no-unused-vars
+app.use(function (error, req, response, next) {
     console.log(error);
     if (process.env.APP_DEBUG) {
-        return response.status(error.statusCode).json({
+        return response.status(error.statusCode ?? 500).json({
             status: "Error",
             message: error.message,
             error: error,
         });
     } else {
-        return response.status(error.statusCode).json({
+        return response.status(error.statusCode ?? 500).json({
             status: "Error",
             message: error.message,
         });
     }
-});
-
-app.get("/", (req, res) => {
-    res.json({ message: "Welcome to DinDin application API." });
 });
 
 // Export express app

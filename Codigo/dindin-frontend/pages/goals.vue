@@ -54,7 +54,13 @@
                                             <td>
                                                 {{ goal.description }}
                                             </td>
-                                            <td>{{ goal.type }}</td>
+                                            <td>
+                                                {{
+                                                    goal.type == "A"
+                                                        ? "Achievement"
+                                                        : "Saving"
+                                                }}
+                                            </td>
                                             <td>R${{ goal.value }}</td>
                                             <td>
                                                 {{ dateFormat(goal.expire_at) }}
