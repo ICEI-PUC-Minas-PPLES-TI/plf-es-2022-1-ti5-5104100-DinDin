@@ -1,12 +1,11 @@
 <template>
-  <v-container fluid> Transactions </v-container>
+    <v-container fluid> Transactions </v-container>
 </template>
 
 <script>
 export default {
-  layout: "home",
+    layout: "home",
 };
 </script>
 
-<style>
-</style>
+<style></style>
