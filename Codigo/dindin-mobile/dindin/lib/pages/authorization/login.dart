@@ -216,6 +216,7 @@ class _LoginState extends State<Login> {
 }
 
 Future<bool> userAuth(String email, String password) async {
+  return true;
   var url = "http://localhost:3001/api/user/auth";
   final Uri uri = Uri.parse(url);
 

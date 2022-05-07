@@ -2,6 +2,7 @@ import 'package:dindin/pages/category/list.dart';
 import 'package:dindin/pages/wallet/create.dart';
 import 'package:dindin/pages/wallet/view.dart';
 import 'package:dindin/models/wallet.dart';
+import 'package:dindin/database/DBProvider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,13 +18,27 @@ class WalletList extends StatefulWidget {
 
 Future<List<Wallet>> fetchWallets() async {
   List<Wallet> walletList = <Wallet>[];
+  final dbProvider = DBProvider.instance;
+  
+  /*Map<String, dynamic> row = {
+    'description' : 'Macoratti2'
+  };
+  final id = await dbProvider.insert('wallet',row);
+  print('linha inserida id: $id');*/
 
-  final String response =
+  final todasLinhas = await dbProvider.queryAllRows('wallet');
+  print('Consulta todas as linhas:');
+  todasLinhas.forEach((row) => {
+    walletList.add(Wallet(id: row['id'], updatedAt: '', createdAt: '', deletedAt: '', currentValue: null, shared: 0, description: row['description'])),
+    print(row)
+  });
+
+  /*final String response =
       await rootBundle.loadString('assets/data/wallets.json');
   final walletsJson = jsonDecode(response)['wallets'];
   for (var wallet in walletsJson) {
     walletList.add(Wallet.fromJson(wallet));
-  }
+  }*/
   return walletList;
 }
 
