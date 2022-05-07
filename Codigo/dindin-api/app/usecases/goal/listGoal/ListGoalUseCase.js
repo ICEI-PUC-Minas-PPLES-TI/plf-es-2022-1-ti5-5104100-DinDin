@@ -13,7 +13,7 @@ class ListGoalUseCase {
 
         if (query.description) {
             whre.description = sequelize.where(
-                sequelize.fn("LOWER", sequelize.col("description")),
+                sequelize.fn("LOWER", sequelize.col("Goal.description")),
                 "LIKE",
                 "%" + query.description.toLowerCase() + "%"
             );
@@ -64,6 +64,9 @@ class ListGoalUseCase {
                 {
                     model: Wallet,
                     as: "wallet",
+                    attributes: {
+                        include: ["id"]
+                    },
                     required: true,
                     include: [{
                         model: UserHasWallet,
@@ -71,6 +74,9 @@ class ListGoalUseCase {
                         required: true,
                         where: {
                             user_id: userId,
+                        },
+                        attributes: {
+                            include: ["user_id"]
                         },
                     }]
                 }

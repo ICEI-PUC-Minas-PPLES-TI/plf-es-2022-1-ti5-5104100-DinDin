@@ -3,8 +3,31 @@ require("dotenv").config();
 let { request, connectAndLogin } = require("../../helpers/AuthUtil");
 const { close } = require("../../../database");
 
+const mockCategoryIds = [];
+const toDeleteCategory = {
+    category: 0,
+    type: "IN"
+}
+
 beforeAll(async () => {
     await connectAndLogin();
+
+    for (let i = 0; i < 5; i++) {
+        const type = i % 2 === 0 ? "IN" : "OUT"
+        const response = await request.post("/api/category").send({
+            wallet_id: 1,
+            description: `category to test ${i}`,
+            type,
+            color: "FF0000",
+        });
+        if (i === 2){
+            toDeleteCategory.category = response.body.id;
+            toDeleteCategory.type = type;
+        }
+        mockCategoryIds.push(response.body.id);
+    }
+
+    await request.delete(`/api/category${toDeleteCategory.category}`)    
 });
 
 afterAll(async () => {
@@ -44,7 +67,7 @@ describe("GET /category test suite", () => {
         expect(response.body).toHaveProperty("total");
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("categories");
-        expect(response.body.categories[0].id).toEqual("1");
+        expect(Number(response.body.categories[0].id)).toEqual(mockCategoryIds[0]);
     });
 
     it("should list the categories with desc order id", async () => {
@@ -57,12 +80,12 @@ describe("GET /category test suite", () => {
         expect(response.body).toHaveProperty("total");
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("categories");
-        expect(response.body.categories[0].id).not.toEqual(1);
+        expect(Number(response.body.categories[0].id)).toEqual(mockCategoryIds[mockCategoryIds.length-1]);
     });
 
     it("should list the categories with description search", async () => {
         const response = await request
-            .get("/api/category?description=Culture")
+            .get("/api/category?description=1")
             .send();
 
         expect(response.statusCode).toEqual(200);
@@ -127,7 +150,7 @@ describe("GET /category test suite", () => {
     it("should list the categories with all filters", async () => {
         const response = await request
             .get(
-                "/api/category?page=1&limit=5&attribute=id&order=DESC&description=culture&type=IN&wallet_id=1&created_at_start=2010-01-01 11:50:00&created_at_end=2099-01-01 11:50:00&updated_at_start=2010-01-01 11:50:00&updated_at_end=2099-01-01 11:50:00"
+                `/api/category?page=1&limit=5&attribute=id&order=DESC&description=cat&type=${toDeleteCategory.type}&wallet_id=1&created_at_start=2010-01-01 11:50:00&created_at_end=2099-01-01 11:50:00&updated_at_start=2010-01-01 11:50:00&updated_at_end=2099-01-01 11:50:00`
             )
             .send();
 
