@@ -6,28 +6,28 @@ const { close } = require("../../../database");
 const mockCategoryIds = [];
 const toDeleteCategory = {
     category: 0,
-    type: "IN"
-}
+    type: "IN",
+};
 
 beforeAll(async () => {
     await connectAndLogin();
 
     for (let i = 0; i < 5; i++) {
-        const type = i % 2 === 0 ? "IN" : "OUT"
+        const type = i % 2 === 0 ? "IN" : "OUT";
         const response = await request.post("/api/category").send({
             wallet_id: 1,
             description: `category to test ${i}`,
             type,
             color: "FF0000",
         });
-        if (i === 2){
+        if (i === 2) {
             toDeleteCategory.category = response.body.id;
             toDeleteCategory.type = type;
         }
         mockCategoryIds.push(response.body.id);
     }
 
-    await request.delete(`/api/category${toDeleteCategory.category}`)    
+    await request.delete(`/api/category${toDeleteCategory.category}`);
 });
 
 afterAll(async () => {
@@ -67,7 +67,9 @@ describe("GET /category test suite", () => {
         expect(response.body).toHaveProperty("total");
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("categories");
-        expect(Number(response.body.categories[0].id)).toEqual(mockCategoryIds[0]);
+        expect(Number(response.body.categories[0].id)).toEqual(
+            mockCategoryIds[0]
+        );
     });
 
     it("should list the categories with desc order id", async () => {
@@ -80,7 +82,9 @@ describe("GET /category test suite", () => {
         expect(response.body).toHaveProperty("total");
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("categories");
-        expect(Number(response.body.categories[0].id)).toEqual(mockCategoryIds[mockCategoryIds.length-1]);
+        expect(Number(response.body.categories[0].id)).toEqual(
+            mockCategoryIds[mockCategoryIds.length - 1]
+        );
     });
 
     it("should list the categories with description search", async () => {

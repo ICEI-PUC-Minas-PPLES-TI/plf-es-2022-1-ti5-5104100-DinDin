@@ -7,15 +7,14 @@ const mockGoalIds = [];
 let walletIdToSearch;
 const toDeleteGoal = {
     goal: 0,
-    wallet: 0
-}
+    wallet: 0,
+};
 
 beforeAll(async () => {
-    userId = (await connectAndLogin()).userId;
+    await connectAndLogin();
 
     for (let i = 0; i < 5; i++) {
-
-        const response = await request.post("/api/wallet").send( {
+        const response = await request.post("/api/wallet").send({
             description: `mockup wallet to goal test ${i}`,
             initial_value: 2000,
         });
@@ -27,13 +26,12 @@ beforeAll(async () => {
             expire_at: "2030-10-10",
             wallet_id: response.body.wallet.id,
         });
-        if (i === 2){
-            toDeleteGoal.wallet = response.body.wallet.id,
-            toDeleteGoal.goal = goalResponse.body.id
+        if (i === 2) {
+            (toDeleteGoal.wallet = response.body.wallet.id),
+                (toDeleteGoal.goal = goalResponse.body.id);
         }
         walletIdToSearch = response.body.wallet.id;
         mockGoalIds.push(goalResponse.body.id);
-
     }
     // dando update para filtro com updated_at
     await request.put(`/api/goal/${mockGoalIds[1]}`).send({
@@ -41,7 +39,6 @@ beforeAll(async () => {
     });
     // deletando um para filtro deleted_at
     await request.delete(`/api/goal/${toDeleteGoal.goal}`);
-    
 });
 
 afterAll(async () => {
@@ -58,7 +55,7 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("goals");
         expect(response.body.goals.length).toBeGreaterThanOrEqual(1);
-        response.body.goals.forEach(goal => {
+        response.body.goals.forEach((goal) => {
             expect(mockGoalIds).toContain(Number(goal.id));
         });
     });
@@ -97,13 +94,13 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("total");
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("goals");
-        expect(Number(response.body.goals[0].id)).toEqual( mockGoalIds[mockGoalIds.length-1] );
+        expect(Number(response.body.goals[0].id)).toEqual(
+            mockGoalIds[mockGoalIds.length - 1]
+        );
     });
 
     it("should list user's goals with description search", async () => {
-        const response = await request
-            .get("/api/goal?description=1")
-            .send();
+        const response = await request.get("/api/goal?description=1").send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -162,7 +159,9 @@ describe("GET /goal test suite", () => {
     });
 
     it("should list user's goals with wallet_id search", async () => {
-        const response = await request.get(`/api/goal?wallet_id=${walletIdToSearch}`).send();
+        const response = await request
+            .get(`/api/goal?wallet_id=${walletIdToSearch}`)
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");

@@ -65,21 +65,23 @@ class ListGoalUseCase {
                     model: Wallet,
                     as: "wallet",
                     attributes: {
-                        include: ["id"]
+                        include: ["id"],
                     },
                     required: true,
-                    include: [{
-                        model: UserHasWallet,
-                        as: "users",
-                        required: true,
-                        where: {
-                            user_id: userId,
+                    include: [
+                        {
+                            model: UserHasWallet,
+                            as: "users",
+                            required: true,
+                            where: {
+                                user_id: userId,
+                            },
+                            attributes: {
+                                include: ["user_id"],
+                            },
                         },
-                        attributes: {
-                            include: ["user_id"]
-                        },
-                    }]
-                }
+                    ],
+                },
             ],
         }).catch((error) => {
             throw new AppError("Erro interno do servidor!", 500, error);

@@ -8,9 +8,7 @@ const Category = require("../../../models/Category");
 let loggedUserId;
 
 beforeAll(async () => {
-    const {
-        userId
-    } = await connectAndLogin();
+    const { userId } = await connectAndLogin();
 
     loggedUserId = userId;
 });

@@ -54,8 +54,8 @@ class ListCategoriesUseCase {
                     as: "user",
                     required: true,
                     where: {
-                        id: userId
-                    }
+                        id: userId,
+                    },
                 },
                 // !   {
                 // !     model: Wallet,
