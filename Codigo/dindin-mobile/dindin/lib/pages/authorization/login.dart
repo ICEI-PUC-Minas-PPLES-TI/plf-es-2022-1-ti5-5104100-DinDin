@@ -1,4 +1,5 @@
 import 'package:dindin/pages/dashboard.dart';
+import 'package:dindin/helpers/api_url.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
@@ -216,8 +217,7 @@ class _LoginState extends State<Login> {
 }
 
 Future<bool> userAuth(String email, String password) async {
-  return true;
-  var url = "http://localhost:3001/api/user/auth";
+  var url = ApiURL.baseUrl + "/user/auth";
   final Uri uri = Uri.parse(url);
 
   // Firebase Cloud Messaging
@@ -231,5 +231,5 @@ Future<bool> userAuth(String email, String password) async {
     await messaging.subscribeToTopic('U_' + userId);
     return true;
   }
-  return false;;
+  return false;
 }
