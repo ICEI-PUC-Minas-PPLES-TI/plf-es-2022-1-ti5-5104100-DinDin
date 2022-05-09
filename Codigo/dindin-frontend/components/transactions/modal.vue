@@ -150,7 +150,6 @@
                             >
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-text-field
-                                        :rules="[rules.required]"
                                         prepend-inner-icon="mdi-calendar-range"
                                         outlined
                                         hide-details="auto"
@@ -159,6 +158,8 @@
                                         v-bind="attrs"
                                         v-on="on"
                                         label="End Date"
+                                        :hint="hintWarningDate"
+                                        persistent-hint
                                     />
                                 </template>
                                 <v-date-picker
@@ -224,6 +225,7 @@ export default {
                 wallet_id: "",
                 recurrent: false,
             },
+            hintWarningDate: "",
             today: "",
             date: "",
             menu: false,
@@ -247,14 +249,11 @@ export default {
         },
         "transaction.endDate"(val) {
             if (this.transaction.recurrentType == "M") {
-                if (val && val.length >= 10) {
-                    if (val.split("-")[2] >= 28) {
-                        Swal.fire(
-                            "Warning!",
-                            "This transaction may be occur in diff days on next month",
-                            "warning"
-                        );
-                    }
+                if (val && val.length >= 10 && val.split("-")[2] >= 28) {
+                    this.hintWarningDate =
+                        "This transaction may take place on different days in the coming months";
+                } else {
+                    this.hintWarningDate = "";
                 }
             }
         },
