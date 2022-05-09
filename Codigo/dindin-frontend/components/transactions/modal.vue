@@ -251,7 +251,7 @@ export default {
             if (this.transaction.recurrentType == "M") {
                 if (val && val.length >= 10 && val.split("-")[2] >= 28) {
                     this.hintWarningDate =
-                        "This transaction may take place on different days in the coming months";
+                        "Warning, because your transaction has a monthly recurrence day above the 28th, it will not occur in some months of the year.";
                 } else {
                     this.hintWarningDate = "";
                 }
