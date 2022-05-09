@@ -127,12 +127,6 @@ class _LoginState extends State<Login> {
                                       primary: Color.fromARGB(255, 84, 179, 88),
                                     ),
                                     onPressed: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Dashboard()),
-                                      );
                                       if (formKey.currentState!.validate()) {
                                         const snackBarTrue =
                                             SnackBar(content: Text('Loging'));
@@ -146,12 +140,12 @@ class _LoginState extends State<Login> {
                                                       _scaffoldKey.currentState!
                                                           .showSnackBar(
                                                               snackBarTrue),
-                                                      // Navigator.pushReplacement(
-                                                      //   context,
-                                                      //   MaterialPageRoute(
-                                                      //       builder: (context) =>
-                                                      //           const Dashboard()),
-                                                      // )
+                                                      Navigator.pushReplacement(
+                                                         context,
+                                                         MaterialPageRoute(
+                                                             builder: (context) =>
+                                                                 const Dashboard()),
+                                                      )
                                                     }
                                                   else
                                                     {
@@ -242,7 +236,7 @@ Future<bool> userAuth(String email, String password) async {
   var status = response.statusCode;
   if (status == 200) {
     var json = jsonDecode(response.body);
-    String userId = json["userId"];
+    String userId = json["userId"].toString();
     (await prefs).setString("token", json["token"]);
     FirebaseAuth.instance.signInWithCustomToken(json["firebaseToken"]);
     try {

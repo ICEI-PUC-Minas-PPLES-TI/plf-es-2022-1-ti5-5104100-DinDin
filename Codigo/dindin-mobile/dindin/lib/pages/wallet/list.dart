@@ -1,8 +1,9 @@
-import 'package:dindin/pages/category/list.dart';
-import 'package:dindin/pages/wallet/create.dart';
+import 'package:dindin/pages/wallet/form.dart';
+import 'package:dindin/pages/wallet/join.dart';
 import 'package:dindin/pages/wallet/view.dart';
 import 'package:dindin/models/wallet.dart';
 import 'package:dindin/database/DBProvider.dart';
+import 'package:dindin/helpers/api_url.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,12 +20,6 @@ class WalletList extends StatefulWidget {
 Future<List<Wallet>> fetchWallets() async {
   List<Wallet> walletList = <Wallet>[];
   final dbProvider = DBProvider.instance;
-  
-  /*Map<String, dynamic> row = {
-    'description' : 'Macoratti2'
-  };
-  final id = await dbProvider.insert('wallet',row);
-  print('linha inserida id: $id');*/
 
   final todasLinhas = await dbProvider.queryAllRows('wallet');
   print('Consulta todas as linhas:');
@@ -32,6 +27,22 @@ Future<List<Wallet>> fetchWallets() async {
     walletList.add(Wallet(id: row['id'], updatedAt: '', createdAt: '', deletedAt: '', currentValue: null, shared: 0, description: row['description'])),
     print(row)
   });
+
+
+  var url = ApiURL.baseUrl + "/wallet";
+  ApiURL.getToken().then((value) => {
+    print('token' + value),
+  });
+  /*
+
+  var response =
+      await http.get(uri, body: {'email': email, 'password': password});
+  var status = response.statusCode;
+  if (status == 200) {
+    var json = jsonDecode(response.body);
+    return true;
+  }
+  return false;*/
 
   /*final String response =
       await rootBundle.loadString('assets/data/wallets.json');
@@ -59,11 +70,11 @@ class _WalletListState extends State<WalletList> {
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
           IconButton(
-            icon: const FaIcon(FontAwesomeIcons.tag),
+            icon: const FaIcon(FontAwesomeIcons.doorOpen),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ListCategories()),
+                MaterialPageRoute(builder: (context) => const WalletJoin()),
               );
             },
           ),
@@ -81,13 +92,19 @@ class _WalletListState extends State<WalletList> {
                   return Card(
                     child: InkWell(
                       onTap: () {
+                        final Wallet w = Wallet(id: snapshot.data[index].id, createdAt: '', deletedAt: '', updatedAt: '', currentValue: null, shared: snapshot.data[index].shared, description: snapshot.data[index].description);
                         print("Open Wallet Visualization at id: " +
                             snapshot.data[index].id.toString());
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const WalletView()),
-                        );
+                              builder: (context) => WalletView(w)),
+                        ).then((value) => {
+                          setState(() {
+                            wallets = fetchWallets();
+                          })
+
+                        });
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
@@ -113,8 +130,12 @@ class _WalletListState extends State<WalletList> {
           print("Create a new Wallet");
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const WalletCreate()),
-          );
+            MaterialPageRoute(builder: (context) => const WalletForm(null)),
+          ).then((value) => {
+            setState(() {
+              wallets = fetchWallets();
+            })
+          });
         },
         backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),

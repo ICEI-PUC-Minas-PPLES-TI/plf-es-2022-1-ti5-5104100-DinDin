@@ -1,13 +1,13 @@
 class Wallet {
   final num id;
-  final String description;
+  final String? description;
   final num? currentValue;
   final num shared;
   final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;
 
-  const Wallet({
+  Wallet({
     required this.id,
     required this.description,
     required this.currentValue,
@@ -16,6 +16,7 @@ class Wallet {
     required this.updatedAt,
     required this.deletedAt,
   });
+
 
   factory Wallet.fromJson(Map<String, dynamic> json) {
     return Wallet(

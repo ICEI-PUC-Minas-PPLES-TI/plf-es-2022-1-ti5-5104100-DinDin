@@ -1,10 +1,15 @@
-import 'package:dindin/pages/wallet/update.dart';
+import 'package:dindin/pages/wallet/form.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../models/wallet.dart';
+import '../category/list.dart';
+
 class WalletView extends StatefulWidget {
-  const WalletView({Key? key}) : super(key: key);
+  final Wallet wallet;
+
+  const WalletView(this.wallet, {Key? key}) : super(key: key);
 
   @override
   _WalletViewState createState() => _WalletViewState();
@@ -77,8 +82,19 @@ class _WalletViewState extends State<WalletView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Wallet X'),
+        title: Text(widget.wallet.description?? ''),
         backgroundColor: Theme.of(context).primaryColor,
+        actions: [
+          IconButton(
+            icon: const FaIcon(FontAwesomeIcons.tag),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ListCategories()),
+              );
+            },
+          ),
+        ],
       ),
       body: ListView(
         children: [
@@ -116,8 +132,11 @@ class _WalletViewState extends State<WalletView> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const WalletUpdate()),
-                                  );
+                                            WalletForm(widget.wallet)),
+                                  ).then((value) => {
+                                    if(value == 'CLOSE')
+                                      Navigator.of(context).pop('RELOAD')
+                                  });
                                 },
                               ),
                             ],
@@ -128,22 +147,17 @@ class _WalletViewState extends State<WalletView> {
                           child: Container(
                             width: double.infinity,
                             padding: const EdgeInsets.all(10.0),
-                            child: const Center(
-                                child: Text('Wallet X',
-                                    style: TextStyle(
+                            child: Center(
+                                child: Text(widget.wallet.description?? '',
+                                    style: const TextStyle(
                                         fontSize: 50,
                                         fontWeight: FontWeight.bold))),
                           ),
                         ),
-                        const SizedBox(height: 5.0),
-                        const Text(
-                          "Description",
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ),
                         const SizedBox(height: 25.0),
-                        const Text(
-                          "Receipient type: Private",
-                          style: TextStyle(fontWeight: FontWeight.w700),
+                        Text(
+                          widget.wallet.shared == 1 ? 'Shared': 'Private',
+                          style: const TextStyle(fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(height: 60.0),
                       ],
