@@ -11,14 +11,17 @@ class CreateTransactionController {
     // * Route: /api/wallet/{id}/transaction
     // * {id} == wallet_id of the transaction
     async create(request, response) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
         const scheme = yup.object().shape({
             value: yup
                 .number("'value' must be numeric!")
-                .required("'value' is a required field"),
+                .required("'value' is a required field!"),
             description: yup
                 .string("'description' must be string!")
                 .max(30)
-                .required("'description' is a required field"),
+                .required("'description' is a required field!"),
             day: yup
                 .number("'day' must be numeric!")
                 .min(1)
@@ -29,10 +32,13 @@ class CreateTransactionController {
                 .mixed()
                 .oneOf(
                     intervalEnum,
-                    `'interval' must be one of these: ${intervalEnum}.`
+                    `'interval' must be one of these: ${intervalEnum}!`
                 )
                 .nullable(true),
-            expired_at: yup.date("'expired_at' must be date!").nullable(true),
+            expired_at: yup
+                .date("'expired_at' must be date!")
+                .min(today, "expire_at' cannot be in the past!")
+                .nullable(true),
             category_id: yup.number("'category_id' must be numeric!").min(1),
         });
 
@@ -54,6 +60,7 @@ class CreateTransactionController {
         const wallet_id = request.params.id; // * wallet_id of the transaction
         const user_id = request.userId;
 
+        // TODO: need finish others intervals
         if (interval && interval != "M" && interval != "D")
             throw new AppError(
                 "ValidationError",
@@ -61,14 +68,17 @@ class CreateTransactionController {
                 "Only monthly 'interval' = [M] and daily 'interval' = [D] recurring transactions are implemented."
             );
 
+        // * If the 'interval' is monthly (M), it is necessary to inform the 'day'
         if (interval == "M" && !day) {
             throw new AppError(
                 "ValidationError",
                 422,
-                "Monthly recurring transactions require the day of the month."
+                "Monthly ('interval' = [M]) recurring transactions require the field 'day' of the month."
             );
         }
-        if (day && !interval) interval = "D";
+
+        // * If the 'interval' is daily (D), you don't need the 'day' because it's every day. Set 'day' null
+        if (interval == "D") day = null;
 
         const isRecurrencyTransaction = day || (interval && day) ? true : false;
         let transaction = null;

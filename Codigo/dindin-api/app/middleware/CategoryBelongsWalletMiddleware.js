@@ -15,7 +15,7 @@ const verifyCategoryBelongsWallet = async (request, response, next) => {
     if (category) next();
     else
         throw new AppError(
-            "Category does not have permission for this wallet",
+            "Category does not have permission for this wallet!",
             403
         );
 };
