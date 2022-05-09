@@ -375,7 +375,7 @@ export default {
             menuData2: false,
             loading: false,
             showModal: false,
-            transactionId: "",
+            transactionId: 0,
             filters: {
                 wallet: "",
                 category: "",
@@ -445,7 +445,7 @@ export default {
         },
         openModal(id) {
             this.showModal = true;
-            this.transactionId = id;
+            this.transactionId = parseInt(id);
         },
     },
 };

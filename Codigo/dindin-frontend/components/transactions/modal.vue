@@ -6,7 +6,7 @@
         @keydown.esc="$emit('input', false)"
     >
         <v-card class="pa-2">
-            <v-card-title class="text-h5 goals-modal-title">
+            <v-card-title class="text-h5 transactions-modal-title">
                 <h4>
                     <span> {{ title }}</span>
                 </h4>
@@ -23,7 +23,7 @@
                         </li>
                     </ul>
                 </v-alert>
-                <!-- Goal Add Form -->
+                <!-- Transaction Form -->
                 <v-container fluids>
                     <v-form
                         ref="form"
@@ -45,7 +45,7 @@
                         <v-row class="pb-2">
                             <v-text-field
                                 :rules="[rules.required]"
-                                v-model="goal.value"
+                                v-model="transaction.value"
                                 prepend-inner-icon="mdi-currency-usd"
                                 outlined
                                 type="number"
@@ -60,7 +60,7 @@
                                 :rules="[rules.required]"
                                 prepend-inner-icon="mdi-tag"
                                 outlined
-                                v-model="goal.description"
+                                v-model="transaction.description"
                                 hide-details="auto"
                                 :clearable="true"
                                 label="Description"
@@ -127,24 +127,45 @@
                             >
                             </v-checkbox>
                         </v-row>
+
+                        <v-row class="mb-0 pb-2" v-show="transaction.recurrent">
+                            <v-col cols="12" class="pl-0 py-2">
+                                <v-btn-toggle
+                                    v-model="transaction.recurrentType"
+                                    outlined
+                                    mandatory
+                                >
+                                    <v-btn value="D"> Daylly </v-btn>
+                                    <v-btn value="M"> Monthly </v-btn>
+                                </v-btn-toggle>
+                            </v-col>
+                        </v-row>
+
                         <v-row class="pb-2" v-show="transaction.recurrent">
-                            <v-text-field
-                                :rules="
-                                    transaction.recurrent == true
-                                        ? [rules.required]
-                                        : []
-                                "
-                                v-model="transaction.month_recurrency"
-                                prepend-inner-icon="mdi-calendar-range"
-                                outlined
-                                type="number"
-                                hide-details="auto"
-                                :clearable="true"
-                                min="1"
-                                placeholder="1 months"
-                                maxlength="3"
-                                label="Month recurrency"
-                            />
+                            <v-menu
+                                v-model="menu2"
+                                :close-on-content-click="true"
+                                offset-y
+                                min-width="290px"
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        :rules="[rules.required]"
+                                        prepend-inner-icon="mdi-calendar-range"
+                                        outlined
+                                        hide-details="auto"
+                                        type="date"
+                                        v-model="transaction.endDate"
+                                        v-bind="attrs"
+                                        v-on="on"
+                                        label="End Date"
+                                    />
+                                </template>
+                                <v-date-picker
+                                    v-model="transaction.endDate"
+                                    @input="menu2 = false"
+                                ></v-date-picker>
+                            </v-menu>
                         </v-row>
                     </v-form>
                 </v-container>
@@ -159,7 +180,7 @@
                             >Cancel</v-btn
                         >
                     </v-col>
-                    <v-col v-if="goalToEdit != null" class="mr-2">
+                    <v-col v-if="transactionId" class="mr-2">
                         <v-btn
                             block
                             color="primary"
@@ -186,36 +207,27 @@ import Swal from "sweetalert2";
 export default {
     props: {
         value: Boolean,
-        goalToEdit: Object,
         modalEdit: Boolean,
-        transactionId: String,
+        transactionId: Number,
     },
     data() {
         return {
             title: "New Transaction",
-            goal: {
-                id: "",
-                description: "",
-                expire_at: "",
-                value: "",
-                type: 0,
-                walletId: 0,
-                status: "PENDING",
-            },
             transaction: {
                 id: "",
                 value: "",
                 description: "",
                 date: "",
                 type: "",
+                recurrentType: "",
                 category_id: "",
                 wallet_id: "",
                 recurrent: false,
             },
-            choosenGoal: "",
             today: "",
             date: "",
             menu: false,
+            menu2: false,
             rules: {
                 required: (value) => !!value || "Required.",
                 // wrongDate: (value) =>
@@ -226,13 +238,24 @@ export default {
     },
     watch: {
         transactionId(val) {
-            console.log("oi");
-            console.log(val);
             if (val) {
                 //load transaction
             } else {
                 this.cleanForm();
-                this.setCurrentDate();
+                //this.setCurrentDate();
+            }
+        },
+        "transaction.endDate"(val) {
+            if (this.transaction.recurrentType == "M") {
+                if (val && val.length >= 10) {
+                    if (val.split("-")[2] >= 28) {
+                        Swal.fire(
+                            "Warning!",
+                            "This transaction may be occur in diff days on next month",
+                            "warning"
+                        );
+                    }
+                }
             }
         },
     },
@@ -246,22 +269,19 @@ export default {
             },
         },
     },
-    mounted() {
-        console.log("oi");
-        this.setCurrentDate();
-    },
     methods: {
-        setCurrentDate() {
-            this.parseDate(new Date().toLocaleDateString());
-        },
+        // setCurrentDate() {
+        //     console.log("oi");
+        //     this.transaction.date = new Date().toLocaleDateString();
+        // },
         saveTransaction() {
             this.errors = [];
             if (this.$refs.form.validate()) {
                 this.$axios
-                    .post("/goal", this.goal)
+                    .post("/transaction", this.transaction)
                     .then(() => {
                         Swal.fire({
-                            title: "Goal Created",
+                            title: "Transaction Created",
                             icon: "success",
                             showConfirmButton: false,
                             toast: true,
@@ -271,7 +291,7 @@ export default {
                         });
                         this.$refs.form.reset();
                         this.$emit("input", false);
-                        this.$emit("created", this.goal);
+                        this.$emit("created", this.transaction);
                     })
                     .catch((err) => {
                         this.erroLogin = err.response.data.message;
@@ -287,10 +307,13 @@ export default {
             this.errors = [];
             if (this.$refs.form.validate()) {
                 this.$axios
-                    .put("/goal/" + this.goal.id, this.goal)
+                    .put(
+                        "/transaction/" + this.transaction.id,
+                        this.transaction
+                    )
                     .then(() => {
                         Swal.fire({
-                            title: "Goal Edited",
+                            title: "Transaction Edited",
                             icon: "success",
                             showConfirmButton: false,
                             toast: true,
@@ -300,31 +323,18 @@ export default {
                         });
                         this.$refs.form.reset();
                         this.$emit("input", false);
-                        this.$emit("created", this.goal);
+                        this.$emit("created", this.transaction);
                     })
                     .catch((err) => {
-                        this.erroLogin = err.response.data.message;
-                        if (err.response.status == 500) {
-                            this.erroLogin = "Erro interno do servidor";
-                        }
+                        Swal.fire({
+                            title: "Error!",
+                            html: err.response.data.message,
+                            icon: "error",
+                        });
                     });
             } else {
                 this.errors = ["Fields have invalid input"];
             }
-        },
-        parseDate(date) {
-            //console.log("oii");
-            if (!date) return null;
-            const [year, month, day] = date.split("-");
-            this.transaction.date = `${day}/${month}/${year}`;
-        },
-        shortDate(date) {
-            if (!date) {
-                return null;
-            }
-            let parse = date.substring(0, 10);
-            const [year, month, day] = parse.split("-");
-            return `${day}/${month}/${year}`;
         },
         compareDates(date1, date2) {
             if (date1 == null || date2 == null) {
@@ -345,24 +355,15 @@ export default {
             }
             return resp;
         },
-        fillForm(data) {
-            this.goal.id = data.id;
-            this.goal.description = data.description;
-            this.goal.value = data.value;
-            this.date = this.shortDate(data.expire_at);
-            this.goal.expire_at = data.expire_at.substring(0, 10);
-            this.goal.type = data.type;
-            this.goal.walletId = data.walletId;
-        },
         cleanForm() {
-            this.$refs.form.reset();
+            //this.$refs.form.reset();
         },
     },
 };
 </script>
 
 <style>
-.goals-modal-title h4 {
+.transactions-modal-title h4 {
     width: calc(100% - 37px);
     text-align: left;
     line-height: 0.1em;
