@@ -18,12 +18,18 @@ const updateCategoryController = new UpdateCategoryController();
 
 walletCategoryRoutes.post(
     "/wallet/:walletId/category/",
-    [jwtAuthorization.verifyToken],
+    [
+        jwtAuthorization.verifyToken,
+        UserAccessWalletCategoryMiddleware.verifyWalletCategoryPermission,
+    ],    
     createCategoryController.create
 );
 walletCategoryRoutes.get(
     "/wallet/:walletId/category/:categoryId",
-    [jwtAuthorization.verifyToken],
+    [
+        jwtAuthorization.verifyToken,
+        UserAccessWalletCategoryMiddleware.verifyWalletCategoryPermission,
+    ],
     findCategoryController.find
 );
 walletCategoryRoutes.get(
@@ -36,12 +42,18 @@ walletCategoryRoutes.get(
 );
 walletCategoryRoutes.put(
     "/wallet/:walletId/category/:categoryId",
-    [jwtAuthorization.verifyToken],
+    [
+        jwtAuthorization.verifyToken,
+        UserAccessWalletCategoryMiddleware.verifyWalletCategoryPermission,
+    ],    
     updateCategoryController.update
 );
 walletCategoryRoutes.delete(
     "/wallet/:walletId/category/:categoryId",
-    [jwtAuthorization.verifyToken],
+    [
+        jwtAuthorization.verifyToken,
+        UserAccessWalletCategoryMiddleware.verifyWalletCategoryPermission,
+    ],
     deleteCategoryController.delete
 );
 
