@@ -1,7 +1,8 @@
 const { Router } = require("express");
-const categoryRoutes = Router();
+const walletCategoryRoutes = Router();
 
 const jwtAuthorization = require("./jwtAuthorization");
+const UserAccessWalletCategoryMiddleware = require("../middleware/UserAccessWalletCategoryMiddleware");
 
 const CreateCategoryController = require("../usecases/category/createCategory/CreateCategoryController");
 const DeleteCategoryController = require("../usecases/category/deleteCategory/DeleteCategoryController");
@@ -15,30 +16,33 @@ const listCategoryController = new ListCategoryController();
 const deleteCategoryController = new DeleteCategoryController();
 const updateCategoryController = new UpdateCategoryController();
 
-categoryRoutes.post(
-    "/",
+walletCategoryRoutes.post(
+    "/wallet/:walletId/category/",
     [jwtAuthorization.verifyToken],
     createCategoryController.create
 );
-categoryRoutes.get(
-    "/:id",
+walletCategoryRoutes.get(
+    "/wallet/:walletId/category/:categoryId",
     [jwtAuthorization.verifyToken],
     findCategoryController.find
 );
-categoryRoutes.get(
-    "/",
-    [jwtAuthorization.verifyToken],
+walletCategoryRoutes.get(
+    "/wallet/:walletId/category/",
+    [
+        jwtAuthorization.verifyToken,
+        UserAccessWalletCategoryMiddleware.verifyWalletCategoryPermission,
+    ],
     listCategoryController.list
 );
-categoryRoutes.put(
-    "/:id",
+walletCategoryRoutes.put(
+    "/wallet/:walletId/category/:categoryId",
     [jwtAuthorization.verifyToken],
     updateCategoryController.update
 );
-categoryRoutes.delete(
-    "/:id",
+walletCategoryRoutes.delete(
+    "/wallet/:walletId/category/:categoryId",
     [jwtAuthorization.verifyToken],
     deleteCategoryController.delete
 );
 
-module.exports = categoryRoutes;
+module.exports = walletCategoryRoutes;

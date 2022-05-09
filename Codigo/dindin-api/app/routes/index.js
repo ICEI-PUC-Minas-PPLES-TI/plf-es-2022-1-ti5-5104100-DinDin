@@ -11,6 +11,6 @@ const walletCategoryRoutes = require("./walletCategoryRoutes");
 router.use("/user", userRoutes);
 router.use("/goal", goalRoutes);
 router.use("/wallet", walletRoutes);
-router.use("/wallet/:id/category", walletCategoryRoutes);
+router.use(walletCategoryRoutes);
 
 module.exports = router;
