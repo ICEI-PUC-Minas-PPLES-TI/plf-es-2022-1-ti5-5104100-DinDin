@@ -1,22 +1,24 @@
 const AppError = require("../../../errors/AppError");
 
-const Transaction = require("../../../models/Transaction");
+const FindTransactionUseCase = require("../findTransaction/FindTransactionUseCase");
 
 class UpdateTransactionUseCase {
     async update(id, wallet_id, value, description, date, category_id) {
-        const transaction = await Transaction.update(
-            {
+        const findTransactionUseCase = new FindTransactionUseCase();
+        const transaction = await findTransactionUseCase.find(id, wallet_id);
+
+        await transaction
+            .update({
                 value: value,
                 description: description,
                 date: date,
                 category_id: category_id,
-            },
-            { where: { id: id, wallet_id: wallet_id } }
-        ).catch((error) => {
-            throw new AppError(error.message, 500, error);
-        });
+            })
+            .catch((error) => {
+                throw new AppError(error.message, 500, error);
+            });
 
-        return { id: transaction.id };
+        return transaction;
     }
 }
 

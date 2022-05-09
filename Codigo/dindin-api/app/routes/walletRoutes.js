@@ -16,6 +16,8 @@ const ListWalletUsersController = require("../usecases/wallet/listWalletUsers/Li
 
 const CreateTransactionController = require("../usecases/transaction/createTransaction/CreateTransactionController");
 const UpdateTransactionController = require("../usecases/transaction/updateTransaction/UpdateTransactionController");
+const CreateTransactionRecurrenciesController = require("../usecases/transactionRecurrencies/createTransactionRecurrencies/CreateTransactionRecurrenciesController");
+const UpdateTransactionRecurrenciesController = require("../usecases/transactionRecurrencies/updateTransactionRecurrencies/UpdateTransactionRecurrenciesController");
 
 const createWalletController = new CreateWalletController();
 const listWalletController = new ListWalletController();
@@ -27,6 +29,10 @@ const listWalletUsersController = new ListWalletUsersController();
 
 const createTransactionController = new CreateTransactionController();
 const updateTransactionController = new UpdateTransactionController();
+const createTransactionRecurrenciesController =
+    new CreateTransactionRecurrenciesController();
+const updateTransactionRecurrenciesController =
+    new UpdateTransactionRecurrenciesController();
 
 walletRoutes.post(
     "/",
@@ -94,6 +100,16 @@ walletRoutes.post(
     createTransactionController.create
 );
 
+walletRoutes.post(
+    "/:id/transactionrecurrencies",
+    [
+        JwtAuthorization.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+        CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
+    ],
+    createTransactionRecurrenciesController.create
+);
+
 walletRoutes.put(
     "/:id/transaction/:tid",
     [
@@ -102,6 +118,16 @@ walletRoutes.put(
         CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],
     updateTransactionController.update
+);
+
+walletRoutes.put(
+    "/:id/transactionrecurrencies/:trid",
+    [
+        JwtAuthorization.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+        CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
+    ],
+    updateTransactionRecurrenciesController.update
 );
 
 module.exports = walletRoutes;
