@@ -4,6 +4,8 @@ let { request, connectAndLogin } = require("../../helpers/AuthUtil");
 const { close } = require("../../../database");
 const Wallet = require("../../../models/Wallet");
 const UserHasWallet = require("../../../models/UserHasWallet");
+const User = require("../../../models/User");
+
 var userID = null;
 
 beforeAll(async () => {
@@ -18,6 +20,18 @@ beforeAll(async () => {
             wallet_id: wallet.id,
             user_id: userID,
         });
+
+        for (let x = 0; x < 5; x++) {
+            let user = await User.create({
+                name: `${i}Joao${x}`,
+                email: `${i}Joao${x}@email.com`,
+                password: `${i}Joao${x}`,
+            });
+            await UserHasWallet.create({
+                wallet_id: wallet.id,
+                user_id: user.id,
+            });
+        }
     }
 });
 
@@ -28,7 +42,7 @@ afterAll(async () => {
 describe("GET /wallet users test suite", () => {
     it("should list the wallets users", async () => {
         const response = await request.get("/api/wallet/1/users").send();
-
+        console.log(response.body);
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
         expect(response.body).toHaveProperty("total");
