@@ -41,7 +41,12 @@ afterAll(async () => {
 
 describe("GET /wallet users test suite", () => {
     it("should list the wallets users", async () => {
-        const response = await request.get("/api/wallet/1/users").send();
+        const responseList1 = await request.get("/api/wallet/").send();
+        let walletId = responseList1.body.wallets[0].id;
+        const response = await request
+            .get("/api/wallet/" + walletId + "/users")
+            .send();
+        console.log("oiii");
         console.log(response.body);
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
