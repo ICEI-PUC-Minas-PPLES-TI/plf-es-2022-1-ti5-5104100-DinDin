@@ -45,7 +45,7 @@ walletCategoryRoutes.put(
     [
         jwtAuthorization.verifyToken,
         UserAccessWalletCategoryMiddleware.verifyWalletCategoryPermission,
-    ],    
+    ],
     updateCategoryController.update
 );
 walletCategoryRoutes.delete(
