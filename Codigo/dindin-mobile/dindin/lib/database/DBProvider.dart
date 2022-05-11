@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 class DBProvider {
   
   static final _databaseName = "DinDind.db";
-  static final _databaseVersion = 1;
+  static final _databaseVersion = 3;
 
   // torna esta classe singleton
   DBProvider._privateConstructor();
@@ -32,7 +32,9 @@ class DBProvider {
     await db.execute('''
           CREATE TABLE wallet (
             id INTEGER PRIMARY KEY,
-            description TEXT NOT NULL
+            description TEXT NOT NULL,
+            initial_value REAL NOT NULL,
+            offline INTEGER NULL
           )
           ''');
   }
@@ -62,6 +64,11 @@ class DBProvider {
     return Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $table'));
   }
 
+  Future<List<Map<String, dynamic>>> queryRaw(String table, String where) async {
+    Database db = await instance.database;
+    return await db.query(table, where: where);
+  }
+
   // Assumimos aqui que a coluna id no mapa está definida. Os outros
   // valores das colunas serão usados para atualizar a linha.
   Future<int> update(String table, Map<String, dynamic> row) async {
@@ -75,6 +82,11 @@ class DBProvider {
   Future<int> delete(String table, int id) async {
     Database db = await instance.database;
     return await db.delete(table, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteAll(String table) async {
+    Database db = await instance.database;
+    return await db.delete(table);
   }
 
 }

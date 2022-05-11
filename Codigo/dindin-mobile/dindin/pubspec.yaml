@@ -76,7 +76,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
    - assets/data/transactions.json
-   - assets/data/wallets.json
    - assets/data/goals.json
    - .env
   #   - images/a_dot_burr.jpeg

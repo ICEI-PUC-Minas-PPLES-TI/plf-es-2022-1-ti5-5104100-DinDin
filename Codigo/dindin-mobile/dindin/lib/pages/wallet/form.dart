@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dindin/models/wallet.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/database/DBProvider.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class WalletForm extends StatefulWidget {
   final Wallet? wallet;
@@ -35,6 +37,36 @@ class _WalletFormState extends State<WalletForm> {
       //Create
     }
     super.initState();
+  }
+
+  void createWallet() async {
+    var url = ApiURL.baseUrl + "/wallet";
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    final dbProvider = DBProvider.instance;
+
+    try {
+      var response = await http.post(uri, headers: {'Authorization': token}, body: {'description' : _descriptionController.text, 'initial_value': _startingController.text.replaceAll(new RegExp(r"\D"), "") });
+      var status = response.statusCode;
+      if (status == 201) {
+        var json = jsonDecode(response.body);
+        Navigator.of(context).pop();
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      Map<String, dynamic> row = {
+        'description' : _descriptionController.text,
+        'initial_value': _startingController.text.replaceAll(new RegExp(r"\D"), ""),
+        'offline': 1
+      };
+      final id = await dbProvider.insert('wallet',row);
+      print('linha inserida id: $id');
+      var prefs = StreamingSharedPreferences.instance;
+      (await prefs).setBool("update_wallet", true);
+
+      Navigator.of(context).pop();
+    }
   }
 
 
@@ -98,12 +130,7 @@ class _WalletFormState extends State<WalletForm> {
                           final dbProvider = DBProvider.instance;
                           if(widget.wallet == null) {
 
-                            Map<String, dynamic> row = {
-                              'description' : _descriptionController.text
-                            };
-                            final id = await dbProvider.insert('wallet',row);
-                            print('linha inserida id: $id');
-                            Navigator.of(context).pop();
+                            createWallet();
 
                           } else {
                             Map<String, dynamic> row = {
