@@ -21,7 +21,7 @@ walletCategoryRoutes.post(
     [
         jwtAuthorization.verifyToken,
         UserAccessWalletCategoryMiddleware.verifyWalletCategoryPermission,
-    ],    
+    ],
     createCategoryController.create
 );
 walletCategoryRoutes.get(
