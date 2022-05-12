@@ -68,7 +68,7 @@ describe("POST /goal test suite", () => {
 //         const response = await request.post("/api/category").send({
 //             user_id: 1,
 //             description: "teste",
-//             type: "IN",
+    //             type: "IN",
 //             color: "FF0000",
 //         });
 //         expect(response.statusCode).toEqual(422);
