@@ -22,7 +22,6 @@ class ListWalletTransactionUseCase {
 
         if (query.value) whre.value = query.value;
 
-        console.log(query.category_id);
         if (query.category_id) whre.category_id = query.category_id;
         if (query.category_id == "null") whre.category_id = { [Op.is]: null };
 
