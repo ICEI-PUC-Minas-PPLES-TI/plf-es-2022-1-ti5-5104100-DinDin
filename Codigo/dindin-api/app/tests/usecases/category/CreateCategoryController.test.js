@@ -91,7 +91,7 @@ describe("POST /goal test suite", () => {
 //             description: "teste",
 //             color: "FF0000",
 //         });
-//         expect(response.statusCode).toEqual(422);
+    //         expect(response.statusCode).toEqual(422);
 //     });
 
 //     it("should fail validation with big description", async () => {
