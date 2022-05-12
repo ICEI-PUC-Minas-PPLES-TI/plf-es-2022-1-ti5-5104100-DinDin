@@ -42,7 +42,7 @@ describe("POST /goal test suite", () => {
 //             type: "OUT",
 //             color: "000000",
 //         });
-//         expect(response.statusCode).toEqual(201);
+    //         expect(response.statusCode).toEqual(201);
 //         expect(response.body).toHaveProperty("id");
     //         const createdCategory = await Category.findByPk(
 //             parseInt(response.body.id)
