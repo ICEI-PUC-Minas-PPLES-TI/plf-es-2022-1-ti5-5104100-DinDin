@@ -44,7 +44,7 @@ describe("POST /goal test suite", () => {
 //         });
 //         expect(response.statusCode).toEqual(201);
 //         expect(response.body).toHaveProperty("id");
-//         const createdCategory = await Category.findByPk(
+    //         const createdCategory = await Category.findByPk(
 //             parseInt(response.body.id)
 //         );
 //         expect(createdCategory.dataValues.user_id).toEqual(2);
