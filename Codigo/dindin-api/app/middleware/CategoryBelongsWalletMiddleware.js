@@ -2,7 +2,9 @@ const AppError = require("../errors/AppError");
 const Category = require("../models/Category");
 
 const verifyCategoryBelongsWallet = async (request, response, next) => {
-    const category_id = request.body.category_id;
+    let category_id = request.body.category_id;
+    if (!category_id) category_id = request.query.category_id;
+    if (category_id == "null") category_id = undefined;
     if (!category_id) return next(); // * optional, if not sent, do not check
     const category = await Category.findOne({
         where: {
