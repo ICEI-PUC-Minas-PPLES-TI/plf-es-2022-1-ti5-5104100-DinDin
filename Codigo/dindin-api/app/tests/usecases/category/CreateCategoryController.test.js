@@ -40,7 +40,7 @@ describe("POST /goal test suite", () => {
 //             wallet_id: 2,
 //             description: "teste OUT",
 //             type: "OUT",
-//             color: "000000",
+    //             color: "000000",
     //         });
     //         expect(response.statusCode).toEqual(201);
     //         expect(response.body).toHaveProperty("id");
