@@ -6,7 +6,7 @@ const UpdateTransactionUseCase = require("./UpdateTransactionUseCase");
 class UpdateTransactionController {
     // * Route: /api/wallet/{id}/transaction/{tid}
     // * {id} == wallet_id of the transaction
-    // * {tid} == transaction id to update
+    // * {tid} == transaction uuid to update
     async update(request, response) {
         const today = new Date();
         today.setHours(0, 0, 0, 0);

@@ -18,6 +18,7 @@ const CreateTransactionController = require("../usecases/transaction/createTrans
 const UpdateTransactionController = require("../usecases/transaction/updateTransaction/UpdateTransactionController");
 const CreateTransactionRecurrenciesController = require("../usecases/transactionRecurrencies/createTransactionRecurrencies/CreateTransactionRecurrenciesController");
 const UpdateTransactionRecurrenciesController = require("../usecases/transactionRecurrencies/updateTransactionRecurrencies/UpdateTransactionRecurrenciesController");
+const FindTransactionController = require("../usecases/transaction/findTransaction/FindTransactionController");
 
 const createWalletController = new CreateWalletController();
 const listWalletController = new ListWalletController();
@@ -33,6 +34,7 @@ const createTransactionRecurrenciesController =
     new CreateTransactionRecurrenciesController();
 const updateTransactionRecurrenciesController =
     new UpdateTransactionRecurrenciesController();
+const findTransactionController = new FindTransactionController();
 
 walletRoutes.post(
     "/",
@@ -128,6 +130,15 @@ walletRoutes.put(
         CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],
     updateTransactionRecurrenciesController.update
+);
+
+walletRoutes.get(
+    "/:id/transaction/:tid",
+    [
+        JwtAuthorization.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+    ],
+    findTransactionController.find
 );
 
 module.exports = walletRoutes;
