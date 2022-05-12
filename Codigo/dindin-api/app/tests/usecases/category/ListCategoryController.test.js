@@ -1,17 +1,17 @@
-// require("dotenv").config();
+require("dotenv").config();
 
-// let { request, connectAndLogin } = require("../../helpers/AuthUtil");
-// const { close } = require("../../../database");
+let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+const { close } = require("../../../database");
 
-// beforeAll(async () => {
-//     await connectAndLogin();
-// });
+beforeAll(async () => {
+    await connectAndLogin();
+});
 
-// afterAll(async () => {
-//     await close();
-// });
+afterAll(async () => {
+    await close();
+});
 
-// describe("GET /category test suite", () => {
+describe("GET /category test suite", () => {
 //     it("should list the categories", async () => {
 //         const response = await request.get("/api/category/").send();
 
@@ -138,4 +138,4 @@
 //         expect(response.body).toHaveProperty("categories");
 //         expect(response.body.categories.length).toBeGreaterThanOrEqual(1);
 //     });
-// });
+});

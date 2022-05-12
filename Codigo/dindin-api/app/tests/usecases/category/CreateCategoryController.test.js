@@ -1,19 +1,19 @@
-// require("dotenv").config();
+require("dotenv").config();
 
-// let { request, connectAndLogin } = require("../../helpers/AuthUtil");
-// const { close } = require("../../../database");
+let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+const { close } = require("../../../database");
 
-// const Category = require("../../../models/Category");
+const Category = require("../../../models/Category");
 
-// beforeAll(async () => {
-//     await connectAndLogin();
-// });
+beforeAll(async () => {
+    await connectAndLogin();
+});
 
-// afterAll(async () => {
-//     await close();
-// });
+afterAll(async () => {
+    await close();
+});
 
-// describe("POST /goal test suite", () => {
+describe("POST /goal test suite", () => {
 //     it("should create a new category IN", async () => {
 //         const response = await request.post("/api/category").send({
 //             user_id: 1,
@@ -148,4 +148,4 @@
 //         });
 //         expect(response.statusCode).toEqual(404);
 //     });
-// });
+});

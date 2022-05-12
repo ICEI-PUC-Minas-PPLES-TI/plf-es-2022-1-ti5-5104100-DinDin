@@ -1,19 +1,19 @@
-// require("dotenv").config();
+require("dotenv").config();
 
-// let { request, connectAndLogin } = require("../../helpers/AuthUtil");
-// const { close } = require("../../../database");
+let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+const { close } = require("../../../database");
 
-// const Category = require("../../../models/Category");
+const Category = require("../../../models/Category");
 
-// beforeAll(async () => {
-//     await connectAndLogin();
-// });
+beforeAll(async () => {
+    await connectAndLogin();
+});
 
-// afterAll(async () => {
-//     await close();
-// });
+afterAll(async () => {
+    await close();
+});
 
-// describe("DELETE /category:id test suite", () => {
+describe("DELETE /category:id test suite", () => {
 //     it("should delete a category", async () => {
 //         const mockCategory = {
 //             description: "teste",
@@ -69,4 +69,4 @@
 
 //         expect(response.statusCode).toEqual(422);
 //     });
-// });
+});

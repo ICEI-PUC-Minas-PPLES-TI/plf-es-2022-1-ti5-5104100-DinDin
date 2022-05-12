@@ -1,19 +1,19 @@
-// require("dotenv").config();
+require("dotenv").config();
 
-// let { request, connectAndLogin } = require("../../helpers/AuthUtil");
-// const { close } = require("../../../database");
+let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+const { close } = require("../../../database");
 
-// const Category = require("../../../models/Category");
+const Category = require("../../../models/Category");
 
-// beforeAll(async () => {
-//     await connectAndLogin();
-// });
+beforeAll(async () => {
+    await connectAndLogin();
+});
 
-// afterAll(async () => {
-//     await close();
-// });
+afterAll(async () => {
+    await close();
+});
 
-// describe("GET /category/:id test suite", () => {
+describe("GET /category/:id test suite", () => {
 //     it("should find and return the category", async () => {
 //         const mockCategory = {
 //             user_id: 1,
@@ -64,4 +64,4 @@
 //         response = await request.get("/api/category/" + invalidId).send();
 //         expect(response.statusCode).toEqual(422);
 //     });
-// });
+});
