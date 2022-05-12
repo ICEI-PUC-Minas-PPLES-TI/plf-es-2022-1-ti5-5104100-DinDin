@@ -69,7 +69,7 @@ describe("POST /goal test suite", () => {
 //             user_id: 1,
 //             description: "teste",
     //             type: "IN",
-//             color: "FF0000",
+    //             color: "FF0000",
 //         });
 //         expect(response.statusCode).toEqual(422);
 //     });
