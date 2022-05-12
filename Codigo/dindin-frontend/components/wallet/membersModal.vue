@@ -37,7 +37,7 @@
                                         {{ member.name }}
                                     </td>
                                     <td class="text-right">
-                                        <v-tooltip top>
+                                        <v-tooltip v-if="wallet.owner_id == $store.getters['login/userId']" top>
                                             <template
                                                 #activator="{ on, attrs }"
                                             >
@@ -90,6 +90,7 @@ export default {
     props: {
         value: Boolean,
         walletId: String,
+        wallet: Object,
     },
     data() {
         return {

@@ -109,6 +109,7 @@ export default {
                             loginData: res.data.token,
                             router: this.$router,
                         });
+                        this.$store.dispatch("login/setUserId", res.data.userId);
                         this.$fire.auth.signInWithCustomToken(
                             res.data.firebaseToken
                         );

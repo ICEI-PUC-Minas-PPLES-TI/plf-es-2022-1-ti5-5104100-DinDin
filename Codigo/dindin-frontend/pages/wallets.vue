@@ -120,7 +120,7 @@
                                                             v-on="on"
                                                             @click="
                                                                 openMembersModal(
-                                                                    wallet.id
+                                                                    wallet
                                                                 )
                                                             "
                                                         >
@@ -156,7 +156,7 @@
                                                     </template>
                                                     <span>Edit</span>
                                                 </v-tooltip>
-                                                <v-tooltip top>
+                                                <v-tooltip v-if="wallet.owner_id == $store.getters['login/userId']" top>
                                                     <template
                                                         #activator="{
                                                             on,
@@ -217,6 +217,7 @@
         <membersModal
             v-model="showMembersModal"
             :wallet-id="walletToShowMembersId"
+            :wallet="walletToShowMembers"
         />
     </v-container>
 </template>
@@ -383,9 +384,10 @@ export default {
             this.modalEdit = true;
             this.showModal = true;
         },
-        openMembersModal(id) {
+        openMembersModal(wallet) {
             this.showMembersModal = true;
-            this.walletToShowMembersId = id;
+            this.walletToShowMembersId = wallet.id;
+            this.walletToShowMembers = wallet;
         },
     },
 };
