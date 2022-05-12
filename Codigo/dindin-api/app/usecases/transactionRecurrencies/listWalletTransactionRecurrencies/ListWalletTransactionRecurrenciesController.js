@@ -55,11 +55,15 @@ class ListWalletTransactionRecurrenciesController {
         }
         const wallet_id = request.params.id; // * wallet_id of the transaction
 
-        const listWalletUseCase =
+        const listWalletTransactionRecurrenciesUseCase =
             new ListWalletTransactionRecurrenciesUseCase();
-        const wallets = await listWalletUseCase.list(request.query, wallet_id);
+        const transactions =
+            await listWalletTransactionRecurrenciesUseCase.list(
+                request.query,
+                wallet_id
+            );
 
-        return response.status(200).json(wallets);
+        return response.status(200).json(transactions);
     }
 }
 

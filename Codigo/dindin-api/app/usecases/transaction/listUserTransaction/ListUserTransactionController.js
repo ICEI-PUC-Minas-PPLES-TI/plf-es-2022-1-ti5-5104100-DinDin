@@ -1,13 +1,13 @@
 const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
-const ListWalletTransactionUseCase = require("./ListWalletTransactionUseCase");
+const ListUserTransactionUseCase = require("./ListUserTransactionUseCase");
 
 const orderEnum = ["ASC", "DESC"];
 
-class ListWalletTransactionController {
-    // * Route: /api/wallet/{id}/transaction/
-    // * {id} == wallet_id of the transactions
+class ListUserTransactionController {
+    // * Route: /api/transaction
+    // * request.userId == user_id of the transactions
     async list(request, response) {
         const scheme = yup.object().shape({
             page: yup.number("'value' must be numeric!"),
@@ -46,16 +46,16 @@ class ListWalletTransactionController {
         } catch (error) {
             throw new AppError(error.name, 422, error.errors);
         }
-        const wallet_id = request.params.id; // * wallet_id of the transaction
+        const user_id = request.userId;
 
-        const listWalletTransactionUseCase = new ListWalletTransactionUseCase();
-        const transactions = await listWalletTransactionUseCase.list(
+        const listUserTransactionUseCase = new ListUserTransactionUseCase();
+        const transactions = await listUserTransactionUseCase.list(
             request.query,
-            wallet_id
+            user_id
         );
 
         return response.status(200).json(transactions);
     }
 }
 
-module.exports = ListWalletTransactionController;
+module.exports = ListUserTransactionController;

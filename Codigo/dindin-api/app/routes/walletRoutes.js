@@ -2,8 +2,8 @@ const { Router } = require("express");
 const walletRoutes = Router();
 
 const JwtAuthorization = require("../middleware/JwtAuthorizationMiddleware");
-const UserAccessWalletMiddleware = require("../middleware/UserAccessWalletMiddleware");
 
+const UserAccessWalletMiddleware = require("../middleware/UserAccessWalletMiddleware");
 const CategoryBelongsWalletMiddleware = require("../middleware/CategoryBelongsWalletMiddleware");
 
 const CreateWalletController = require("../usecases/wallet/createWallet/CreateWalletController");
