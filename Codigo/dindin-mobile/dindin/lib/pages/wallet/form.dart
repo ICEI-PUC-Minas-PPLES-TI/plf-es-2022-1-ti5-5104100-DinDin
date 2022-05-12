@@ -1,6 +1,6 @@
 
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
-import 'package:dindin/pages/wallet/list.dart';
+import 'dart:io';
 import 'dart:convert';
 import 'package:dindin/pages/wallet/view.dart';
 import 'package:flutter/material.dart';
@@ -27,16 +27,36 @@ class _WalletFormState extends State<WalletForm> {
 
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _startingController = TextEditingController();
+  bool showEditDeleteBtn = false;
 
   @override
   void initState() {
     if (widget.wallet != null) {
       // Edit
       _descriptionController.text = widget.wallet!.description!;
-    } else {
-      //Create
+      checkInternet();
     }
     super.initState();
+  }
+
+  void checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          showEditDeleteBtn = true;
+        });
+      }
+    } on SocketException catch (_) {
+      // Not Connected to Internet
+      final dbProvider = DBProvider.instance;
+      final wallet = await dbProvider.queryId('wallet', widget.wallet!.id.toString());
+      if(wallet[0]['offline'] == 1) {
+        setState(() {
+          showEditDeleteBtn = true;
+        });
+      }
+    }
   }
 
   void createWallet() async {
@@ -69,6 +89,58 @@ class _WalletFormState extends State<WalletForm> {
     }
   }
 
+  void updateWallet() async {
+    var url = ApiURL.baseUrl + "/wallet/" + widget.wallet!.id.toString();
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    final dbProvider = DBProvider.instance;
+
+    try {
+      var response = await http.put(uri, headers: {'Authorization': token}, body: {'description' : _descriptionController.text });
+      var status = response.statusCode;
+      if (status == 200) {
+        var json = jsonDecode(response.body);
+        Wallet newWallet = Wallet(id: widget.wallet!.id, shared: widget.wallet!.shared, deletedAt: widget.wallet!.deletedAt, description: _descriptionController.text, createdAt: widget.wallet!.createdAt, updatedAt: widget.wallet!.updatedAt, currentValue: widget.wallet!.currentValue);
+        Navigator.of(context).pop(newWallet);
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      if(showEditDeleteBtn) {
+        Map<String, dynamic> row = {
+          'id': widget.wallet?.id,
+          'description' : _descriptionController.text
+        };
+        await dbProvider.update('wallet',row);
+        Wallet newWallet = Wallet(id: widget.wallet!.id, shared: widget.wallet!.shared, deletedAt: widget.wallet!.deletedAt, description: _descriptionController.text, createdAt: widget.wallet!.createdAt, updatedAt: widget.wallet!.updatedAt, currentValue: widget.wallet!.currentValue);
+        Navigator.of(context).pop(newWallet);
+      }
+    }
+  }
+
+  void deleteWallet() async {
+    var url = ApiURL.baseUrl + "/wallet/" + widget.wallet!.id.toString();
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    final dbProvider = DBProvider.instance;
+
+    try {
+      var response = await http.delete(uri, headers: {'Authorization': token});
+      var status = response.statusCode;
+      if (status == 204) {
+        Navigator.of(context).pop();
+        Navigator.of(context).pop('CLOSE');
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      if(showEditDeleteBtn) {
+        dbProvider.delete('wallet', widget.wallet!.id.toInt());
+        Navigator.of(context).pop();
+        Navigator.of(context).pop('CLOSE');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,34 +198,22 @@ class _WalletFormState extends State<WalletForm> {
                         style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).primaryColor,
                         ),
-                        onPressed: () async {
-                          final dbProvider = DBProvider.instance;
+                        onPressed: showEditDeleteBtn ? () async {
                           if(widget.wallet == null) {
-
                             createWallet();
-
                           } else {
-                            Map<String, dynamic> row = {
-                              'id': widget.wallet?.id,
-                              'description' : _descriptionController.text
-                            };
-                            await dbProvider.update('wallet',row);
-
-                            Wallet newWallet = Wallet(id: widget.wallet!.id, shared: widget.wallet!.shared, deletedAt: widget.wallet!.deletedAt, description: _descriptionController.text, createdAt: widget.wallet!.createdAt, updatedAt: widget.wallet!.updatedAt, currentValue: widget.wallet!.currentValue);
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => WalletView(newWallet)),
-                            );
+                            updateWallet();
                           }
-
-
-                        },
+                        }: null,
                       ),
                     ),
                     const SizedBox(height: 20),
-                    if (widget.wallet != null)
+                    if(!showEditDeleteBtn)
+                    const Text(
+                      'You can\'t edit a cloud saved wallet while offline!',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    if (widget.wallet != null && showEditDeleteBtn)
                     Center(
                       child: TextButton(
                         onPressed: () => showDialog<String>(
@@ -179,10 +239,7 @@ class _WalletFormState extends State<WalletForm> {
                               ),
                               TextButton(
                               onPressed: () async {
-                                  final dbProvider = DBProvider.instance;
-                                  dbProvider.delete('wallet', widget.wallet!.id.toInt());
-                                  Navigator.of(context).pop('CLOSE');
-                                  Navigator.of(context).pop('CLOSE');
+                                  deleteWallet();
                                 },
                                 child: const Text('Yes',
                                     style: TextStyle(color: Colors.black)),

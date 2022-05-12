@@ -69,6 +69,11 @@ class DBProvider {
     return await db.query(table, where: where);
   }
 
+  Future<List<Map<String, dynamic>>> queryId(String table, String id) async {
+    Database db = await instance.database;
+    return await db.query(table, where: 'id = ?', whereArgs: [id], limit: 1);
+  }
+
   // Assumimos aqui que a coluna id no mapa está definida. Os outros
   // valores das colunas serão usados para atualizar a linha.
   Future<int> update(String table, Map<String, dynamic> row) async {

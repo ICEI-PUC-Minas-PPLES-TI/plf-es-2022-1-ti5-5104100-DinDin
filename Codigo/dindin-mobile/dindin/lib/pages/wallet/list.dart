@@ -35,13 +35,13 @@ Future<List<Wallet>> fetchWallets() async {
     var status = response.statusCode;
     if (status == 200) {
 
-      // Verify if has any wallet created while offline
+      // Check if has any wallet created while offline
       final prefs = await StreamingSharedPreferences.instance;
       final Preference<bool> sincroniza =  prefs.getBool("update_wallet", defaultValue: false);
       if(sincroniza.getValue()) {
         final lines = await dbProvider.queryRaw('wallet', 'offline = 1');
         lines.forEach((line) async {
-          var resPost = await http.post(uri, headers: {'Authorization': token}, body: {'description' : line['description'], 'initial_value': line['initial_value'].toString() });
+          http.post(uri, headers: {'Authorization': token}, body: {'description' : line['description'], 'initial_value': line['initial_value'].toString() });
         });
         (await prefs).setBool("update_wallet", false);
         return fetchWallets();
@@ -78,10 +78,8 @@ Future<List<Wallet>> fetchWalletsOffline() async{
   final dbProvider = DBProvider.instance;
 
   final lines = await dbProvider.queryAllRows('wallet');
-  print('Consulta todas as linhas:');
   lines.forEach((row) => {
     walletList.add(Wallet(id: row['id'], updatedAt: '', createdAt: '', deletedAt: '', currentValue: null, shared: 0, description: row['description'])),
-    print(row)
   });
   return walletList;
 }

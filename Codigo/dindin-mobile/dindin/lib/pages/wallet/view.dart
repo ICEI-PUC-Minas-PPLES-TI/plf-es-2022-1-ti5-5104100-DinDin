@@ -30,6 +30,7 @@ class HexColor extends Color {
 class _WalletViewState extends State<WalletView> {
   String inviteCode = "AAAA12333";
   String inviteExpireDate = "17/05/2022";
+  String description = ' ';
   final GlobalKey<FormState> _formKey = GlobalKey();
   showInviteDialog(BuildContext context) {
     return showDialog(
@@ -79,10 +80,18 @@ class _WalletViewState extends State<WalletView> {
   }
 
   @override
+  void initState() {
+    setState(() {
+      description = widget.wallet.description!;
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.wallet.description?? ''),
+        title: Text(description),
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
           IconButton(
@@ -134,8 +143,14 @@ class _WalletViewState extends State<WalletView> {
                                         builder: (context) =>
                                             WalletForm(widget.wallet)),
                                   ).then((value) => {
-                                    if(value == 'CLOSE')
-                                      Navigator.of(context).pop('RELOAD')
+                                    if(value is Wallet) {
+                                      setState(() {
+                                        description = value.description!;
+                                      }),
+                                    } else if (value is String){
+                                      if(value == 'CLOSE')
+                                        Navigator.of(context).pop()
+                                    }
                                   });
                                 },
                               ),
@@ -148,7 +163,7 @@ class _WalletViewState extends State<WalletView> {
                             width: double.infinity,
                             padding: const EdgeInsets.all(10.0),
                             child: Center(
-                                child: Text(widget.wallet.description?? '',
+                                child: Text(description,
                                     style: const TextStyle(
                                         fontSize: 50,
                                         fontWeight: FontWeight.bold))),
