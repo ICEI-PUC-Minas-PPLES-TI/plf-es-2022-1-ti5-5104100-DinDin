@@ -14,7 +14,7 @@ afterAll(async () => {
 });
 
 describe("POST /goal test suite", () => {
-//     it("should create a new category IN", async () => {
+    //     it("should create a new category IN", async () => {
     //         const response = await request.post("/api/category").send({
     //             user_id: 1,
     //             wallet_id: 1,
