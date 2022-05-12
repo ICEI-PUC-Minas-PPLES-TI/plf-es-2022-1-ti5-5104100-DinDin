@@ -41,7 +41,7 @@ describe("POST /goal test suite", () => {
 //             description: "teste OUT",
 //             type: "OUT",
 //             color: "000000",
-//         });
+    //         });
     //         expect(response.statusCode).toEqual(201);
 //         expect(response.body).toHaveProperty("id");
     //         const createdCategory = await Category.findByPk(
