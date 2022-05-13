@@ -11,7 +11,7 @@
             <v-col>
                 <v-card elevation="0" class="p-20">
                     <!-- Table top toolbar -->
-                    <v-row>
+                    <v-row class="pr-6">
                         <v-col cols="2" offset="10">
                             <v-btn
                                 block
@@ -54,7 +54,13 @@
                                             <td>
                                                 {{ goal.description }}
                                             </td>
-                                            <td>{{ goal.type }}</td>
+                                            <td>
+                                                {{
+                                                    goal.type == "A"
+                                                        ? "Achievement"
+                                                        : "Saving"
+                                                }}
+                                            </td>
                                             <td>R${{ goal.value }}</td>
                                             <td>
                                                 {{ dateFormat(goal.expire_at) }}
@@ -62,7 +68,7 @@
                                             <td class="table-goals-status">
                                                 {{ goal.status }}
                                             </td>
-                                            <td>
+                                            <td style="width: 200px">
                                                 <v-tooltip top>
                                                     <template
                                                         v-slot:activator="{
@@ -142,7 +148,7 @@
                     </v-row>
                     <!-- Pagination -->
                     <v-row>
-                        <v-col cols="12" md="8" offset-md="4">
+                        <v-col>
                             <div class="mw-100">
                                 <v-pagination
                                     v-model="currentPage"

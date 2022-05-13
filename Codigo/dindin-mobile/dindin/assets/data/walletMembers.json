@@ -1,0 +1,38 @@
+{
+    "count": 5,
+    "total": 6,
+    "pages": 2,
+    "walletMembers": [
+        {
+            "id": 1,
+            "name": "Fernanda",
+            "email": "fernanda@email.com",
+            "wallet_id":2
+
+        },
+        {
+            "id": 2,
+            "name": "Paula",
+            "email": "paula@email.com",
+            "wallet_id":2
+        },
+        {
+            "id": 3,
+            "name": "Cesár",
+            "email": "cesar@email.com",
+            "wallet_id":2
+        },
+        {
+            "id": 4,
+            "name": "Ana",
+            "email": "ana@email.com",
+            "wallet_id":2
+        },
+        {
+            "id": 5,
+            "name": "Neymar",
+            "email": "neymar@email.com",
+            "wallet_id":2 
+        }
+    ]
+}

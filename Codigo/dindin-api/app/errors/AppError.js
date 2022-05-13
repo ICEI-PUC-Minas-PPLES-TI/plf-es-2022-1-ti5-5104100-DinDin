@@ -1,7 +1,7 @@
 class AppError {
     constructor(message, statusCode = 500, error) {
         if (message == "ValidationError") {
-            this.message = "Erro na validação dos campos!";
+            this.message = "Field validation error!";
             this.statusCode = statusCode;
             this.error = error;
         } else {

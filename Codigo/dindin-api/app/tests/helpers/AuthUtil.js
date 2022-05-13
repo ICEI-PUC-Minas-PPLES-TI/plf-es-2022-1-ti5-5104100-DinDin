@@ -24,7 +24,11 @@ async function connectAndLogin() {
     });
     request.set("Authorization", response.body.token);
 
-    return userId;
+    return {
+        userId,
+        mockmail,
+        mockPassword,
+    };
 }
 
 module.exports = { request, connectAndLogin };

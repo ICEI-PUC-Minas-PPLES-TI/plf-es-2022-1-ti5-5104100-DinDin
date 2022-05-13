@@ -150,40 +150,85 @@ export default {
             },
         };
     },
-    // mounted: {
-    //   //pegar usuario na sessao e chamar o edit
-    //   //this.getUser(id)
-    // },
+    async fetch() {
+        await this.$axios
+            .get("user/")
+            .then((res) => {
+                this.user.id = res.data.id;
+                this.user.name = res.data.name;
+            })
+            .catch((err) => {
+                Swal.fire({
+                    title: "Erro",
+                    html: err.response.data.message,
+                    icon: "error",
+                });
+            });
+    },
+    mounted() {
+        //this.getUser();
+    },
     methods: {
         updateUserPassword() {
             //...
-            // if (this.$refs.formUserPassword.validate()) {
-            //     const user = {
-            //         id: this.user.id,
-            //         name: this.user.name,
-            //         password: this.user.newPassword,
-            //     };
-            //     this.$axios.put("/user/" + this.user.id).then(res);
-            // }
+            if (this.$refs.formUserPassword.validate()) {
+                const userUpdate = {
+                    name: this.user.name,
+                    password: this.user.newPassword,
+                    oldPassword: this.user.oldPassword,
+                };
+                this.$axios
+                    .put("/user/", userUpdate)
+                    .then(() => {
+                        //console.log(res.data);
+                        Swal.fire({
+                            title: "User password update successfully",
+                            icon: "success",
+                            showConfirmButton: false,
+                            toast: true,
+                            position: "top-end",
+                            timer: 3000,
+                            timerProgressBar: true,
+                        });
+                        this.$fetch();
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            title: "Erro",
+                            html: err.response.data.message,
+                            icon: "error",
+                        });
+                    });
+            }
         },
         updateUserName() {
             //...
-            // if (this.$refs.formUserName.validate()) {
-            // }
-        },
-        getUser(id) {
-            this.$axios
-                .get("user/" + id)
-                .then((res) => {
-                    this.user = res.user; //verificar
-                })
-                .catch((err) => {
-                    Swal.fire({
-                        title: "Erro",
-                        html: err.response.data.messag,
-                        icon: "error",
+            if (this.$refs.formUserName.validate()) {
+                const userUpdate = {
+                    name: this.user.name,
+                };
+                this.$axios
+                    .put("/user/", userUpdate)
+                    .then(() => {
+                        Swal.fire({
+                            title: "User name update successfully",
+                            icon: "success",
+                            showConfirmButton: false,
+                            toast: true,
+                            position: "top-end",
+                            timer: 3000,
+                            timerProgressBar: true,
+                        });
+                        this.$fetch();
+                    })
+                    .catch((err) => {
+                        Swal.fire({
+                            title: "Erro",
+                            html: err.response.data.message,
+                            icon: "error",
+                        });
                     });
-                });
+            }
         },
     },
 };
