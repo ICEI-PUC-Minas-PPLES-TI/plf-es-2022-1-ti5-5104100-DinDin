@@ -156,7 +156,15 @@
                                                     </template>
                                                     <span>Edit</span>
                                                 </v-tooltip>
-                                                <v-tooltip v-if="wallet.owner_id == $store.getters['login/userId']" top>
+                                                <v-tooltip
+                                                    v-if="
+                                                        wallet.owner_id ==
+                                                        $store.getters[
+                                                            'login/userId'
+                                                        ]
+                                                    "
+                                                    top
+                                                >
                                                     <template
                                                         #activator="{
                                                             on,

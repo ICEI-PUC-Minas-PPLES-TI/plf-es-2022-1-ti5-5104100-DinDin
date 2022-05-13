@@ -6,7 +6,7 @@ class DeleteWalletUseCase {
         const findWalletUseCase = new FindWalletUseCase();
         const wallet = await findWalletUseCase.find(id);
 
-        if(wallet.owner_id != userID)
+        if (wallet.owner_id != userID)
             throw new AppError("You're not this wallet owner!", 403);
 
         await wallet.destroy().catch((error) => {
