@@ -1,12 +1,13 @@
 const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
-const ListUserTransactionUseCase = require("./ListUserTransactionUseCase");
+const ListUserTransactionRecurrenciesUseCase = require("./ListUserTransactionRecurrenciesUseCase");
 
 const orderEnum = ["ASC", "DESC"];
+const intervalEnum = [null, "D", "W", "B", "M", "S", "A"];
 
-class ListUserTransactionController {
-    // * Route: /api/transaction
+class ListUserTransactionRecurrenciesController {
+    // * Route: /api/transactionrecurrencies
     // * request.userId == user_id of the transactions
     async list(request, response) {
         const scheme = yup.object().shape({
@@ -22,9 +23,16 @@ class ListUserTransactionController {
 
             description: yup.string("'description' must be string!").max(30),
             value: yup.number("'value' must be numeric!"),
+            day: yup.number("'day' must be numeric!").min(1).max(31),
+            interval: yup
+                .mixed()
+                .oneOf(
+                    intervalEnum,
+                    `'interval' must be one of these: ${intervalEnum}!`
+                ),
 
-            date_start: yup.date("'date_start' must be date!"),
-            date_end: yup.date("'date_end' must be date!"),
+            expired_at_start: yup.date("'expired_at_start' must be date!"),
+            expired_at_end: yup.date("'expired_at_end' must be date!"),
 
             created_at_start: yup.date("'created_at_start' must be date!"),
             created_at_end: yup.date("'created_at_end' must be date!"),
@@ -45,16 +53,18 @@ class ListUserTransactionController {
         } catch (error) {
             throw new AppError(error.name, 422, error.errors);
         }
-        const user_id = request.userId;
+        const userId = request.userId;
 
-        const listUserTransactionUseCase = new ListUserTransactionUseCase();
-        const transactions = await listUserTransactionUseCase.list(
-            request.query,
-            user_id
-        );
+        const listUserTransactionRecurrenciesUseCase =
+            new ListUserTransactionRecurrenciesUseCase();
+        const transactionsRecurrencies =
+            await listUserTransactionRecurrenciesUseCase.list(
+                request.query,
+                userId
+            );
 
-        return response.status(200).json(transactions);
+        return response.status(200).json(transactionsRecurrencies);
     }
 }
 
-module.exports = ListUserTransactionController;
+module.exports = ListUserTransactionRecurrenciesController;

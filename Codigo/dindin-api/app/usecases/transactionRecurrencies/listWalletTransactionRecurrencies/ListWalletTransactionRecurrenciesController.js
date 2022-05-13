@@ -57,13 +57,13 @@ class ListWalletTransactionRecurrenciesController {
 
         const listWalletTransactionRecurrenciesUseCase =
             new ListWalletTransactionRecurrenciesUseCase();
-        const transactions =
+        const transactionsRecurrencies =
             await listWalletTransactionRecurrenciesUseCase.list(
                 request.query,
                 wallet_id
             );
 
-        return response.status(200).json(transactions);
+        return response.status(200).json(transactionsRecurrencies);
     }
 }
 

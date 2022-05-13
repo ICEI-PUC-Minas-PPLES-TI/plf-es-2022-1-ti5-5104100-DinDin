@@ -84,18 +84,19 @@ class CreateTransactionRecurrenciesController {
 
         const createTransactionRecurrenciesUseCase =
             new CreateTransactionRecurrenciesUseCase();
-        const transaction = await createTransactionRecurrenciesUseCase.create(
-            wallet_id,
-            value,
-            description,
-            day,
-            interval,
-            category_id,
-            expired_at,
-            user_id
-        );
+        const transactionRecurrencies =
+            await createTransactionRecurrenciesUseCase.create(
+                wallet_id,
+                value,
+                description,
+                day,
+                interval,
+                category_id,
+                expired_at,
+                user_id
+            );
 
-        return response.status(201).json(transaction);
+        return response.status(201).json(transactionRecurrencies);
     }
 }
 

@@ -74,18 +74,19 @@ class UpdateTransactionController {
 
         const updateTransactionRecurrenciesUseCase =
             new UpdateTransactionRecurrenciesUseCase();
-        const transaction = await updateTransactionRecurrenciesUseCase.update(
-            transaction_id,
-            wallet_id,
-            value,
-            description,
-            day,
-            interval,
-            category_id,
-            expired_at
-        );
+        const transactionRecurrencies =
+            await updateTransactionRecurrenciesUseCase.update(
+                transaction_id,
+                wallet_id,
+                value,
+                description,
+                day,
+                interval,
+                category_id,
+                expired_at
+            );
 
-        return response.status(200).json(transaction);
+        return response.status(200).json(transactionRecurrencies);
     }
 }
 

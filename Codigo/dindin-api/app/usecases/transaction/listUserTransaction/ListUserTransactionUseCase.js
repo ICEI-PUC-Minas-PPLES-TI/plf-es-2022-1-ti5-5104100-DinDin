@@ -28,6 +28,8 @@ class ListWalletTransactionUseCase {
         if (query.transaction_recurrencies_id)
             whre.transaction_recurrencies_id =
                 query.transaction_recurrencies_id;
+        if (query.transaction_recurrencies_id == "null")
+            whre.transaction_recurrencies_id = { [Op.is]: null };
 
         if (query.date_start || query.date_end) {
             const startDate = query.date_start

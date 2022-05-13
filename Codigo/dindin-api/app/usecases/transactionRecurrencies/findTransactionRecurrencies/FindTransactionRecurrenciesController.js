@@ -28,11 +28,9 @@ class FindTransactionRecurrenciesController {
 
         const findTransactionRecurrenciesUseCase =
             new FindTransactionRecurrenciesUseCase();
-        const transaction = await findTransactionRecurrenciesUseCase.find(
-            tid,
-            id
-        );
-        return response.status(200).json(transaction);
+        const transactionRecurrencies =
+            await findTransactionRecurrenciesUseCase.find(tid, id);
+        return response.status(200).json(transactionRecurrencies);
     }
 }
 
