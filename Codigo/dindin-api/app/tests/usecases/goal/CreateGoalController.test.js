@@ -62,7 +62,7 @@ describe("POST /goal test suite", () => {
 
         const response = await request.post("/api/goal").send(mockGoal);
 
-        expect(response.statusCode).toEqual(422);
+        expect(response.statusCode).toEqual(404);
     });
 
     it("should not create a goal that has a past limit date", async () => {

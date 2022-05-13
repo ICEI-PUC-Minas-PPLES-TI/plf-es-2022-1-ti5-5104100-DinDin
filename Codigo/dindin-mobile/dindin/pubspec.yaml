@@ -35,6 +35,11 @@ dependencies:
   intl: ^0.17.0
   cupertino_icons: ^1.0.2
   intl_phone_field: ^3.1.0
+  firebase_messaging: ^11.2.15
+  firebase_core: ^1.15.0
+  flutter_local_notifications: ^9.4.1
+  currency_text_input_formatter: ^2.1.5
+  share_plus: ^4.0.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -66,6 +71,7 @@ flutter:
    - assets/data/transactions.json
    - assets/data/wallets.json
    - assets/data/goals.json
+   - assets/data/walletMembers.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
