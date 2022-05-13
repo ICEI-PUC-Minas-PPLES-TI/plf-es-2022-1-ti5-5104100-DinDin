@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 
 class CategoryList extends StatelessWidget {
   final List<Category> categories;
-  final Function deleteTx;
+  final Function reloadTx;
   final ColorHelper ch = ColorHelper();
 
-  CategoryList(this.categories, this.deleteTx, {Key? key}) : super(key: key);
+  CategoryList(this.categories, this.reloadTx, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +34,10 @@ class CategoryList extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                CategoryForm(categories[index])),
-                      )
+                                CategoryForm(int.parse(categories[index].walletId.toString()), categories[index])),
+                      ).then((value) => {
+                        reloadTx()
+                      })
                     },
                     child: Card(
                       elevation: 5,
@@ -49,16 +51,6 @@ class CategoryList extends StatelessWidget {
                           categories[index].description!,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
-                        trailing: CircleAvatar(
-                          radius: 20,
-                          backgroundColor:
-                              const Color.fromARGB(158, 255, 255, 255),
-                          child: IconButton(
-                            icon: const Icon(Icons.delete),
-                            color: Theme.of(context).errorColor,
-                            onPressed: () => deleteTx(categories[index].id),
-                          ),
                         ),
                       ),
                     ),

@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:dindin/helpers/color_helper.dart';
 import 'package:dindin/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:dindin/helpers/api_url.dart';
 
 class CategoryForm extends StatefulWidget {
   final Category? category;
+  final int walletId;
 
-  const CategoryForm(this.category, {Key? key}) : super(key: key);
+  const CategoryForm(this.walletId, this.category, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -20,6 +25,60 @@ class _CategoryFormState extends State<CategoryForm> {
   ColorHelper ch = ColorHelper();
 
   final TextEditingController _descriptionController = TextEditingController();
+
+  void createCategory() async {
+    var url = ApiURL.baseUrl + "/category";
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    try {
+      var response = await http.post(uri, headers: {'Authorization': token}, body: {'description' : _descriptionController.text, 'type': _catType, 'color': _catColor, 'wallet_id': widget.walletId.toString() });
+      var status = response.statusCode;
+      if (status == 201) {
+        var json = jsonDecode(response.body);
+        Navigator.of(context).pop();
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void editCategory() async {
+    var url = ApiURL.baseUrl + "/category/"+ widget.category!.id.toString();
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    try {
+      var response = await http.put(uri, headers: {'Authorization': token}, body: {'description' : _descriptionController.text, 'type': _catType, 'color': _catColor });
+      var status = response.statusCode;
+      if (status == 200) {
+        var json = jsonDecode(response.body);
+        Navigator.of(context).pop();
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void deleteCategory() async {
+    var url = ApiURL.baseUrl + "/category/"+ widget.category!.id.toString();
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    try {
+      var response = await http.delete(uri, headers: {'Authorization': token}, body: {'description' : _descriptionController.text, 'type': _catType, 'color': _catColor });
+      var status = response.statusCode;
+      if (status == 204) {
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   void initState() {
@@ -304,7 +363,58 @@ class _CategoryFormState extends State<CategoryForm> {
                         style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).primaryColor,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          if(widget.category == null) {
+                            createCategory();
+                          } else {
+                            editCategory();
+                          }
+
+                        },
+                      ),
+                    ),
+                    Center(
+                      child: TextButton(
+                        onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Padding(
+                              padding: EdgeInsets.only(left: 90.0),
+                              child: FaIcon(FontAwesomeIcons.trash,
+                                  size: 50.0, color: Colors.red),
+                            ),
+                            content: const Text(
+                              "All transactions linked to this category will be set as 'No Category'. Delete ?",
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('No',
+                                    style: TextStyle(color: Colors.black)),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).canvasColor,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  deleteCategory();
+                                },
+                                child: const Text('Yes',
+                                    style: TextStyle(color: Colors.black)),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).canvasColor,
+                                ),
+                              ),
+                            ],
+                            actionsAlignment: MainAxisAlignment.spaceAround,
+                            actionsPadding: const EdgeInsets.all(16.0),
+                          ),
+                        ),
+                        child: const Text(
+                          'Delete Category',
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
                     )
                     // End wallet list

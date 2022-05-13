@@ -1,60 +1,69 @@
+import 'dart:convert';
+
 import 'package:dindin/models/category.dart';
 import 'package:dindin/pages/category/form.dart';
 import 'package:dindin/widgets/category_list.dart';
+import 'package:dindin/helpers/api_url.dart';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class ListCategories extends StatefulWidget {
-  const ListCategories({Key? key}) : super(key: key);
+  int walletId;
+  ListCategories(this.walletId,{Key? key}) : super(key: key);
 
   @override
   _ListCategoriesState createState() => _ListCategoriesState();
 }
 
 class _ListCategoriesState extends State<ListCategories> {
-  final List<Category> _walletCategoriesOut = [
-    Category(
-        id: 1,
-        userId: 1,
-        walletId: 1,
-        description: 'Food',
-        type: 'OUT',
-        color: 'eb5a46'),
-    Category(
-        id: 2,
-        userId: 1,
-        walletId: 1,
-        description: 'Transport',
-        type: 'OUT',
-        color: 'ff9f1a'),
-    Category(
-        id: 3,
-        userId: 1,
-        walletId: 1,
-        description: 'Studies',
-        type: 'OUT',
-        color: '0079bf')
-  ];
+  List<Category> _walletCategoriesOut = [];
 
-  final List<Category> _walletCategoriesIn = [
-    Category(
-        id: 4,
-        userId: 1,
-        walletId: 1,
-        description: 'Salary',
-        type: 'IN',
-        color: '61bd4f'),
-    Category(
-        id: 5,
-        userId: 1,
-        walletId: 1,
-        description: 'Stocks',
-        type: 'IN',
-        color: 'c377e0')
-  ];
+  List<Category> _walletCategoriesIn = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getCategories();
+  }
+
+  void getCategories() async{
+    List<Category> l1 = await fetchCategories('IN');
+    List<Category> l2 = await fetchCategories('OUT');
+    setState(() {
+      _walletCategoriesIn = l1;
+      _walletCategoriesOut = l2;
+    });
+  }
+
+  Future<List<Category>> fetchCategories(String type) async {
+    List<Category> categoryList = <Category>[];
+    var url = ApiURL.baseUrl + "/category?wallet_id="+widget.walletId.toString() + '&type=' + type;
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+
+    try {
+      var response = await http.get(uri, headers: {'Authorization': token});
+      var status = response.statusCode;
+      if(status == 200) {
+        var json = jsonDecode(response.body);
+        json['categories'].forEach((row) => {
+          categoryList.add(Category(id: num.parse(row['id'].toString()), userId: num.parse(row['user_id'].toString()), walletId: num.parse(row['wallet_id'].toString()), description: row['description'], type: type, color: row['color'] )),
+          print(row)
+        });
+
+      }
+    } catch (e) {
+      print("deu nao");
+      print(e);
+    }
+    return categoryList;
+  }
+
+
 
   void _deleteCategoryIn(int id) {
-    _deleteCategory(_walletCategoriesIn, id);
+    //_deleteCategory(_walletCategoriesIn, id);
   }
 
   void _deleteCategoryOut(int id) {
@@ -122,16 +131,16 @@ class _ListCategoriesState extends State<ListCategories> {
                 )),
           ),
           body: TabBarView(children: [
-            CategoryList(_walletCategoriesIn, _deleteCategoryIn),
-            CategoryList(_walletCategoriesOut, _deleteCategoryOut)
+            CategoryList(_walletCategoriesIn, getCategories),
+            CategoryList(_walletCategoriesOut, getCategories)
           ]),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const CategoryForm(null)),
-              );
+                    builder: (context) => CategoryForm(widget.walletId,null)),
+              ).then((value) => getCategories());
             },
             child: const Icon(Icons.add),
             backgroundColor: Theme.of(context).primaryColor,
