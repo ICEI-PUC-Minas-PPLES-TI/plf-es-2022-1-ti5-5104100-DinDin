@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const goalRoutes = Router();
 
-const JwtAuthorization = require("../middleware/JwtAuthorizationMiddleware");
+const JwtAuthorization = require("../middleware/JwtMiddleware");
 
 const CreateGoalController = require("../usecases/goal/createGoal/CreateGoalController");
 const UpdateGoalController = require("../usecases/goal/updateGoal/UpdateGoalController");

@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const transactionRecurrenciesRoutes = Router();
 
-const JwtAuthorization = require("../middleware/JwtAuthorizationMiddleware");
+const JwtAuthorization = require("../middleware/JwtMiddleware");
 
 const CategoryBelongsWalletMiddleware = require("../middleware/CategoryBelongsWalletMiddleware");
 

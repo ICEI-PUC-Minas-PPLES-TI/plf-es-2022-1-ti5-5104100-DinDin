@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const categoryRoutes = Router();
 
-const JwtAuthorization = require("../middleware/JwtAuthorizationMiddleware");
+const JwtAuthorization = require("../middleware/JwtMiddleware");
 
 const CreateCategoryController = require("../usecases/category/createCategory/CreateCategoryController");
 const DeleteCategoryController = require("../usecases/category/deleteCategory/DeleteCategoryController");

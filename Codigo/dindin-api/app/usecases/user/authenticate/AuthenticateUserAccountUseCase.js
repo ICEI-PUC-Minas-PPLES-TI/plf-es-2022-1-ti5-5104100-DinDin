@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const JwtAuthorization = require("../../../middleware/JwtAuthorizationMiddleware");
+const JwtAuthorization = require("../../../middleware/JwtMiddleware");
 const { firebaseServices } = require("../../../services/firebaseServices");
 
 const AppError = require("../../../errors/AppError");

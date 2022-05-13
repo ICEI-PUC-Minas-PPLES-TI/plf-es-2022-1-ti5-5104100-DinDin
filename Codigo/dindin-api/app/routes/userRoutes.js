@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const userRoutes = Router();
 
-const JwtAuthorization = require("../middleware/JwtAuthorizationMiddleware");
+const JwtAuthorization = require("../middleware/JwtMiddleware");
 
 const FindUserAccountController = require("../usecases/user/findAccount/FindUserAccountController");
 const CreateUserAccountController = require("../usecases/user/createAccount/CreateUserAccountController");
