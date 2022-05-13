@@ -37,7 +37,19 @@
                                         {{ member.name }}
                                     </td>
                                     <td class="text-right">
-                                        <v-tooltip v-if="wallet.owner_id == $store.getters['login/userId'] && member.id != $store.getters['login/userId']" top>
+                                        <v-tooltip
+                                            v-if="
+                                                wallet.owner_id ==
+                                                    $store.getters[
+                                                        'login/userId'
+                                                    ] &&
+                                                member.id !=
+                                                    $store.getters[
+                                                        'login/userId'
+                                                    ]
+                                            "
+                                            top
+                                        >
                                             <template
                                                 #activator="{ on, attrs }"
                                             >
@@ -133,19 +145,21 @@ export default {
                 confirmButtonText: "Yes, I want to delete!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                      this.$axios.delete(`/wallet/${this.wallet.id}/users/${id}`).then(() => {
-                        Swal.fire({
-                          title: "Removed!",
-                          text: "The member has been removed.",
-                          icon: "info",
-                          showConfirmButton: false,
-                          toast: true,
-                          position: "top-end",
-                          timer: 3000,
-                          timerProgressBar: true,
+                    this.$axios
+                        .delete(`/wallet/${this.wallet.id}/users/${id}`)
+                        .then(() => {
+                            Swal.fire({
+                                title: "Removed!",
+                                text: "The member has been removed.",
+                                icon: "info",
+                                showConfirmButton: false,
+                                toast: true,
+                                position: "top-end",
+                                timer: 3000,
+                                timerProgressBar: true,
+                            });
+                            this.listMembers(this.walletId);
                         });
-                        this.listMembers(this.walletId);
-                      });
                 }
             });
         },
