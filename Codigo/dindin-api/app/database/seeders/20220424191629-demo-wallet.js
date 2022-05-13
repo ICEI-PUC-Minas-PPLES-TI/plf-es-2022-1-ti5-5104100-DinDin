@@ -31,8 +31,6 @@ module.exports = {
             `SELECT id from wallet ORDER BY created_at DESC LIMIT ${data.length};`
         );
 
-        
-
         let walletUsers = [];
         let walletInvite = [];
         for (let i = 0; i < data.length; i++) {

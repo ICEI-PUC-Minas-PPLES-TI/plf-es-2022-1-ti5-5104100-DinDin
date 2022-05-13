@@ -1,6 +1,6 @@
 export const state = () => ({
     token: null,
-    userId: null
+    userId: null,
 });
 
 export const mutations = {
