@@ -6,10 +6,10 @@ const Wallet = require("../../../models/Wallet");
 const UserHasWallet = require("../../../models/UserHasWallet");
 const User = require("../../../models/User");
 
-var userID = null;
+var login = null;
 
 beforeAll(async () => {
-    userID = await connectAndLogin();
+    login = await connectAndLogin();
     for (let i = 0; i < 30; i++) {
         let wallet = await Wallet.create({
             description: `Wallet ${i}`,
@@ -18,7 +18,7 @@ beforeAll(async () => {
         });
         await UserHasWallet.create({
             wallet_id: wallet.id,
-            user_id: userID,
+            user_id: login.userId,
         });
 
         for (let x = 0; x < 5; x++) {

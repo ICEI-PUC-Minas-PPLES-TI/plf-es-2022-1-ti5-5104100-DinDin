@@ -4,10 +4,10 @@ let { request, connectAndLogin } = require("../../helpers/AuthUtil");
 const { close } = require("../../../database");
 const Wallet = require("../../../models/Wallet");
 const UserHasWallet = require("../../../models/UserHasWallet");
-var userID = null;
+var login = null;
 
 beforeAll(async () => {
-    userID = await connectAndLogin();
+    login = await connectAndLogin();
     for (let i = 0; i < 30; i++) {
         let wallet = await Wallet.create({
             description: `wallet ${i}`,
@@ -16,7 +16,7 @@ beforeAll(async () => {
         });
         await UserHasWallet.create({
             wallet_id: wallet.id,
-            user_id: userID,
+            user_id: login.userId,
         });
     }
 });
