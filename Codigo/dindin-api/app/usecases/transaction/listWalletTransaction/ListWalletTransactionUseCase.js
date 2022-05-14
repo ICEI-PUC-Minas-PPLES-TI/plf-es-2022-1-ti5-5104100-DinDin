@@ -3,8 +3,12 @@ const { Op } = require("sequelize");
 
 const AppError = require("../../../errors/AppError");
 const { SortPaginate } = require("../../../helpers/SortPaginate");
+const Category = require("../../../models/Category");
 
 const Transaction = require("../../../models/Transaction");
+const TransactionRecurrencies = require("../../../models/TransactionRecurrencies");
+const User = require("../../../models/User");
+const Wallet = require("../../../models/Wallet");
 
 class ListWalletTransactionUseCase {
     async list(query, wallet_id) {
@@ -59,6 +63,24 @@ class ListWalletTransactionUseCase {
             offset: sortPaginateOptions.offset,
             order: sortPaginateOptions.order,
             paranoid: sortPaginateOptions.paranoid,
+            include: [
+                {
+                    model: User,
+                    as: "user",
+                },
+                {
+                    model: Wallet,
+                    as: "wallet",
+                },
+                {
+                    model: Category,
+                    as: "category",
+                },
+                {
+                    model: TransactionRecurrencies,
+                    as: "transaction_recurrencies",
+                },
+            ],
         }).catch((error) => {
             throw new AppError("Erro interno do servidor!", 500, error);
         });
