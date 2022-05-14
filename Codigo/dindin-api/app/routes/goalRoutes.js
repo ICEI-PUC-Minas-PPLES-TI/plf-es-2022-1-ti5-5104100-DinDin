@@ -8,7 +8,9 @@ const UpdateGoalController = require("../usecases/goal/updateGoal/UpdateGoalCont
 const ListGoalController = require("../usecases/goal/listGoal/ListGoalController");
 const FindGoalController = require("../usecases/goal/findGoal/FindGoalController");
 const DeleteGoalController = require("../usecases/goal/deleteGoal/DeleteGoalController");
-const { verifyGoalPermission } = require("../middleware/UserAccessGoalMiddleware");
+const {
+    verifyGoalPermission,
+} = require("../middleware/UserAccessGoalMiddleware");
 
 const goalCreateController = new CreateGoalController();
 const goalUpdateController = new UpdateGoalController();
@@ -23,27 +25,18 @@ goalRoutes.post(
 );
 goalRoutes.put(
     "/:id",
-    [
-        jwtAuthorization.verifyToken,
-        verifyGoalPermission
-    ],
+    [jwtAuthorization.verifyToken, verifyGoalPermission],
     goalUpdateController.update
 );
 goalRoutes.get("/", [jwtAuthorization.verifyToken], listGoalController.list);
 goalRoutes.get(
-    "/:id", 
-    [
-        jwtAuthorization.verifyToken,
-        verifyGoalPermission
-    ], 
+    "/:id",
+    [jwtAuthorization.verifyToken, verifyGoalPermission],
     findGoalController.find
 );
 goalRoutes.delete(
     "/:id",
-    [
-        jwtAuthorization.verifyToken,
-        verifyGoalPermission
-    ],
+    [jwtAuthorization.verifyToken, verifyGoalPermission],
     deleteGoalController.delete
 );
 

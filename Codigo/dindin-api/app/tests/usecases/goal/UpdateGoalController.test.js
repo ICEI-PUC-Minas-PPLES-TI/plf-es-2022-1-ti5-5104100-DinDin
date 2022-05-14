@@ -211,7 +211,9 @@ describe("PUT /goal test suite", () => {
             wallet_id: 125999002, //unexisting wallet
         };
 
-        const response = await request.put("/api/goal/" + goalIdToValidations).send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -225,7 +227,9 @@ describe("PUT /goal test suite", () => {
             wallet_id: walletToCreate,
         };
 
-        const response = await request.put("/api/goal/" + goalIdToValidations).send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -239,7 +243,9 @@ describe("PUT /goal test suite", () => {
             wallet_id: walletToCreate,
         };
 
-        const response = await request.put("/api/goal/" + goalIdToValidations).send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -253,7 +259,9 @@ describe("PUT /goal test suite", () => {
             wallet_id: walletToCreate,
         };
 
-        const response = await request.put("/api/goal/" + goalIdToValidations).send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -267,7 +275,9 @@ describe("PUT /goal test suite", () => {
             wallet_id: walletToCreate,
         };
 
-        const response = await request.put("/api/goal/" + goalIdToValidations).send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -281,7 +291,9 @@ describe("PUT /goal test suite", () => {
             wallet_id: walletToCreate,
         };
 
-        const response = await request.put("/api/goal/" + goalIdToValidations).send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -295,7 +307,9 @@ describe("PUT /goal test suite", () => {
             wallet_id: "notAId",
         };
 
-        const response = await request.put("/api/goal/" + goalIdToValidations).send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });

@@ -5,12 +5,10 @@ const { close } = require("../../../database");
 
 const Goal = require("../../../models/Goal");
 
-let loggedUserId;
 let walletToCreate;
 
 beforeAll(async () => {
-    const { userId } = await connectAndLogin();
-    loggedUserId = userId;
+    await connectAndLogin();
 
     const response = await request.post("/api/wallet").send({
         description: `wallet to goal delete test`,
@@ -46,9 +44,7 @@ describe("DELETE /goal/:id test suite", () => {
     });
 
     it("should not delete a goal that the user does not has access", async () => {
-        const response = await request
-            .delete("/api/goal/" + 1)
-            .send();
+        const response = await request.delete("/api/goal/" + 1).send();
 
         expect(response.statusCode).toEqual(403);
     });
@@ -64,5 +60,4 @@ describe("DELETE /goal/:id test suite", () => {
         const tryToFindGoal = await Goal.findByPk(nonExistentId);
         expect(tryToFindGoal).toBeNull();
     });
-
 });

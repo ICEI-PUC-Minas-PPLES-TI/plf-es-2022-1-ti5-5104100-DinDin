@@ -21,12 +21,14 @@ beforeAll(async () => {
 
     for (let i = 0; i < 5; i++) {
         const type = i % 2 === 0 ? "IN" : "OUT";
-        const response = await request.post(`/api/wallet/${walletToList}/category`).send({
-            wallet_id: 1,
-            description: `category to test ${i}`,
-            type,
-            color: "FF0000",
-        });
+        const response = await request
+            .post(`/api/wallet/${walletToList}/category`)
+            .send({
+                wallet_id: 1,
+                description: `category to test ${i}`,
+                type,
+                color: "FF0000",
+            });
         if (i === 2) {
             toDeleteCategory.category = response.body.id;
             toDeleteCategory.type = type;
@@ -34,7 +36,9 @@ beforeAll(async () => {
         mockCategoryIds.push(response.body.id);
     }
 
-    await request.delete(`/api/wallet/${walletToList}/category/${toDeleteCategory.category}`);
+    await request.delete(
+        `/api/wallet/${walletToList}/category/${toDeleteCategory.category}`
+    );
 });
 
 afterAll(async () => {
@@ -43,7 +47,9 @@ afterAll(async () => {
 
 describe("GET /category test suite", () => {
     it("should list the categories", async () => {
-        const response = await request.get(`/api/wallet/${walletToList}/category/`).send();
+        const response = await request
+            .get(`/api/wallet/${walletToList}/category/`)
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -54,7 +60,9 @@ describe("GET /category test suite", () => {
     });
 
     it("should list the categories with limit", async () => {
-        const response = await request.get(`/api/wallet/${walletToList}/category/`).send();
+        const response = await request
+            .get(`/api/wallet/${walletToList}/category/`)
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -107,7 +115,9 @@ describe("GET /category test suite", () => {
         expect(response.body.categories.length).toBeGreaterThanOrEqual(1);
     });
     it("should list the categories with type search", async () => {
-        const response = await request.get(`/api/wallet/${walletToList}/category?type=IN`).send();
+        const response = await request
+            .get(`/api/wallet/${walletToList}/category?type=IN`)
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -118,7 +128,9 @@ describe("GET /category test suite", () => {
     });
 
     it("should list the categories with wallet_id search", async () => {
-        const response = await request.get(`/api/wallet/${walletToList}/category?wallet_id=1`).send();
+        const response = await request
+            .get(`/api/wallet/${walletToList}/category?wallet_id=1`)
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");

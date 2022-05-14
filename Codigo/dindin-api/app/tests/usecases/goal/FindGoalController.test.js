@@ -54,9 +54,7 @@ describe("GET /goal/:id test suite", () => {
     });
 
     it("should not return a goal that the user does not have permission", async () => {
-        const response = await request
-            .get("/api/goal/" + 1)
-            .send();
+        const response = await request.get("/api/goal/" + 1).send();
 
         expect(response.statusCode).toEqual(403);
     });

@@ -6,7 +6,7 @@ const verifyGoalPermission = async (request, response, next) => {
     const goalId = request.params.id;
     const goal = await Goal.findByPk(goalId);
 
-    if (!goal){
+    if (!goal) {
         throw new AppError("This goal does not exists", 404);
     }
     const { wallet_id } = goal;
@@ -14,7 +14,7 @@ const verifyGoalPermission = async (request, response, next) => {
     const user = await UserHasWallet.findOne({
         where: {
             user_id: request.userId,
-            wallet_id
+            wallet_id,
         },
     }).catch((error) => {
         throw new AppError(error.message, 500, error);
