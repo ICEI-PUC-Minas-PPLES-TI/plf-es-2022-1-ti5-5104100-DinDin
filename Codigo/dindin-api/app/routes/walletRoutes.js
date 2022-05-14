@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const walletRoutes = Router();
 
-const JwtAuthorization = require("../middleware/JwtMiddleware");
+const AuthenticationMiddleware = require("../middleware/AuthenticationMiddleware");
 
 const UserAccessWalletMiddleware = require("../middleware/UserAccessWalletMiddleware");
 const CategoryBelongsWalletMiddleware = require("../middleware/CategoryBelongsWalletMiddleware");
@@ -51,18 +51,18 @@ const listWalletTransactionRecurrenciesController =
 
 walletRoutes.post(
     "/",
-    [JwtAuthorization.verifyToken],
+    [AuthenticationMiddleware.verifyToken],
     createWalletController.create
 );
 walletRoutes.get(
     "/",
-    [JwtAuthorization.verifyToken],
+    [AuthenticationMiddleware.verifyToken],
     listWalletController.list
 );
 walletRoutes.get(
     "/:id",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     findWalletController.find
@@ -70,7 +70,7 @@ walletRoutes.get(
 walletRoutes.get(
     "/:id/users",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     listWalletUsersController.listUsers
@@ -78,7 +78,7 @@ walletRoutes.get(
 walletRoutes.put(
     "/:id",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     updateWalletController.update
@@ -86,7 +86,7 @@ walletRoutes.put(
 walletRoutes.delete(
     "/:id",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     deleteWalletController.delete
@@ -94,21 +94,21 @@ walletRoutes.delete(
 walletRoutes.post(
     "/:id/invite",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     inviteWalletController.invite
 );
 walletRoutes.post(
     "/invite",
-    [JwtAuthorization.verifyToken],
+    [AuthenticationMiddleware.verifyToken],
     inviteWalletController.accept
 );
 
 walletRoutes.post(
     "/:id/transaction",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
         CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],
@@ -118,7 +118,7 @@ walletRoutes.post(
 walletRoutes.post(
     "/:id/transactionrecurrencies",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
         CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],
@@ -128,7 +128,7 @@ walletRoutes.post(
 walletRoutes.put(
     "/:id/transaction/:tid",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
         CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],
@@ -138,7 +138,7 @@ walletRoutes.put(
 walletRoutes.put(
     "/:id/transactionrecurrencies/:trid",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
         CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],
@@ -148,7 +148,7 @@ walletRoutes.put(
 walletRoutes.get(
     "/:id/transaction/:tid",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     findTransactionController.find
@@ -157,7 +157,7 @@ walletRoutes.get(
 walletRoutes.get(
     "/:id/transactionrecurrencies/:tid",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     findTransactionRecurrenciesController.find
@@ -166,7 +166,7 @@ walletRoutes.get(
 walletRoutes.delete(
     "/:id/transaction/:tid",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     deleteTransactionController.delete
@@ -175,7 +175,7 @@ walletRoutes.delete(
 walletRoutes.delete(
     "/:id/transactionrecurrencies/:tid",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     deleteTransactionRecurrenciesController.delete
@@ -184,7 +184,7 @@ walletRoutes.delete(
 walletRoutes.get(
     "/:id/transaction",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
         CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],
@@ -194,7 +194,7 @@ walletRoutes.get(
 walletRoutes.get(
     "/:id/transactionrecurrencies",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
         CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],

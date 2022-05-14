@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const transactionRecurrenciesRoutes = Router();
 
-const JwtAuthorization = require("../middleware/JwtMiddleware");
+const AuthenticationMiddleware = require("../middleware/AuthenticationMiddleware");
 
 const CategoryBelongsWalletMiddleware = require("../middleware/CategoryBelongsWalletMiddleware");
 
@@ -12,7 +12,7 @@ const listUserTransactionRecurrenciesController =
 transactionRecurrenciesRoutes.get(
     "/",
     [
-        JwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],
     listUserTransactionRecurrenciesController.list

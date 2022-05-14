@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const userRoutes = Router();
 
-const JwtAuthorization = require("../middleware/JwtMiddleware");
+const AuthenticationMiddleware = require("../middleware/AuthenticationMiddleware");
 
 const FindUserAccountController = require("../usecases/user/findAccount/FindUserAccountController");
 const CreateUserAccountController = require("../usecases/user/createAccount/CreateUserAccountController");
@@ -18,20 +18,20 @@ const authenticateUserAccountController =
 
 userRoutes.get(
     "/:id",
-    [JwtAuthorization.verifyToken],
+    [AuthenticationMiddleware.verifyToken],
     findUserAccountController.find
 );
 
 userRoutes.get(
     "/",
-    [JwtAuthorization.verifyToken],
+    [AuthenticationMiddleware.verifyToken],
     findMyUserAccountController.find
 );
 
 userRoutes.post("/", createUserAccountController.create);
 userRoutes.put(
     "/",
-    [JwtAuthorization.verifyToken],
+    [AuthenticationMiddleware.verifyToken],
     updateUserAccountController.update
 );
 userRoutes.post("/auth", authenticateUserAccountController.login);
