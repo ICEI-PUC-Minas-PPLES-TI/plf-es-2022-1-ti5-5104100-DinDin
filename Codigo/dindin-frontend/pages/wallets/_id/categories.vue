@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <!-- Page Title -->
-        <v-row>
+        <v-row class="pr-6">
             <v-col>
                 <h2 class="page-title">Categories</h2>
             </v-col>
@@ -11,7 +11,7 @@
             <v-col>
                 <v-card elevation="0" class="p-20">
                     <!-- Table top toolbar -->
-                    <v-row>
+                    <v-row class="mr-2">
                         <v-col cols="2" offset="10">
                             <v-btn
                                 block
@@ -135,7 +135,7 @@
                     </v-row>
                     <!-- Pagination -->
                     <v-row>
-                        <v-col cols="12" md="8" offset-md="4">
+                        <v-col>
                             <div class="mw-100">
                                 <v-pagination
                                     v-model="currentPage"

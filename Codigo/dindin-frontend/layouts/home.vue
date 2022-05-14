@@ -162,7 +162,7 @@ export default {
                 {
                     name: "Logout",
                     icon: "fa-solid fa-right-from-bracket",
-                    url: "/login",
+                    url: "/logout",
                 },
             ],
         };

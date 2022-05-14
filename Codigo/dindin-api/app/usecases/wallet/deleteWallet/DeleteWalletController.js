@@ -19,7 +19,7 @@ class DeleteWalletController {
         const { id } = request.params;
 
         const deleteWalletUseCase = new DeleteWalletUseCase();
-        await deleteWalletUseCase.delete(id);
+        await deleteWalletUseCase.delete(id, request.userId);
 
         return response.status(204).json();
     }

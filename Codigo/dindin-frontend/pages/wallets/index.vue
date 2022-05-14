@@ -11,7 +11,7 @@
             <v-col>
                 <v-card elevation="0" class="p-20">
                     <!-- Table top toolbar -->
-                    <v-row>
+                    <v-row class="pr-6">
                         <v-col cols="7" sm="0"> </v-col>
                         <v-col>
                             <v-btn
@@ -25,7 +25,7 @@
                         <v-col>
                             <v-btn
                                 block
-                                color="#5BD098"
+                                color="success"
                                 @click.stop="
                                     showModal = true;
                                     modalEdit = false;
@@ -75,7 +75,7 @@
                                             <td>
                                                 R${{ wallet.initial_value }}
                                             </td>
-                                            <td>
+                                            <td style="width: 200px">
                                                 <v-tooltip top>
                                                     <template
                                                         #activator="{
@@ -120,7 +120,7 @@
                                                             v-on="on"
                                                             @click="
                                                                 openMembersModal(
-                                                                    wallet.id
+                                                                    wallet
                                                                 )
                                                             "
                                                         >
@@ -156,7 +156,15 @@
                                                     </template>
                                                     <span>Edit</span>
                                                 </v-tooltip>
-                                                <v-tooltip top>
+                                                <v-tooltip
+                                                    v-if="
+                                                        wallet.owner_id ==
+                                                        $store.getters[
+                                                            'login/userId'
+                                                        ]
+                                                    "
+                                                    top
+                                                >
                                                     <template
                                                         #activator="{
                                                             on,
@@ -219,7 +227,7 @@
                     </v-row>
                     <!-- Pagination -->
                     <v-row>
-                        <v-col cols="12" md="8" offset-md="4">
+                        <v-col>
                             <div class="mw-100">
                                 <v-pagination
                                     v-model="currentPage"
@@ -242,6 +250,7 @@
         <membersModal
             v-model="showMembersModal"
             :wallet-id="walletToShowMembersId"
+            :wallet="walletToShowMembers"
         />
     </v-container>
 </template>
@@ -408,9 +417,10 @@ export default {
             this.modalEdit = true;
             this.showModal = true;
         },
-        openMembersModal(id) {
+        openMembersModal(wallet) {
             this.showMembersModal = true;
-            this.walletToShowMembersId = id;
+            this.walletToShowMembersId = wallet.id;
+            this.walletToShowMembers = wallet;
         },
         redirecToCategories(wallet) {
             this.$router.push(`wallets/${wallet.id}/categories`);
