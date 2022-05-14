@@ -198,17 +198,19 @@ class _WalletFormState extends State<WalletForm> {
                         style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).primaryColor,
                         ),
-                        onPressed: showEditDeleteBtn ? () async {
+                        onPressed: () async {
                           if(widget.wallet == null) {
                             createWallet();
                           } else {
-                            updateWallet();
+                            if(showEditDeleteBtn) {
+                              updateWallet();
+                            }
                           }
-                        }: null,
+                        },
                       ),
                     ),
                     const SizedBox(height: 20),
-                    if(!showEditDeleteBtn)
+                    if(widget.wallet != null && !showEditDeleteBtn)
                     const Text(
                       'You can\'t edit a cloud saved wallet while offline!',
                       style: TextStyle(color: Colors.red),
