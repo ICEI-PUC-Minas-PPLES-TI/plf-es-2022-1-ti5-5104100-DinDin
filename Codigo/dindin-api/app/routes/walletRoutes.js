@@ -80,7 +80,7 @@ walletRoutes.get(
 walletRoutes.delete(
     "/:id/users/:userId",
     [
-        jwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     deleteWalletUsersController.delete
