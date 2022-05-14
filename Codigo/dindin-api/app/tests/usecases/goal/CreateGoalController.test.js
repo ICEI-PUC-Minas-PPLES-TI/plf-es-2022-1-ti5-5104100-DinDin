@@ -5,8 +5,16 @@ const { close } = require("../../../database");
 
 const Goal = require("../../../models/Goal");
 
+let walletToCreate;
+
 beforeAll(async () => {
     await connectAndLogin();
+
+    const response = await request.post("/api/wallet").send({
+        description: `wallet to goal delete test`,
+        initial_value: 2000,
+    });
+    walletToCreate = response.body.wallet.id;
 });
 
 afterAll(async () => {
@@ -20,7 +28,7 @@ describe("POST /goal test suite", () => {
             value: 2000,
             type: "A",
             expire_at: "2030-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
         const response = await request.post("/api/goal").send(mockGoal);
@@ -39,7 +47,7 @@ describe("POST /goal test suite", () => {
             value: 2000,
             type: "B",
             expire_at: "2030-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
         const response = await request.post("/api/goal").send(mockGoal);
@@ -57,7 +65,7 @@ describe("POST /goal test suite", () => {
             value: 2000,
             type: "A",
             expire_at: "2030-10-10",
-            wallet_id: 125999002, //unexisting wallet
+            wallet_id: 225999002, //unexisting wallet
         };
 
         const response = await request.post("/api/goal").send(mockGoal);
@@ -71,7 +79,7 @@ describe("POST /goal test suite", () => {
             value: 2000,
             type: "A",
             expire_at: "2020-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
         const response = await request.post("/api/goal").send(mockGoal);
@@ -84,7 +92,7 @@ describe("POST /goal test suite", () => {
             value: 2000,
             type: "A",
             expire_at: "2030-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
         const response = await request.post("/api/goal").send(mockGoal);
@@ -97,7 +105,7 @@ describe("POST /goal test suite", () => {
             description: "my goal",
             type: "A",
             expire_at: "2030-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
         const response = await request.post("/api/goal").send(mockGoal);
@@ -110,7 +118,7 @@ describe("POST /goal test suite", () => {
             description: "my goal",
             value: 2000,
             expire_at: "2030-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
         const response = await request.post("/api/goal").send(mockGoal);
@@ -123,7 +131,7 @@ describe("POST /goal test suite", () => {
             description: "my goal",
             value: 2000,
             type: "A",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
         const response = await request.post("/api/goal").send(mockGoal);
@@ -150,7 +158,7 @@ describe("POST /goal test suite", () => {
             value: 2000,
             type: "A",
             expire_at: "2030-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
         const response = await request.post("/api/goal").send(mockGoal);
@@ -164,7 +172,7 @@ describe("POST /goal test suite", () => {
             value: "notANumber",
             type: "A",
             expire_at: "2030-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
         const response = await request.post("/api/goal").send(mockGoal);
@@ -178,7 +186,7 @@ describe("POST /goal test suite", () => {
             value: 2000,
             type: "X",
             expire_at: "2030-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
         const response = await request.post("/api/goal").send(mockGoal);
@@ -192,7 +200,7 @@ describe("POST /goal test suite", () => {
             value: 2000,
             type: "A",
             expire_at: "notADate",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
         const response = await request.post("/api/goal").send(mockGoal);

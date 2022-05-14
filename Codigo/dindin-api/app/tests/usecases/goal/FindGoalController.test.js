@@ -5,8 +5,16 @@ const { close } = require("../../../database");
 
 const Goal = require("../../../models/Goal");
 
+let walletToCreate;
+
 beforeAll(async () => {
     await connectAndLogin();
+
+    const response = await request.post("/api/wallet").send({
+        description: `wallet to goal delete test`,
+        initial_value: 2000,
+    });
+    walletToCreate = response.body.wallet.id;
 });
 
 afterAll(async () => {
@@ -21,7 +29,7 @@ describe("GET /goal/:id test suite", () => {
             value: 2000,
             type: "B",
             expire_at: "2031-12-12T00:00:00.000Z",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
         const createdGoal = await Goal.create(mockGoal);
 
@@ -45,21 +53,11 @@ describe("GET /goal/:id test suite", () => {
         expect(response.statusCode).toEqual(404);
     });
 
-    it("should fail when trying to find goal with invalid id", async () => {
-        let invalidId = 0;
-        let response = await request.get("/api/goal/" + invalidId).send();
-        expect(response.statusCode).toEqual(422);
+    it("should not return a goal that the user does not have permission", async () => {
+        const response = await request
+            .get("/api/goal/" + 1)
+            .send();
 
-        invalidId = -1;
-        response = await request.get("/api/goal/" + invalidId).send();
-        expect(response.statusCode).toEqual(422);
-
-        invalidId = null;
-        response = await request.get("/api/goal/" + invalidId).send();
-        expect(response.statusCode).toEqual(422);
-
-        invalidId = undefined;
-        response = await request.get("/api/goal/" + invalidId).send();
-        expect(response.statusCode).toEqual(422);
+        expect(response.statusCode).toEqual(403);
     });
 });
