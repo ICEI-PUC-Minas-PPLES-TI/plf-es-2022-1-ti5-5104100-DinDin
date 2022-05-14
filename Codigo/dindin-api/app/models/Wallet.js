@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
+const User = require("./User");
 
 class Wallet extends Model {
     static init(sequelize) {
@@ -32,6 +33,17 @@ class Wallet extends Model {
                     allowNull: false,
                     defaultValue: 0,
                     notEmpty: true,
+                },
+                owner_id: {
+                    type: DataTypes.INTEGER.UNSIGNED,
+                    autoIncrement: false,
+                    allowNull: false,
+                    required: true,
+                    notEmpty: true,
+                    references: {
+                        model: User,
+                        key: "id",
+                    },
                 },
                 created_at: {
                     type: DataTypes.DATE,

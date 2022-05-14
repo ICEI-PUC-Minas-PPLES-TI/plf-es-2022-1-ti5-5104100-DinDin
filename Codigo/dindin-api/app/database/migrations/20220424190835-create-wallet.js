@@ -27,6 +27,11 @@ module.exports = {
                     type: DataTypes.DOUBLE,
                     defaultValue: 0,
                 },
+                owner_id: {
+                    type: DataTypes.INTEGER.UNSIGNED,
+                    allowNull: false,
+                    references: { model: "user", key: "id" },
+                },
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: false,
