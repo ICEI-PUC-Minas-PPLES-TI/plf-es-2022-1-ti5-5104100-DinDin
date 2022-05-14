@@ -12,6 +12,7 @@ const DeleteWalletController = require("../usecases/wallet/deleteWallet/DeleteWa
 
 const InviteWalletController = require("../usecases/wallet/inviteWallet/InviteWalletController");
 const ListWalletUsersController = require("../usecases/wallet/listWalletUsers/ListWalletUsersController");
+const DeleteWalletUsersController = require("../usecases/wallet/deleteWalletUsers/DeleteWalletUsersController");
 
 const createWalletController = new CreateWalletController();
 const listWalletController = new ListWalletController();
@@ -20,6 +21,7 @@ const deleteWalletController = new DeleteWalletController();
 const findWalletController = new FindWalletController();
 const inviteWalletController = new InviteWalletController();
 const listWalletUsersController = new ListWalletUsersController();
+const deleteWalletUsersController = new DeleteWalletUsersController();
 
 walletRoutes.post(
     "/",
@@ -46,6 +48,14 @@ walletRoutes.get(
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     listWalletUsersController.listUsers
+);
+walletRoutes.delete(
+    "/:id/users/:userId",
+    [
+        jwtAuthorization.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+    ],
+    deleteWalletUsersController.delete
 );
 walletRoutes.put(
     "/:id",
