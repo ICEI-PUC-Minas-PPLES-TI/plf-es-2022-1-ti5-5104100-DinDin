@@ -10,28 +10,32 @@ var login = null;
 
 beforeAll(async () => {
     login = await connectAndLogin();
-    for (let i = 0; i < 30; i++) {
-        let wallet = await Wallet.create({
-            description: `Wallet ${i}`,
-            shared: false,
-            initial_value: i * 1000,
-        });
-        await UserHasWallet.create({
-            wallet_id: wallet.id,
-            user_id: login.userId,
-        });
-
-        for (let x = 0; x < 5; x++) {
-            let user = await User.create({
-                name: `${i}Joao${x}`,
-                email: `${i}Joao${x}@email.com`,
-                password: `${i}Joao${x}`,
+    try {
+        for (let i = 0; i < 30; i++) {
+            let wallet = await Wallet.create({
+                description: `WalletUser ${i}`,
+                shared: false,
+                initial_value: i * 1000,
             });
             await UserHasWallet.create({
                 wallet_id: wallet.id,
-                user_id: user.id,
+                user_id: login.userId,
             });
+
+            for (let x = 0; x < 5; x++) {
+                let user = await User.create({
+                    name: `${i}JoaoJose${x}`,
+                    email: `${i}JoaoJose${x}@email.com`,
+                    password: `${i}JoaoJosePassword${x}`,
+                });
+                await UserHasWallet.create({
+                    wallet_id: wallet.id,
+                    user_id: user.id,
+                });
+            }
         }
+    } catch (e) {
+        console.log(e);
     }
 });
 
@@ -56,6 +60,8 @@ describe("GET /wallet users test suite", () => {
 
     it("should list users from wallet 2", async () => {
         const responseList1 = await request.get("/api/wallet/").send();
+        console.log("oii");
+        console.log(responseList1.body);
         let walletId = responseList1.body.wallets[1].id;
 
         const response = await request
