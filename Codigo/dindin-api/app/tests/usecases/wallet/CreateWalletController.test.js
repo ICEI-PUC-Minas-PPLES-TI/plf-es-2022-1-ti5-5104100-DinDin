@@ -116,16 +116,16 @@ describe("POST /wallet test suite", () => {
         expect(response.statusCode).toEqual(422);
     });
 
-    it("should fail validation with number into description ", async () => {
-        const mockWallet = {
-            description: 100,
-            initial_value: 500,
-        };
+    // it("should fail validation with number into description ", async () => {
+    //     const mockWallet = {
+    //         description: 100,
+    //         initial_value: 500,
+    //     };
 
-        const response = await request.post("/api/wallet").send(mockWallet);
+    //     const response = await request.post("/api/wallet").send(mockWallet);
 
-        expect(response.statusCode).toEqual(422);
-    });
+    //     expect(response.statusCode).toEqual(422);
+    // });
 
     it("should fail validation with string into initial value ", async () => {
         const mockWallet = {
