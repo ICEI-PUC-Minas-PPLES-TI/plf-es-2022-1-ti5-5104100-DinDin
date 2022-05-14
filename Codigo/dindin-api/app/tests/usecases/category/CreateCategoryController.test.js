@@ -1,9 +1,9 @@
 require("dotenv").config();
-
-let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+let { connectAndLogin } = require("../../helpers/AuthUtil");
+//let { request, connectAndLogin } = require("../../helpers/AuthUtil");
 const { close } = require("../../../database");
 
-const Category = require("../../../models/Category");
+//const Category = require("../../../models/Category");
 
 let loggedUserId;
 

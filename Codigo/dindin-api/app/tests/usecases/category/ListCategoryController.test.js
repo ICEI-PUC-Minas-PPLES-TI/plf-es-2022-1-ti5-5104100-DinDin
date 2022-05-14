@@ -1,6 +1,8 @@
 require("dotenv").config();
 
-let { request, connectAndLogin } = require("../../helpers/AuthUtil");
+let { connectAndLogin } = require("../../helpers/AuthUtil");
+
+//let { request, connectAndLogin } = require("../../helpers/AuthUtil");
 const { close } = require("../../../database");
 
 const mockCategoryIds = [];

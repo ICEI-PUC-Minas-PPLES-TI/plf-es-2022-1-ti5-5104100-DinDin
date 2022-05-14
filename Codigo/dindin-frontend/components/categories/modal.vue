@@ -235,11 +235,11 @@ export default {
                     description: this.category.description,
                     type: this.category.type,
                     color: this.category.color.hex.replace("#", ""),
-                    wallet_id: 1,
+                    wallet_id: this.$route.params.id,
                     user_id: 1,
                 };
                 this.$axios
-                    .post("/category", category)
+                    .post(`wallet/${this.$route.params.id}/category`, category)
                     .then(() => {
                         Swal.fire({
                             title: "Category Created",
@@ -275,7 +275,10 @@ export default {
                     user_id: 1,
                 };
                 this.$axios
-                    .put("/category/" + this.category.id, category)
+                    .put(
+                        `wallet/${this.$route.params.id}/category/${this.category.id}`,
+                        category
+                    )
                     .then(() => {
                         Swal.fire({
                             title: "Category Edited",
@@ -302,7 +305,7 @@ export default {
         },
         getCategory(id) {
             this.$axios
-                .get("/category/" + id)
+                .get(`wallet/${this.$route.params.id}/category/${id}`)
                 .then((res) => {
                     let data = res.data;
                     //console.log(data);

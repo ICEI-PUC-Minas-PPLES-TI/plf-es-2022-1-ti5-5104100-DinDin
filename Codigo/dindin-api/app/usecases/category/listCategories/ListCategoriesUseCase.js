@@ -5,7 +5,7 @@ const { SortPaginate } = require("../../../helpers/SortPaginate");
 const User = require("../../../models/User");
 
 class ListCategoriesUseCase {
-    async list(query, userId) {
+    async list(query, userId, walletId) {
         let whre = {};
 
         if (query.description) {
@@ -23,10 +23,7 @@ class ListCategoriesUseCase {
         if (query.user_id) {
             whre.user_id = query.user_id;
         }
-
-        if (query.wallet_id) {
-            whre.wallet_id = query.wallet_id;
-        }
+        whre.wallet_id = walletId;
 
         const attributes = Object.keys(Category.getAttributes);
         const categoriesQuantity = await Category.count();
