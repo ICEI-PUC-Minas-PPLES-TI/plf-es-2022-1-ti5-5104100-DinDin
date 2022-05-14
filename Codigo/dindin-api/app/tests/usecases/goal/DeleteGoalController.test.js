@@ -5,8 +5,18 @@ const { close } = require("../../../database");
 
 const Goal = require("../../../models/Goal");
 
+let loggedUserId;
+let walletToCreate;
+
 beforeAll(async () => {
-    await connectAndLogin();
+    const { userId } = await connectAndLogin();
+    loggedUserId = userId;
+
+    const response = await request.post("/api/wallet").send({
+        description: `wallet to goal delete test`,
+        initial_value: 2000,
+    });
+    walletToCreate = response.body.wallet.id;
 });
 
 afterAll(async () => {
@@ -21,7 +31,7 @@ describe("DELETE /goal/:id test suite", () => {
             value: 2000,
             type: "A",
             expire_at: "2030-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
         const createdGoal = await Goal.create(mockGoal);
 
@@ -33,6 +43,14 @@ describe("DELETE /goal/:id test suite", () => {
 
         const tryToFindGoal = await Goal.findByPk(createdGoal.id);
         expect(tryToFindGoal).toBeNull();
+    });
+
+    it("should not delete a goal that the user does not has access", async () => {
+        const response = await request
+            .delete("/api/goal/" + 1)
+            .send();
+
+        expect(response.statusCode).toEqual(403);
     });
 
     it("should not find a non-existent goal when trying to delete it", async () => {
@@ -47,25 +65,4 @@ describe("DELETE /goal/:id test suite", () => {
         expect(tryToFindGoal).toBeNull();
     });
 
-    it("should fail when trying to delete goal with invalid id", async () => {
-        let invalidId = 0;
-        let response = await request.delete("/api/goal/" + invalidId).send();
-
-        expect(response.statusCode).toEqual(422);
-
-        invalidId = -1;
-        response = await request.delete("/api/goal/" + invalidId).send();
-
-        expect(response.statusCode).toEqual(422);
-
-        invalidId = null;
-        response = await request.delete("/api/goal/" + invalidId).send();
-
-        expect(response.statusCode).toEqual(422);
-
-        invalidId = undefined;
-        response = await request.delete("/api/goal/" + invalidId).send();
-
-        expect(response.statusCode).toEqual(422);
-    });
 });
