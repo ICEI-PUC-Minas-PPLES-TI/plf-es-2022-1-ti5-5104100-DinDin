@@ -49,7 +49,6 @@ class ListCategoriesUseCase {
                 {
                     model: User,
                     as: "user",
-                    required: true,
                     where: {
                         id: userId,
                     },
