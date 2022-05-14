@@ -18,7 +18,10 @@ class ListWalletTransactionUseCase {
 
         if (query.description) {
             whre.description = sequelize.where(
-                sequelize.fn("LOWER", sequelize.col("description")),
+                sequelize.fn(
+                    "LOWER",
+                    sequelize.col("`Transaction`.`description`")
+                ),
                 "LIKE",
                 "%" + query.description.toLowerCase() + "%"
             );

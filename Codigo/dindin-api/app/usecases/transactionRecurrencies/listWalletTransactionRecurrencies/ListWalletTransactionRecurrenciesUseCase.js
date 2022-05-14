@@ -5,6 +5,9 @@ const AppError = require("../../../errors/AppError");
 const { SortPaginate } = require("../../../helpers/SortPaginate");
 
 const TransactionRecurrencies = require("../../../models/TransactionRecurrencies");
+const User = require("../../../models/User");
+const Wallet = require("../../../models/Wallet");
+const Category = require("../../../models/Category");
 
 class ListWalletTransactionRecurrenciesUseCase {
     async list(query, wallet_id) {
@@ -14,7 +17,10 @@ class ListWalletTransactionRecurrenciesUseCase {
 
         if (query.description) {
             whre.description = sequelize.where(
-                sequelize.fn("LOWER", sequelize.col("description")),
+                sequelize.fn(
+                    "LOWER",
+                    sequelize.col("`TransactionRecurrencies`.`description`")
+                ),
                 "LIKE",
                 "%" + query.description.toLowerCase() + "%"
             );
@@ -58,6 +64,20 @@ class ListWalletTransactionRecurrenciesUseCase {
                 offset: sortPaginateOptions.offset,
                 order: sortPaginateOptions.order,
                 paranoid: sortPaginateOptions.paranoid,
+                include: [
+                    {
+                        model: User,
+                        as: "user",
+                    },
+                    {
+                        model: Wallet,
+                        as: "wallet",
+                    },
+                    {
+                        model: Category,
+                        as: "category",
+                    },
+                ],
             }).catch((error) => {
                 throw new AppError("Erro interno do servidor!", 500, error);
             });
