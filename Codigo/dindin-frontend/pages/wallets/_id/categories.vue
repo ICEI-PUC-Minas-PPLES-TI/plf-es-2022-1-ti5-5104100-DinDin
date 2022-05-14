@@ -174,7 +174,7 @@ export default {
     },
     async fetch() {
         this.loading = true;
-        let typeFilter = "";
+        let typeFilter = "&type=IN";
         if (this.type) {
             typeFilter = `&type=${this.type}`;
         }
