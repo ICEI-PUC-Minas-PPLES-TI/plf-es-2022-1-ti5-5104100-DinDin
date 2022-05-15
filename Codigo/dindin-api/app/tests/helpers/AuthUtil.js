@@ -27,6 +27,7 @@ async function connectAndLogin() {
     return {
         mockmail,
         mockPassword,
+        userId: response.body.userId,
     };
 }
 

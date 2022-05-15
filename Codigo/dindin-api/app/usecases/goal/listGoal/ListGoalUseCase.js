@@ -4,14 +4,16 @@ const { Op } = require("sequelize");
 const AppError = require("../../../errors/AppError");
 const Goal = require("../../../models/Goal");
 const { SortPaginate } = require("../../../helpers/SortPaginate");
+const Wallet = require("../../../models/Wallet");
+const UserHasWallet = require("../../../models/UserHasWallet");
 
 class ListGoalUseCase {
-    async list(query) {
+    async list(query, userId) {
         let whre = {};
 
         if (query.description) {
             whre.description = sequelize.where(
-                sequelize.fn("LOWER", sequelize.col("description")),
+                sequelize.fn("LOWER", sequelize.col("Goal.description")),
                 "LIKE",
                 "%" + query.description.toLowerCase() + "%"
             );
@@ -58,7 +60,29 @@ class ListGoalUseCase {
             offset: sortPaginateOptions.offset,
             order: sortPaginateOptions.order,
             paranoid: sortPaginateOptions.paranoid,
-            // ! include: [wallet]
+            include: [
+                {
+                    model: Wallet,
+                    as: "wallet",
+                    attributes: {
+                        include: ["id"],
+                    },
+                    required: true,
+                    include: [
+                        {
+                            model: UserHasWallet,
+                            as: "users",
+                            required: true,
+                            where: {
+                                user_id: userId,
+                            },
+                            attributes: {
+                                include: ["user_id"],
+                            },
+                        },
+                    ],
+                },
+            ],
         }).catch((error) => {
             throw new AppError("Erro interno do servidor!", 500, error);
         });
