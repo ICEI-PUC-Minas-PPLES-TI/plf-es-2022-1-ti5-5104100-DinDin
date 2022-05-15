@@ -1,4 +1,3 @@
-import 'package:dindin/pages/wallet/create.dart';
 import 'package:dindin/models/wallet_member.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
