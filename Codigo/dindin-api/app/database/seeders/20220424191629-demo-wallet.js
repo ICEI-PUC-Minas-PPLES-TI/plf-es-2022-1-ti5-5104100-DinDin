@@ -2,11 +2,16 @@
 
 module.exports = {
     async up(queryInterface) {
+        const users = await queryInterface.sequelize.query(
+            `SELECT id from user ORDER BY created_at DESC LIMIT 1;`
+        );
+
         const data = [
             {
                 description: "Personal",
                 shared: false,
                 initial_value: 500.45,
+                owner_id: users[0][0].id,
                 created_at: "2022-03-24 11:30:00",
                 updated_at: "2023-03-26 11:30:00",
             },
@@ -14,6 +19,7 @@ module.exports = {
                 description: "Family Travels",
                 shared: true,
                 initial_value: 200.45,
+                owner_id: users[0][0].id,
                 created_at: "2022-03-23 11:30:00",
                 updated_at: "2023-04-05 11:30:00",
             },
@@ -23,10 +29,6 @@ module.exports = {
 
         const wallets = await queryInterface.sequelize.query(
             `SELECT id from wallet ORDER BY created_at DESC LIMIT ${data.length};`
-        );
-
-        const users = await queryInterface.sequelize.query(
-            `SELECT id from user ORDER BY created_at DESC LIMIT 1;`
         );
 
         let walletUsers = [];
