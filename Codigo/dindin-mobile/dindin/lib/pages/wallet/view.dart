@@ -2,6 +2,7 @@ import 'package:dindin/pages/wallet/form.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:dindin/pages/wallet/members.dart';
 
 import '../../models/wallet.dart';
 import '../category/list.dart';
@@ -31,6 +32,8 @@ class _WalletViewState extends State<WalletView> {
   String inviteCode = "AAAA12333";
   String inviteExpireDate = "17/05/2022";
   String description = ' ';
+  bool walletIsShared = true;
+  
   final GlobalKey<FormState> _formKey = GlobalKey();
   showInviteDialog(BuildContext context) {
     return showDialog(
@@ -228,6 +231,37 @@ class _WalletViewState extends State<WalletView> {
                           title: Text('Share Wallet'),
                           subtitle: Text('zejoao@protonmail.com')),
                     ),
+                  ),
+                  if(!walletIsShared) const SizedBox(
+                    height: 10,
+                  ),
+                  if(walletIsShared) const SizedBox(
+                    height: 10,
+                  ),
+                  if(walletIsShared) GestureDetector(
+                    onTap: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MembersList()),
+                      )
+                    },
+                    child: const Card(
+                      child: ListTile(
+                          leading: Padding(
+                            padding: EdgeInsets.only(top: 4.0, left: 4.0),
+                            child: FaIcon(
+                              FontAwesomeIcons.users,
+                              size: 30.0,
+                              color: Colors.black,
+                            ),
+                          ),
+                          title: Text('Wallet Users'),
+                          subtitle: Text('Ana, pedro, neymar...')),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                 ],
               ),

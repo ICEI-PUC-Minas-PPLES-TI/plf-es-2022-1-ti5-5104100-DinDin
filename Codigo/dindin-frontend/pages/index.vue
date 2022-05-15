@@ -1,12 +1,16 @@
 <template>
-    <div>
-        <Tutorial />
-        <v-text-field label="Main input" hide-details="auto" />
-    </div>
+    <login />
 </template>
 
 <script>
+import login from "./login.vue";
 export default {
+    components: { login },
     name: "IndexPage",
+    asyncData({ store, redirect }) {
+        if (store.getters["login/token"]) {
+            redirect("/dashboard");
+        }
+    },
 };
 </script>
