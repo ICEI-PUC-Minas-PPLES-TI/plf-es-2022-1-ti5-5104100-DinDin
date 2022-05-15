@@ -7,6 +7,7 @@ class CreateWalletUseCase {
         const wallet = await Wallet.create({
             description,
             shared: false,
+            owner_id: userID,
             initial_value,
         }).catch((error) => {
             throw new AppError(error.message, 500, error);
