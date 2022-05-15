@@ -102,7 +102,7 @@ class _WalletViewState extends State<WalletView> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ListCategories()),
+                MaterialPageRoute(builder: (context) => ListCategories(widget.wallet.id.toInt())),
               );
             },
           ),
