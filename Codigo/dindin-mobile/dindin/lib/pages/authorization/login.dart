@@ -7,7 +7,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
@@ -93,6 +92,7 @@ class _LoginState extends State<Login> {
                                     } else {
                                       null;
                                     }
+                                    return null;
                                   },
                                 ),
                                 const SizedBox(height: 20),
@@ -114,6 +114,7 @@ class _LoginState extends State<Login> {
                                     } else {
                                       null;
                                     }
+                                    return null;
                                   },
                                 ),
                                 const SizedBox(height: 20),
@@ -123,7 +124,7 @@ class _LoginState extends State<Login> {
                                   child: ElevatedButton(
                                     child: const Text("Login"),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Color.fromARGB(255, 84, 179, 88),
+                                      primary: const Color.fromARGB(255, 84, 179, 88),
                                     ),
                                     onPressed: () {
                                       Navigator.pushReplacement(
