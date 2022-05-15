@@ -1,11 +1,16 @@
+import 'package:dindin/pages/authorization/register.dart';
 import 'package:dindin/pages/dashboard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/gestures.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutterfire_ui/auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -134,18 +139,18 @@ class _LoginState extends State<Login> {
                                             content: Text('User not Found'));
                                         userAuth(email, password)
                                             .then((res) => {
-                                              print(res),
+                                                  print(res),
                                                   if (res == true)
                                                     {
                                                       _scaffoldKey.currentState!
                                                           .showSnackBar(
                                                               snackBarTrue),
-                                                      Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                const Dashboard()),
-                                                      )
+                                                      // Navigator.pushReplacement(
+                                                      //   context,
+                                                      //   MaterialPageRoute(
+                                                      //       builder: (context) =>
+                                                      //           const Dashboard()),
+                                                      // )
                                                     }
                                                   else
                                                     {
@@ -163,6 +168,12 @@ class _LoginState extends State<Login> {
                                       }
                                     },
                                   ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: GoogleSignInButton(
+                                      clientId:
+                                          "125881301157-qrh3qr5r9r1h6jk1m3hfevts43s8n620.apps.googleusercontent.com"),
                                 ),
                               ],
                             )),
@@ -192,7 +203,11 @@ class _LoginState extends State<Login> {
                               style: TextStyle(color: Colors.green[800]),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.pushNamed(context, "/register");
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Register()),
+                                  );
                                 },
                             ),
                           ),
@@ -216,19 +231,27 @@ class _LoginState extends State<Login> {
 }
 
 Future<bool> userAuth(String email, String password) async {
-  var url = "http://localhost:3001/api/user/auth";
+  var url = dotenv.get('API_BASE_URL', fallback: 'http://localhost:3001/api') +
+      "/user/auth";
   final Uri uri = Uri.parse(url);
 
   // Firebase Cloud Messaging
-  var messaging = FirebaseMessaging.instance;
   var response =
-  await http.post(uri, body: {'email': email, 'password': password});
+      await http.post(uri, body: {'email': email, 'password': password});
+  var prefs = StreamingSharedPreferences.instance;
   var status = response.statusCode;
   if (status == 200) {
-    final userId = jsonDecode(response.body)['userId'];
-    print(userId);
-    await messaging.subscribeToTopic('U_' + userId);
+    var json = jsonDecode(response.body);
+    String userId = json["userId"];
+    (await prefs).setString("token", json["token"]);
+    FirebaseAuth.instance.signInWithCustomToken(json["firebaseToken"]);
+    try {
+      FirebaseMessaging.instance.subscribeToTopic('U_' + userId);
+    } catch (e) {
+      print(
+          "Não foi possível fazer a inscrição para receber mensagens no tópico");
+    }
     return true;
   }
-  return false;;
+  return false;
 }

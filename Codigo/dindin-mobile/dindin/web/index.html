@@ -29,10 +29,30 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
+  <!--Firebase-->
+
   <title>dindin</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+  <!-- Firebase Configuration -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC38_lJL-jncuQgjmr6P1wclR_WZ2vOkRU",
+      authDomain: "dindinfinance.firebaseapp.com",
+      projectId: "dindinfinance",
+      storageBucket: "dindinfinance.appspot.com",
+      messagingSenderId: "125881301157",
+      appId: "1:125881301157:web:b29d2fde8dbfbe54dcf54c",
+      measurementId: "G-S6JFL3JQYG"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
