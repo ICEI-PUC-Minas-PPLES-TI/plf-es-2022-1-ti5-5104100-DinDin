@@ -39,7 +39,7 @@ dependencies:
   firebase_core: ^1.15.0
   flutter_local_notifications: ^9.4.1
   firebase_auth: ^3.3.16
-  flutterfire_ui: ^0.4.0+4
+  flutterfire_ui: 0.4.0+4
   google_sign_in: '^5.2.1'
   streaming_shared_preferences: ^2.0.0
   flutter_dotenv: ^5.0.2

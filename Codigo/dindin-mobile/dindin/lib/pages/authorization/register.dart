@@ -100,6 +100,7 @@ class _LoginState extends State<Register> {
                                         } else {
                                           null;
                                         }
+                                        return null;
                                       },
                                     ),
                                   ),
@@ -124,6 +125,7 @@ class _LoginState extends State<Register> {
                                         } else {
                                           null;
                                         }
+                                        return null;
                                       },
                                     ),
                                   ),
@@ -148,6 +150,7 @@ class _LoginState extends State<Register> {
                                         } else {
                                           null;
                                         }
+                                        return null;
                                       },
                                     ),
                                   ),
