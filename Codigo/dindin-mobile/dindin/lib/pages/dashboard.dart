@@ -3,10 +3,12 @@ import 'package:dindin/pages/profile/edit.dart';
 import 'package:dindin/pages/transactions/create.dart';
 import 'package:dindin/pages/transactions/list.dart';
 import 'package:dindin/pages/wallet/list.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -15,7 +17,33 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: const Text('Dashboard'),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text('Dashboard'),
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.transparent,
+                  child: IconButton(
+                    alignment: Alignment.topRight,
+                    icon: const Center(
+                      child: FaIcon(
+                        FontAwesomeIcons.rightFromBracket,
+                        size: 25.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    color: Colors.white,
+                    onPressed: () async {
+                      FirebaseAuth.instance.signOut();
+                      (await StreamingSharedPreferences.instance)
+                          .remove("token");
+                    },
+                  ),
+                ),
+              ],
+            ),
             backgroundColor: Theme.of(context).primaryColor,
             automaticallyImplyLeading: false),
         body: ListView(
