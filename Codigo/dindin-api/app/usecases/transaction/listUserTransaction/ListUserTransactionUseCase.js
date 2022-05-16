@@ -10,7 +10,7 @@ const TransactionRecurrencies = require("../../../models/TransactionRecurrencies
 const User = require("../../../models/User");
 const Wallet = require("../../../models/Wallet");
 
-class ListWalletTransactionUseCase {
+class ListUserTransactionUseCase {
     async list(query, user_id) {
         let whre = {};
 
@@ -99,4 +99,4 @@ class ListWalletTransactionUseCase {
     }
 }
 
-module.exports = ListWalletTransactionUseCase;
+module.exports = ListUserTransactionUseCase;
