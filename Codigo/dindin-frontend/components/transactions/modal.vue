@@ -131,7 +131,12 @@
                                 label="Category"
                             ></v-autocomplete>
                         </v-row>
-                        <v-row>
+                        <v-row
+                            v-if="
+                                transactionToEdit == null &&
+                                transaction.recurrent == false
+                            "
+                        >
                             <v-checkbox
                                 label="Recurrent"
                                 v-model="transaction.recurrent"
@@ -150,6 +155,35 @@
                                     <v-btn value="M"> Monthly </v-btn>
                                 </v-btn-toggle>
                             </v-col>
+                        </v-row>
+
+                        <v-row
+                            v-show="
+                                transaction.recurrent &&
+                                transaction.interval == 'M'
+                            "
+                            class="pb-2"
+                        >
+                            <v-text-field
+                                label="Day"
+                                :rules="[
+                                    (value) =>
+                                        value <= 31 ||
+                                        `Day canno't be more than 31`,
+                                ]"
+                                v-model="transaction.day"
+                                prepend-inner-icon="mdi-calendar-today"
+                                outlined
+                                type="number"
+                                hide-details="auto"
+                                hint="If you don't
+                            fill this filed the day its gonna be the equal of
+                            End Date day"
+                                :clearable="true"
+                                placeholder="1"
+                                min="1"
+                                max="31"
+                            />
                         </v-row>
 
                         <v-row class="pb-2" v-show="transaction.recurrent">
@@ -262,7 +296,6 @@ export default {
                 this.title = "Edit transaction";
                 let tForm = this.transaction;
 
-                //console.log(val.date);
                 tForm.id = val.id;
                 tForm.value = val.value;
                 tForm.description = val.description;
@@ -280,6 +313,7 @@ export default {
                 //     category_id: "",
                 //     recurrent: false,
             } else {
+                this.title = "New Transaction";
                 this.cleanForm();
                 //this.setCurrentDate();
             }
@@ -335,11 +369,7 @@ export default {
             await this.$axios
                 .$get(`/wallet/${walletId}/category${filter}`)
                 .then((res) => {
-                    //this.pages = res.pages;
                     this.categories = res.categories;
-                })
-                .finally(() => {
-                    //this.loading = false;
                 });
         },
 
@@ -354,15 +384,9 @@ export default {
             if (search) {
                 filter = `?description=${search}`;
             }
-            await this.$axios
-                .$get(`/wallet${filter}`)
-                .then((res) => {
-                    //this.pages = res.pages;
-                    this.wallets = res.wallets;
-                })
-                .finally(() => {
-                    //this.loading = false;
-                });
+            await this.$axios.$get(`/wallet${filter}`).then((res) => {
+                this.wallets = res.wallets;
+            });
         },
         saveTransaction() {
             this.errors = [];

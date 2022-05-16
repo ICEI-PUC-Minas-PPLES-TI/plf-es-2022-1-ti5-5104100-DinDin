@@ -222,6 +222,7 @@
                                                     transaction.value
                                                         .toString()
                                                         .replace(".", ",")
+                                                        .replace("-", "")
                                                 }}
                                             </td>
                                             <td>
@@ -456,11 +457,7 @@ export default {
             await this.$axios
                 .$get(`/wallet/${walletId}/category${filter}`)
                 .then((res) => {
-                    //this.pages = res.pages;
                     this.categories = res.categories;
-                })
-                .finally(() => {
-                    //this.loading = false;
                 });
         },
 
@@ -475,15 +472,9 @@ export default {
             if (search) {
                 filter = `?description=${search}`;
             }
-            await this.$axios
-                .$get(`/wallet${filter}`)
-                .then((res) => {
-                    //this.pages = res.pages;
-                    this.wallets = res.wallets;
-                })
-                .finally(() => {
-                    //this.loading = false;
-                });
+            await this.$axios.$get(`/wallet${filter}`).then((res) => {
+                this.wallets = res.wallets;
+            });
         },
 
         removeTransaction(transaction) {
