@@ -215,7 +215,9 @@
                                                         : transaction.category
                                                               .type == "OUT"
                                                         ? "-"
-                                                        : "") +
+                                                        : transaction.value > 0
+                                                        ? "+"
+                                                        : "-") +
                                                     "R$" +
                                                     transaction.value
                                                         .toString()
