@@ -480,34 +480,88 @@ export default {
         removeTransaction(transaction) {
             let walletId = transaction.wallet_id;
             let tId = transaction.id;
-
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#d33",
-                reverseButtons: true,
-                confirmButtonText: "Yes, I want to delete!",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.$axios
-                        .delete(`wallet/${walletId}/transaction/${tId}`)
-                        .then(() => {
-                            Swal.fire({
-                                title: "Deleted!",
-                                text: "The Transaction has been deleted.",
-                                icon: "info",
-                                showConfirmButton: false,
-                                toast: true,
-                                position: "top-end",
-                                timer: 3000,
-                                timerProgressBar: true,
+            if (transaction.transaction_recurrencies) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "This transactions is recurrent. Do you want to DELETE all future ocurrencies ?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    showDenyButton: true,
+                    confirmButtonColor: "#FF8686",
+                    denyButtonColor: "#FF3131",
+                    reverseButtons: true,
+                    confirmButtonText: "Delete just this one",
+                    denyButtonText: "Delete all future ones",
+                })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            this.$axios
+                                .delete(`wallet/${walletId}/transaction/${tId}`)
+                                .then(() => {
+                                    Swal.fire({
+                                        title: "Deleted!",
+                                        text: "The Transaction has been deleted.",
+                                        icon: "info",
+                                        showConfirmButton: false,
+                                        toast: true,
+                                        position: "top-end",
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                    });
+                                    this.$fetch();
+                                });
+                        } else if (result.isDenied) {
+                            let trId = transaction.transaction_recurrencies.id;
+                            this.$axios
+                                .delete(
+                                    `wallet/${walletId}/transactionrecurrencies/${trId}`
+                                )
+                                .then(() => {
+                                    Swal.fire({
+                                        title: "Deleted!",
+                                        text: "The Transaction has been deleted and don't gonna be more recurrencies transactions like that.",
+                                        icon: "info",
+                                        showConfirmButton: false,
+                                        toast: true,
+                                        position: "top-end",
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                    });
+                                });
+                        }
+                    })
+                    .finally(() => {
+                        this.$fetch();
+                    });
+            } else {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    reverseButtons: true,
+                    confirmButtonText: "Yes, I want to delete!",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.$axios
+                            .delete(`wallet/${walletId}/transaction/${tId}`)
+                            .then(() => {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "The Transaction has been deleted.",
+                                    icon: "info",
+                                    showConfirmButton: false,
+                                    toast: true,
+                                    position: "top-end",
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                });
+                                this.$fetch();
                             });
-                            this.$fetch();
-                        });
-                }
-            });
+                    }
+                });
+            }
         },
         openModal(transaction) {
             this.showModal = true;
