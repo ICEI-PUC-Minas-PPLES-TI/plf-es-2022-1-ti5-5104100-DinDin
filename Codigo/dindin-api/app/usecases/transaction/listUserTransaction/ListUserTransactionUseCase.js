@@ -15,6 +15,7 @@ class ListUserTransactionUseCase {
         let whre = {};
 
         whre.user_id = user_id;
+        if (query.wallet_id) whre.wallet_id = query.wallet_id;
 
         if (query.description) {
             whre.description = sequelize.where(

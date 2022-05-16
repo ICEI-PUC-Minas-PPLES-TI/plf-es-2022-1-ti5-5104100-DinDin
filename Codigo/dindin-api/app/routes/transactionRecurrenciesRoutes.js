@@ -3,7 +3,7 @@ const transactionRecurrenciesRoutes = Router();
 
 const AuthenticationMiddleware = require("../middleware/AuthenticationMiddleware");
 
-const CategoryBelongsWalletMiddleware = require("../middleware/CategoryBelongsWalletMiddleware");
+const CategoryBelongsUserMiddleware = require("../middleware/CategoryBelongsUserMiddleware");
 
 const ListUserTransactionRecurrenciesController = require("../usecases/transactionRecurrencies/listUserTransactionRecurrencies/ListUserTransactionRecurrenciesController");
 const listUserTransactionRecurrenciesController =
@@ -13,7 +13,7 @@ transactionRecurrenciesRoutes.get(
     "/",
     [
         AuthenticationMiddleware.verifyToken,
-        CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
+        CategoryBelongsUserMiddleware.verifyCategoryBelongsUser,
     ],
     listUserTransactionRecurrenciesController.list
 );
