@@ -1,6 +1,6 @@
 import 'package:dindin/pages/goal/list.dart';
 import 'package:dindin/pages/profile/edit.dart';
-import 'package:dindin/pages/transactions/create.dart';
+import 'package:dindin/pages/transactions/form.dart';
 import 'package:dindin/pages/transactions/list.dart';
 import 'package:dindin/pages/wallet/list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -384,7 +384,7 @@ class Dashboard extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const CreateTransaction()),
+                  builder: (context) => const TransactionForm()),
             );
           },
           child: const Icon(Icons.add),

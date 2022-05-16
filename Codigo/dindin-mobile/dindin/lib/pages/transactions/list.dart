@@ -1,4 +1,4 @@
-import 'package:dindin/pages/transactions/create.dart';
+import 'package:dindin/pages/transactions/form.dart';
 import 'package:dindin/models/transaction.dart';
 
 import 'package:flutter/material.dart';
@@ -196,7 +196,7 @@ class _ExtractState extends State<Extract> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const CreateTransaction()),
+                  builder: (context) => const TransactionForm()),
             );
           },
           child: const Icon(Icons.add),
