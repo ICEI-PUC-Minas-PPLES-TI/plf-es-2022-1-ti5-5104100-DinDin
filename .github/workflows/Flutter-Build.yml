@@ -31,6 +31,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Create flutter .env file
+        working-directory: ./Codigo/dindin-mobile/dindin
+        run: |
+          touch .env
       - uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
@@ -51,6 +55,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Create flutter .env file
+        working-directory: ./Codigo/dindin-mobile/dindin
+        run: |
+          touch .env
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "2.x"

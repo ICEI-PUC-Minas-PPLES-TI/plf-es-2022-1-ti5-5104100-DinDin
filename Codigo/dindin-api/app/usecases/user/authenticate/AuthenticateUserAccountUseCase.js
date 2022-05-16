@@ -75,7 +75,11 @@ class AuthenticateUserAccountUseCase {
         }
 
         // gerar jwt
-        return AuthenticationMiddleware.logIn(user.id);
+        return {
+            jwt: AuthenticationMiddleware.logIn(user.id),
+            firebaseToken,
+            userId: user.id,
+        };
     }
 }
 
