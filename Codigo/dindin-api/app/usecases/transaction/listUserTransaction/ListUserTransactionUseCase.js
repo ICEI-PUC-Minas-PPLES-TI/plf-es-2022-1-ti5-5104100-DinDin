@@ -10,11 +10,12 @@ const TransactionRecurrencies = require("../../../models/TransactionRecurrencies
 const User = require("../../../models/User");
 const Wallet = require("../../../models/Wallet");
 
-class ListWalletTransactionUseCase {
+class ListUserTransactionUseCase {
     async list(query, user_id) {
         let whre = {};
 
         whre.user_id = user_id;
+        if (query.wallet_id) whre.wallet_id = query.wallet_id;
 
         if (query.description) {
             whre.description = sequelize.where(
@@ -99,4 +100,4 @@ class ListWalletTransactionUseCase {
     }
 }
 
-module.exports = ListWalletTransactionUseCase;
+module.exports = ListUserTransactionUseCase;
