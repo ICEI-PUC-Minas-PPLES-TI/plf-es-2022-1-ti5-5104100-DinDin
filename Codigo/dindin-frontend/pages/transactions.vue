@@ -366,12 +366,12 @@ export default {
         this.loading = true;
         this.transactions = [];
         let filters = "";
-        // if (this.filters.wallet_id) {
-        //     filters += `&wallet_id=${this.filters.wallet_id}`;
-        // }
-        // if (this.filters.category_id) {
-        //     filters += `&category_id=${this.filters.category_id}`;
-        // }
+        if (this.filters.wallet_id) {
+            filters += `&wallet_id=${this.filters.wallet_id}`;
+        }
+        if (this.filters.category_id) {
+            filters += `&category_id=${this.filters.category_id}`;
+        }
 
         if (this.filters.dateFrom) {
             filters += `&date_start=${this.filters.dateFrom}`;
@@ -437,7 +437,7 @@ export default {
 
         searchCategory(val) {
             if (val && val.length >= 2) {
-                this.searchWalletTxt = val;
+                this.searchCategoryTxt = val;
                 this.listCategories(val);
             } else this.listCategories(null);
         },

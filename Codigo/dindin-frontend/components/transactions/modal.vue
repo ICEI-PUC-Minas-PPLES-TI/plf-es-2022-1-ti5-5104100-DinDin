@@ -106,7 +106,6 @@
                                 outlined
                                 hide-details="auto"
                                 v-model="transaction.wallet_id"
-                                @change="cleanCategory"
                                 :items="wallets"
                                 :search-input="searchWalletTxt"
                                 @update:search-input="searchWallet"
@@ -143,7 +142,7 @@
                         <v-row class="mb-0 pb-2" v-show="transaction.recurrent">
                             <v-col cols="12" class="pl-0 py-2">
                                 <v-btn-toggle
-                                    v-model="transaction.recurrentType"
+                                    v-model="transaction.interval"
                                     outlined
                                     mandatory
                                 >
@@ -166,7 +165,7 @@
                                         outlined
                                         hide-details="auto"
                                         type="date"
-                                        v-model="transaction.endDate"
+                                        v-model="transaction.expired_at"
                                         v-bind="attrs"
                                         v-on="on"
                                         label="End Date"
@@ -175,7 +174,7 @@
                                     />
                                 </template>
                                 <v-date-picker
-                                    v-model="transaction.endDate"
+                                    v-model="transaction.expired_at"
                                     @input="menu2 = false"
                                 ></v-date-picker>
                             </v-menu>
@@ -232,10 +231,12 @@ export default {
                 description: "",
                 date: "",
                 type: "",
-                recurrentType: "",
                 category_id: null,
                 wallet_id: "",
                 recurrent: false,
+                interval: "",
+                day: null,
+                expired_at: null,
             },
             hintWarningDate: "",
             today: "",
@@ -274,7 +275,7 @@ export default {
                     tForm.category_id = val.category.id;
                     tForm.type = val.category.type;
                 }
-                // recurrentType: "",
+                // interval: "",
                 //     type: val.type,
                 //     category_id: "",
                 //     recurrent: false,
@@ -283,8 +284,8 @@ export default {
                 //this.setCurrentDate();
             }
         },
-        "transaction.endDate"(val) {
-            if (this.transaction.recurrentType == "M") {
+        "transaction.expired_at"(val) {
+            if (this.transaction.interval == "M") {
                 if (val && val.length >= 10 && val.split("-")[2] >= 28) {
                     this.hintWarningDate =
                         "Warning, because your transaction has a monthly recurrence day above the 28th, it will not occur in some months of the year.";
@@ -317,7 +318,7 @@ export default {
         },
         searchCategory(val) {
             if (val && val.length >= 2) {
-                this.searchWalletTxt = val;
+                this.searchCategoryTxt = val;
                 this.listCategories(val);
             } else this.listCategories(null);
         },
@@ -365,11 +366,20 @@ export default {
         },
         saveTransaction() {
             this.errors = [];
-            let walletId = this.transaction.wallet_id;
-
+            let endPoint = `wallet/${this.transaction.wallet_id}/`;
+            if (this.transaction.recurrent == false) {
+                endPoint += "transaction";
+            } else {
+                endPoint += "transactionrecurrencies";
+                this.transaction.day = parseInt(
+                    new Date(this.transaction.expired_at)
+                        .toLocaleDateString()
+                        .split("/")[0]
+                );
+            }
             if (this.$refs.form.validate()) {
                 this.$axios
-                    .post(`wallet/${walletId}/transaction`, this.transaction)
+                    .post(endPoint, this.transaction)
                     .then(() => {
                         Swal.fire({
                             title: "Transaction Created",
@@ -456,7 +466,7 @@ export default {
                 description: "",
                 date: "",
                 type: "IN",
-                recurrentType: "",
+                interval: "",
                 category_id: null,
                 wallet_id: "",
                 recurrent: false,
