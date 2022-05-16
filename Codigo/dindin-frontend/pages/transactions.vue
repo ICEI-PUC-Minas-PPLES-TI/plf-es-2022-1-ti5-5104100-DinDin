@@ -24,25 +24,37 @@
                     <!-- Table top toolbar -->
                     <v-row justify="center">
                         <v-col cols="9" md="4" sm="12" lg="2">
-                            <v-select
-                                v-model="filters.wallet"
-                                :items="listWalletsFilter"
-                                label="Wallet"
-                                item-value="id"
-                                item-text="description"
+                            <v-autocomplete
+                                prepend-inner-icon="mdi-wallet"
                                 outlined
-                            ></v-select>
+                                hide-details="auto"
+                                v-model="filters.wallet_id"
+                                @change="cleanCategory && $fetch()"
+                                :items="wallets"
+                                :search-input="searchWalletTxt"
+                                @update:search-input="searchWallet"
+                                @focus="listWallets(null)"
+                                item-text="description"
+                                item-value="id"
+                                label="Wallet"
+                            ></v-autocomplete>
                         </v-col>
                         <v-col cols="9" md="4" sm="12" lg="2">
-                            <v-select
-                                v-model="filters.category"
-                                :disabled="!filters.wallet"
-                                :items="listCategoriesFilter"
-                                label="Category"
-                                item-value="id"
-                                item-text="description"
+                            <v-autocomplete
+                                prepend-inner-icon="mdi-tag"
                                 outlined
-                            ></v-select>
+                                hide-details="auto"
+                                :disabled="!filters.wallet_id"
+                                v-model="filters.category_id"
+                                @change="$fetch()"
+                                :items="categories"
+                                :search-input="searchCategoryTxt"
+                                @update:search-input="searchCategory"
+                                @focus="listCategories(null)"
+                                item-text="description"
+                                item-value="id"
+                                label="Category"
+                            ></v-autocomplete>
                         </v-col>
                         <v-col cols="9" md="4" sm="12" lg="2">
                             <v-menu
@@ -123,7 +135,10 @@
                             <v-btn
                                 block
                                 color="success"
-                                @click.stop="openModal(0)"
+                                @click.stop="
+                                    transactionToEdit = null;
+                                    showModal = true;
+                                "
                             >
                                 New Transaction
                             </v-btn>
@@ -138,7 +153,7 @@
                                         <tr>
                                             <th class="text-left">Name</th>
                                             <th class="text-left">Date</th>
-                                            <th class="text-left">Amount</th>
+                                            <th class="text-left">value</th>
                                             <th class="text-left">Category</th>
                                             <th class="text-left">Wallet</th>
                                             <th class="text-right">Options</th>
@@ -160,27 +175,52 @@
                                                         transaction.category
                                                             .type == 'IN'
                                                             ? 'primary'
-                                                            : 'error'
+                                                            : transaction
+                                                                  .category
+                                                                  .type == 'OUT'
+                                                            ? 'error'
+                                                            : 'warning'
                                                     "
                                                     size="30"
                                                 >
                                                     <v-icon color="white">
-                                                        mdi-arrow-{{
+                                                        mdi-{{
                                                             transaction.category
                                                                 .type == "IN"
-                                                                ? "up"
-                                                                : "down"
-                                                        }}-thin
+                                                                ? "arrow-up-thin"
+                                                                : transaction
+                                                                      .category
+                                                                      .type ==
+                                                                  "OUT"
+                                                                ? "arrow-down"
+                                                                : "help"
+                                                        }}
                                                     </v-icon>
                                                 </v-avatar>
                                                 &nbsp;
                                                 {{ transaction.description }}
                                             </td>
                                             <td>
-                                                {{ transaction.date }}
+                                                {{
+                                                    new Date(
+                                                        transaction.date
+                                                    ).toLocaleDateString()
+                                                }}
                                             </td>
                                             <td>
-                                                {{ transaction.amount }}
+                                                {{
+                                                    (transaction.category
+                                                        .type == "IN"
+                                                        ? "+"
+                                                        : transaction.category
+                                                              .type == "OUT"
+                                                        ? "-"
+                                                        : "") +
+                                                    "R$" +
+                                                    transaction.value
+                                                        .toString()
+                                                        .replace(".", ",")
+                                                }}
                                             </td>
                                             <td>
                                                 <div
@@ -218,6 +258,11 @@
                                                             small
                                                             v-bind="attrs"
                                                             v-on="on"
+                                                            @click="
+                                                                transactionToEdit =
+                                                                    transaction;
+                                                                showModal = true;
+                                                            "
                                                         >
                                                             <i
                                                                 class="fa-solid fa-pen-to-square"
@@ -241,7 +286,7 @@
                                                             v-on="on"
                                                             @click="
                                                                 removeTransaction(
-                                                                    transaction.id
+                                                                    transaction
                                                                 )
                                                             "
                                                         >
@@ -276,7 +321,7 @@
             </v-col>
         </v-row>
         <modal
-            :transactionId="transactionId"
+            :transactionToEdit="transactionToEdit"
             v-model="showModal"
             @created="$fetch"
         />
@@ -295,106 +340,78 @@ export default {
         return {
             currentPage: 1,
             pages: 1,
-            transactions: [
-                {
-                    id: "1",
-                    description: "Be Biquinis",
-                    date: "30/04/2022",
-                    amount: "+R$1000",
-                    category: {
-                        id: "",
-                        description: "Category X",
-                        type: "IN",
-                        color: "0079bf",
-                        wallet_id: "",
-                        user_id: "",
-                    },
-                    wallet: {
-                        id: "",
-                        description: "Wallet X",
-                    },
-                },
-                {
-                    id: "2",
-                    description: "Uber Monthly",
-                    date: "30/04/2022",
-                    amount: "+R$2000",
-                    category: {
-                        id: "",
-                        description: "Category Y",
-                        type: "IN",
-                        color: "344563",
-                        wallet_id: "",
-                        user_id: "",
-                    },
-                    wallet: {
-                        id: "",
-                        description: "Wallet Y",
-                    },
-                },
-                {
-                    id: "3",
-                    description: "Verdemar",
-                    date: "30/04/2022",
-                    amount: "-R$2000",
-                    category: {
-                        id: "",
-                        description: "Category Z",
-                        type: "OUT",
-                        color: "c377e0",
-                        wallet_id: "",
-                        user_id: "",
-                    },
-                    wallet: {
-                        id: "",
-                        description: "Wallet Z",
-                    },
-                },
-            ],
-            listWalletsFilter: [
-                {
-                    id: "1",
-                    description: "Wallet X",
-                },
-                {
-                    id: "2",
-                    description: "Wallet Y",
-                },
-            ],
-            listCategoriesFilter: [
-                {
-                    id: "1",
-                    description: "Category X",
-                },
-                {
-                    id: "2",
-                    description: "Category Y",
-                },
-            ],
+            transactions: [],
+            searchWalletTxt: "",
+            wallets: [],
+            searchCategoryTxt: "",
+            categories: [],
+
             menuData1: false,
             menuData2: false,
             loading: false,
             showModal: false,
-            transactionId: 0,
+            transactionToEdit: null,
             filters: {
-                wallet: "",
-                category: "",
+                wallet_id: "",
+                category_id: "",
                 dateFrom: "",
                 dateTo: "",
             },
         };
     },
+    mounted() {
+        this.$fetch();
+    },
     async fetch() {
-        // this.loading = true;
-        // await this.$axios
-        //   .$get(`/category?page=${this.currentPage}`)
-        //   .then((res) => {
-        //     this.pages = res.pages;
-        //     this.transactions = res.transactions;
-        //   })
-        //   .finally(() => {
-        //     this.loading = false;
-        //   });
+        this.loading = true;
+        this.transactions = [];
+        let filters = "";
+        // if (this.filters.wallet_id) {
+        //     filters += `&wallet_id=${this.filters.wallet_id}`;
+        // }
+        // if (this.filters.category_id) {
+        //     filters += `&category_id=${this.filters.category_id}`;
+        // }
+
+        if (this.filters.dateFrom) {
+            filters += `&date_start=${this.filters.dateFrom}`;
+        }
+
+        if (this.filters.dateTo) {
+            filters += `&date_end=${this.filters.dateTo}`;
+        }
+
+        await this.$axios
+            .$get(`/transaction?page=${this.currentPage + filters}`)
+            .then((res) => {
+                if (res.transactions) {
+                    this.pages = res.pages;
+                    res.transactions.forEach((e) => {
+                        if (e.category == null) {
+                            e.category = {
+                                id: "",
+                                description: "",
+                                type: "",
+                                color: "",
+                                wallet_id: "",
+                                user_id: "",
+                            };
+                        }
+                        this.transactions.push(e);
+                    });
+                }
+            })
+            .finally(() => {
+                this.loading = false;
+            });
+    },
+    watch: {
+        "filters.dateFrom"() {
+            this.$fetch();
+        },
+        "filters.dateTo"() {
+            this.$fetch();
+        },
     },
     methods: {
         swatchStyle(color) {
@@ -410,13 +427,67 @@ export default {
         changePagination() {
             this.$fetch();
         },
-        // parseDate(date) {
-        //   //console.log("oii");
-        //   if (!date) return null;
-        //   const [year, month, day] = date.split("-");
-        //   this.transaction.date = `${day}/${month}/${year}`;
-        // },
-        removeTransaction(id) {
+        cleanCategory() {
+            if (this.filters.category_id) {
+                this.filters.category_id = null;
+                this.categories = [];
+                this.searchCategoryTxt = "";
+            }
+        },
+
+        searchCategory(val) {
+            if (val && val.length >= 2) {
+                this.searchWalletTxt = val;
+                this.listCategories(val);
+            } else this.listCategories(null);
+        },
+        async listCategories(search) {
+            if (!this.filters.wallet_id) {
+                return;
+            }
+            let filter = ``;
+            let walletId = this.filters.wallet_id;
+            if (search) {
+                filter += `?description=${search}`;
+            }
+
+            await this.$axios
+                .$get(`/wallet/${walletId}/category${filter}`)
+                .then((res) => {
+                    //this.pages = res.pages;
+                    this.categories = res.categories;
+                })
+                .finally(() => {
+                    //this.loading = false;
+                });
+        },
+
+        searchWallet(val) {
+            if (val && val.length >= 2) {
+                this.searchWalletTxt = val;
+                this.listWallets(val);
+            } else this.listWallets(null);
+        },
+        async listWallets(search) {
+            let filter = "";
+            if (search) {
+                filter = `?description=${search}`;
+            }
+            await this.$axios
+                .$get(`/wallet${filter}`)
+                .then((res) => {
+                    //this.pages = res.pages;
+                    this.wallets = res.wallets;
+                })
+                .finally(() => {
+                    //this.loading = false;
+                });
+        },
+
+        removeTransaction(transaction) {
+            let walletId = transaction.wallet_id;
+            let tId = transaction.id;
+
             Swal.fire({
                 title: "Are you sure?",
                 text: "You won't be able to revert this!",
@@ -427,25 +498,27 @@ export default {
                 confirmButtonText: "Yes, I want to delete!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.$axios.delete("/transaction/" + id).then(() => {
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: "The Transaction has been deleted.",
-                            icon: "info",
-                            showConfirmButton: false,
-                            toast: true,
-                            position: "top-end",
-                            timer: 3000,
-                            timerProgressBar: true,
+                    this.$axios
+                        .delete(`wallet/${walletId}/transaction/${tId}`)
+                        .then(() => {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "The Transaction has been deleted.",
+                                icon: "info",
+                                showConfirmButton: false,
+                                toast: true,
+                                position: "top-end",
+                                timer: 3000,
+                                timerProgressBar: true,
+                            });
+                            this.$fetch();
                         });
-                        this.$fetch();
-                    });
                 }
             });
         },
-        openModal(id) {
+        openModal(transaction) {
             this.showModal = true;
-            this.transactionId = parseInt(id);
+            this.transactionToEdit = transaction;
         },
     },
 };

@@ -34,6 +34,10 @@
                             <v-radio-group
                                 row
                                 v-model="transaction.type"
+                                @change="
+                                    searchCategoryTxt = '';
+                                    transaction.category_id = null;
+                                "
                                 mandatory
                             >
                                 <v-radio label="Income" value="IN"> </v-radio>
@@ -44,6 +48,7 @@
 
                         <v-row class="pb-2">
                             <v-text-field
+                                label="Value"
                                 :rules="[rules.required]"
                                 v-model="transaction.value"
                                 prepend-inner-icon="mdi-currency-usd"
@@ -94,31 +99,38 @@
                             </v-menu>
                         </v-row>
                         <v-row class="pb-2">
-                            <v-select
+                            <v-autocomplete
                                 :rules="[rules.required]"
-                                v-model="transaction.wallet_id"
+                                :disabled="transactionToEdit != null"
                                 prepend-inner-icon="mdi-wallet"
                                 outlined
                                 hide-details="auto"
-                                :items="[
-                                    { text: 'Personal', value: 1 },
-                                    { text: 'Public', value: 2 },
-                                ]"
+                                v-model="transaction.wallet_id"
+                                @change="cleanCategory"
+                                :items="wallets"
+                                :search-input="searchWalletTxt"
+                                @update:search-input="searchWallet"
+                                @focus="listWallets(null)"
+                                item-text="description"
+                                item-value="id"
                                 label="Wallet"
-                            />
+                            ></v-autocomplete>
                         </v-row>
                         <v-row class="pb-2">
-                            <v-select
-                                v-model="transaction.walletId"
+                            <v-autocomplete
                                 prepend-inner-icon="mdi-tag"
                                 outlined
                                 hide-details="auto"
-                                :items="[
-                                    { text: 'Personal', value: 1 },
-                                    { text: 'Public', value: 2 },
-                                ]"
+                                :disabled="!transaction.wallet_id"
+                                v-model="transaction.category_id"
+                                :items="categories"
+                                :search-input="searchCategoryTxt"
+                                @update:search-input="searchCategory"
+                                @focus="listCategories(null)"
+                                item-text="description"
+                                item-value="id"
                                 label="Category"
-                            />
+                            ></v-autocomplete>
                         </v-row>
                         <v-row>
                             <v-checkbox
@@ -181,7 +193,7 @@
                             >Cancel</v-btn
                         >
                     </v-col>
-                    <v-col v-if="transactionId" class="mr-2">
+                    <v-col v-if="transaction.id" class="mr-2">
                         <v-btn
                             block
                             color="primary"
@@ -209,7 +221,7 @@ export default {
     props: {
         value: Boolean,
         modalEdit: Boolean,
-        transactionId: Number,
+        transactionToEdit: Object,
     },
     data() {
         return {
@@ -221,13 +233,12 @@ export default {
                 date: "",
                 type: "",
                 recurrentType: "",
-                category_id: "",
+                category_id: null,
                 wallet_id: "",
                 recurrent: false,
             },
             hintWarningDate: "",
             today: "",
-            date: "",
             menu: false,
             menu2: false,
             rules: {
@@ -235,13 +246,38 @@ export default {
                 // wrongDate: (value) =>
                 //   this.compareDates(value, this.today) || "Date expired.",
             },
+
+            searchWalletTxt: "",
+            wallets: [],
+            searchCategoryTxt: "",
+            categories: [],
             errors: [],
         };
     },
     watch: {
-        transactionId(val) {
+        transactionToEdit(val) {
+            console.log(val);
             if (val) {
-                //load transaction
+                this.title = "Edit transaction";
+                let tForm = this.transaction;
+
+                //console.log(val.date);
+                tForm.id = val.id;
+                tForm.value = val.value;
+                tForm.description = val.description;
+                tForm.date = new Date(val.date).toISOString().split("T")[0];
+                this.wallets.push(val.wallet);
+                tForm.wallet_id = val.wallet_id;
+
+                if (val.category != null) {
+                    this.categories.push(val.category);
+                    tForm.category_id = val.category.id;
+                    tForm.type = val.category.type;
+                }
+                // recurrentType: "",
+                //     type: val.type,
+                //     category_id: "",
+                //     recurrent: false,
             } else {
                 this.cleanForm();
                 //this.setCurrentDate();
@@ -269,15 +305,71 @@ export default {
         },
     },
     methods: {
-        // setCurrentDate() {
-        //     console.log("oi");
-        //     this.transaction.date = new Date().toLocaleDateString();
-        // },
+        setCurrentDate() {
+            this.transaction.date = new Date().toLocaleDateString();
+        },
+        cleanCategory() {
+            if (this.transaction.category_id) {
+                this.transaction.category_id = null;
+                this.categories = [];
+                this.searchCategoryTxt = "";
+            }
+        },
+        searchCategory(val) {
+            if (val && val.length >= 2) {
+                this.searchWalletTxt = val;
+                this.listCategories(val);
+            } else this.listCategories(null);
+        },
+        async listCategories(search) {
+            if (!this.transaction.wallet_id || !this.transaction.type) {
+                return;
+            }
+            let filter = `?type=${this.transaction.type}`;
+            let walletId = this.transaction.wallet_id;
+            if (search) {
+                filter += `&description=${search}`;
+            }
+
+            await this.$axios
+                .$get(`/wallet/${walletId}/category${filter}`)
+                .then((res) => {
+                    //this.pages = res.pages;
+                    this.categories = res.categories;
+                })
+                .finally(() => {
+                    //this.loading = false;
+                });
+        },
+
+        searchWallet(val) {
+            if (val && val.length >= 2) {
+                this.searchWalletTxt = val;
+                this.listWallets(val);
+            } else this.listWallets(null);
+        },
+        async listWallets(search) {
+            let filter = "";
+            if (search) {
+                filter = `?description=${search}`;
+            }
+            await this.$axios
+                .$get(`/wallet${filter}`)
+                .then((res) => {
+                    //this.pages = res.pages;
+                    this.wallets = res.wallets;
+                })
+                .finally(() => {
+                    //this.loading = false;
+                });
+        },
         saveTransaction() {
             this.errors = [];
+            let walletId = this.transaction.wallet_id;
+
             if (this.$refs.form.validate()) {
                 this.$axios
-                    .post("/transaction", this.transaction)
+                    .post(`wallet/${walletId}/transaction`, this.transaction)
                     .then(() => {
                         Swal.fire({
                             title: "Transaction Created",
@@ -304,10 +396,12 @@ export default {
         },
         editTransaction() {
             this.errors = [];
+            let walletId = this.transaction.wallet_id;
+
             if (this.$refs.form.validate()) {
                 this.$axios
                     .put(
-                        "/transaction/" + this.transaction.id,
+                        `wallet/${walletId}/transaction/${this.transaction.id}`,
                         this.transaction
                     )
                     .then(() => {
@@ -355,7 +449,18 @@ export default {
             return resp;
         },
         cleanForm() {
-            //this.$refs.form.reset();
+            this.$refs.form.reset();
+            this.transaction = {
+                id: "",
+                value: "",
+                description: "",
+                date: "",
+                type: "IN",
+                recurrentType: "",
+                category_id: null,
+                wallet_id: "",
+                recurrent: false,
+            };
         },
     },
 };
