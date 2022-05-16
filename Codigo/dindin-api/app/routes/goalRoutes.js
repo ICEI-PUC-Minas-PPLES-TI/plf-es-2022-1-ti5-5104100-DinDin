@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const goalRoutes = Router();
 
-const jwtAuthorization = require("./jwtAuthorization");
+const AuthenticationMiddleware = require("../middleware/AuthenticationMiddleware");
 
 const CreateGoalController = require("../usecases/goal/createGoal/CreateGoalController");
 const UpdateGoalController = require("../usecases/goal/updateGoal/UpdateGoalController");
@@ -17,19 +17,27 @@ const deleteGoalController = new DeleteGoalController();
 
 goalRoutes.post(
     "/",
-    [jwtAuthorization.verifyToken],
+    [AuthenticationMiddleware.verifyToken],
     goalCreateController.create
 );
 goalRoutes.put(
     "/:id",
-    [jwtAuthorization.verifyToken],
+    [AuthenticationMiddleware.verifyToken],
     goalUpdateController.update
 );
-goalRoutes.get("/", [jwtAuthorization.verifyToken], listGoalController.list);
-goalRoutes.get("/:id", [jwtAuthorization.verifyToken], findGoalController.find);
+goalRoutes.get(
+    "/",
+    [AuthenticationMiddleware.verifyToken],
+    listGoalController.list
+);
+goalRoutes.get(
+    "/:id",
+    [AuthenticationMiddleware.verifyToken],
+    findGoalController.find
+);
 goalRoutes.delete(
     "/:id",
-    [jwtAuthorization.verifyToken],
+    [AuthenticationMiddleware.verifyToken],
     deleteGoalController.delete
 );
 

@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
-// const Wallet = require("./Wallet");
+const Wallet = require("./Wallet");
+
 class Goal extends Model {
     static init(sequelize) {
         super.init(
@@ -8,17 +9,18 @@ class Goal extends Model {
                     type: DataTypes.INTEGER.UNSIGNED,
                     required: true,
                     primaryKey: true,
+                    unique: true,
                     autoIncrement: true,
                     notEmpty: true,
                     allowNull: false,
                 },
                 wallet_id: {
                     type: DataTypes.INTEGER.UNSIGNED,
-                    allowNull: true, // ! to change
-                    /*references: {
-                      model: Wallet,
-                      key: "id"
-                    }*/
+                    allowNull: false,
+                    references: {
+                        model: Wallet,
+                        key: "id",
+                    },
                 },
                 description: {
                     type: DataTypes.STRING(30),

@@ -11,11 +11,11 @@ const verifyWalletPermission = async (request, response, next) => {
         throw new AppError(error.message, 500, error);
     });
     if (user) next();
-    else throw new AppError("User does not have this wallet permission", 403);
+    else throw new AppError("User does not have this wallet permission!", 403);
 };
 
-const jwtAuthorization = {
+const AuthenticationMiddleware = {
     verifyWalletPermission,
 };
 
-module.exports = jwtAuthorization;
+module.exports = AuthenticationMiddleware;
