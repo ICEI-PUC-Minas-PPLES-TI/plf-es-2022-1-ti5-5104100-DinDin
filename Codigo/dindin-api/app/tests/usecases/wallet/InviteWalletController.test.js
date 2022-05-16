@@ -7,7 +7,7 @@ const UserHasWallet = require("../../../models/UserHasWallet");
 const User = require("../../../models/User");
 
 var login = null;
-
+//oi
 beforeAll(async () => {
     login = await connectAndLogin();
     try {
