@@ -307,11 +307,20 @@ export default {
                     this.categories.push(val.category);
                     tForm.category_id = val.category.id;
                     tForm.type = val.category.type;
+                } else {
+                    this.categories = [];
+                    tForm.category_id = null;
+                    tForm.type = "IN";
                 }
-                // interval: "",
-                //     type: val.type,
-                //     category_id: "",
-                //     recurrent: false,
+                if (val.transaction_recurrencies) {
+                    tForm.recurrent = true;
+                    tForm.day = val.transaction_recurrencies.day;
+                    tForm.interval = val.transaction_recurrencies.interval;
+                } else {
+                    tForm.recurrent = false;
+                    tForm.day = null;
+                    tForm.interval = "D";
+                }
             } else {
                 this.title = "New Transaction";
                 this.cleanForm();
@@ -490,10 +499,12 @@ export default {
                 description: "",
                 date: "",
                 type: "IN",
-                interval: "",
                 category_id: null,
                 wallet_id: "",
                 recurrent: false,
+                interval: "",
+                day: null,
+                expired_at: null,
             };
         },
     },
