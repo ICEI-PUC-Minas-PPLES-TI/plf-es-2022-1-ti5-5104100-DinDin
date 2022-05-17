@@ -20,6 +20,7 @@ class ListWalletTransactionRecurrenciesController {
                     orderEnum,
                     `'order' must be one of these: ${orderEnum}.`
                 ),
+            category_id: yup.number("'category_id' must be numeric!"),
 
             description: yup.string("'description' must be string!").max(30),
             value: yup.number("'value' must be numeric!"),
@@ -54,13 +55,15 @@ class ListWalletTransactionRecurrenciesController {
             throw new AppError(error.name, 422, error.errors);
         }
         const wallet_id = request.params.id; // * wallet_id of the transaction
+        const user_id = request.userId;
 
         const listWalletTransactionRecurrenciesUseCase =
             new ListWalletTransactionRecurrenciesUseCase();
         const transactionsRecurrencies =
             await listWalletTransactionRecurrenciesUseCase.list(
                 request.query,
-                wallet_id
+                wallet_id,
+                user_id
             );
 
         return response.status(200).json(transactionsRecurrencies);

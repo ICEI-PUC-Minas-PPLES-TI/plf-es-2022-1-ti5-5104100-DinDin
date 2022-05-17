@@ -21,7 +21,7 @@ class UpdateTransactionController {
             date: yup.date("'date' must be date!").nullable(false),
             category_id: yup
                 .number("'category_id' must be numeric!")
-                .min(1)
+                .min(0)
                 .nullable(true),
         });
 

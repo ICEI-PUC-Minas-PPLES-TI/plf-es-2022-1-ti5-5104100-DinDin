@@ -19,6 +19,7 @@ class ListWalletTransactionController {
                     orderEnum,
                     `'order' must be one of these: ${orderEnum}.`
                 ),
+            category_id: yup.number("'category_id' must be numeric!"),
 
             description: yup.string("'description' must be string!").max(30),
             value: yup.number("'value' must be numeric!"),
@@ -47,11 +48,13 @@ class ListWalletTransactionController {
             throw new AppError(error.name, 422, error.errors);
         }
         const wallet_id = request.params.id; // * wallet_id of the transaction
+        const user_id = request.userId;
 
         const listWalletTransactionUseCase = new ListWalletTransactionUseCase();
         const transactions = await listWalletTransactionUseCase.list(
             request.query,
-            wallet_id
+            wallet_id,
+            user_id
         );
 
         return response.status(200).json(transactions);

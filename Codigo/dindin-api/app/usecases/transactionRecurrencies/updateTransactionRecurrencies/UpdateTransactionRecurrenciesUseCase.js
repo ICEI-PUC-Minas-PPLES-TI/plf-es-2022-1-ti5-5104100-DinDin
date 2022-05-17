@@ -18,6 +18,8 @@ class UpdateTransactionRecurrenciesUseCase {
         const transactionRecurrencies =
             await findTransactionRecurrenciesUseCase.find(id, wallet_id);
 
+        if (category_id == 0) category_id = null;
+
         await transactionRecurrencies
             .update({
                 value: value,
