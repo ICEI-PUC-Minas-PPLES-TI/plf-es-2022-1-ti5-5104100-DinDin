@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
 import 'dart:convert';
+import 'package:dindin/pages/authorization/login.dart';
 import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -97,6 +100,7 @@ class _LoginState extends State<Register> {
                                         } else {
                                           null;
                                         }
+                                        return null;
                                       },
                                     ),
                                   ),
@@ -121,6 +125,7 @@ class _LoginState extends State<Register> {
                                         } else {
                                           null;
                                         }
+                                        return null;
                                       },
                                     ),
                                   ),
@@ -145,6 +150,7 @@ class _LoginState extends State<Register> {
                                         } else {
                                           null;
                                         }
+                                        return null;
                                       },
                                     ),
                                   ),
@@ -272,7 +278,12 @@ class _LoginState extends State<Register> {
                                     style: TextStyle(color: Colors.green[800]),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        Navigator.pushNamed(context, "/login");
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Login()),
+                                        );
                                       }),
                               ),
                               Icon(
@@ -297,7 +308,9 @@ class _LoginState extends State<Register> {
 }
 
 Future<Object> createUser(String email, String name, String password) async {
-  String url = "http://localhost:3001/api/user";
+  String url =
+      dotenv.get('API_BASE_URL', fallback: 'http://localhost:3001/api') +
+          "/user";
   final Uri uri = Uri.parse(url);
   var response = await http
       .post(uri, body: {'email': email, 'password': password, 'name': name});
