@@ -1,7 +1,8 @@
 const { Router } = require("express");
-const categoryRoutes = Router();
+const walletCategoryRoutes = Router();
 
 const jwtAuthorization = require("./jwtAuthorization");
+const UserAccessWalletMiddleware = require("../middleware/UserAccessWalletMiddleware");
 
 const CreateCategoryController = require("../usecases/category/createCategory/CreateCategoryController");
 const DeleteCategoryController = require("../usecases/category/deleteCategory/DeleteCategoryController");
@@ -15,30 +16,45 @@ const listCategoryController = new ListCategoryController();
 const deleteCategoryController = new DeleteCategoryController();
 const updateCategoryController = new UpdateCategoryController();
 
-categoryRoutes.post(
-    "/",
-    [jwtAuthorization.verifyToken],
+walletCategoryRoutes.post(
+    "/wallet/:id/category/",
+    [
+        jwtAuthorization.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+    ],
     createCategoryController.create
 );
-categoryRoutes.get(
-    "/:id",
-    [jwtAuthorization.verifyToken],
+walletCategoryRoutes.get(
+    "/wallet/:id/category/:categoryId",
+    [
+        jwtAuthorization.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+    ],
     findCategoryController.find
 );
-categoryRoutes.get(
-    "/",
-    [jwtAuthorization.verifyToken],
+walletCategoryRoutes.get(
+    "/wallet/:id/category/",
+    [
+        jwtAuthorization.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+    ],
     listCategoryController.list
 );
-categoryRoutes.put(
-    "/:id",
-    [jwtAuthorization.verifyToken],
+walletCategoryRoutes.put(
+    "/wallet/:id/category/:categoryId",
+    [
+        jwtAuthorization.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+    ],
     updateCategoryController.update
 );
-categoryRoutes.delete(
-    "/:id",
-    [jwtAuthorization.verifyToken],
+walletCategoryRoutes.delete(
+    "/wallet/:id/category/:categoryId",
+    [
+        jwtAuthorization.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+    ],
     deleteCategoryController.delete
 );
 
-module.exports = categoryRoutes;
+module.exports = walletCategoryRoutes;
