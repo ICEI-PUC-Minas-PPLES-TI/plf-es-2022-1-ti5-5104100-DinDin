@@ -73,32 +73,6 @@
                             />
                         </v-row>
                         <v-row class="pb-2">
-                            <v-menu
-                                v-model="menu"
-                                :close-on-content-click="true"
-                                offset-y
-                                min-width="290px"
-                            >
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-text-field
-                                        :rules="[rules.required]"
-                                        prepend-inner-icon="mdi-calendar-range"
-                                        outlined
-                                        hide-details="auto"
-                                        type="date"
-                                        v-model="transaction.date"
-                                        v-bind="attrs"
-                                        v-on="on"
-                                        label="Date"
-                                    />
-                                </template>
-                                <v-date-picker
-                                    v-model="transaction.date"
-                                    @input="menu = false"
-                                ></v-date-picker>
-                            </v-menu>
-                        </v-row>
-                        <v-row class="pb-2">
                             <v-autocomplete
                                 :rules="[rules.required]"
                                 :disabled="transactionToEdit != null"
@@ -121,9 +95,9 @@
                                 outlined
                                 hide-details="auto"
                                 :disabled="!transaction.wallet_id"
+                                v-model="transaction.category_id"
                                 clearable
                                 @click:clear="transaction.category_id = 0"
-                                v-model="transaction.category_id"
                                 :items="categories"
                                 :search-input="searchCategoryTxt"
                                 @update:search-input="searchCategory"
@@ -133,36 +107,7 @@
                                 label="Category"
                             ></v-autocomplete>
                         </v-row>
-
-                        <v-row
-                            v-show="
-                                transactionToEdit != null &&
-                                transaction.recurrent == true
-                            "
-                        >
-                            <v-btn
-                                text
-                                color="primary"
-                                @click="openModalTransactionRecurrencie()"
-                            >
-                                See origin transaction
-                            </v-btn>
-                        </v-row>
-                        <v-row v-if="transactionToEdit == null">
-                            <v-checkbox
-                                label="Recurrent"
-                                v-model="transaction.recurrent"
-                            >
-                            </v-checkbox>
-                        </v-row>
-
-                        <v-row
-                            class="mb-0 pb-2"
-                            v-show="
-                                transaction.recurrent &&
-                                transactionToEdit == null
-                            "
-                        >
+                        <v-row class="mb-0 pb-2">
                             <v-col cols="12" class="pl-0 py-2">
                                 <v-btn-toggle
                                     v-model="transaction.interval"
@@ -176,11 +121,7 @@
                         </v-row>
 
                         <v-row
-                            v-show="
-                                transaction.recurrent &&
-                                transaction.interval == 'M' &&
-                                transactionToEdit == null
-                            "
+                            v-show="transaction.interval == 'M'"
                             class="pb-2"
                         >
                             <v-text-field
@@ -205,13 +146,7 @@
                             />
                         </v-row>
 
-                        <v-row
-                            class="pb-2"
-                            v-show="
-                                transaction.recurrent &&
-                                transactionToEdit == null
-                            "
-                        >
+                        <v-row class="pb-2">
                             <v-menu
                                 v-model="menu2"
                                 :close-on-content-click="true"
@@ -283,12 +218,11 @@ export default {
     },
     data() {
         return {
-            title: "New Transaction",
+            title: "New Transaction Recurrencie",
             transaction: {
                 id: "",
                 value: "",
                 description: "",
-                date: "",
                 type: "",
                 category_id: null,
                 wallet_id: "",
@@ -297,18 +231,6 @@ export default {
                 day: null,
                 expired_at: null,
             },
-            // transactionRecurrency: {
-            //     category_id: "",
-            //     day: "",
-            //     description: "",
-            //     expired_at: null,
-            //     id: "",
-            //     interval: "",
-            //     updated_at: "",
-            //     user_id: "",
-            //     value: "",
-            //     wallet_id: "",
-            // },
             hintWarningDate: "",
             today: "",
             menu: false,
@@ -327,40 +249,47 @@ export default {
         };
     },
     watch: {
-        transactionToEdit(val) {
-            if (val) {
-                this.title = "Edit transaction";
-                let tForm = this.transaction;
+        async transactionToEdit(val) {
+            if (val && val.transaction_recurrencies) {
+                this.title = "Edit Transaction Recurrencie";
 
-                tForm.id = val.id;
-                tForm.value = val.value;
-                tForm.description = val.description;
-                tForm.date = new Date(val.date).toISOString().split("T")[0];
-                this.wallets.push(val.wallet);
-                tForm.wallet_id = val.wallet_id;
+                val = val.transaction_recurrencies;
+                let walletId = val.wallet_id;
+                await this.$axios
+                    .$get(
+                        `/wallet/${walletId}/transactionrecurrencies/${val.id}`
+                    )
+                    .then((res) => {
+                        //console.log(res);
 
-                if (val.category != null) {
-                    this.categories.push(val.category);
-                    tForm.category_id = val.category.id;
-                    tForm.type = val.category.type;
-                } else {
-                    this.categories = [];
-                    tForm.category_id = null;
-                    tForm.type = "IN";
-                }
-                if (val.transaction_recurrencies) {
-                    //this.transactionRecurrency = val.transaction_recurrencies;
-                    tForm.recurrent = true;
-                    tForm.day = val.transaction_recurrencies.day;
-                    tForm.interval = val.transaction_recurrencies.interval;
-                } else {
-                    tForm.recurrent = false;
-                    tForm.day = null;
-                    tForm.interval = "D";
-                }
+                        let tForm = this.transaction;
+                        tForm.id = res.id;
+                        tForm.value = res.value;
+                        tForm.description = res.description;
+                        if (res.expired_at) {
+                            tForm.expired_at = new Date(res.expired_at)
+                                .toISOString()
+                                .split("T")[0];
+                        }
+                        this.wallets.push(res.wallet);
+                        tForm.wallet_id = res.wallet_id;
+
+                        if (res.category != null) {
+                            this.categories.push(res.category);
+                            tForm.category_id = res.category.id;
+                            tForm.type = res.category.type;
+                        } else {
+                            this.categories = [];
+                            tForm.category_id = null;
+                            tForm.type = "IN";
+                        }
+                        tForm.recurrent = true;
+                        tForm.day = res.day;
+                        tForm.interval = res.interval;
+                    });
             } else {
-                this.title = "New Transaction";
-                this.cleanForm();
+                this.title = "New Transaction Recurrencie";
+                //this.cleanForm();
                 //this.setCurrentDate();
             }
         },
@@ -481,7 +410,7 @@ export default {
             if (this.$refs.form.validate()) {
                 this.$axios
                     .put(
-                        `wallet/${walletId}/transaction/${this.transaction.id}`,
+                        `wallet/${walletId}/transactionrecurrencies/${this.transaction.id}`,
                         this.transaction
                     )
                     .then(() => {
@@ -543,10 +472,6 @@ export default {
                 day: null,
                 expired_at: null,
             };
-        },
-
-        openModalTransactionRecurrencie() {
-            this.$emit("showTransactionRecurrencie");
         },
     },
 };

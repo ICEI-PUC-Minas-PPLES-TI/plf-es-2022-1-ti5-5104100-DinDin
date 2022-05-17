@@ -44,7 +44,6 @@
                                 prepend-inner-icon="mdi-tag"
                                 outlined
                                 hide-details="auto"
-                                :disabled="!filters.wallet_id"
                                 v-model="filters.category_id"
                                 @change="$fetch()"
                                 :items="categories"
@@ -327,6 +326,13 @@
             :transactionToEdit="transactionToEdit"
             v-model="showModal"
             @created="$fetch"
+            @showTransactionRecurrencie="showModalTransactionRecurrencie = true"
+        />
+
+        <modalTransactionRecurrencie
+            :transactionToEdit="transactionToEdit"
+            v-model="showModalTransactionRecurrencie"
+            @created="$fetch"
         />
     </v-container>
 </template>
@@ -334,10 +340,13 @@
 <script>
 import Swal from "sweetalert2";
 import modal from "@/components/transactions/modal.vue";
+import modalTransactionRecurrencie from "@/components/transactions/modalTransactionRecurrencie.vue";
+
 export default {
     layout: "home",
     components: {
         modal,
+        modalTransactionRecurrencie,
     },
     data() {
         return {
@@ -347,12 +356,13 @@ export default {
             searchWalletTxt: "",
             wallets: [],
             searchCategoryTxt: "",
-            categories: [],
+            categories: [{ id: 0, description: "No Category" }],
 
             menuData1: false,
             menuData2: false,
             loading: false,
             showModal: false,
+            showModalTransactionRecurrencie: false,
             transactionToEdit: null,
             filters: {
                 wallet_id: "",
@@ -372,7 +382,7 @@ export default {
         if (this.filters.wallet_id) {
             filters += `&wallet_id=${this.filters.wallet_id}`;
         }
-        if (this.filters.category_id) {
+        if (this.filters.category_id || this.filters.category_id === 0) {
             filters += `&category_id=${this.filters.category_id}`;
         }
 
@@ -433,7 +443,7 @@ export default {
         cleanCategory() {
             if (this.filters.category_id) {
                 this.filters.category_id = null;
-                this.categories = [];
+                this.categories = [[{ id: 0, description: "No Category" }]];
                 this.searchCategoryTxt = "";
             }
         },
@@ -457,7 +467,8 @@ export default {
             await this.$axios
                 .$get(`/wallet/${walletId}/category${filter}`)
                 .then((res) => {
-                    this.categories = res.categories;
+                    this.categories = [{ id: 0, description: "No Category" }];
+                    this.categories = this.categories.concat(res.categories);
                 });
         },
 
