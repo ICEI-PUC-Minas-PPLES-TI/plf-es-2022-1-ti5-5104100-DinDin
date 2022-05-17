@@ -23,7 +23,7 @@ class CreateTransactionController {
                 .required("'date' is a required field!"),
             category_id: yup
                 .number("'category_id' must be numeric!")
-                .min(1)
+                .min(0)
                 .nullable(true),
         });
 
