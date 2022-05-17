@@ -11,7 +11,7 @@ const User = require("../../../models/User");
 const Wallet = require("../../../models/Wallet");
 
 class ListWalletTransactionUseCase {
-    async list(query, wallet_id) {
+    async list(query, wallet_id, user_id) {
         let whre = {};
 
         whre.wallet_id = wallet_id;
@@ -29,8 +29,23 @@ class ListWalletTransactionUseCase {
 
         if (query.value) whre.value = query.value;
 
-        if (query.category_id) whre.category_id = query.category_id;
-        if (query.category_id == "null") whre.category_id = { [Op.is]: null };
+        if (query.category_id == 0) whre.category_id = { [Op.is]: null };
+        else if (query.category_id) {
+            const category = await Category.findOne({
+                where: {
+                    id: query.category_id,
+                    user_id: user_id,
+                },
+            }).catch((error) => {
+                throw new AppError(error.message, 500, error);
+            });
+            if (category) whre.category_id = query.category_id;
+            else
+                throw new AppError(
+                    "User does not have permission for this Category!",
+                    403
+                );
+        }
 
         if (query.transaction_recurrencies_id)
             whre.transaction_recurrencies_id =
