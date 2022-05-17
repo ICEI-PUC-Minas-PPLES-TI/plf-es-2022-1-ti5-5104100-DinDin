@@ -9,6 +9,15 @@
             <v-card-title class="text-h5 transactions-modal-title">
                 <h4>
                     <span> {{ title }}</span>
+                    <v-btn
+                        v-show="
+                            transactionToEdit != null &&
+                            transaction.recurrent == true
+                        "
+                        link
+                    >
+                        See origin transaction
+                    </v-btn>
                 </h4>
                 <v-btn icon @click="$emit('input', false)">
                     <v-icon>mdi-close</v-icon>
@@ -131,12 +140,7 @@
                                 label="Category"
                             ></v-autocomplete>
                         </v-row>
-                        <v-row
-                            v-if="
-                                transactionToEdit == null &&
-                                transaction.recurrent == false
-                            "
-                        >
+                        <v-row v-if="transactionToEdit == null">
                             <v-checkbox
                                 label="Recurrent"
                                 v-model="transaction.recurrent"
@@ -144,7 +148,13 @@
                             </v-checkbox>
                         </v-row>
 
-                        <v-row class="mb-0 pb-2" v-show="transaction.recurrent">
+                        <v-row
+                            class="mb-0 pb-2"
+                            v-show="
+                                transaction.recurrent &&
+                                transactionToEdit == null
+                            "
+                        >
                             <v-col cols="12" class="pl-0 py-2">
                                 <v-btn-toggle
                                     v-model="transaction.interval"
@@ -160,7 +170,8 @@
                         <v-row
                             v-show="
                                 transaction.recurrent &&
-                                transaction.interval == 'M'
+                                transaction.interval == 'M' &&
+                                transactionToEdit == null
                             "
                             class="pb-2"
                         >
@@ -186,7 +197,13 @@
                             />
                         </v-row>
 
-                        <v-row class="pb-2" v-show="transaction.recurrent">
+                        <v-row
+                            class="pb-2"
+                            v-show="
+                                transaction.recurrent &&
+                                transactionToEdit == null
+                            "
+                        >
                             <v-menu
                                 v-model="menu2"
                                 :close-on-content-click="true"
@@ -272,6 +289,18 @@ export default {
                 day: null,
                 expired_at: null,
             },
+            // transactionRecurrency: {
+            //     category_id: "",
+            //     day: "",
+            //     description: "",
+            //     expired_at: null,
+            //     id: "",
+            //     interval: "",
+            //     updated_at: "",
+            //     user_id: "",
+            //     value: "",
+            //     wallet_id: "",
+            // },
             hintWarningDate: "",
             today: "",
             menu: false,
@@ -291,7 +320,6 @@ export default {
     },
     watch: {
         transactionToEdit(val) {
-            console.log(val);
             if (val) {
                 this.title = "Edit transaction";
                 let tForm = this.transaction;
@@ -313,6 +341,7 @@ export default {
                     tForm.type = "IN";
                 }
                 if (val.transaction_recurrencies) {
+                    //this.transactionRecurrency = val.transaction_recurrencies;
                     tForm.recurrent = true;
                     tForm.day = val.transaction_recurrencies.day;
                     tForm.interval = val.transaction_recurrencies.interval;

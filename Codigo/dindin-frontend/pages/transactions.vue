@@ -508,7 +508,18 @@ export default {
                                         timer: 3000,
                                         timerProgressBar: true,
                                     });
-                                    this.$fetch();
+                                })
+                                .catch((err) => {
+                                    Swal.fire({
+                                        title: "Warning!",
+                                        text: err.response.data.message,
+                                        icon: "info",
+                                        showConfirmButton: false,
+                                        toast: true,
+                                        position: "top-end",
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                    });
                                 });
                         } else if (result.isDenied) {
                             let trId = transaction.transaction_recurrencies.id;
