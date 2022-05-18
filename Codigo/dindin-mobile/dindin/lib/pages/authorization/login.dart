@@ -125,7 +125,8 @@ class _LoginState extends State<Login> {
                                   child: ElevatedButton(
                                     child: const Text("Login"),
                                     style: ElevatedButton.styleFrom(
-                                      primary: const Color.fromARGB(255, 84, 179, 88),
+                                      primary: const Color.fromARGB(
+                                          255, 84, 179, 88),
                                     ),
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
@@ -142,10 +143,10 @@ class _LoginState extends State<Login> {
                                                           .showSnackBar(
                                                               snackBarTrue),
                                                       Navigator.pushReplacement(
-                                                         context,
-                                                         MaterialPageRoute(
-                                                             builder: (context) =>
-                                                                 const Dashboard()),
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const Dashboard()),
                                                       )
                                                     }
                                                   else
