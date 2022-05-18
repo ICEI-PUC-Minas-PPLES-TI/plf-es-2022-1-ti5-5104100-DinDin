@@ -2,11 +2,13 @@ name: CD-API
 
 on:
   push:
-    branches: [main]
+    branches: [master]
+    paths:
+      - "Codigo/dindin-api/**"
 
 jobs:
   backend-cd:
-    name: CD-API | Docker - OS ${{ matrix.os }} - Node Version ${{ matrix.node-version }} - MySQL 5.7
+    name: CD-API | Docker-compose backend
     runs-on: ${{ matrix.os }}
 
     strategy:
