@@ -9,7 +9,11 @@
         <!-- Balance Selection -->
         <v-row>
             <v-col>
-                <v-card elevation="0" class="p-20">
+                <v-card
+                    elevation="0"
+                    class="p-20"
+                    :loading="loadingTotalBalance"
+                >
                     <div class="text-center"><h3>Your Balance</h3></div>
                     <div class="text-center">
                         <h1>
@@ -405,6 +409,8 @@ export default {
                 if (res.total) {
                     res.total = res.total.toString().replace(".", ",");
                     this.totalBalance = res.total;
+                } else if (res.total == null) {
+                    this.totalBalance = "0, 00";
                 }
             })
             .finally(() => {
