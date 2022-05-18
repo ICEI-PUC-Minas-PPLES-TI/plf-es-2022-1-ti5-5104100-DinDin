@@ -196,7 +196,6 @@ walletRoutes.get(
     [
         AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
-        CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],
     listWalletTransactionController.list
 );
@@ -206,7 +205,6 @@ walletRoutes.get(
     [
         AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
-        CategoryBelongsWalletMiddleware.verifyCategoryBelongsWallet,
     ],
     listWalletTransactionRecurrenciesController.list
 );

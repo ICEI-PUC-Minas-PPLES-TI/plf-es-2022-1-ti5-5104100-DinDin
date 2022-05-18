@@ -12,6 +12,8 @@ class CreateTransactionUseCase {
         user_id,
         transaction_recurrencies_id
     ) {
+        if (category_id == 0) category_id = null;
+
         const transaction = await Transaction.create({
             wallet_id: wallet_id,
             value: value,

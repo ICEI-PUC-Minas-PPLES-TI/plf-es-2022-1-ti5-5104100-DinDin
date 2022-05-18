@@ -3,17 +3,12 @@ const transactionRoutes = Router();
 
 const AuthenticationMiddleware = require("../middleware/AuthenticationMiddleware");
 
-const CategoryBelongsUserMiddleware = require("../middleware/CategoryBelongsUserMiddleware");
-
 const ListUserTransactionController = require("../usecases/transaction/listUserTransaction/ListUserTransactionController");
 const listUserTransactionController = new ListUserTransactionController();
 
 transactionRoutes.get(
     "/",
-    [
-        AuthenticationMiddleware.verifyToken,
-        CategoryBelongsUserMiddleware.verifyCategoryBelongsUser,
-    ],
+    [AuthenticationMiddleware.verifyToken],
     listUserTransactionController.list
 );
 

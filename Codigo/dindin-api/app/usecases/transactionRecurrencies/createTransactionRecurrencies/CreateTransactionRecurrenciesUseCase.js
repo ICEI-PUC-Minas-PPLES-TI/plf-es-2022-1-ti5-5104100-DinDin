@@ -13,6 +13,8 @@ class CreateTransactionRecurrenciesUseCase {
         expired_at,
         user_id
     ) {
+        if (category_id == 0) category_id = null;
+
         const transactionRecurrencies = await TransactionRecurrencies.create({
             wallet_id: wallet_id,
             value: value,
