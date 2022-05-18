@@ -46,6 +46,7 @@ afterAll(async () => {
 
 describe("GET /wallet users test suite", () => {
     it("should list the wallets users", async () => {
+        jest.setTimeout(30000);
         const responseList1 = await request.get("/api/wallet/").send();
         let walletId = responseList1.body.wallets[0].id;
         const response = await request
@@ -60,6 +61,7 @@ describe("GET /wallet users test suite", () => {
     });
 
     it("should list users from wallet 2", async () => {
+        jest.setTimeout(30000);
         const responseList1 = await request.get("/api/wallet/").send();
         console.log("oii");
         console.log(responseList1.body);
@@ -77,6 +79,7 @@ describe("GET /wallet users test suite", () => {
     });
 
     it("should list users from wallet 3", async () => {
+        jest.setTimeout(30000);
         const responseList1 = await request.get("/api/wallet/").send();
         let walletId = responseList1.body.wallets[2].id;
 
