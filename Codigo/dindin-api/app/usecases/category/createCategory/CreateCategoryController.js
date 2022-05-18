@@ -34,8 +34,8 @@ class CreateCategoryController {
         }
 
         const { description, type, color } = request.body;
-        const user_id = request.userId;
         const wallet_id = request.params.id;
+        const user_id = request.userId;
 
         const createCategoryUseCase = new CreateCategoryUseCase();
         const category = await createCategoryUseCase.create(
