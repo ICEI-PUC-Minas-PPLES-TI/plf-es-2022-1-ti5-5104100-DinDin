@@ -7,6 +7,7 @@ const UserHasWallet = require("../../../models/UserHasWallet");
 var login = null;
 
 beforeAll(async () => {
+    jest.setTimeout(30000);
     login = await connectAndLogin();
     for (let i = 0; i < 30; i++) {
         let wallet = await Wallet.create({
