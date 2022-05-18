@@ -1,9 +1,8 @@
 const { Router } = require("express");
 const walletCategoryRoutes = Router();
 
-const jwtAuthorization = require("../middleware/AuthenticationMiddleware");
+const AuthenticationMiddleware = require("../middleware/AuthenticationMiddleware");
 const UserAccessWalletMiddleware = require("../middleware/UserAccessWalletMiddleware");
-
 const CreateCategoryController = require("../usecases/category/createCategory/CreateCategoryController");
 const DeleteCategoryController = require("../usecases/category/deleteCategory/DeleteCategoryController");
 const FindCategoryController = require("../usecases/category/findCategory/FindCategoryController");
@@ -19,7 +18,7 @@ const updateCategoryController = new UpdateCategoryController();
 walletCategoryRoutes.post(
     "/wallet/:id/category/",
     [
-        jwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     createCategoryController.create
@@ -27,7 +26,7 @@ walletCategoryRoutes.post(
 walletCategoryRoutes.get(
     "/wallet/:id/category/:categoryId",
     [
-        jwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     findCategoryController.find
@@ -35,7 +34,7 @@ walletCategoryRoutes.get(
 walletCategoryRoutes.get(
     "/wallet/:id/category/",
     [
-        jwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     listCategoryController.list
@@ -43,7 +42,7 @@ walletCategoryRoutes.get(
 walletCategoryRoutes.put(
     "/wallet/:id/category/:categoryId",
     [
-        jwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     updateCategoryController.update
@@ -51,7 +50,7 @@ walletCategoryRoutes.put(
 walletCategoryRoutes.delete(
     "/wallet/:id/category/:categoryId",
     [
-        jwtAuthorization.verifyToken,
+        AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
     ],
     deleteCategoryController.delete
