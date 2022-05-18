@@ -19,7 +19,6 @@ class ListCategoriesController {
                     `'order' must be one of these: ${orderEnum}.`
                 ),
 
-            wallet_id: yup.number("'wallet_id' must be numeric!"),
             user_id: yup.number("'user_id' must be numeric!"),
             description: yup.string().max(100),
             color: yup.string().min(6).max(6),
@@ -46,7 +45,11 @@ class ListCategoriesController {
             throw new AppError(error.name, 422, error.errors);
         }
         const listCategoriesUseCase = new ListCategoriesUseCase();
-        const categories = await listCategoriesUseCase.list(request.query);
+        const categories = await listCategoriesUseCase.list(
+            request.query,
+            request.userId,
+            request.params.id
+        );
         return response.status(200).json(categories);
     }
 }
