@@ -410,7 +410,7 @@ export default {
                     res.total = res.total.toString().replace(".", ",");
                     this.totalBalance = res.total;
                 } else if (res.total == null) {
-                    this.totalBalance = "0, 00";
+                    this.totalBalance = "0,00";
                 }
             })
             .finally(() => {
