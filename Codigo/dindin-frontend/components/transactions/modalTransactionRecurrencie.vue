@@ -291,7 +291,7 @@ export default {
             }
         },
         "transaction.day"(val) {
-            if (val && val >= 28) {
+            if (val && val > 28) {
                 this.hintWarningDate =
                     "Warning, because your transaction has a monthly recurrence day above the 28th, it will not occur in some months of the year.";
             } else {
