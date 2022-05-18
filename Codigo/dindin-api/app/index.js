@@ -4,14 +4,13 @@ require("express-async-errors");
 const cors = require("cors");
 const logger = require("morgan");
 
+const routes = require("./routes/index"); // Require API routes
+
 // Create express instance
 const app = express();
 
-// Require API routes
-const routes = require("./routes/index");
-
 // Define cors origin
-var corsOptions = {
+const corsOptions = {
     origin: "*",
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };

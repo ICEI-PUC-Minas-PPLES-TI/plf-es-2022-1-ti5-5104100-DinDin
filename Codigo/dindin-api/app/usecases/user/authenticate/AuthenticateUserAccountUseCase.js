@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const jwtAuthorization = require("../../../routes/jwtAuthorization");
+const AuthenticationMiddleware = require("../../../middleware/AuthenticationMiddleware");
 const { firebaseServices } = require("../../../services/firebaseServices");
 
 const AppError = require("../../../errors/AppError");
@@ -29,7 +29,7 @@ class AuthenticateUserAccountUseCase {
         if (!arePasswordsEqual) throw new AppError("Senha incorreta!", 401);
 
         // gerar jwt
-        const jwt = jwtAuthorization.logIn(user.id);
+        const jwt = AuthenticationMiddleware.logIn(user.id);
         const firebaseToken = await firebaseServices.generateFirebaseAuthToken(
             user.id
         );
@@ -76,7 +76,7 @@ class AuthenticateUserAccountUseCase {
 
         // gerar jwt
         return {
-            jwt: jwtAuthorization.logIn(user.id),
+            jwt: AuthenticationMiddleware.logIn(user.id),
             firebaseToken,
             userId: user.id,
         };

@@ -10,6 +10,8 @@ const Wallet = require("../models/Wallet.js");
 const UserHasWallet = require("../models/UserHasWallet.js");
 const WalletInvite = require("../models/WalletInvite");
 const Category = require("../models/Category.js");
+const Transaction = require("../models/Transaction.js");
+const TransactionRecurrencies = require("../models/TransactionRecurrencies.js");
 
 const dbConfigEnviroment =
     process.env.NODE_ENV === "test" ? dbConfig.test : dbConfig.production;
@@ -87,11 +89,13 @@ module.exports = {
         try {
             // * Start Models here
             User.init(sequelize);
+            Wallet.init(sequelize);
             Goal.init(sequelize);
             Category.init(sequelize);
-            Wallet.init(sequelize);
             UserHasWallet.init(sequelize);
             WalletInvite.init(sequelize);
+            TransactionRecurrencies.init(sequelize);
+            Transaction.init(sequelize);
 
             // * Configure Associations here
             Goal.belongsTo(Wallet, {
@@ -111,8 +115,38 @@ module.exports = {
                 as: "wallet",
                 foreignKey: "wallet_id",
             });
-            // ! TransactionRecurrencies.belongsTo(Wallet, { as: "wallet", foreignKey: "wallet_id" });
-            // ! Transaction.belongsTo(Wallet, { as: "wallet", foreignKey: "wallet_id" });
+            TransactionRecurrencies.belongsTo(User, {
+                as: "user",
+                foreignKey: "user_id",
+            });
+            Transaction.belongsTo(User, {
+                as: "user",
+                foreignKey: "user_id",
+            });
+            TransactionRecurrencies.belongsTo(Wallet, {
+                as: "wallet",
+                foreignKey: "wallet_id",
+            });
+            Transaction.belongsTo(Wallet, {
+                as: "wallet",
+                foreignKey: "wallet_id",
+            });
+            TransactionRecurrencies.belongsTo(Category, {
+                as: "category",
+                foreignKey: "category_id",
+            });
+            Transaction.belongsTo(Category, {
+                as: "category",
+                foreignKey: "category_id",
+            });
+            TransactionRecurrencies.hasMany(Transaction, {
+                as: "transactions",
+                foreignKey: "transaction_recurrencies_id",
+            });
+            Transaction.belongsTo(TransactionRecurrencies, {
+                as: "transaction_recurrencies",
+                foreignKey: "transaction_recurrencies_id",
+            });
 
             // await sequelize.sync({ alter: false }); // force: true to drop and re-create
             await sequelize.authenticate();

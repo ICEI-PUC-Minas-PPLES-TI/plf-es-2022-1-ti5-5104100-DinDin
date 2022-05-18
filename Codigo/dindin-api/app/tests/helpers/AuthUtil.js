@@ -3,8 +3,8 @@ require("dotenv").config();
 
 const app = require("../..");
 const { connect } = require("../../database");
-var defaults = require("superagent-defaults");
-var request = defaults(supertest(app)); // or url
+const defaults = require("superagent-defaults");
+const request = defaults(supertest(app)); // or url
 
 async function connectAndLogin() {
     await connect();

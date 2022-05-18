@@ -1,16 +1,18 @@
+("use strict");
+
 const DataTypes = require("sequelize/lib/data-types");
 
-("use strict");
 module.exports = {
     async up(queryInterface) {
         await queryInterface.createTable(
             "wallet",
             {
                 id: {
-                    allowNull: false,
-                    autoIncrement: true,
-                    primaryKey: true,
                     type: DataTypes.BIGINT.UNSIGNED,
+                    primaryKey: true,
+                    unique: true,
+                    autoIncrement: true,
+                    allowNull: false,
                 },
                 description: {
                     type: DataTypes.STRING(30),
@@ -31,12 +33,12 @@ module.exports = {
                     references: { model: "user", key: "id" },
                 },
                 created_at: {
-                    allowNull: false,
                     type: DataTypes.DATE,
+                    allowNull: false,
                 },
                 updated_at: {
-                    allowNull: false,
                     type: DataTypes.DATE,
+                    allowNull: false,
                 },
                 deleted_at: {
                     type: DataTypes.DATE,

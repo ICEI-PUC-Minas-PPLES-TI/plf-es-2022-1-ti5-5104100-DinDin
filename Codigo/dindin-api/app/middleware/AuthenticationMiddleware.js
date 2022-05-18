@@ -14,6 +14,8 @@ const verifyToken = (request, response, next) => {
     }
 
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+        request.user = null;
+        request.userId = null;
         if (err) {
             throw new AppError("Falha ao autenticar no sistema!!", 403, [
                 "Falha ao autenticar o token!!",
@@ -42,9 +44,9 @@ const logIn = (id) => {
     return token;
 };
 
-const jwtAuthorization = {
+const AuthenticationMiddleware = {
     verifyToken,
     logIn,
 };
 
-module.exports = jwtAuthorization;
+module.exports = AuthenticationMiddleware;
