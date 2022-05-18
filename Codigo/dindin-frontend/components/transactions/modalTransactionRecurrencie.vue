@@ -136,9 +136,7 @@
                                 outlined
                                 type="number"
                                 hide-details="auto"
-                                hint="If you don't
-                            fill this filed the day its gonna be the equal of
-                            End Date day"
+                                :hint="hintWarningDate"
                                 :clearable="true"
                                 placeholder="1"
                                 min="1"
@@ -163,7 +161,6 @@
                                         v-bind="attrs"
                                         v-on="on"
                                         label="End Date"
-                                        :hint="hintWarningDate"
                                         persistent-hint
                                     />
                                 </template>
@@ -293,14 +290,12 @@ export default {
                 //this.setCurrentDate();
             }
         },
-        "transaction.expired_at"(val) {
-            if (this.transaction.interval == "M") {
-                if (val && val.length >= 10 && val.split("-")[2] >= 28) {
-                    this.hintWarningDate =
-                        "Warning, because your transaction has a monthly recurrence day above the 28th, it will not occur in some months of the year.";
-                } else {
-                    this.hintWarningDate = "";
-                }
+        "transaction.day"(val) {
+            if (val && val >= 28) {
+                this.hintWarningDate =
+                    "Warning, because your transaction has a monthly recurrence day above the 28th, it will not occur in some months of the year.";
+            } else {
+                this.hintWarningDate = "";
             }
         },
     },
@@ -376,6 +371,13 @@ export default {
                         .split("/")[0]
                 );
             }
+
+            if (this.transaction.type == "OUT") {
+                if (this.transaction.value > 0) {
+                    this.transaction.value *= -1;
+                }
+            }
+
             if (this.$refs.form.validate()) {
                 this.$axios
                     .post(endPoint, this.transaction)
@@ -406,6 +408,12 @@ export default {
         editTransaction() {
             this.errors = [];
             let walletId = this.transaction.wallet_id;
+
+            if (this.transaction.type == "OUT") {
+                if (this.transaction.value > 0) {
+                    this.transaction.value *= -1;
+                }
+            }
 
             if (this.$refs.form.validate()) {
                 this.$axios

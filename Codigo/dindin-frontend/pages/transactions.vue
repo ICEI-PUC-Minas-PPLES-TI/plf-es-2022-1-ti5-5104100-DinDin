@@ -12,7 +12,9 @@
                 <v-card elevation="0" class="p-20">
                     <div class="text-center"><h3>Your Balance</h3></div>
                     <div class="text-center">
-                        <h1><b> R$ 25.000,00 </b></h1>
+                        <h1>
+                            <b> R$ {{ totalBalance }} </b>
+                        </h1>
                     </div>
                 </v-card>
             </v-col>
@@ -364,6 +366,7 @@ export default {
             showModal: false,
             showModalTransactionRecurrencie: false,
             transactionToEdit: null,
+            totalBalance: "0,00",
             filters: {
                 wallet_id: "",
                 category_id: "",
@@ -377,6 +380,8 @@ export default {
     },
     async fetch() {
         this.loading = true;
+        this.loadingTotalBalance = true;
+
         this.transactions = [];
         let filters = "";
         if (this.filters.wallet_id) {
@@ -393,6 +398,18 @@ export default {
         if (this.filters.dateTo) {
             filters += `&date_end=${this.filters.dateTo}`;
         }
+
+        await this.$axios
+            .$get(`report/usertotal${filters.replace("&", "?")}`)
+            .then((res) => {
+                if (res.total) {
+                    res.total = res.total.toString().replace(".", ",");
+                    this.totalBalance = res.total;
+                }
+            })
+            .finally(() => {
+                this.loadingTotalBalance = false;
+            });
 
         await this.$axios
             .$get(`/transaction?page=${this.currentPage + filters}`)
@@ -424,6 +441,11 @@ export default {
         },
         "filters.dateTo"() {
             this.$fetch();
+        },
+        showModalTransactionRecurrencie(val) {
+            if (!val) {
+                this.showModal = false;
+            }
         },
     },
     methods: {
