@@ -1,6 +1,6 @@
 # DinDin
 
-Aplicação para controle de finanças.
+Aplicação para controle de finanças pessoais.
 
 ## Alunos integrantes da equipe
 
