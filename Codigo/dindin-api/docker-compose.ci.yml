@@ -42,7 +42,7 @@ services:
       - FB_PRIVATE_KEY=$FB_PRIVATE_KEY
     stdin_open: true
     tty: true
-    command: /bin/bash -c "/usr/wait-for-it.sh --timeout=0 mysqldb:3306 && npm install && npm run test && npm run $NPM_DOCKER_CMD"
+    command: /bin/bash -c "/usr/wait-for-it.sh --timeout=0 mysqldb:3306 && npm install && npm run test && npm run reset && npm run start:prod"
 
 volumes:
   db:

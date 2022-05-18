@@ -1,0 +1,92 @@
+name: CD-API
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  backend-cd:
+    name: CD-API | Docker - OS ${{ matrix.os }} - Node Version ${{ matrix.node-version }} - MySQL 5.7
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-version: [16.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Copy dist to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          # Github path
+          source: "Codigo/dindin-api/**"
+          # VPS path
+          target: "~/apps"
+
+      - name: Create node .env file
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/apps/Codigo/dindin-api
+            touch .env
+            echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+            echo DB_USER=${{ secrets.DB_USER }} >> .env
+            echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+            echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+            echo DB_NAME_TEST=${{ secrets.DB_NAME_TEST }} >> .env
+            echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+            echo APP_DEBUG=${{ secrets.APP_DEBUG }} >> .env
+            echo NODE_PUBLIC_PORT=${{ secrets.NODE_PUBLIC_PORT }} >> .env
+            echo NODE_APP_HOST=${{ secrets.NODE_APP_HOST }} >> .env
+            echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+            echo FB_PRIVATE_KEY="\"${{ secrets.FB_PRIVATE_KEY }}\"" >> .env
+
+      - name: Create docker .env file
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/apps/Codigo/dindin-api
+            touch .env
+            echo MYSQLDB_USER=${{ secrets.MYSQLDB_USER }} >> .env
+            echo MYSQLDB_ROOT_PASSWORD=${{ secrets.MYSQLDB_ROOT_PASSWORD }} >> .env
+            echo MYSQLDB_DATABASE=${{ secrets.MYSQLDB_DATABASE }} >> .env
+            echo MYSQLDB_LOCAL_PORT=${{ secrets.MYSQLDB_LOCAL_PORT }} >> .env
+            echo MYSQLDB_DOCKER_PORT=${{ secrets.MYSQLDB_DOCKER_PORT }} >> .env
+            echo NODE_LOCAL_PORT=${{ secrets.NODE_LOCAL_PORT }} >> .env
+            echo APP_DEBUG=${{ secrets.APP_DEBUG }} >> .env
+            echo NODE_PUBLIC_PORT=${{ secrets.NODE_PUBLIC_PORT }} >> .env
+            echo NODE_APP_HOST=${{ secrets.NODE_APP_HOST }} >> .env
+            echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+            echo FB_PRIVATE_KEY="\"${{ secrets.FB_PRIVATE_KEY }}\"" >> .env
+
+      - name: Instal dependencies on VPS, run migrations on VPS and restart Node server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/apps/Codigo/dindin-api
+            docker stop dindin-api || true && docker rm dindin-api || true && sudo docker rm -vf $(docker ps -aq) || true && sudo docker rmi -f $(docker images -aq) || true && sudo docker volume rm $(docker volume ls -q) || true
+            sudo docker-compose -f "docker-compose.ci.yml" up -d --build --force-recreate
