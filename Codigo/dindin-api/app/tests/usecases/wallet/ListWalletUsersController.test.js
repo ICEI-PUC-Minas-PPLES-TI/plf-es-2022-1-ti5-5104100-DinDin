@@ -9,6 +9,7 @@ const User = require("../../../models/User");
 var login = null;
 
 beforeAll(async () => {
+    jest.setTimeout(30000);
     login = await connectAndLogin();
     try {
         for (let i = 0; i < 30; i++) {
