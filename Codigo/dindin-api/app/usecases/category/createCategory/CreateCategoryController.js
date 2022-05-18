@@ -39,7 +39,7 @@ class CreateCategoryController {
         const createCategoryUseCase = new CreateCategoryUseCase();
         const category = await createCategoryUseCase.create(
             wallet_id,
-            request.userId,
+            user_id,
             description,
             type,
             color
