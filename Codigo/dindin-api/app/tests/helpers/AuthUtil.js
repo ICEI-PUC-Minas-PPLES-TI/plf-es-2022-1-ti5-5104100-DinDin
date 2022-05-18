@@ -12,12 +12,12 @@ async function connectAndLogin() {
     const mockmail = `${Math.random()}@email.com`;
     const mockPassword = `${Math.random()}@ultrapassword`;
 
-    await supertest(app).post("/api/user").send({
+    const responseCreateUser = await supertest(app).post("/api/user").send({
         name: "User Test",
         email: mockmail,
         password: mockPassword,
     });
-
+    const userId = responseCreateUser.body.id;
     const response = await supertest(app).post("/api/user/auth").send({
         email: mockmail,
         password: mockPassword,
@@ -25,6 +25,7 @@ async function connectAndLogin() {
     request.set("Authorization", response.body.token);
 
     return {
+        userId,
         mockmail,
         mockPassword,
         userId: response.body.userId,
