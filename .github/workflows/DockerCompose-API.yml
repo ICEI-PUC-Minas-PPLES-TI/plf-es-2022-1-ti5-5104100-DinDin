@@ -3,15 +3,14 @@ name: Docker Compose API
 on:
   push:
     branches: [master]
-    paths: 
-    - 'Codigo/dindin-api/**'
+    paths:
+      - "Codigo/dindin-api/**"
   pull_request:
     branches: [master]
-    paths: 
-    - 'Codigo/dindin-api/**'
+    paths:
+      - "Codigo/dindin-api/**"
 
 jobs:
-    
   docker:
     name: Docker-compose API CI | OS ${{ matrix.os }}
     timeout-minutes: 30
@@ -40,7 +39,6 @@ jobs:
           echo NODE_APP_HOST=${{ secrets.NODE_APP_HOST }} >> .env
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
           echo FB_PRIVATE_KEY="\"${{ secrets.FB_PRIVATE_KEY }}\"" >> .env
-
       - name: Create docker .env file
         working-directory: ./Codigo/dindin-api/
         run: |
@@ -57,14 +55,13 @@ jobs:
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
           echo FB_PRIVATE_KEY="\"${{ secrets.FB_PRIVATE_KEY }}\"" >> .env
 
-
       - name: Start containers
-        run: docker-compose -f "docker-compose.ci.yml" up -d --build
+        run: docker-compose up -d --build
         working-directory: ./Codigo/dindin-api/
         env:
           CI: true
 
       - name: Stop containers
         if: always()
-        run: docker-compose -f "docker-compose.yml" down
+        run: docker-compose down
         working-directory: ./Codigo/dindin-api/

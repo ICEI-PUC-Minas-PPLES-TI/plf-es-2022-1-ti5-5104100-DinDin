@@ -16,7 +16,8 @@
     "reset": "echo \"Reseting database\" && npm run createDatabase && npm run undomigrations && npm run migrations && npm run seeds",
     "start": " cross-env NODE_ENV=dev nodemon -L index.js",
     "start:reset": "cross-env NODE_ENV=dev npm run reset && nodemon -L index.js",
-    "start:prod": "cross-env NODE_ENV=prod node index.js"
+    "start:prod": "cross-env NODE_ENV=prod node index.js",
+    "api": "if test \"$NPM_DOCKER_CMD\" = \"ci\" ; then npm run reset && npm run start:prod ; else npm run start:reset ; fi "
   },
   "jest": {
     "testEnvironment": "node",
