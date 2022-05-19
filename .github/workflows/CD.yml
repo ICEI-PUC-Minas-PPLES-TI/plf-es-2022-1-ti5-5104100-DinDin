@@ -3,6 +3,9 @@ name: Continuous delivery with docker-compose
 on:
   push:
     branches: [master]
+    paths:
+      - "Codigo/dindin-api/**"
+      - "Codigo/dindin-frontend/**"
 
 jobs:
   backend-cd:
