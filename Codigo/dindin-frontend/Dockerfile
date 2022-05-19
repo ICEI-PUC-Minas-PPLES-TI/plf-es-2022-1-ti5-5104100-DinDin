@@ -16,11 +16,11 @@ RUN apk add dos2unix
 RUN rm -rf ./node_modules
 RUN rm -rf package-lock.json
 
-RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
-
 # Install app dependencies
 COPY ./package.json .
 RUN npm install
+
+RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 
 # copy the app, note .dockerignore, bundle app source
 COPY . .
