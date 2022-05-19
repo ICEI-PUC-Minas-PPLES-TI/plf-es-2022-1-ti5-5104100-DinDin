@@ -1,7 +1,7 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/widgets/category_drop.dart';
 import 'package:dindin/widgets/wallet_drop.dart';
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -41,32 +41,31 @@ class _TransactionFormState extends State<TransactionForm> {
     setState(() {
       wallet = id;
     });
-    _key.currentState!.setWallet(_isIncome ? "IN": "OUT", id);
+    _key.currentState!.setWallet(_isIncome ? "IN" : "OUT", id);
   }
 
-  void changeCategoryId(String id){
+  void changeCategoryId(String id) {
     category = id;
     print(id);
   }
 
   void insertTransaction() async {
-
-    if(_descriptionController.text.isEmpty) {
+    if (_descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Missing Description"),
       ));
       return;
-    } else if(_amountController.text.isEmpty) {
+    } else if (_amountController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Missing Amount"),
       ));
       return;
-    } else if(_dateController.text.isEmpty) {
+    } else if (_dateController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Missing Date"),
       ));
       return;
-    } else if(wallet.isEmpty) {
+    } else if (wallet.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Missing Wallet"),
       ));
@@ -83,14 +82,12 @@ class _TransactionFormState extends State<TransactionForm> {
       'date': '${date.year}-${date.month}-${date.day}',
     };
 
-
-    if(category?.isEmpty ?? false) {
+    if (category?.isEmpty ?? false) {
       body['category_id'] = category!;
     }
 
-    var response = await http.post(uri, headers: {
-      'Authorization': token
-    }, body: body);
+    var response =
+        await http.post(uri, headers: {'Authorization': token}, body: body);
     var status = response.statusCode;
     if (status == 201) {
       print('created');
@@ -99,8 +96,10 @@ class _TransactionFormState extends State<TransactionForm> {
       print(response.body);
     }
 
-    if(_isChecked) { // Recurrency ON
-      var url2 = ApiURL.baseUrl + "/wallet/" + wallet + "/transactionrecurrencies";
+    if (_isChecked) {
+      // Recurrency ON
+      var url2 =
+          ApiURL.baseUrl + "/wallet/" + wallet + "/transactionrecurrencies";
       final Uri uri2 = Uri.parse(url2);
 
       var response2 = await http.post(uri2, headers: {
@@ -109,7 +108,7 @@ class _TransactionFormState extends State<TransactionForm> {
         'description': _descriptionController.text,
         'value': _amountController.text.replaceAll(new RegExp(r"\D"), ""),
         'day': '${date.day}',
-        'category_id': category?? "0",
+        'category_id': category ?? "0",
         'interval': recurrency,
         'expired_at': '${endDate!.year}-${endDate!.month}-${endDate!.day}'
       });
@@ -121,6 +120,7 @@ class _TransactionFormState extends State<TransactionForm> {
         print(response2.body);
       }
     }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -242,15 +242,12 @@ class _TransactionFormState extends State<TransactionForm> {
                           builder: (context, child) {
                             return Theme(
                               data: ThemeData.light().copyWith(
-                                primaryColor:
-                                Theme.of(context).primaryColor,
+                                primaryColor: Theme.of(context).primaryColor,
                                 colorScheme: ColorScheme.light(
-                                  primary:
-                                  Theme.of(context).primaryColor,
+                                  primary: Theme.of(context).primaryColor,
                                 ),
                                 buttonTheme: const ButtonThemeData(
-                                    textTheme:
-                                    ButtonTextTheme.primary),
+                                    textTheme: ButtonTextTheme.primary),
                               ),
                               child: child!,
                             );
@@ -258,9 +255,10 @@ class _TransactionFormState extends State<TransactionForm> {
                         );
                         if (newDate == null) return;
                         setState(() => {
-                          date = newDate,
-                          _dateController.text = '${date.day}/${date.month}/${date.year}'
-                        });
+                              date = newDate,
+                              _dateController.text =
+                                  '${date.day}/${date.month}/${date.year}'
+                            });
                       },
                       decoration: InputDecoration(
                           labelText: "Date",
@@ -273,7 +271,7 @@ class _TransactionFormState extends State<TransactionForm> {
                           )),
                     ),
                     const SizedBox(height: 10),
-                    DropCategory(changeCategoryId,key: _key),
+                    DropCategory(changeCategoryId, key: _key),
                     // Reccurrent
                     CheckboxListTile(
                       title: const Text(
@@ -290,105 +288,103 @@ class _TransactionFormState extends State<TransactionForm> {
                           .leading, //  <-- leading Checkbox
                     ),
                     const SizedBox(height: 10),
-                    if(_isChecked)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                recurrency = "D";
-                              });
-                            },
-                            style: recurrency == "D"
-                                ? ButtonStyle(
-                                backgroundColor:
-                                MaterialStateProperty.all<Color>(
-                                  Colors.grey,
-                                ))
-                                : ButtonStyle(
-                              backgroundColor:
-                              MaterialStateProperty.all<Color>(
-                                  Colors.white38),
-                            ),
-                            child: const Text(
-                              "Daily",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          child: ElevatedButton(
+                    if (_isChecked)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  recurrency = "M";
+                                  recurrency = "D";
                                 });
                               },
-                              style: recurrency == "M"
+                              style: recurrency == "D"
                                   ? ButtonStyle(
-                                backgroundColor:
-                                MaterialStateProperty.all<Color>(
-                                    Colors.grey),
-                              )
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                      Colors.grey,
+                                    ))
                                   : ButtonStyle(
-                                backgroundColor:
-                                MaterialStateProperty.all<Color>(
-                                    Colors.white38),
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              Colors.white38),
+                                    ),
+                              child: const Text(
+                                "Daily",
+                                style: TextStyle(fontSize: 20),
                               ),
-                              child: const Text("Montly",
-                                  style: TextStyle(fontSize: 20))),
-                        ),
-                      ],
-                    ),
-                    if(_isChecked)
-                    TextField(
-                      controller: _endDateController,
-                      enableInteractiveSelection: false,
-                      onTap: () async {
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        DateTime? newDate = await showDatePicker(
-                          context: context,
-                          initialDate: date,
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2062),
-                          builder: (context, child) {
-                            return Theme(
-                              data: ThemeData.light().copyWith(
-                                primaryColor:
-                                Theme.of(context).primaryColor,
-                                colorScheme: ColorScheme.light(
-                                  primary:
-                                  Theme.of(context).primaryColor,
-                                ),
-                                buttonTheme: const ButtonThemeData(
-                                    textTheme:
-                                    ButtonTextTheme.primary),
-                              ),
-                              child: child!,
-                            );
-                          },
-                        );
-                        if (newDate == null) return;
-                        setState(() => {
-                          endDate = newDate,
-                          _endDateController.text = '${endDate!.day}/${endDate!.month}/${endDate!.year}'
-                        });
-                      },
-                      decoration: InputDecoration(
-                          labelText: "End Date",
-                          labelStyle: const TextStyle(fontSize: 16),
-                          border: const UnderlineInputBorder(),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
                             ),
-                          )),
-                    ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    recurrency = "M";
+                                  });
+                                },
+                                style: recurrency == "M"
+                                    ? ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.grey),
+                                      )
+                                    : ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.white38),
+                                      ),
+                                child: const Text("Montly",
+                                    style: TextStyle(fontSize: 20))),
+                          ),
+                        ],
+                      ),
+                    if (_isChecked)
+                      TextField(
+                        controller: _endDateController,
+                        enableInteractiveSelection: false,
+                        onTap: () async {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          DateTime? newDate = await showDatePicker(
+                            context: context,
+                            initialDate: date,
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2062),
+                            builder: (context, child) {
+                              return Theme(
+                                data: ThemeData.light().copyWith(
+                                  primaryColor: Theme.of(context).primaryColor,
+                                  colorScheme: ColorScheme.light(
+                                    primary: Theme.of(context).primaryColor,
+                                  ),
+                                  buttonTheme: const ButtonThemeData(
+                                      textTheme: ButtonTextTheme.primary),
+                                ),
+                                child: child!,
+                              );
+                            },
+                          );
+                          if (newDate == null) return;
+                          setState(() => {
+                                endDate = newDate,
+                                _endDateController.text =
+                                    '${endDate!.day}/${endDate!.month}/${endDate!.year}'
+                              });
+                        },
+                        decoration: InputDecoration(
+                            labelText: "End Date",
+                            labelStyle: const TextStyle(fontSize: 16),
+                            border: const UnderlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            )),
+                      ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
