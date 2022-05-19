@@ -20,6 +20,8 @@ RUN rm -rf package-lock.json
 COPY ./package.json .
 RUN npm install
 
+RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
+
 # copy the app, note .dockerignore, bundle app source
 COPY . .
 # convert from windows to linux

@@ -7,6 +7,8 @@ class UpdateTransactionUseCase {
         const findTransactionUseCase = new FindTransactionUseCase();
         const transaction = await findTransactionUseCase.find(id, wallet_id);
 
+        if (category_id == 0) category_id = null;
+
         await transaction
             .update({
                 value: value,

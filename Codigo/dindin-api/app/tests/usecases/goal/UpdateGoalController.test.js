@@ -5,8 +5,27 @@ const { close } = require("../../../database");
 
 const Goal = require("../../../models/Goal");
 
+let walletToCreate;
+let goalIdToValidations;
+
 beforeAll(async () => {
     await connectAndLogin();
+
+    const response = await request.post("/api/wallet").send({
+        description: `wallet to goal update test`,
+        initial_value: 2000,
+    });
+    walletToCreate = response.body.wallet.id;
+
+    const mockGoalToValidations = {
+        description: "goal to update",
+        value: 2000,
+        type: "B",
+        expire_at: "2030-01-01T14:50:00.000Z",
+        wallet_id: walletToCreate,
+    };
+    const { id } = await Goal.create(mockGoalToValidations);
+    goalIdToValidations = id;
 });
 
 afterAll(async () => {
@@ -20,7 +39,7 @@ describe("PUT /goal test suite", () => {
             value: 2000,
             type: "B",
             expire_at: "2030-01-01T14:50:00.000Z",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
         const createdGoal = await Goal.create(mockGoal);
 
@@ -28,7 +47,7 @@ describe("PUT /goal test suite", () => {
         mockGoal.value = 3000;
         mockGoal.type = "A";
         mockGoal.expire_at = "2040-01-01T14:50:00.000Z";
-        mockGoal.wallet_id = 2;
+        mockGoal.wallet_id = walletToCreate;
 
         const response = await request
             .put("/api/goal/" + createdGoal.id)
@@ -49,7 +68,7 @@ describe("PUT /goal test suite", () => {
             value: 2000,
             type: "B",
             expire_at: "2030-01-01T14:50:00.000Z",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         }; /* Start with PENDING status */
         const createdGoal = await Goal.create(mockGoal);
 
@@ -69,7 +88,7 @@ describe("PUT /goal test suite", () => {
             value: 2000,
             type: "B",
             expire_at: "2030-01-01T14:50:00.000Z",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
         const createdGoal = await Goal.create(mockGoal);
 
@@ -93,7 +112,7 @@ describe("PUT /goal test suite", () => {
             value: 2000,
             type: "B",
             expire_at: "2030-01-01T14:50:00.000Z",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
         const createdGoal = await Goal.create(mockGoal);
 
@@ -117,7 +136,7 @@ describe("PUT /goal test suite", () => {
             value: 2000,
             type: "B",
             expire_at: "2030-01-01T14:50:00.000Z",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
         const createdGoal = await Goal.create(mockGoal);
 
@@ -141,7 +160,7 @@ describe("PUT /goal test suite", () => {
             value: 2000,
             type: "B",
             expire_at: "2030-01-01T14:50:00.000Z",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
         const createdGoal = await Goal.create(mockGoal);
 
@@ -165,7 +184,7 @@ describe("PUT /goal test suite", () => {
             value: 2000,
             type: "B",
             expire_at: "2030-01-01T14:50:00.000Z",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
         const createdGoal = await Goal.create(mockGoal);
 
@@ -192,7 +211,9 @@ describe("PUT /goal test suite", () => {
             wallet_id: 125999002, //unexisting wallet
         };
 
-        const response = await request.put("/api/goal/1").send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -203,10 +224,12 @@ describe("PUT /goal test suite", () => {
             value: 2000,
             type: "A",
             expire_at: "2020-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
-        const response = await request.put("/api/goal/1").send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -217,10 +240,12 @@ describe("PUT /goal test suite", () => {
             value: 2000,
             type: "A",
             expire_at: "2030-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
-        const response = await request.put("/api/goal/1").send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -231,10 +256,12 @@ describe("PUT /goal test suite", () => {
             value: "notANumber",
             type: "A",
             expire_at: "2030-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
-        const response = await request.put("/api/goal/1").send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -245,10 +272,12 @@ describe("PUT /goal test suite", () => {
             value: 2000,
             type: "X",
             expire_at: "2030-10-10",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
-        const response = await request.put("/api/goal/1").send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -259,10 +288,12 @@ describe("PUT /goal test suite", () => {
             value: 2000,
             type: "A",
             expire_at: "notADate",
-            wallet_id: 1,
+            wallet_id: walletToCreate,
         };
 
-        const response = await request.put("/api/goal/1").send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });
@@ -276,7 +307,9 @@ describe("PUT /goal test suite", () => {
             wallet_id: "notAId",
         };
 
-        const response = await request.put("/api/goal/1").send(mockGoal);
+        const response = await request
+            .put("/api/goal/" + goalIdToValidations)
+            .send(mockGoal);
 
         expect(response.statusCode).toEqual(422);
     });

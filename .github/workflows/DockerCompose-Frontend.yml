@@ -3,12 +3,12 @@ name: Docker Compose Frontend
 on:
   push:
     branches: [master]
-    paths: 
-    - 'Codigo/dindin-frontend/**'
+    paths:
+      - "Codigo/dindin-frontend/**"
   pull_request:
     branches: [master]
-    paths: 
-    - 'Codigo/dindin-frontend/**'
+    paths:
+      - "Codigo/dindin-frontend/**"
 
 jobs:
   docker:

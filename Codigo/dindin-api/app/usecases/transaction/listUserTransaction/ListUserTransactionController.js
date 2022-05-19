@@ -19,6 +19,8 @@ class ListUserTransactionController {
                     orderEnum,
                     `'order' must be one of these: ${orderEnum}.`
                 ),
+            wallet_id: yup.number("'wallet_id' must be numeric!"),
+            category_id: yup.number("'category_id' must be numeric!"),
 
             description: yup.string("'description' must be string!").max(30),
             value: yup.number("'value' must be numeric!"),

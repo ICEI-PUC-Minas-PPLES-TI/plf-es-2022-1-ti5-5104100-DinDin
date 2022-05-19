@@ -59,7 +59,7 @@ class ListGoalController {
         }
 
         const listGoalUseCase = new ListGoalUseCase();
-        const goals = await listGoalUseCase.list(request.query);
+        const goals = await listGoalUseCase.list(request.query, request.userId);
 
         return response.status(200).json(goals);
     }

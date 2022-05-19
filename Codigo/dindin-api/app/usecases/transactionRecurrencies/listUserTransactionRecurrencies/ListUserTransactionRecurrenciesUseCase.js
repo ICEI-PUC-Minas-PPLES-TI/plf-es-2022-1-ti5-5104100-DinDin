@@ -14,6 +14,7 @@ class ListUserTransactionRecurrenciesUseCase {
         let whre = {};
 
         whre.user_id = user_id;
+        if (query.wallet_id) whre.wallet_id = query.wallet_id;
 
         if (query.description) {
             whre.description = sequelize.where(
@@ -27,8 +28,23 @@ class ListUserTransactionRecurrenciesUseCase {
         if (query.day) whre.day = query.day;
         if (query.interval) whre.interval = query.interval;
 
-        if (query.category_id) whre.category_id = query.category_id;
-        if (query.category_id == "null") whre.category_id = { [Op.is]: null };
+        if (query.category_id == 0) whre.category_id = { [Op.is]: null };
+        else if (query.category_id) {
+            const category = await Category.findOne({
+                where: {
+                    id: query.category_id,
+                    user_id: user_id,
+                },
+            }).catch((error) => {
+                throw new AppError(error.message, 500, error);
+            });
+            if (category) whre.category_id = query.category_id;
+            else
+                throw new AppError(
+                    "User does not have permission for this Category!",
+                    403
+                );
+        }
 
         if (query.expired_at_start || query.expired_at_end) {
             const startDate = query.expired_at_start

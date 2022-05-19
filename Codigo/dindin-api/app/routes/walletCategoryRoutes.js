@@ -1,8 +1,8 @@
 const { Router } = require("express");
-const categoryRoutes = Router();
+const walletCategoryRoutes = Router();
 
 const AuthenticationMiddleware = require("../middleware/AuthenticationMiddleware");
-
+const UserAccessWalletMiddleware = require("../middleware/UserAccessWalletMiddleware");
 const CreateCategoryController = require("../usecases/category/createCategory/CreateCategoryController");
 const DeleteCategoryController = require("../usecases/category/deleteCategory/DeleteCategoryController");
 const FindCategoryController = require("../usecases/category/findCategory/FindCategoryController");
@@ -15,30 +15,45 @@ const listCategoryController = new ListCategoryController();
 const deleteCategoryController = new DeleteCategoryController();
 const updateCategoryController = new UpdateCategoryController();
 
-categoryRoutes.post(
-    "/",
-    [AuthenticationMiddleware.verifyToken],
+walletCategoryRoutes.post(
+    "/wallet/:id/category/",
+    [
+        AuthenticationMiddleware.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+    ],
     createCategoryController.create
 );
-categoryRoutes.get(
-    "/:id",
-    [AuthenticationMiddleware.verifyToken],
+walletCategoryRoutes.get(
+    "/wallet/:id/category/:categoryId",
+    [
+        AuthenticationMiddleware.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+    ],
     findCategoryController.find
 );
-categoryRoutes.get(
-    "/",
-    [AuthenticationMiddleware.verifyToken],
+walletCategoryRoutes.get(
+    "/wallet/:id/category/",
+    [
+        AuthenticationMiddleware.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+    ],
     listCategoryController.list
 );
-categoryRoutes.put(
-    "/:id",
-    [AuthenticationMiddleware.verifyToken],
+walletCategoryRoutes.put(
+    "/wallet/:id/category/:categoryId",
+    [
+        AuthenticationMiddleware.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+    ],
     updateCategoryController.update
 );
-categoryRoutes.delete(
-    "/:id",
-    [AuthenticationMiddleware.verifyToken],
+walletCategoryRoutes.delete(
+    "/wallet/:id/category/:categoryId",
+    [
+        AuthenticationMiddleware.verifyToken,
+        UserAccessWalletMiddleware.verifyWalletPermission,
+    ],
     deleteCategoryController.delete
 );
 
-module.exports = categoryRoutes;
+module.exports = walletCategoryRoutes;

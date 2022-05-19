@@ -83,17 +83,25 @@ Future autheticateToServerViaFirebaseUser(User firebaseUser) {
       .getIdToken()
       .then((token) => http.post(uri, body: {'firebaseToken': token}))
       .then((response) async {
-    var json = jsonDecode(response.body);
-    int userId = json["userId"];
-    try {
-      await FirebaseMessaging.instance
-          .subscribeToTopic('U_' + userId.toString());
-    } catch (e) {
-      print(
-          "Não foi possível fazer a inscrição para receber mensagens no tópico");
+    if (response.statusCode != 200) {
+      FirebaseAuth.instance.signOut();
+    } else {
+      var json = jsonDecode(response.body);
+      int userId = json["userId"];
+      try {
+        await FirebaseMessaging.instance
+            .subscribeToTopic('U_' + userId.toString());
+      } catch (e) {
+        print(
+            "Não foi possível fazer a inscrição para receber mensagens no tópico");
+      }
+      StreamingSharedPreferences.instance.then((sharedPref) {
+        sharedPref.setString("token", json["token"]);
+      });
     }
-    StreamingSharedPreferences.instance.then((sharedPref) {
-      sharedPref.setString("token", json["token"]);
-    });
+  }).catchError((err) {
+    print("Error while trying to authenticate with backend server" +
+        err.toString());
+    FirebaseAuth.instance.signOut();
   });
 }

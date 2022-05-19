@@ -49,6 +49,16 @@ module.exports = {
             });
         }
 
+        try {
+            walletUsers.push({
+                wallet_id: 1,
+                user_id: 1,
+                created_at: "2022-03-23 11:30:00",
+            });
+        } catch (e) {
+            console.log(e);
+        }
+
         await queryInterface.bulkInsert("user_has_wallet", walletUsers, {});
         await queryInterface.bulkInsert("wallet_invite", walletInvite, {});
     },

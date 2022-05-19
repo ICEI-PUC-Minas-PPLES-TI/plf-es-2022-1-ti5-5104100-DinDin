@@ -38,7 +38,7 @@ class UpdateTransactionController {
                 .nullable(true),
             category_id: yup
                 .number("'category_id' must be numeric!")
-                .min(1)
+                .min(0)
                 .nullable(true),
         });
 

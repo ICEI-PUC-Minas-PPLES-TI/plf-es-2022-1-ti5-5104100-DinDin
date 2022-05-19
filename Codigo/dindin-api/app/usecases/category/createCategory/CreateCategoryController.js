@@ -33,12 +33,14 @@ class CreateCategoryController {
             throw new AppError(error.name, 422, error.errors);
         }
 
-        const { wallet_id, description, type, color } = request.body;
+        const { description, type, color } = request.body;
+        const wallet_id = request.params.id;
+        const user_id = request.userId;
 
         const createCategoryUseCase = new CreateCategoryUseCase();
         const category = await createCategoryUseCase.create(
             wallet_id,
-            request.userId,
+            user_id,
             description,
             type,
             color

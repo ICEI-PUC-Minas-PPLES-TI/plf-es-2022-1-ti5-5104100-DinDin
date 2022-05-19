@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
 import 'dart:convert';
+import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/pages/authorization/login.dart';
+import 'package:dindin/pages/dashboard.dart';
 import 'package:flutter/gestures.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -100,6 +102,7 @@ class _LoginState extends State<Register> {
                                         } else {
                                           null;
                                         }
+                                        return null;
                                       },
                                     ),
                                   ),
@@ -107,7 +110,9 @@ class _LoginState extends State<Register> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 0.0, vertical: 10.0),
                                     child: TextFormField(
-                                      controller: _emailController,
+                                      onChanged: (text) {
+                                        name = text;
+                                      },
                                       keyboardType: TextInputType.emailAddress,
                                       decoration: InputDecoration(
                                           labelText: 'Your Name',
@@ -124,6 +129,7 @@ class _LoginState extends State<Register> {
                                         } else {
                                           null;
                                         }
+                                        return null;
                                       },
                                     ),
                                   ),
@@ -148,6 +154,7 @@ class _LoginState extends State<Register> {
                                         } else {
                                           null;
                                         }
+                                        return null;
                                       },
                                     ),
                                   ),
@@ -156,7 +163,7 @@ class _LoginState extends State<Register> {
                                         horizontal: 0.0, vertical: 10.0),
                                     child: TextFormField(
                                       onChanged: (text) {
-                                        password = text;
+                                        confirmPassword = text;
                                       },
                                       obscureText: true,
                                       decoration: InputDecoration(
@@ -219,24 +226,29 @@ class _LoginState extends State<Register> {
                                       if (formKey.currentState!.validate()) {
                                         final snackBarTrue = SnackBar(
                                             content: Text('User created'));
-                                        final snackBarFalse = SnackBar(
-                                            content:
-                                                Text('Fail to create user'));
-                                        createUser(email, password, name)
-                                            .then((res) => {
-                                                  if (res == 0)
-                                                    {
-                                                      _scaffoldKey.currentState!
-                                                          .showSnackBar(
-                                                              snackBarTrue)
-                                                    }
-                                                  else
-                                                    {
-                                                      _scaffoldKey.currentState!
-                                                          .showSnackBar(
-                                                              snackBarFalse)
-                                                    }
-                                                });
+                                        createUser(email, name, password)
+                                            .then((res) async {
+                                          if (res == true) {
+                                            _scaffoldKey.currentState!
+                                                .showSnackBar(snackBarTrue);
+
+                                            bool logged =
+                                                await userAuth(email, password);
+                                            if (logged) {
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const Dashboard()),
+                                              );
+                                            }
+                                          } else {
+                                            final snackBarFalse = SnackBar(
+                                                content: Text(res as String));
+                                            _scaffoldKey.currentState!
+                                                .showSnackBar(snackBarFalse);
+                                          }
+                                        });
                                       } else {
                                         final snackBar = SnackBar(
                                             content:
@@ -305,15 +317,13 @@ class _LoginState extends State<Register> {
 }
 
 Future<Object> createUser(String email, String name, String password) async {
-  String url =
-      dotenv.get('API_BASE_URL', fallback: 'http://localhost:3001/api') +
-          "/user";
-  final Uri uri = Uri.parse(url);
-  var response = await http
-      .post(uri, body: {'email': email, 'password': password, 'name': name});
+  var response = await ApiURL.post("/user",
+      body: {'email': email, 'password': password, 'name': name});
   int status = response.statusCode;
   if (status == 201) {
-    return jsonDecode(response.body);
+    return true;
+  } else if (jsonDecode(response.body)["message"] != null) {
+    return jsonDecode(response.body)["message"];
   }
-  return {'message': "Fail to connect to the network"};
+  return "Fail to connect to the network";
 }

@@ -9,10 +9,16 @@
         <!-- Balance Selection -->
         <v-row>
             <v-col>
-                <v-card elevation="0" class="p-20">
+                <v-card
+                    elevation="0"
+                    class="p-20"
+                    :loading="loadingTotalBalance"
+                >
                     <div class="text-center"><h3>Your Balance</h3></div>
                     <div class="text-center">
-                        <h1><b> R$ 25.000,00 </b></h1>
+                        <h1>
+                            <b> R$ {{ totalBalance }} </b>
+                        </h1>
                     </div>
                 </v-card>
             </v-col>
@@ -24,25 +30,36 @@
                     <!-- Table top toolbar -->
                     <v-row justify="center">
                         <v-col cols="9" md="4" sm="12" lg="2">
-                            <v-select
-                                v-model="filters.wallet"
-                                :items="listWalletsFilter"
-                                label="Wallet"
-                                item-value="id"
-                                item-text="description"
+                            <v-autocomplete
+                                prepend-inner-icon="mdi-wallet"
                                 outlined
-                            ></v-select>
+                                hide-details="auto"
+                                v-model="filters.wallet_id"
+                                @change="cleanCategory && $fetch()"
+                                :items="wallets"
+                                :search-input="searchWalletTxt"
+                                @update:search-input="searchWallet"
+                                @focus="listWallets(null)"
+                                item-text="description"
+                                item-value="id"
+                                label="Wallet"
+                            ></v-autocomplete>
                         </v-col>
                         <v-col cols="9" md="4" sm="12" lg="2">
-                            <v-select
-                                v-model="filters.category"
-                                :disabled="!filters.wallet"
-                                :items="listCategoriesFilter"
-                                label="Category"
-                                item-value="id"
-                                item-text="description"
+                            <v-autocomplete
+                                prepend-inner-icon="mdi-tag"
                                 outlined
-                            ></v-select>
+                                hide-details="auto"
+                                v-model="filters.category_id"
+                                @change="$fetch()"
+                                :items="categories"
+                                :search-input="searchCategoryTxt"
+                                @update:search-input="searchCategory"
+                                @focus="listCategories(null)"
+                                item-text="description"
+                                item-value="id"
+                                label="Category"
+                            ></v-autocomplete>
                         </v-col>
                         <v-col cols="9" md="4" sm="12" lg="2">
                             <v-menu
@@ -123,7 +140,10 @@
                             <v-btn
                                 block
                                 color="success"
-                                @click.stop="openModal(0)"
+                                @click.stop="
+                                    transactionToEdit = null;
+                                    showModal = true;
+                                "
                             >
                                 New Transaction
                             </v-btn>
@@ -138,7 +158,7 @@
                                         <tr>
                                             <th class="text-left">Name</th>
                                             <th class="text-left">Date</th>
-                                            <th class="text-left">Amount</th>
+                                            <th class="text-left">value</th>
                                             <th class="text-left">Category</th>
                                             <th class="text-left">Wallet</th>
                                             <th class="text-right">Options</th>
@@ -160,27 +180,55 @@
                                                         transaction.category
                                                             .type == 'IN'
                                                             ? 'primary'
-                                                            : 'error'
+                                                            : transaction
+                                                                  .category
+                                                                  .type == 'OUT'
+                                                            ? 'error'
+                                                            : 'warning'
                                                     "
                                                     size="30"
                                                 >
                                                     <v-icon color="white">
-                                                        mdi-arrow-{{
+                                                        mdi-{{
                                                             transaction.category
                                                                 .type == "IN"
-                                                                ? "up"
-                                                                : "down"
-                                                        }}-thin
+                                                                ? "arrow-up-thin"
+                                                                : transaction
+                                                                      .category
+                                                                      .type ==
+                                                                  "OUT"
+                                                                ? "arrow-down"
+                                                                : "help"
+                                                        }}
                                                     </v-icon>
                                                 </v-avatar>
                                                 &nbsp;
                                                 {{ transaction.description }}
                                             </td>
                                             <td>
-                                                {{ transaction.date }}
+                                                {{
+                                                    new Date(
+                                                        transaction.date
+                                                    ).toLocaleDateString()
+                                                }}
                                             </td>
                                             <td>
-                                                {{ transaction.amount }}
+                                                {{
+                                                    (transaction.category
+                                                        .type == "IN"
+                                                        ? "+"
+                                                        : transaction.category
+                                                              .type == "OUT"
+                                                        ? "-"
+                                                        : transaction.value > 0
+                                                        ? "+"
+                                                        : "-") +
+                                                    "R$" +
+                                                    transaction.value
+                                                        .toString()
+                                                        .replace(".", ",")
+                                                        .replace("-", "")
+                                                }}
                                             </td>
                                             <td>
                                                 <div
@@ -218,6 +266,11 @@
                                                             small
                                                             v-bind="attrs"
                                                             v-on="on"
+                                                            @click="
+                                                                transactionToEdit =
+                                                                    transaction;
+                                                                showModal = true;
+                                                            "
                                                         >
                                                             <i
                                                                 class="fa-solid fa-pen-to-square"
@@ -241,7 +294,7 @@
                                                             v-on="on"
                                                             @click="
                                                                 removeTransaction(
-                                                                    transaction.id
+                                                                    transaction
                                                                 )
                                                             "
                                                         >
@@ -276,8 +329,15 @@
             </v-col>
         </v-row>
         <modal
-            :transactionId="transactionId"
+            :transactionToEdit="transactionToEdit"
             v-model="showModal"
+            @created="$fetch"
+            @showTransactionRecurrencie="showModalTransactionRecurrencie = true"
+        />
+
+        <modalTransactionRecurrencie
+            :transactionToEdit="transactionToEdit"
+            v-model="showModalTransactionRecurrencie"
             @created="$fetch"
         />
     </v-container>
@@ -286,115 +346,113 @@
 <script>
 import Swal from "sweetalert2";
 import modal from "@/components/transactions/modal.vue";
+import modalTransactionRecurrencie from "@/components/transactions/modalTransactionRecurrencie.vue";
+
 export default {
     layout: "home",
     components: {
         modal,
+        modalTransactionRecurrencie,
     },
     data() {
         return {
             currentPage: 1,
             pages: 1,
-            transactions: [
-                {
-                    id: "1",
-                    description: "Be Biquinis",
-                    date: "30/04/2022",
-                    amount: "+R$1000",
-                    category: {
-                        id: "",
-                        description: "Category X",
-                        type: "IN",
-                        color: "0079bf",
-                        wallet_id: "",
-                        user_id: "",
-                    },
-                    wallet: {
-                        id: "",
-                        description: "Wallet X",
-                    },
-                },
-                {
-                    id: "2",
-                    description: "Uber Monthly",
-                    date: "30/04/2022",
-                    amount: "+R$2000",
-                    category: {
-                        id: "",
-                        description: "Category Y",
-                        type: "IN",
-                        color: "344563",
-                        wallet_id: "",
-                        user_id: "",
-                    },
-                    wallet: {
-                        id: "",
-                        description: "Wallet Y",
-                    },
-                },
-                {
-                    id: "3",
-                    description: "Verdemar",
-                    date: "30/04/2022",
-                    amount: "-R$2000",
-                    category: {
-                        id: "",
-                        description: "Category Z",
-                        type: "OUT",
-                        color: "c377e0",
-                        wallet_id: "",
-                        user_id: "",
-                    },
-                    wallet: {
-                        id: "",
-                        description: "Wallet Z",
-                    },
-                },
-            ],
-            listWalletsFilter: [
-                {
-                    id: "1",
-                    description: "Wallet X",
-                },
-                {
-                    id: "2",
-                    description: "Wallet Y",
-                },
-            ],
-            listCategoriesFilter: [
-                {
-                    id: "1",
-                    description: "Category X",
-                },
-                {
-                    id: "2",
-                    description: "Category Y",
-                },
-            ],
+            transactions: [],
+            searchWalletTxt: "",
+            wallets: [],
+            searchCategoryTxt: "",
+            categories: [{ id: 0, description: "No Category" }],
+
             menuData1: false,
             menuData2: false,
             loading: false,
             showModal: false,
-            transactionId: 0,
+            showModalTransactionRecurrencie: false,
+            transactionToEdit: null,
+            totalBalance: "0,00",
             filters: {
-                wallet: "",
-                category: "",
+                wallet_id: "",
+                category_id: "",
                 dateFrom: "",
                 dateTo: "",
             },
         };
     },
+    mounted() {
+        this.$fetch();
+    },
     async fetch() {
-        // this.loading = true;
-        // await this.$axios
-        //   .$get(`/category?page=${this.currentPage}`)
-        //   .then((res) => {
-        //     this.pages = res.pages;
-        //     this.transactions = res.transactions;
-        //   })
-        //   .finally(() => {
-        //     this.loading = false;
-        //   });
+        this.loading = true;
+        this.loadingTotalBalance = true;
+
+        this.transactions = [];
+        let filters = "";
+        if (this.filters.wallet_id) {
+            filters += `&wallet_id=${this.filters.wallet_id}`;
+        }
+        if (this.filters.category_id || this.filters.category_id === 0) {
+            filters += `&category_id=${this.filters.category_id}`;
+        }
+
+        if (this.filters.dateFrom) {
+            filters += `&date_start=${this.filters.dateFrom}`;
+        }
+
+        if (this.filters.dateTo) {
+            filters += `&date_end=${this.filters.dateTo}`;
+        }
+
+        await this.$axios
+            .$get(`report/usertotal${filters.replace("&", "?")}`)
+            .then((res) => {
+                if (res.total) {
+                    res.total = res.total.toString().replace(".", ",");
+                    this.totalBalance = res.total;
+                } else if (res.total == null) {
+                    this.totalBalance = "0,00";
+                }
+            })
+            .finally(() => {
+                this.loadingTotalBalance = false;
+            });
+
+        await this.$axios
+            .$get(`/transaction?page=${this.currentPage + filters}`)
+            .then((res) => {
+                if (res.transactions) {
+                    this.pages = res.pages;
+                    res.transactions.forEach((e) => {
+                        if (e.category == null) {
+                            e.category = {
+                                id: "",
+                                description: "",
+                                type: "",
+                                color: "",
+                                wallet_id: "",
+                                user_id: "",
+                            };
+                        }
+                        this.transactions.push(e);
+                    });
+                }
+            })
+            .finally(() => {
+                this.loading = false;
+            });
+    },
+    watch: {
+        "filters.dateFrom"() {
+            this.$fetch();
+        },
+        "filters.dateTo"() {
+            this.$fetch();
+        },
+        showModalTransactionRecurrencie(val) {
+            if (!val) {
+                this.showModal = false;
+            }
+        },
     },
     methods: {
         swatchStyle(color) {
@@ -410,42 +468,154 @@ export default {
         changePagination() {
             this.$fetch();
         },
-        // parseDate(date) {
-        //   //console.log("oii");
-        //   if (!date) return null;
-        //   const [year, month, day] = date.split("-");
-        //   this.transaction.date = `${day}/${month}/${year}`;
-        // },
-        removeTransaction(id) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#d33",
-                reverseButtons: true,
-                confirmButtonText: "Yes, I want to delete!",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.$axios.delete("/transaction/" + id).then(() => {
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: "The Transaction has been deleted.",
-                            icon: "info",
-                            showConfirmButton: false,
-                            toast: true,
-                            position: "top-end",
-                            timer: 3000,
-                            timerProgressBar: true,
-                        });
-                        this.$fetch();
-                    });
-                }
+        cleanCategory() {
+            if (this.filters.category_id) {
+                this.filters.category_id = null;
+                this.categories = [[{ id: 0, description: "No Category" }]];
+                this.searchCategoryTxt = "";
+            }
+        },
+
+        searchCategory(val) {
+            if (val && val.length >= 2) {
+                this.searchCategoryTxt = val;
+                this.listCategories(val);
+            } else this.listCategories(null);
+        },
+        async listCategories(search) {
+            if (!this.filters.wallet_id) {
+                return;
+            }
+            let filter = ``;
+            let walletId = this.filters.wallet_id;
+            if (search) {
+                filter += `?description=${search}`;
+            }
+
+            await this.$axios
+                .$get(`/wallet/${walletId}/category${filter}`)
+                .then((res) => {
+                    this.categories = [{ id: 0, description: "No Category" }];
+                    this.categories = this.categories.concat(res.categories);
+                });
+        },
+
+        searchWallet(val) {
+            if (val && val.length >= 2) {
+                this.searchWalletTxt = val;
+                this.listWallets(val);
+            } else this.listWallets(null);
+        },
+        async listWallets(search) {
+            let filter = "";
+            if (search) {
+                filter = `?description=${search}`;
+            }
+            await this.$axios.$get(`/wallet${filter}`).then((res) => {
+                this.wallets = res.wallets;
             });
         },
-        openModal(id) {
+
+        removeTransaction(transaction) {
+            let walletId = transaction.wallet_id;
+            let tId = transaction.id;
+            if (transaction.transaction_recurrencies) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "This transactions is recurrent. Do you want to DELETE all future ocurrencies ?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    showDenyButton: true,
+                    confirmButtonColor: "#FF8686",
+                    denyButtonColor: "#FF3131",
+                    reverseButtons: true,
+                    confirmButtonText: "Delete just this one",
+                    denyButtonText: "Delete all future ones",
+                })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            this.$axios
+                                .delete(`wallet/${walletId}/transaction/${tId}`)
+                                .then(() => {
+                                    Swal.fire({
+                                        title: "Deleted!",
+                                        text: "The Transaction has been deleted.",
+                                        icon: "info",
+                                        showConfirmButton: false,
+                                        toast: true,
+                                        position: "top-end",
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                    });
+                                })
+                                .catch((err) => {
+                                    Swal.fire({
+                                        title: "Warning!",
+                                        text: err.response.data.message,
+                                        icon: "info",
+                                        showConfirmButton: false,
+                                        toast: true,
+                                        position: "top-end",
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                    });
+                                });
+                        } else if (result.isDenied) {
+                            let trId = transaction.transaction_recurrencies.id;
+                            this.$axios
+                                .delete(
+                                    `wallet/${walletId}/transactionrecurrencies/${trId}`
+                                )
+                                .then(() => {
+                                    Swal.fire({
+                                        title: "Deleted!",
+                                        text: "The Transaction has been deleted and don't gonna be more recurrencies transactions like that.",
+                                        icon: "info",
+                                        showConfirmButton: false,
+                                        toast: true,
+                                        position: "top-end",
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                    });
+                                });
+                        }
+                    })
+                    .finally(() => {
+                        this.$fetch();
+                    });
+            } else {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    reverseButtons: true,
+                    confirmButtonText: "Yes, I want to delete!",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.$axios
+                            .delete(`wallet/${walletId}/transaction/${tId}`)
+                            .then(() => {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "The Transaction has been deleted.",
+                                    icon: "info",
+                                    showConfirmButton: false,
+                                    toast: true,
+                                    position: "top-end",
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                });
+                                this.$fetch();
+                            });
+                    }
+                });
+            }
+        },
+        openModal(transaction) {
             this.showModal = true;
-            this.transactionId = parseInt(id);
+            this.transactionToEdit = transaction;
         },
     },
 };

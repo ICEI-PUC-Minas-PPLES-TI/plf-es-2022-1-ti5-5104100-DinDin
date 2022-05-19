@@ -8,7 +8,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
@@ -94,6 +93,7 @@ class _LoginState extends State<Login> {
                                     } else {
                                       null;
                                     }
+                                    return null;
                                   },
                                 ),
                                 const SizedBox(height: 20),
@@ -115,6 +115,7 @@ class _LoginState extends State<Login> {
                                     } else {
                                       null;
                                     }
+                                    return null;
                                   },
                                 ),
                                 const SizedBox(height: 20),
@@ -124,7 +125,8 @@ class _LoginState extends State<Login> {
                                   child: ElevatedButton(
                                     child: const Text("Login"),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Color.fromARGB(255, 84, 179, 88),
+                                      primary: const Color.fromARGB(
+                                          255, 84, 179, 88),
                                     ),
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
@@ -141,10 +143,10 @@ class _LoginState extends State<Login> {
                                                           .showSnackBar(
                                                               snackBarTrue),
                                                       Navigator.pushReplacement(
-                                                         context,
-                                                         MaterialPageRoute(
-                                                             builder: (context) =>
-                                                                 const Dashboard()),
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const Dashboard()),
                                                       )
                                                     }
                                                   else
@@ -226,12 +228,8 @@ class _LoginState extends State<Login> {
 }
 
 Future<bool> userAuth(String email, String password) async {
-  var url = ApiURL.baseUrl + "/user/auth";
-  final Uri uri = Uri.parse(url);
-
-  // Firebase Cloud Messaging
-  var response =
-      await http.post(uri, body: {'email': email, 'password': password});
+  var response = await ApiURL.post("/user/auth",
+      body: {'email': email, 'password': password});
   var prefs = StreamingSharedPreferences.instance;
   var status = response.statusCode;
   if (status == 200) {
@@ -240,6 +238,7 @@ Future<bool> userAuth(String email, String password) async {
     (await prefs).setString("token", json["token"]);
     FirebaseAuth.instance.signInWithCustomToken(json["firebaseToken"]);
     try {
+      // Firebase Cloud Messaging
       FirebaseMessaging.instance.subscribeToTopic('U_' + userId);
     } catch (e) {
       print(

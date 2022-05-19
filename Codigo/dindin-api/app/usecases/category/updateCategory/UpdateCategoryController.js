@@ -18,7 +18,7 @@ class UpdateCategoryController {
 
         const { description, type, color } = request.body;
 
-        const id = request?.params?.id;
+        const id = request?.params?.categoryId;
         if (!id || !(id > 0))
             throw new AppError("Please send a valid id on url", 422);
 
