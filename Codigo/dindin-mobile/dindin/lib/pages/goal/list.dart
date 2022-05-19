@@ -1,3 +1,4 @@
+import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/pages/goal/create.dart';
 import 'package:dindin/pages/goal/view.dart';
 import 'package:dindin/models/goal.dart';
@@ -20,8 +21,7 @@ Future<List<Goal>> fetchGoals() async {
   http.Response response;
 
   try {
-    response = await http.get(Uri.parse(
-        'http://localhost:3001/api/goal?page=1&limit=5&attribute=id&order=ASC'));
+    response = await ApiURL.get('/goal?page=1&attribute=id&order=ASC');
   } catch (e) {
     final String response =
         await rootBundle.loadString('assets/data/goals.json');
@@ -74,7 +74,8 @@ class _GoalListState extends State<GoalList> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const GoalView()),
+                              builder: (context) =>
+                                  GoalView(idGoal: snapshot.data[index].id)),
                         );
                       },
                       child: Padding(
