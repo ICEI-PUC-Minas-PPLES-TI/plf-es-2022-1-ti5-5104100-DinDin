@@ -16,38 +16,81 @@ class TransactionForm extends StatefulWidget {
 class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
+  final GlobalKey<DropCategoryState> _key = GlobalKey();
 
   bool _isChecked = false;
   DateTime date = DateTime.now();
+  DateTime? endDate;
   bool _isIncome = true;
-  String category = "";
+  String? category;
   String wallet = "";
   double amount = 0;
+  String recurrency = "D";
 
   void changeButtonState() {
     setState(() {
       _isIncome = !_isIncome;
     });
+    category = null;
+    changeWalletId(wallet);
   }
 
   void changeWalletId(String id) {
     setState(() {
       wallet = id;
     });
+    _key.currentState!.setWallet(_isIncome ? "IN": "OUT", id);
+  }
+
+  void changeCategoryId(String id){
+    category = id;
+    print(id);
   }
 
   void insertTransaction() async {
+
+    if(_descriptionController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Missing Description"),
+      ));
+      return;
+    } else if(_amountController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Missing Amount"),
+      ));
+      return;
+    } else if(_dateController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Missing Date"),
+      ));
+      return;
+    } else if(wallet.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Missing Wallet"),
+      ));
+      return;
+    }
+
     var url = ApiURL.baseUrl + "/wallet/" + wallet + "/transaction";
     final Uri uri = Uri.parse(url);
     var token = await ApiURL.getToken();
 
-    var response = await http.post(uri, headers: {
-      'Authorization': token
-    }, body: {
+    var body = {
       'description': _descriptionController.text,
       'value': _amountController.text.replaceAll(new RegExp(r"\D"), ""),
-      'date': '${date.year}-${date.month}-${date.day}'
-    });
+      'date': '${date.year}-${date.month}-${date.day}',
+    };
+
+
+    if(category?.isEmpty ?? false) {
+      body['category_id'] = category!;
+    }
+
+    var response = await http.post(uri, headers: {
+      'Authorization': token
+    }, body: body);
     var status = response.statusCode;
     if (status == 201) {
       print('created');
@@ -56,12 +99,28 @@ class _TransactionFormState extends State<TransactionForm> {
       print(response.body);
     }
 
-    print(wallet);
-    print(_isIncome);
-    print(_isChecked);
-    print(date);
-    print(_amountController.text);
-    print(_descriptionController.text);
+    if(_isChecked) { // Recurrency ON
+      var url2 = ApiURL.baseUrl + "/wallet/" + wallet + "/transactionrecurrencies";
+      final Uri uri2 = Uri.parse(url2);
+
+      var response2 = await http.post(uri2, headers: {
+        'Authorization': token
+      }, body: {
+        'description': _descriptionController.text,
+        'value': _amountController.text.replaceAll(new RegExp(r"\D"), ""),
+        'day': '${date.day}',
+        'category_id': category?? "0",
+        'interval': recurrency,
+        'expired_at': '${endDate!.year}-${endDate!.month}-${endDate!.day}'
+      });
+      var status2 = response2.statusCode;
+      if (status2 == 201) {
+        print('created rec');
+        print(response2.body);
+      } else {
+        print(response2.body);
+      }
+    }
   }
 
   @override
@@ -133,8 +192,6 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                     const SizedBox(height: 10),
                     DropWallet(changeWalletId),
-                    const SizedBox(height: 10),
-                    DropCategory(wallet),
                     // Amount text field
                     TextField(
                       inputFormatters: <TextInputFormatter>[
@@ -172,58 +229,51 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                     const SizedBox(height: 10),
                     // Date picker
-                    Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Center(
-                          child: Column(children: [
-                            Text(
-                              '${date.day}/${date.month}/${date.year}',
-                              style: const TextStyle(fontSize: 20),
+                    TextField(
+                      controller: _dateController,
+                      enableInteractiveSelection: false,
+                      onTap: () async {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        DateTime? newDate = await showDatePicker(
+                          context: context,
+                          initialDate: date,
+                          firstDate: DateTime(2022),
+                          lastDate: DateTime(2062),
+                          builder: (context, child) {
+                            return Theme(
+                              data: ThemeData.light().copyWith(
+                                primaryColor:
+                                Theme.of(context).primaryColor,
+                                colorScheme: ColorScheme.light(
+                                  primary:
+                                  Theme.of(context).primaryColor,
+                                ),
+                                buttonTheme: const ButtonThemeData(
+                                    textTheme:
+                                    ButtonTextTheme.primary),
+                              ),
+                              child: child!,
+                            );
+                          },
+                        );
+                        if (newDate == null) return;
+                        setState(() => {
+                          date = newDate,
+                          _dateController.text = '${date.day}/${date.month}/${date.year}'
+                        });
+                      },
+                      decoration: InputDecoration(
+                          labelText: "Date",
+                          labelStyle: const TextStyle(fontSize: 16),
+                          border: const UnderlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor,
                             ),
-                            ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                    Theme.of(context).primaryColor,
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Select Date',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  DateTime? newDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: date,
-                                    firstDate: DateTime(2022),
-                                    lastDate: DateTime(2062),
-                                    builder: (context, child) {
-                                      return Theme(
-                                        data: ThemeData.light().copyWith(
-                                          primaryColor:
-                                              Theme.of(context).primaryColor,
-                                          colorScheme: ColorScheme.light(
-                                            primary:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                          buttonTheme: const ButtonThemeData(
-                                              textTheme:
-                                                  ButtonTextTheme.primary),
-                                        ),
-                                        child: child!,
-                                      );
-                                    },
-                                  );
-                                  if (newDate == null) return;
-                                  setState(() => date = newDate);
-                                })
-                          ]),
-                        ),
-                      ),
+                          )),
                     ),
+                    const SizedBox(height: 10),
+                    DropCategory(changeCategoryId,key: _key),
                     // Reccurrent
                     CheckboxListTile(
                       title: const Text(
@@ -238,6 +288,106 @@ class _TransactionFormState extends State<TransactionForm> {
                       },
                       controlAffinity: ListTileControlAffinity
                           .leading, //  <-- leading Checkbox
+                    ),
+                    const SizedBox(height: 10),
+                    if(_isChecked)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.08,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                recurrency = "D";
+                              });
+                            },
+                            style: recurrency == "D"
+                                ? ButtonStyle(
+                                backgroundColor:
+                                MaterialStateProperty.all<Color>(
+                                  Colors.grey,
+                                ))
+                                : ButtonStyle(
+                              backgroundColor:
+                              MaterialStateProperty.all<Color>(
+                                  Colors.white38),
+                            ),
+                            child: const Text(
+                              "Daily",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.08,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  recurrency = "M";
+                                });
+                              },
+                              style: recurrency == "M"
+                                  ? ButtonStyle(
+                                backgroundColor:
+                                MaterialStateProperty.all<Color>(
+                                    Colors.grey),
+                              )
+                                  : ButtonStyle(
+                                backgroundColor:
+                                MaterialStateProperty.all<Color>(
+                                    Colors.white38),
+                              ),
+                              child: const Text("Montly",
+                                  style: TextStyle(fontSize: 20))),
+                        ),
+                      ],
+                    ),
+                    if(_isChecked)
+                    TextField(
+                      controller: _endDateController,
+                      enableInteractiveSelection: false,
+                      onTap: () async {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        DateTime? newDate = await showDatePicker(
+                          context: context,
+                          initialDate: date,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2062),
+                          builder: (context, child) {
+                            return Theme(
+                              data: ThemeData.light().copyWith(
+                                primaryColor:
+                                Theme.of(context).primaryColor,
+                                colorScheme: ColorScheme.light(
+                                  primary:
+                                  Theme.of(context).primaryColor,
+                                ),
+                                buttonTheme: const ButtonThemeData(
+                                    textTheme:
+                                    ButtonTextTheme.primary),
+                              ),
+                              child: child!,
+                            );
+                          },
+                        );
+                        if (newDate == null) return;
+                        setState(() => {
+                          endDate = newDate,
+                          _endDateController.text = '${endDate!.day}/${endDate!.month}/${endDate!.year}'
+                        });
+                      },
+                      decoration: InputDecoration(
+                          labelText: "End Date",
+                          labelStyle: const TextStyle(fontSize: 16),
+                          border: const UnderlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          )),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),

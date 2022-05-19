@@ -62,34 +62,34 @@ class _DropWalletState extends State<DropWallet> {
       child: ValueListenableBuilder(
           valueListenable: dropValue,
           builder: (BuildContext context, String value, _) {
-            return Container(
-              height: 50,
-              child: Row(
+            return Row(
                 children: [
                   const Icon(
                     Icons.account_balance_wallet,
                     color: Colors.green,
                     size: 25.0,
                   ),
-                  DropdownButton<int>(
-                    hint: const Text("Wallet", style: TextStyle(fontSize: 20)),
-                    value: (value.isEmpty) ? null : int.parse(value),
-                    onChanged: (option) => {
-                      dropValue.value = option.toString(),
-                      widget.changeWalletDrop(option.toString())
-                    },
-                    items: wallets
-                        .map(
-                          (op) => DropdownMenuItem(
+                  Expanded(
+                      flex: 1,
+                      child: DropdownButton<int>(
+                        hint: const Text("Wallet", style: TextStyle(fontSize: 20)),
+                        value: (value.isEmpty) ? null : int.parse(value),
+                        onChanged: (option) => {
+                          dropValue.value = option.toString(),
+                          widget.changeWalletDrop(option.toString())
+                        },
+                        items: wallets
+                            .map(
+                              (op) => DropdownMenuItem(
                             value: int.parse(op.id.toString()),
                             child: Text(op.description!),
                           ),
                         )
-                        .toList(),
-                  ),
+                            .toList(),
+                      ),
+                  )
                 ],
-              ),
-            );
+              );
           }),
     );
   }
