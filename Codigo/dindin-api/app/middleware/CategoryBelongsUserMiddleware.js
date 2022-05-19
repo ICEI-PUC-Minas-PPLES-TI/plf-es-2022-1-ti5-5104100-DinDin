@@ -4,9 +4,9 @@ const Category = require("../models/Category");
 const verifyCategoryBelongsUser = async (request, response, next) => {
     let category_id = request.body.category_id;
     if (!category_id) category_id = request.query.category_id;
+    if (category_id == 0) return next(); // * optional, if not sent, do not check
     if (category_id == "null") category_id = undefined;
     if (!category_id) return next(); // * optional, if not sent, do not check
-    console.log(category_id, request.userId);
     const category = await Category.findOne({
         where: {
             id: category_id,

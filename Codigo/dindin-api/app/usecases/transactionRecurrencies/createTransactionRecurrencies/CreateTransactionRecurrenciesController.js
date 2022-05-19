@@ -39,8 +39,7 @@ class CreateTransactionRecurrenciesController {
                 .min(today, "expire_at' cannot be in the past!")
                 .nullable(true),
             category_id: yup
-                .number("'category_id' must be numeric!")
-                .min(0)
+                .string("'category_id' must be string!")
                 .nullable(true),
         });
 

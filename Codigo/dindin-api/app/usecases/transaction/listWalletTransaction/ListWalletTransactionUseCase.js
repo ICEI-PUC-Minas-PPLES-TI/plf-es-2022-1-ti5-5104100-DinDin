@@ -31,6 +31,7 @@ class ListWalletTransactionUseCase {
 
         if (query.category_id == 0) whre.category_id = { [Op.is]: null };
         else if (query.category_id) {
+            console.log(query.category_id);
             const category = await Category.findOne({
                 where: {
                     id: query.category_id,
