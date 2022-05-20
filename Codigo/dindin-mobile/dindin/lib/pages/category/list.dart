@@ -61,50 +61,6 @@ class _ListCategoriesState extends State<ListCategories> {
   }
 
 
-
-  void _deleteCategoryIn(int id) {
-    //_deleteCategory(_walletCategoriesIn, id);
-  }
-
-  void _deleteCategoryOut(int id) {
-    _deleteCategory(_walletCategoriesOut, id);
-  }
-
-  void _deleteCategory(List<Category> _walletCategories, int id) {
-    Widget cancelButton = MaterialButton(
-      child: const Text("Cancel"),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-    Widget continueButton = MaterialButton(
-      child: const Text("Yes, delete"),
-      onPressed: () {
-        setState(() {
-          _walletCategories.removeWhere((tx) => tx.id == id);
-        });
-        Navigator.of(context).pop();
-      },
-    );
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Alert"),
-      content: const Text(
-          "By removing a category, all transactions linked to it will be unlinked, are you sure ?"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
   TabBar get _tabBar => const TabBar(
         indicatorColor: Colors.grey,
         tabs: [

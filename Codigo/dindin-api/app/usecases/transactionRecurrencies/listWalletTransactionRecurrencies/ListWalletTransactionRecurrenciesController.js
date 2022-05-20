@@ -20,7 +20,9 @@ class ListWalletTransactionRecurrenciesController {
                     orderEnum,
                     `'order' must be one of these: ${orderEnum}.`
                 ),
-            category_id: yup.number("'category_id' must be numeric!"),
+            category_id: yup
+                .string("'category_id' must be string!")
+                .nullable(true),
 
             description: yup.string("'description' must be string!").max(30),
             value: yup.number("'value' must be numeric!"),
