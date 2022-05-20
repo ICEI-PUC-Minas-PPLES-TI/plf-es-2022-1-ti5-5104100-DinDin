@@ -6,6 +6,7 @@ class Goal {
   final String? type;
   final String? expireAt;
   final num? walletId;
+  final String? wallet;
   final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;
@@ -18,6 +19,7 @@ class Goal {
     required this.type,
     required this.expireAt,
     required this.walletId,
+    required this.wallet,
     required this.createdAt,
     required this.updatedAt,
     required this.deletedAt,
@@ -25,16 +27,17 @@ class Goal {
 
   factory Goal.fromJson(Map<String, dynamic> json) {
     return Goal(
-      id: json['id'],
-      description: json['description'],
+      id: int.parse(json['id']),
+      description: json['description'].toString(),
       value: json['value'],
-      status: json['status'],
-      type: json['type'],
-      expireAt: json['expire_at'],
-      walletId: json['wallet_id'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-      deletedAt: json['deleted_at'],
+      status: json['status'].toString(),
+      type: json['type'].toString(),
+      expireAt: json['expire_at'].toString(),
+      walletId: int.parse(json['wallet_id']),
+      wallet: (json['wallet']['description']).toString(),
+      createdAt: json['created_at'].toString(),
+      updatedAt: json['updated_at'].toString(),
+      deletedAt: json['deleted_at'].toString(),
     );
   }
 }
