@@ -1,5 +1,6 @@
 const AppError = require("../../../errors/AppError");
 const Goal = require("../../../models/Goal");
+const Wallet = require("../../../models/Wallet");
 
 class FindGoalUseCase {
     async find(id) {
@@ -7,6 +8,13 @@ class FindGoalUseCase {
             where: {
                 id: id,
             },
+            include: [
+                {
+                    model: Wallet,
+                    as: "wallet",
+                    required: true,
+                },
+            ],
         }).catch((error) => {
             throw new AppError(error.message, 500, error);
         });
