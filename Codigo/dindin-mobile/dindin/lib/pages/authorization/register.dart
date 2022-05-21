@@ -73,6 +73,7 @@ class _LoginState extends State<Register> {
                       ),
                       Form(
                         key: formKey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
