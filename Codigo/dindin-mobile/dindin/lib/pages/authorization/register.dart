@@ -23,6 +23,7 @@ class _LoginState extends State<Register> {
   String confirmPassword = '';
   String name = '';
   bool acceptedTerms = false;
+  Color colorOfButton = Colors.grey;
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -74,6 +75,11 @@ class _LoginState extends State<Register> {
                       Form(
                         key: formKey,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
+                        onChanged: () {
+                        if (formKey.currentState!.validate()) {
+                          colorOfButton = Colors.green;
+                        }
+                      },
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -221,7 +227,7 @@ class _LoginState extends State<Register> {
                                   child: ElevatedButton(
                                     child: Text("Register"),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Colors.grey,
+                                      primary: colorOfButton,
                                     ),
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
