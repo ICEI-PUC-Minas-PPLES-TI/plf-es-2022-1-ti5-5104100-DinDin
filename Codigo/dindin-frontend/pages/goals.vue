@@ -12,7 +12,15 @@
                 <v-card elevation="0" class="p-20">
                     <!-- Table top toolbar -->
                     <v-row class="pr-6">
-                        <v-col cols="2" offset="10">
+                        <v-col
+                            cols="12"
+                            md="2"
+                            sm="2"
+                            lg="2"
+                            offset-lg="10"
+                            offset-md="10"
+                            offset-sm="10"
+                        >
                             <v-btn
                                 block
                                 color="success"
