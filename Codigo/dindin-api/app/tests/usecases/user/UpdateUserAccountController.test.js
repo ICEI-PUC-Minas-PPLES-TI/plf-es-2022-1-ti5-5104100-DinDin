@@ -60,7 +60,8 @@ describe("PUT /user test suite", () => {
         });
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("id");
-        const getResponse = await request.get("/api/user/" + response.body.id);
+        const getResponse = await request.get("/api/user");
+        expect(getResponse.statusCode).toEqual(200);
         expect(getResponse.body.email).toEqual(oldEmail);
     });
 

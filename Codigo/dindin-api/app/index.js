@@ -31,7 +31,8 @@ app.get("/", (req, res) => {
 // é necessário desabilitar a linha eslint abaixo pq ele reclama do next não ser usado, mas ao tirar ele, o callback para de ser um middleware de erro. (err, req, res, next) -> (req, res, next)
 // eslint-disable-next-line no-unused-vars
 app.use(function (error, req, response, next) {
-    console.log(error);
+    if (process.env.APP_DEBUG && process.env.NODE_ENV != "test")
+        console.log(error);
     if (process.env.APP_DEBUG) {
         return response.status(error.statusCode ?? 500).json({
             status: "Error",
