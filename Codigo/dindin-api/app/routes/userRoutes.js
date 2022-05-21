@@ -3,24 +3,16 @@ const userRoutes = Router();
 
 const AuthenticationMiddleware = require("../middleware/AuthenticationMiddleware");
 
-const FindUserAccountController = require("../usecases/user/findAccount/FindUserAccountController");
 const CreateUserAccountController = require("../usecases/user/createAccount/CreateUserAccountController");
 const UpdateUserAccountController = require("../usecases/user/updateAccount/UpdateUserAccountController");
 const AuthenticateUserAccountController = require("../usecases/user/authenticate/AuthenticateUserAccountController");
 const FindMyUserAccountController = require("../usecases/user/findMyAccount/FindMyUserAccountController");
 
-const findUserAccountController = new FindUserAccountController();
 const findMyUserAccountController = new FindMyUserAccountController();
 const createUserAccountController = new CreateUserAccountController();
 const updateUserAccountController = new UpdateUserAccountController();
 const authenticateUserAccountController =
     new AuthenticateUserAccountController();
-
-userRoutes.get(
-    "/:id",
-    [AuthenticationMiddleware.verifyToken],
-    findUserAccountController.find
-);
 
 userRoutes.get(
     "/",
