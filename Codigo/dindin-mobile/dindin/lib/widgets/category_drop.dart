@@ -7,21 +7,29 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class DropCategory extends StatefulWidget {
-  final dropValue = ValueNotifier('');
   final Function changeCategoryDrop;
 
-  DropCategory(this.changeCategoryDrop, {Key? key}) : super(key: key);
+  const DropCategory(this.changeCategoryDrop, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => DropCategoryState();
 }
 
 class DropCategoryState extends State<DropCategory> {
-  final dropOptionsCategories = ['Food', 'Work', 'Bar'];
   List<Category> categories = [];
+  final dropValue = ValueNotifier('');
   var walletId = "";
 
   void setWallet(String type, wallet) async {
+    if (wallet == null) {
+      setState(() {
+        dropValue.value = "";
+        categories = [];
+        walletId = "";
+      });
+      return;
+    }
+
     walletId = wallet;
     List<Category> l1 = await fetchCategories(type);
     setState(() {
@@ -60,7 +68,7 @@ class DropCategoryState extends State<DropCategory> {
   Widget build(BuildContext context) {
     return Center(
       child: ValueListenableBuilder(
-          valueListenable: widget.dropValue,
+          valueListenable: dropValue,
           builder: (BuildContext context, String value, _) {
             return Row(
               children: [
@@ -70,17 +78,12 @@ class DropCategoryState extends State<DropCategory> {
                     child: ButtonTheme(
                       alignedDropdown: true,
                       child: DropdownButton<int>(
-                        icon: const Visibility (visible:false, child: Icon(Icons.arrow_downward)),
+                        icon: const Visibility(
+                            visible: false, child: Icon(Icons.arrow_downward)),
                         isExpanded: true,
                         hint: const Text("Category",
                             style: TextStyle(fontSize: 20)),
                         value: (value.isEmpty) ? null : int.parse(value),
-                        onChanged: walletId == ""
-                            ? null
-                            : (option) => {
-                                  widget.dropValue.value = option.toString(),
-                                  widget.changeCategoryDrop(option.toString())
-                                },
                         items: categories
                             .map(
                               (op) => DropdownMenuItem(
@@ -90,14 +93,24 @@ class DropCategoryState extends State<DropCategory> {
                               ),
                             )
                             .toList(),
+                        onChanged: (option) {
+                          setState(() {
+                            dropValue.value = "";
+                            widget.changeCategoryDrop("");
+                          });
+                          setState(() {
+                            dropValue.value = option.toString();
+                            widget.changeCategoryDrop(option.toString());
+                          });
+                        },
                       ),
                     ),
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.fromLTRB(0,0,6,0),
+                  padding: EdgeInsets.fromLTRB(0, 0, 6, 0),
                   child: FaIcon(FontAwesomeIcons.list,
-                                  size: 30.0, color: Color.fromRGBO(96, 212, 156, 1)),
+                      size: 30.0, color: Color.fromRGBO(96, 212, 156, 1)),
                 ),
               ],
             );

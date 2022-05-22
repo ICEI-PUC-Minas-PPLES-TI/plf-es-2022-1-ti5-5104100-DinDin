@@ -25,7 +25,7 @@ class _TransactionFormState extends State<TransactionForm> {
   DateTime date = DateTime.now();
   DateTime? endDate;
   bool _isIncome = true;
-  String? category;
+  String? category = "";
   String wallet = "";
   double amount = 0;
   String recurrency = "D";
@@ -34,22 +34,27 @@ class _TransactionFormState extends State<TransactionForm> {
 
   void changeButtonState() {
     setState(() {
+      category = null;
+      _key.currentState!.setWallet(_isIncome ? "IN" : "OUT", null);
       _isIncome = !_isIncome;
     });
-    category = null;
     changeWalletId(wallet);
   }
 
   void changeWalletId(String id) {
     setState(() {
+      _key.currentState!.setWallet(_isIncome ? "IN" : "OUT", null);
+      category = "";
       wallet = id;
     });
     _key.currentState!.setWallet(_isIncome ? "IN" : "OUT", id);
   }
 
   void changeCategoryId(String id) {
-    category = id;
-    print(id);
+    setState(() {
+      category = id;
+    });
+    print(category);
   }
 
   void insertTransaction() async {
@@ -74,7 +79,9 @@ class _TransactionFormState extends State<TransactionForm> {
       ));
       return;
     }
-
+    print(wallet);
+    print("category:");
+    print(category);
     var url = ApiURL.baseUrl + "/wallet/" + wallet + "/transaction";
     final Uri uri = Uri.parse(url);
     var token = await ApiURL.getToken();
@@ -83,6 +90,7 @@ class _TransactionFormState extends State<TransactionForm> {
       'description': _descriptionController.text,
       'value': _amountController.text.replaceAll(new RegExp(r"\D"), ""),
       'date': '${date.year}-${date.month}-${date.day}',
+      'category_id': category
     };
 
     if (category?.isEmpty ?? false) {
@@ -212,11 +220,13 @@ class _TransactionFormState extends State<TransactionForm> {
                       controller: _amountController,
                       decoration: InputDecoration(
                           border: InputBorder.none,
-                          contentPadding: const EdgeInsets.fromLTRB(16,0,0,0),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(16, 0, 0, 0),
                           labelText: "Amount",
                           labelStyle: const TextStyle(fontSize: 20),
-                          suffixIcon:
-                              Icon(FontAwesomeIcons.moneyBill, size: 30.0,color:Theme.of(context).primaryColor),
+                          suffixIcon: Icon(FontAwesomeIcons.moneyBill,
+                              size: 30.0,
+                              color: Theme.of(context).primaryColor),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Theme.of(context).primaryColor,
@@ -229,11 +239,13 @@ class _TransactionFormState extends State<TransactionForm> {
                       keyboardType: TextInputType.text,
                       controller: _descriptionController,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.fromLTRB(16,0,0,0),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(16, 0, 0, 0),
                           border: InputBorder.none,
                           labelText: "Description",
-                          suffixIcon:
-                              Icon(FontAwesomeIcons.info, size: 30.0,color:Theme.of(context).primaryColor),
+                          suffixIcon: Icon(FontAwesomeIcons.info,
+                              size: 30.0,
+                              color: Theme.of(context).primaryColor),
                           labelStyle: const TextStyle(fontSize: 20),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -275,10 +287,12 @@ class _TransactionFormState extends State<TransactionForm> {
                             });
                       },
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.fromLTRB(16,0,0,0),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(16, 0, 0, 0),
                           labelText: "Date",
-                          suffixIcon:
-                              Icon(FontAwesomeIcons.calendar, size: 30.0,color:Theme.of(context).primaryColor),
+                          suffixIcon: Icon(FontAwesomeIcons.calendar,
+                              size: 30.0,
+                              color: Theme.of(context).primaryColor),
                           labelStyle: const TextStyle(fontSize: 20),
                           border: InputBorder.none,
                           focusedBorder: OutlineInputBorder(
@@ -365,6 +379,7 @@ class _TransactionFormState extends State<TransactionForm> {
                           ),
                         ],
                       ),
+                    if (_isChecked) const Divider(height: 10),
                     if (_isChecked)
                       TextField(
                         controller: _endDateController,
@@ -399,18 +414,20 @@ class _TransactionFormState extends State<TransactionForm> {
                         },
                         decoration: InputDecoration(
                             labelText: "End Date",
-                            contentPadding: const EdgeInsets.fromLTRB(16,10,0,0),
+                            contentPadding:
+                                const EdgeInsets.fromLTRB(16, 10, 0, 0),
                             labelStyle: const TextStyle(fontSize: 20),
-                            suffixIcon:
-                              Icon(FontAwesomeIcons.calendar, size: 30.0,color:Theme.of(context).primaryColor),
+                            suffixIcon: Icon(FontAwesomeIcons.calendar,
+                                size: 30.0,
+                                color: Theme.of(context).primaryColor),
                             border: InputBorder.none,
                             focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          )),
+                              borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            )),
                       ),
-                    const SizedBox(height: 10),
+                    if (_isChecked) const Divider(height: 10),
                     Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
