@@ -306,7 +306,7 @@ class _TransactionFormState extends State<TransactionForm> {
                       controlAffinity: ListTileControlAffinity
                           .leading, //  <-- leading Checkbox
                     ),
-                    const Divider(height: 10),
+                    if (_isChecked) const Divider(height: 10),
                     if (_isChecked)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -403,12 +403,12 @@ class _TransactionFormState extends State<TransactionForm> {
                             labelStyle: const TextStyle(fontSize: 20),
                             suffixIcon:
                               Icon(FontAwesomeIcons.calendar, size: 30.0,color:Theme.of(context).primaryColor),
-                            border: const UnderlineInputBorder(),
+                            border: InputBorder.none,
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            )),
+                            borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          )),
                       ),
                     const SizedBox(height: 10),
                     Center(

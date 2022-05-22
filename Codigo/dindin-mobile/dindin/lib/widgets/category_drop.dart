@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/models/category.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class DropCategory extends StatefulWidget {
@@ -93,11 +94,11 @@ class DropCategoryState extends State<DropCategory> {
                     ),
                   ),
                 ),
-                const Icon(
-                  Icons.category,
-                  color: Color.fromRGBO(96, 212, 156, 1),
-                  size: 40.0,
-                )
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0,0,6,0),
+                  child: FaIcon(FontAwesomeIcons.list,
+                                  size: 30.0, color: Color.fromRGBO(96, 212, 156, 1)),
+                ),
               ],
             );
           }),
