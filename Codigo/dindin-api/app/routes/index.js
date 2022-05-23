@@ -18,6 +18,5 @@ router.use("/wallet", transactionWalletRoutes);
 router.use("/transaction", transactionRoutes);
 router.use("/transactionrecurrencies", transactionRecurrenciesRoutes);
 router.use("/report", transactionReportRoutes);
-router.use("/transactionrecurrencies", transactionRecurrenciesRoutes);
 
 module.exports = router;
