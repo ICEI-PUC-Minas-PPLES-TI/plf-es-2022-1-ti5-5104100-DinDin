@@ -83,16 +83,6 @@ class ReportWalletBalanceTransactionUseCase {
         if (query.transaction_recurrencies_id == "null")
             whre.transaction_recurrencies_id = { [Op.is]: null };
 
-        // if (query.date_start || query.date_end) {
-        //     const startDate = query.date_start
-        //         ? new Date(query.date_start)
-        //         : new Date(null); // * new Date(null) == 1970
-        //     const endDate = query.date_end
-        //         ? new Date(query.date_end)
-        //         : new Date("2999/01/01");
-        //     whre.date = { [Op.between]: [startDate, endDate] };
-        // }
-
         const attributes = Object.keys(Transaction.getAttributes);
         const transactionQuantity = await Transaction.count();
         const sortPaginateOptions = SortPaginate(
@@ -108,12 +98,6 @@ class ReportWalletBalanceTransactionUseCase {
             whre.deleted_at = sortPaginateOptions.where.deleted_at;
 
         const dateFilter = "`Transaction`.`date`";
-        // whre.date = {
-        //     [Op.between]: [
-        //         sequelize.literal("NOW() - INTERVAL 300 DAY"),
-        //         sequelize.literal("NOW()"),
-        //     ],
-        // };
         const transactionsWalletDailyBalance = await Transaction.findAll({
             attributes: [
                 [sequelize.literal(`DATE(${dateFilter})`), "dt"],
@@ -134,7 +118,7 @@ class ReportWalletBalanceTransactionUseCase {
                 whre,
 
                 sequelize.literal(
-                    `DATE(${dateFilter}) BETWEEN DATE(NOW() - INTERVAL 300 DAY) AND DATE(NOW())`
+                    `DATE(${dateFilter}) BETWEEN DATE(NOW() - INTERVAL 7 DAY) AND DATE(NOW())`
                 ),
             ],
             group: sequelize.literal(`DATE(${dateFilter})`),
