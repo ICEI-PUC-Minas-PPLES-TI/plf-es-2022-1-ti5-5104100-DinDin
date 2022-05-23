@@ -37,7 +37,20 @@ class ListGoalUseCase {
             whre.expire_at = { [Op.between]: [startDate, endDate] };
         }
         if (query.wallet_id) {
-            whre.wallet_id = query.wallet_id;
+            const user = await UserHasWallet.findOne({
+                where: {
+                    user_id: userId,
+                    wallet_id: query.wallet_id,
+                },
+            }).catch((error) => {
+                throw new AppError(error.message, 500, error);
+            });
+            if (user) whre.wallet_id = query.wallet_id;
+            else
+                throw new AppError(
+                    "User does not have this wallet permission!",
+                    403
+                );
         }
 
         const attributes = Object.keys(Goal.getAttributes);
