@@ -12,7 +12,7 @@ const transactionReportRoutes = require("./transactionReportRoutes");
 
 router.use("/user", userRoutes);
 router.use("/goal", goalRoutes);
-router.use(walletCategoryRoutes);
+router.use("/wallet", walletCategoryRoutes);
 router.use("/wallet", walletRoutes);
 router.use("/wallet", transactionWalletRoutes);
 router.use("/transaction", transactionRoutes);
