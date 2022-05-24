@@ -1,3 +1,4 @@
+import 'package:dindin/models/wallet.dart';
 import 'package:dindin/pages/goal/create.dart';
 import 'package:dindin/pages/goal/view.dart';
 import 'package:dindin/models/goal.dart';
@@ -64,12 +65,13 @@ class _GoalListState extends State<GoalList> {
                   return Card(
                     child: InkWell(
                       onTap: () {
+                        final Goal goal = Goal(id: snapshot.data[index].id, createdAt: '', deletedAt: '', updatedAt: '', description: snapshot.data[index].description, expireAt: snapshot.data[index].expireAt, walletId: snapshot.data[index].walletId, value: snapshot.data[index].value, type: snapshot.data[index].type, status: snapshot.data[index].status,walletDescription: snapshot.data[index].walletDescription);
                         print("Open Goal Visualization at id: " +
                             snapshot.data[index].id.toString());
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const GoalView()),
+                              builder: (context) => GoalView(goal)),
                         );
                       },
                       child: Padding(

@@ -9,6 +9,7 @@ class Goal {
   final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;
+  final Object walletDescription;
 
   const Goal({
     required this.id,
@@ -21,6 +22,7 @@ class Goal {
     required this.createdAt,
     required this.updatedAt,
     required this.deletedAt,
+    required this.walletDescription
   });
 
   factory Goal.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class Goal {
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
       deletedAt: json['deleted_at'],
+      walletDescription: json['wallet']
     );
   }
 }

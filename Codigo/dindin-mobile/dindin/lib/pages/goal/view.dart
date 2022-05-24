@@ -2,8 +2,12 @@ import 'package:dindin/pages/goal/edit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../models/goal.dart';
+
 class GoalView extends StatefulWidget {
-  const GoalView({Key? key}) : super(key: key);
+  final Goal goal;
+
+  const GoalView(this.goal, {Key? key}) : super(key: key);
 
   @override
   _GoalViewState createState() => _GoalViewState();
@@ -24,11 +28,34 @@ class HexColor extends Color {
 class _GoalViewState extends State<GoalView> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
+  String description = '';
+  String status = '';
+  num value = 0;
+  String type = '';
+  String expireAt = '';
+  String walletId = '';
+  var walletDescription;
+  @override
+  void initState() {
+    setState(() {
+      description = widget.goal.description;
+      status = widget.goal.status!;
+      type = widget.goal.type=='B'?'Saving':'Achievement';
+      value = widget.goal.value!;
+      expireAt = widget.goal.expireAt!;
+      var splited = (expireAt.substring(0, 10)).split('-');
+      expireAt = splited[2] + "/" + splited[1] + "/" + splited[0];
+      walletId = (widget.goal.walletId).toString();
+      walletDescription = widget.goal.walletDescription;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Goal X'),
+        title: Text(description),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: ListView(
@@ -65,24 +92,24 @@ class _GoalViewState extends State<GoalView> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const GoalEdit()),
+                                        builder: (context) =>GoalEdit(widget.goal)),
                                   );
                                 },
                               ),
                             ],
                           ),
                         ),
-                        const Center(
-                            child: Text('Goal X',
-                                style: TextStyle(
+                        Center(
+                            child: Text(description,
+                                style: const TextStyle(
                                     fontSize: 50,
                                     fontWeight: FontWeight.bold))),
-                        const Padding(
-                          padding: EdgeInsets.only(
+                        Padding(
+                          padding: const EdgeInsets.only(
                               top: 8.0, left: 8, right: 8, bottom: 40),
                           child: Text(
-                            "Status: In progress",
-                            style: TextStyle(
+                            "Status: "+ status,
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                                 color: Colors.amber),
                           ),
@@ -102,11 +129,11 @@ class _GoalViewState extends State<GoalView> {
                           semanticsLabel: "\$ 741.50",
                           value: 0.75,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
                           child: Text(
-                            "\$ 741.50",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            value.toString(),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         )
                       ],
@@ -115,9 +142,9 @@ class _GoalViewState extends State<GoalView> {
                   const SizedBox(
                     height: 35,
                   ),
-                  const Card(
+                  Card(
                     child: ListTile(
-                        leading: Padding(
+                        leading: const Padding(
                           padding: EdgeInsets.only(top: 4.0, left: 4.0),
                           child: FaIcon(
                             FontAwesomeIcons.dollarSign,
@@ -126,14 +153,14 @@ class _GoalViewState extends State<GoalView> {
                           ),
                         ),
                         title: Text('Achievement Amount'),
-                        subtitle: Text('\$ 1,000.00')),
+                        subtitle: Text('\$' + value.toString())),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  const Card(
+                  Card(
                     child: ListTile(
-                        leading: Padding(
+                        leading: const Padding(
                           padding: EdgeInsets.only(top: 4.0, left: 4.0),
                           child: FaIcon(
                             FontAwesomeIcons.calendar,
@@ -141,15 +168,15 @@ class _GoalViewState extends State<GoalView> {
                             color: Colors.black,
                           ),
                         ),
-                        title: Text('Limit Date'),
-                        subtitle: Text('10/12/2022')),
+                        title: const Text('Limit Date'),
+                        subtitle: Text(expireAt)),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  const Card(
+                  Card(
                     child: ListTile(
-                        leading: Padding(
+                        leading: const Padding(
                           padding: EdgeInsets.only(top: 4.0, left: 4.0),
                           child: FaIcon(
                             FontAwesomeIcons.bullseye,
@@ -157,15 +184,15 @@ class _GoalViewState extends State<GoalView> {
                             color: Colors.black,
                           ),
                         ),
-                        title: Text('Goal Type'),
-                        subtitle: Text('Achievement')),
+                        title: const Text('Goal Type'),
+                        subtitle: Text(type)),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  const Card(
+                  Card(
                     child: ListTile(
-                        leading: Padding(
+                        leading: const Padding(
                           padding: EdgeInsets.only(top: 4.0, left: 4.0),
                           child: FaIcon(
                             FontAwesomeIcons.wallet,
@@ -173,8 +200,8 @@ class _GoalViewState extends State<GoalView> {
                             color: Colors.black,
                           ),
                         ),
-                        title: Text('Wallet'),
-                        subtitle: Text('Personal')),
+                        title: const Text('Wallet'),
+                        subtitle: Text(walletDescription['description'])),
                   ),
                 ],
               ),

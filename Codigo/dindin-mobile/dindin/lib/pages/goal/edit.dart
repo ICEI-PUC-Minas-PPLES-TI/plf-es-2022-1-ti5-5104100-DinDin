@@ -1,8 +1,13 @@
+import 'dart:io';
+import 'package:dindin/models/goal.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../database/DBProvider.dart';
+
 class GoalEdit extends StatefulWidget {
-  const GoalEdit({Key? key}) : super(key: key);
+  final Goal? goal;
+  const GoalEdit(this.goal, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -12,11 +17,13 @@ class GoalEdit extends StatefulWidget {
 
 class _GoalEditState extends State<GoalEdit> {
   DateTime selectedDate = DateTime.now();
-  final List _wallets = ["Wallet X", "Wallet Y", "Wallet Z"];
-  late List<DropdownMenuItem<String>> _dropDownMenuItems;
-  late String _currentWallet;
+  // final List _wallets = [];
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _valuecontroller = TextEditingController();
+  // late String _currentWallet;
   final TextEditingController _dateController = TextEditingController();
-  int _goalType = 1;
+  int _goalType = 0;
+  bool showEditDeleteBtn = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -33,29 +40,62 @@ class _GoalEditState extends State<GoalEdit> {
     }
   }
 
-  // Fill wallet dropdown function
-  List<DropdownMenuItem<String>> getDropDownMenuItems() {
-    List<DropdownMenuItem<String>> items = [];
-    for (String wallet in _wallets) {
-      // here we are creating the drop down menu items, you can customize the item right here
-      // but I'll just use a simple text for this
-      items.add(DropdownMenuItem(value: wallet, child: Text(wallet)));
-    }
-    return items;
+  void updateGoal() async{
+    
   }
+  // // Fill wallet dropdown function
+  // List<DropdownMenuItem<String>> getDropDownMenuItems() {
+  //   List<DropdownMenuItem<String>> items = [];
+  //   for (String wallet in _wallets) {
+  //     // here we are creating the drop down menu items, you can customize the item right here
+  //     // but I'll just use a simple text for this
+  //     items.add(DropdownMenuItem(value: wallet, child: Text(wallet)));
+  //   }
+  //   return items;
+  // }
 
   // Change wallet dropdown function
-  void changedDropDownItem(String? selectedWallet) {
-    setState(() {
-      _currentWallet = selectedWallet!;
-    });
-  }
+  // void changedDropDownItem(String? selectedWallet) {
+  //   setState(() {
+  //     _currentWallet = selectedWallet!;
+  //   });
+  // }
 
   @override
   void initState() {
-    _dropDownMenuItems = getDropDownMenuItems();
-    _currentWallet = _dropDownMenuItems[0].value!;
+    if (widget.goal != null) {
+      // Edit
+      selectedDate = DateTime.parse((widget.goal?.expireAt).toString());
+       _dateController.text = "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString()}";
+      _descriptionController.text = widget.goal!.description;
+      // checkInternet();
+      _goalType = widget.goal?.type == 'B' ? 1 : 2;
+      _valuecontroller.text = (widget.goal?.value).toString();
+      // _dropDownMenuItems = getDropDownMenuItems();
+      // _currentWallet = _dropDownMenuItems[0].value!;
+    }
     super.initState();
+  }
+
+  void checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          showEditDeleteBtn = true;
+        });
+      }
+    } on SocketException catch (_) {
+      // Not Connected to Internet
+      final dbProvider = DBProvider.instance;
+      final goal =
+          await dbProvider.queryId('wallet', widget.goal!.id.toString());
+      if (goal[0]['offline'] == 1) {
+        setState(() {
+          showEditDeleteBtn = true;
+        });
+      }
+    }
   }
 
   @override
@@ -77,8 +117,9 @@ class _GoalEditState extends State<GoalEdit> {
                     // Description field
                     const Text('Description',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    const TextField(
-                      decoration: InputDecoration(
+                    TextField(
+                      controller: _descriptionController,
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: 'Save money for eurotrip',
                           suffixIcon:
@@ -156,9 +197,10 @@ class _GoalEditState extends State<GoalEdit> {
                     // Numeric input saving amount
                     const Text('Saving/Achievement Amount',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    const TextField(
+                    TextField(
+                      controller: _valuecontroller,
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: '9999,99',
                           suffixIcon:
@@ -172,27 +214,12 @@ class _GoalEditState extends State<GoalEdit> {
                     TextField(
                       controller: _dateController,
                       readOnly: true,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: '12/12/2030',
+                      decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          hintText: _dateController.text,
                           suffixIcon:
-                              Icon(FontAwesomeIcons.calendar, size: 20.0)),
+                              const Icon(FontAwesomeIcons.calendar, size: 20.0)),
                       onTap: () => _selectDate(context),
-                    ),
-                    const SizedBox(height: 20),
-                    // End date limit
-                    // Wallet dropdown list field
-                    const Text('Wallet',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    DropdownButtonFormField(
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Wallet 2',
-                          suffixIcon:
-                              Icon(FontAwesomeIcons.wallet, size: 20.0)),
-                      value: _currentWallet,
-                      items: _dropDownMenuItems,
-                      onChanged: changedDropDownItem,
                     ),
                     const SizedBox(height: 20),
                     SizedBox(
@@ -203,7 +230,9 @@ class _GoalEditState extends State<GoalEdit> {
                         style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).primaryColor,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+
+                        },
                       ),
                     )
                     // End wallet list
