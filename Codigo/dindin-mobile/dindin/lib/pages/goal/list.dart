@@ -1,7 +1,7 @@
 import 'package:dindin/pages/goal/create.dart';
 import 'package:dindin/pages/goal/view.dart';
 import 'package:dindin/models/goal.dart';
-
+import 'package:dindin/helpers/api_url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -18,29 +18,24 @@ class GoalList extends StatefulWidget {
 Future<List<Goal>> fetchGoals() async {
   List<Goal> goalsList = <Goal>[];
   http.Response response;
-
   try {
-    response = await http.get(Uri.parse(
-        'http://localhost:3001/api/goal?page=1&limit=5&attribute=id&order=ASC'));
-  } catch (e) {
-    final String response =
-        await rootBundle.loadString('assets/data/goals.json');
-    final goalsJson = jsonDecode(response)['goals'];
-    for (var goal in goalsJson) {
-      goalsList.add(Goal.fromJson(goal));
-    }
-    return goalsList;
-  }
-
-  if (response.statusCode == 200) {
+    response = await ApiURL.get('/goal');
+    print(response.body);
     final goalsJson = jsonDecode(response.body)['goals'];
-    for (var goal in goalsJson) {
-      goalsList.add(Goal.fromJson(goal));
-    }
-    return goalsList;
-  } else {
+    num status = response.statusCode;
+    if(status==200){
+      for (var goal in goalsJson) {
+        goalsList.add(Goal.fromJson(goal));
+      }
+    }else {
     throw Exception('Failed to load goals');
   }
+    return goalsList;
+  } catch (e) {
+    print(e);
+  }
+
+  return goalsList;
 }
 
 class _GoalListState extends State<GoalList> {

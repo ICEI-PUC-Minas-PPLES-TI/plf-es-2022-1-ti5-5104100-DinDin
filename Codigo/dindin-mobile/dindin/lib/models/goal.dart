@@ -25,13 +25,13 @@ class Goal {
 
   factory Goal.fromJson(Map<String, dynamic> json) {
     return Goal(
-      id: json['id'],
+      id: int.parse(json['id']),
       description: json['description'],
       value: json['value'],
       status: json['status'],
       type: json['type'],
       expireAt: json['expire_at'],
-      walletId: json['wallet_id'],
+      walletId: int.parse(json['wallet_id']),
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
       deletedAt: json['deleted_at'],
