@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dindin/models/goal.dart';
+import 'package:dindin/pages/goal/list.dart';
+import 'package:dindin/pages/goal/view.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:http/http.dart' as http;
 import '../../database/DBProvider.dart';
+import '../../helpers/api_url.dart';
 
 class GoalEdit extends StatefulWidget {
   final Goal? goal;
@@ -40,8 +44,47 @@ class _GoalEditState extends State<GoalEdit> {
     }
   }
 
-  void updateGoal() async{
-    
+  void updateGoal() async {
+    var url = ApiURL.baseUrl + "/goal/" + widget.goal!.id.toString();
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    try {
+      var response = await http.put(
+        uri,
+        headers: {'Authorization': token},
+        body: {
+          'description': _descriptionController.text,
+          'value': _valuecontroller.text,
+          'type': _goalType == 2 ? 'A' : 'B',
+          'expire_at': selectedDate.toString(),
+          'wallet_id': (widget.goal?.walletId).toString()
+        },
+      );
+      var status = response.statusCode;
+      if (status == 200) {
+        var json = jsonDecode(response.body);
+        Goal newGoal = Goal(
+            id: widget.goal!.id,
+            deletedAt: widget.goal!.deletedAt,
+            description: _descriptionController.text,
+            createdAt: widget.goal!.createdAt,
+            updatedAt: widget.goal!.updatedAt,
+            value: widget.goal!.value,
+            walletId: (widget.goal?.walletId),
+            walletDescription: widget.goal!.walletDescription,
+            expireAt: widget.goal!.expireAt,
+            status: widget.goal!.status,
+            type: widget.goal!.type);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const GoalList()),
+        );
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
   // // Fill wallet dropdown function
   // List<DropdownMenuItem<String>> getDropDownMenuItems() {
@@ -66,7 +109,8 @@ class _GoalEditState extends State<GoalEdit> {
     if (widget.goal != null) {
       // Edit
       selectedDate = DateTime.parse((widget.goal?.expireAt).toString());
-       _dateController.text = "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString()}";
+      _dateController.text =
+          "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString()}";
       _descriptionController.text = widget.goal!.description;
       // checkInternet();
       _goalType = widget.goal?.type == 'B' ? 1 : 2;
@@ -117,7 +161,7 @@ class _GoalEditState extends State<GoalEdit> {
                     // Description field
                     const Text('Description',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextField(
+                    TextFormField(
                       controller: _descriptionController,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
@@ -197,7 +241,7 @@ class _GoalEditState extends State<GoalEdit> {
                     // Numeric input saving amount
                     const Text('Saving/Achievement Amount',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextField(
+                    TextFormField(
                       controller: _valuecontroller,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
@@ -211,14 +255,14 @@ class _GoalEditState extends State<GoalEdit> {
                     // Date Limit field
                     const Text('Date Limit',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextField(
+                    TextFormField(
                       controller: _dateController,
                       readOnly: true,
                       decoration: InputDecoration(
                           border: const OutlineInputBorder(),
                           hintText: _dateController.text,
-                          suffixIcon:
-                              const Icon(FontAwesomeIcons.calendar, size: 20.0)),
+                          suffixIcon: const Icon(FontAwesomeIcons.calendar,
+                              size: 20.0)),
                       onTap: () => _selectDate(context),
                     ),
                     const SizedBox(height: 20),
@@ -230,8 +274,8 @@ class _GoalEditState extends State<GoalEdit> {
                         style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).primaryColor,
                         ),
-                        onPressed: () {
-
+                        onPressed: () async {
+                          updateGoal();
                         },
                       ),
                     )
