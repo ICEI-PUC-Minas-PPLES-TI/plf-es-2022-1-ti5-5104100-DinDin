@@ -32,6 +32,8 @@ class GoalView extends StatelessWidget {
           if (snap.hasData) {
             Goal goal = snap.data! as Goal;
             String goalName = goal.description;
+            // Color statusColor = goal.status === "PENDING" ? Colors.amber : 
+            //                     goal.status === ""
             return Scaffold(
               appBar: AppBar(
                 title: Text(goalName),
@@ -173,9 +175,9 @@ class GoalView extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          const Card(
+                          Card(
                             child: ListTile(
-                                leading: Padding(
+                                leading: const Padding(
                                   padding: EdgeInsets.only(top: 4.0, left: 4.0),
                                   child: FaIcon(
                                     FontAwesomeIcons.wallet,
@@ -183,8 +185,8 @@ class GoalView extends StatelessWidget {
                                     color: Colors.black,
                                   ),
                                 ),
-                                title: Text('Wallet'),
-                                subtitle: Text("Personal")),
+                                title: const Text('Wallet'),
+                                subtitle: Text(goal.wallet?.description??"")),
                           ),
                         ],
                       ),

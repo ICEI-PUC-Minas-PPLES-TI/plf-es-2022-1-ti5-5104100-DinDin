@@ -1,3 +1,5 @@
+import 'package:dindin/models/wallet.dart';
+
 class Goal {
   final num id;
   final String description;
@@ -6,7 +8,7 @@ class Goal {
   final String? type;
   final String? expireAt;
   final num? walletId;
-  final String? wallet;
+  final Wallet? wallet;
   final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;
@@ -26,6 +28,7 @@ class Goal {
   });
 
   factory Goal.fromJson(Map<String, dynamic> json) {
+    dynamic wallet = json['wallet'];
     return Goal(
       id: int.parse(json['id']),
       description: json['description'].toString(),
@@ -34,7 +37,7 @@ class Goal {
       type: json['type'].toString(),
       expireAt: json['expire_at'].toString(),
       walletId: int.parse(json['wallet_id']),
-      wallet: (json['wallet']['description']).toString(),
+      wallet: wallet.toString().isEmpty ? Wallet.fromJson(json['wallet']) : null,
       createdAt: json['created_at'].toString(),
       updatedAt: json['updated_at'].toString(),
       deletedAt: json['deleted_at'].toString(),
