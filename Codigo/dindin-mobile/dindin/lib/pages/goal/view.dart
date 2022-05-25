@@ -86,9 +86,9 @@ class _GoalViewState extends State<GoalView> {
                             children: [
                               IconButton(
                                 alignment: Alignment.topRight,
-                                icon: const FaIcon(
-                                  FontAwesomeIcons.ellipsis,
-                                  size: 30.0,
+                                icon: const Icon(
+                                  FontAwesomeIcons.penToSquare,
+                                  size: 20.0,
                                   color: Colors.black,
                                 ),
                                 color: Colors.black,
