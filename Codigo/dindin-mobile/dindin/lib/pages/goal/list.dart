@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class GoalList extends StatefulWidget {
   const GoalList({Key? key}) : super(key: key);
@@ -24,14 +25,14 @@ Future<List<Goal>> fetchGoals() async {
     print(response.body);
     final goalsJson = jsonDecode(response.body)['goals'];
     num status = response.statusCode;
-    if(status==200){
+    if (status == 200) {
       for (var goal in goalsJson) {
         goalsList.add(Goal.fromJson(goal));
       }
-    }else {
-    throw Exception('Failed to load goals');
-  }
-    
+    } else {
+      throw Exception('Failed to load goals');
+    }
+
     return goalsList;
   } catch (e) {
     print(e);
@@ -47,6 +48,27 @@ class _GoalListState extends State<GoalList> {
   void initState() {
     super.initState();
     goals = fetchGoals();
+  }
+
+  void deleteGoal(id) async {
+    var url = ApiURL.baseUrl + "/goal/" + id;
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    try {
+      var response = await http.delete(uri, headers: {'Authorization': token});
+      var status = response.statusCode;
+      if (status == 204) {
+        print('delete');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const GoalList()),
+        );
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -66,7 +88,19 @@ class _GoalListState extends State<GoalList> {
                   return Card(
                     child: InkWell(
                       onTap: () {
-                        final Goal goal = Goal(id: snapshot.data[index].id, createdAt: '', deletedAt: '', updatedAt: '', description: snapshot.data[index].description, expireAt: snapshot.data[index].expireAt, walletId: snapshot.data[index].walletId, value: snapshot.data[index].value, type: snapshot.data[index].type, status: snapshot.data[index].status,walletDescription: snapshot.data[index].walletDescription);
+                        final Goal goal = Goal(
+                            id: snapshot.data[index].id,
+                            createdAt: '',
+                            deletedAt: '',
+                            updatedAt: '',
+                            description: snapshot.data[index].description,
+                            expireAt: snapshot.data[index].expireAt,
+                            walletId: snapshot.data[index].walletId,
+                            value: snapshot.data[index].value,
+                            type: snapshot.data[index].type,
+                            status: snapshot.data[index].status,
+                            walletDescription:
+                                snapshot.data[index].walletDescription);
                         print("Open Goal Visualization at id: " +
                             snapshot.data[index].id.toString());
                         Navigator.push(
@@ -77,16 +111,29 @@ class _GoalListState extends State<GoalList> {
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                        child: ListTile(
-                          leading: const Padding(
-                            padding: EdgeInsets.only(top: 5.0),
-                            child: FaIcon(
-                              FontAwesomeIcons.bullseye,
-                              size: 30.0,
-                              color: Colors.redAccent,
+                        child: Slidable(
+                          actionPane: const SlidableScrollActionPane(),
+                          actions: [
+                            IconSlideAction(
+                                caption: 'Delete',
+                                color: Colors.red,
+                                icon: Icons.delete,
+                                onTap: () => {
+                                  deleteGoal((snapshot.data[index].id).toString())
+                                })
+                          ],
+                          actionExtentRatio: 1 / 5,
+                          child: ListTile(
+                            leading: const Padding(
+                              padding: EdgeInsets.only(top: 5.0),
+                              child: FaIcon(
+                                FontAwesomeIcons.bullseye,
+                                size: 30.0,
+                                color: Colors.redAccent,
+                              ),
                             ),
+                            title: Text((snapshot.data[index].description)),
                           ),
-                          title: Text((snapshot.data[index].description)),
                         ),
                       ),
                     ),
