@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:dindin/helpers/api_url.dart';
+import 'package:dindin/widgets/wallet_drop.dart';
+import 'package:flutter/services.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 class GoalCreate extends StatefulWidget {
   const GoalCreate({Key? key}) : super(key: key);
@@ -11,50 +16,22 @@ class GoalCreate extends StatefulWidget {
 }
 
 class _GoalCreateState extends State<GoalCreate> {
-  DateTime selectedDate = DateTime.now();
-  final List _wallets = ["Wallet X", "Wallet Y", "Wallet Z"];
-  late List<DropdownMenuItem<String>> _dropDownMenuItems;
-  late String _currentWallet;
+  DateTime date = DateTime.now();
   final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _valueController = TextEditingController();
+  String wallet = "";
   int _goalType = 1;
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        _dateController.text =
-            "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year.toString()}";
-      });
-    }
-  }
-
-  // Fill wallet dropdown function
-  List<DropdownMenuItem<String>> getDropDownMenuItems() {
-    List<DropdownMenuItem<String>> items = [];
-    for (String wallet in _wallets) {
-      // here we are creating the drop down menu items, you can customize the item right here
-      // but I'll just use a simple text for this
-      items.add(DropdownMenuItem(value: wallet, child: Text(wallet)));
-    }
-    return items;
-  }
-
-  // Change wallet dropdown function
-  void changedDropDownItem(String? selectedWallet) {
+  void changeWalletId(String id) {
     setState(() {
-      _currentWallet = selectedWallet!;
+      wallet = id;
     });
+    //_key.currentState!.setWallet(_isIncome ? "IN" : "OUT", id);
   }
 
   @override
   void initState() {
-    _dropDownMenuItems = getDropDownMenuItems();
-    _currentWallet = _dropDownMenuItems[0].value!;
     super.initState();
   }
 
@@ -77,8 +54,9 @@ class _GoalCreateState extends State<GoalCreate> {
                     // Description field
                     const Text('Description',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    const TextField(
-                      decoration: InputDecoration(
+                    TextField(
+                      controller: _descriptionController,
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: 'ex: Save money for eurotrip',
                           suffixIcon:
@@ -156,9 +134,16 @@ class _GoalCreateState extends State<GoalCreate> {
                     // Numeric input saving amount
                     const Text('Saving/Achievement Amount',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    const TextField(
+                    TextField(
+                      controller: _valueController,
+                      inputFormatters: <TextInputFormatter>[
+                        CurrencyTextInputFormatter(
+                          locale: 'pt_BR',
+                          decimalDigits: 2,
+                        ),
+                      ],
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: '9999,99',
                           suffixIcon:
@@ -171,29 +156,53 @@ class _GoalCreateState extends State<GoalCreate> {
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     TextField(
                       controller: _dateController,
-                      readOnly: true,
+                      enableInteractiveSelection: false,
+                      onTap: () async {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        DateTime? newDate = await showDatePicker(
+                          context: context,
+                          initialDate: date,
+                          firstDate: DateTime(2022),
+                          lastDate: DateTime(2062),
+                          builder: (context, child) {
+                            return Theme(
+                              data: ThemeData.light().copyWith(
+                                primaryColor: Theme.of(context).primaryColor,
+                                colorScheme: ColorScheme.light(
+                                  primary: Theme.of(context).primaryColor,
+                                ),
+                                buttonTheme: const ButtonThemeData(
+                                    textTheme: ButtonTextTheme.primary),
+                              ),
+                              child: child!,
+                            );
+                          },
+                        );
+                        if (newDate == null) return;
+                        if (newDate.compareTo(DateTime.now()) <= 0) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Date need to greater than today"),
+                          ));
+                          return;
+                        }
+                        setState(() => {
+                              date = newDate,
+                              _dateController.text =
+                                  '${date.day}/${date.month}/${date.year}'
+                            });
+                      },
                       decoration: const InputDecoration(
+                          labelStyle: TextStyle(fontSize: 16),
                           border: OutlineInputBorder(),
                           hintText: 'Select Date',
                           suffixIcon:
                               Icon(FontAwesomeIcons.calendar, size: 20.0)),
-                      onTap: () => _selectDate(context),
                     ),
                     const SizedBox(height: 20),
                     // End date limit
                     // Wallet dropdown list field
-                    const Text('Wallet',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    DropdownButtonFormField(
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Select Wallet',
-                          suffixIcon:
-                              Icon(FontAwesomeIcons.wallet, size: 20.0)),
-                      value: _currentWallet,
-                      items: _dropDownMenuItems,
-                      onChanged: changedDropDownItem,
-                    ),
+                    DropWallet(changeWalletId),
                     const SizedBox(height: 20),
                     SizedBox(
                       height: 40,
@@ -203,7 +212,59 @@ class _GoalCreateState extends State<GoalCreate> {
                         style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).primaryColor,
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (_descriptionController.text.isEmpty) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Missing Description"),
+                            ));
+                            return;
+                          } else if (_valueController.text.isEmpty) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Missing Amount"),
+                            ));
+                            return;
+                          } else if (_dateController.text.isEmpty) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Missing Date"),
+                            ));
+                            return;
+                          } else if (wallet.isEmpty) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Missing Wallet"),
+                            ));
+                            return;
+                          }
+
+                          var url = ApiURL.baseUrl + "/goal";
+                          final Uri uri = Uri.parse(url);
+                          var token = await ApiURL.getToken();
+                          try {
+                            var response = await http.post(uri, headers: {
+                              'Authorization': token
+                            }, body: {
+                              'description': _descriptionController.text,
+                              'value': _valueController.text
+                                  .replaceAll(RegExp(r"\D"), ""),
+                              'type': _goalType == 1 ? "A" : "B",
+                              'expire_at':
+                                  '${date.year}-${date.month}-${date.day}',
+                              'wallet_id': wallet
+                            });
+                            var status = response.statusCode;
+                            if (status == 201) {
+                              //var json = jsonDecode(response.body);
+                              Navigator.of(context).pop();
+                            } else {
+                              print(response.body);
+                            }
+                          } catch (e) {
+                            print(e);
+                          }
+                        },
                       ),
                     )
                     // End wallet list
