@@ -119,8 +119,9 @@ class _GoalListState extends State<GoalList> {
                                 color: Colors.red,
                                 icon: Icons.delete,
                                 onTap: () => {
-                                  deleteGoal((snapshot.data[index].id).toString())
-                                })
+                                      deleteGoal(
+                                          (snapshot.data[index].id).toString())
+                                    })
                           ],
                           actionExtentRatio: 1 / 5,
                           child: ListTile(
