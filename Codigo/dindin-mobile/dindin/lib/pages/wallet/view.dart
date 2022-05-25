@@ -3,7 +3,6 @@ import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dindin/pages/wallet/members.dart';
-import 'package:dindin/pages/category/list.dart';
 
 import '../../models/wallet.dart';
 import '../category/list.dart';
@@ -271,28 +270,6 @@ class _WalletViewState extends State<WalletView> {
                     ),
                   const SizedBox(
                     height: 10,
-                  ),
-                  GestureDetector(
-                    onTap: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ListCategories(1)),
-                      )
-                    },
-                    child: const Card(
-                      child: ListTile(
-                          leading: Padding(
-                            padding: EdgeInsets.only(top: 4.0, left: 4.0),
-                            child: FaIcon(
-                              FontAwesomeIcons.alignJustify,
-                              size: 30.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                          title: Text('Categories'),
-                          subtitle: Text('Food, health, pleazure...')),
-                    ),
                   ),
                 ],
               ),
