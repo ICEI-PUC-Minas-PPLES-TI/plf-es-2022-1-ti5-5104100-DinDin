@@ -106,7 +106,11 @@ class _WalletListState extends State<WalletList> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const WalletJoin()),
-              );
+              ).then((value) => {
+                setState(() {
+                  wallets = fetchWallets();
+                })
+              });
             },
           ),
           // add more IconButton
@@ -134,7 +138,6 @@ class _WalletListState extends State<WalletList> {
                           setState(() {
                             wallets = fetchWallets();
                           })
-
                         });
                       },
                       child: Padding(
