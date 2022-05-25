@@ -3,6 +3,7 @@ import 'package:dindin/pages/profile/edit.dart';
 import 'package:dindin/pages/transactions/form.dart';
 import 'package:dindin/pages/transactions/list.dart';
 import 'package:dindin/pages/wallet/list.dart';
+import 'package:dindin/widgets/transactions_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
@@ -292,99 +293,16 @@ class Dashboard extends StatelessWidget {
                 ]),
               ),
             ),
-            FutureBuilder<List<dynamic>>(
-              future: fetchTransaction(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  return Expanded(
-                    child: Column(
-                      children: [
-                        ListView.builder(
-                            key: const Key("keyListBuilderTransactions"),
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.all(8),
-                            itemCount: snapshot.data?.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Card(
-                                child: InkWell(
-                                  onTap: () {
-                                    print(
-                                        "Open Transaction Visualization at id: " +
-                                            snapshot.data[index].id.toString());
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 8.0, bottom: 8.0),
-                                    child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: fromHex(snapshot
-                                              .data[index].categoryColor),
-                                          child: const FaIcon(
-                                            FontAwesomeIcons.cartShopping,
-                                            size: 20.0,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                    (snapshot.data[index]
-                                                        .description),
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                Text(
-                                                  DateFormat.yMEd()
-                                                      .add_jms()
-                                                      .format(DateTime.parse(
-                                                          snapshot.data[index]
-                                                              .createdAt)),
-                                                  style: const TextStyle(
-                                                      fontSize: 12),
-                                                )
-                                              ],
-                                            ),
-                                            Text(
-                                                '\$' +
-                                                    formatMoney.format(snapshot
-                                                        .data[index].value
-                                                        .abs()),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 10,
-                                                    color: snapshot.data[index]
-                                                                .value <
-                                                            0
-                                                        ? Colors.red
-                                                        : Colors.black)),
-                                          ],
-                                        )),
-                                  ),
-                                ),
-                              );
-                            }),
-                      ],
-                    ),
-                  );
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
+            const TransactionsList(
+              maxItems: 5,
+            )
           ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const TransactionForm()),
+              MaterialPageRoute(builder: (context) => const TransactionForm()),
             );
           },
           child: const Icon(Icons.add),
