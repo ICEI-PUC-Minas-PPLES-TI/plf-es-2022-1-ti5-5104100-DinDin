@@ -1,3 +1,4 @@
+import 'package:dindin/pages/goal/list.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -257,7 +258,11 @@ class _GoalCreateState extends State<GoalCreate> {
                             var status = response.statusCode;
                             if (status == 201) {
                               //var json = jsonDecode(response.body);
-                              Navigator.of(context).pop();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const GoalList()),
+                              );
                             } else {
                               print(response.body);
                             }
