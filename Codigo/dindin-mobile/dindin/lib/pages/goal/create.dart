@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:dindin/helpers/api_url.dart';
-import 'package:dindin/widgets/wallet_drop.dart';
+import 'package:dindin/widgets/wallet_drop_border.dart';
 import 'package:flutter/services.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
