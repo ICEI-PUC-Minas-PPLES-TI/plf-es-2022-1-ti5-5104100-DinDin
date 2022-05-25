@@ -40,7 +40,7 @@ class _GoalViewState extends State<GoalView> {
     setState(() {
       description = widget.goal.description;
       status = widget.goal.status!;
-      type = widget.goal.type=='B'?'Saving':'Achievement';
+      type = widget.goal.type == 'B' ? 'Saving' : 'Achievement';
       value = widget.goal.value!;
       expireAt = widget.goal.expireAt!;
       var splited = (expireAt.substring(0, 10)).split('-');
@@ -56,13 +56,27 @@ class _GoalViewState extends State<GoalView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(description),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,0,20,0),
+            child: IconButton(
+              icon: const FaIcon(FontAwesomeIcons.penToSquare),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => GoalEdit(widget.goal)),
+                );
+              },
+            ),
+          ),
+        ],
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: ListView(
         children: [
           const SizedBox(
-                    height: 20,
-                  ),
+            height: 20,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32.0),
             child: Form(
@@ -70,7 +84,6 @@ class _GoalViewState extends State<GoalView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-
                   Card(
                     elevation: 5,
                     color: HexColor("F5F6FA"),
@@ -79,40 +92,19 @@ class _GoalViewState extends State<GoalView> {
                     ),
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20, right: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                alignment: Alignment.topRight,
-                                icon: const Icon(
-                                  FontAwesomeIcons.penToSquare,
-                                  size: 20.0,
-                                  color: Colors.black,
-                                ),
-                                color: Colors.black,
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>GoalEdit(widget.goal)),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
                         Center(
-                            child: Text(description,
-                                style: const TextStyle(
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.bold))),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                              child: Text(description,
+                                  style: const TextStyle(
+                                      fontSize: 50,
+                                      fontWeight: FontWeight.bold)),
+                            )),
                         Padding(
                           padding: const EdgeInsets.only(
                               top: 8.0, left: 8, right: 8, bottom: 40),
                           child: Text(
-                            "Status: "+ status,
+                            "Status: " + status,
                             style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                                 color: Colors.amber),
@@ -135,7 +127,8 @@ class _GoalViewState extends State<GoalView> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(('\$' + value.toString()),
+                          child: Text(
+                            ('\$' + value.toString()),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         )
