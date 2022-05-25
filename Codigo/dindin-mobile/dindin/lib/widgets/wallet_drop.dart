@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/models/wallet.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class DropWallet extends StatefulWidget {
@@ -63,16 +64,16 @@ class _DropWalletState extends State<DropWallet> {
           valueListenable: dropValue,
           builder: (BuildContext context, String value, _) {
             return Row(
-                children: [
-                  const Icon(
-                    Icons.account_balance_wallet,
-                    color: Colors.green,
-                    size: 25.0,
-                  ),
-                  Expanded(
-                      flex: 1,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: DropdownButtonHideUnderline(
+                    child: ButtonTheme(
+                      alignedDropdown: true,
                       child: DropdownButton<int>(
-                        hint: const Text("Wallet", style: TextStyle(fontSize: 20)),
+                        icon: const Visibility (visible:false, child: Icon(Icons.arrow_downward)),
+                        hint: const Text("Wallet",
+                            style: TextStyle(fontSize: 20)),
                         value: (value.isEmpty) ? null : int.parse(value),
                         onChanged: (option) => {
                           dropValue.value = option.toString(),
@@ -81,15 +82,23 @@ class _DropWalletState extends State<DropWallet> {
                         items: wallets
                             .map(
                               (op) => DropdownMenuItem(
-                            value: int.parse(op.id.toString()),
-                            child: Text(op.description!),
-                          ),
-                        )
+                                value: int.parse(op.id.toString()),
+                                child: Text(op.description!,
+                                    style: const TextStyle(fontSize: 20)),
+                              ),
+                            )
                             .toList(),
                       ),
-                  )
-                ],
-              );
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0,0,4,0),
+                  child: FaIcon(FontAwesomeIcons.wallet,
+                                  size: 30.0, color: Color.fromRGBO(96, 212, 156, 1)),
+                ),
+              ],
+            );
           }),
     );
   }
