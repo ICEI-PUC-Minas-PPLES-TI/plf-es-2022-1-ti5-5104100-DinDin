@@ -60,6 +60,9 @@ class _GoalViewState extends State<GoalView> {
       ),
       body: ListView(
         children: [
+          const SizedBox(
+                    height: 20,
+                  ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32.0),
             child: Form(
@@ -67,6 +70,7 @@ class _GoalViewState extends State<GoalView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+
                   Card(
                     elevation: 5,
                     color: HexColor("F5F6FA"),
@@ -131,8 +135,7 @@ class _GoalViewState extends State<GoalView> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            value.toString(),
+                          child: Text(('\$' + value.toString()),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         )
@@ -140,7 +143,7 @@ class _GoalViewState extends State<GoalView> {
                     ),
                   ),
                   const SizedBox(
-                    height: 35,
+                    height: 20,
                   ),
                   Card(
                     child: ListTile(
