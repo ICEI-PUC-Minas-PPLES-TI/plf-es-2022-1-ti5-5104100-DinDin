@@ -31,6 +31,7 @@ Future<List<Goal>> fetchGoals() async {
     }else {
     throw Exception('Failed to load goals');
   }
+    
     return goalsList;
   } catch (e) {
     print(e);
