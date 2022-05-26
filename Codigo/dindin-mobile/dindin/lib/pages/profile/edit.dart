@@ -19,13 +19,21 @@ class _ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
-  final oldPasswordController = TextEditingController();
+  final currentPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
 
-  bool _obscureText = true;
-  void _toggle() {
+  bool _showcurrentPassword = true;
+  bool _showNewPassword = true;
+
+  void _togglecurrentPassword() {
     setState(() {
-      _obscureText = !_obscureText;
+      _showcurrentPassword = !_showcurrentPassword;
+    });
+  }
+
+  void _toggleNewPassword() {
+    setState(() {
+      _showNewPassword = !_showNewPassword;
     });
   }
 
@@ -45,21 +53,23 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void updateUser() async {
     final body = {'name': nameController.text};
-    if (oldPasswordController.text.length >= 8 &&
+    if (currentPasswordController.text.length >= 8 &&
         newPasswordController.text.length >= 8) {
-      body['oldPassword'] = oldPasswordController.text;
+      body['oldPassword'] = currentPasswordController.text;
       body['password'] = newPasswordController.text;
     }
     var response = await ApiURL.put("/user", body: body);
+    print(body);
 
     var status = response.statusCode;
     if (status == 200) {
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Changes saved')),
       );
     } else if (status == 409) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('The old password is wrong')),
+        const SnackBar(content: Text('The current password is wrong')),
       );
     } else {
       print(status);
@@ -75,8 +85,6 @@ class _ProfilePageState extends State<ProfilePage> {
           if (snap.hasData) {
             User user = snap.data! as User;
             nameController.text = user.name;
-            oldPasswordController.text = '';
-            newPasswordController.text = '';
             return Scaffold(
               appBar: AppBar(
                 title: const Text('Edit Profile'),
@@ -127,34 +135,31 @@ class _ProfilePageState extends State<ProfilePage> {
                         height: 5,
                       ),
                       TextFormField(
-                        keyboardType: TextInputType.text,
-                        controller: oldPasswordController,
-                        obscureText: _obscureText,
+                        keyboardType: TextInputType.visiblePassword,
+                        controller: currentPasswordController,
+                        obscureText: _showcurrentPassword,
                         validator: (value) {
-                          if ((oldPasswordController.text.isEmpty &&
+                          if ((currentPasswordController.text.isEmpty &&
                                   newPasswordController.text.isNotEmpty) ||
-                              (oldPasswordController.text.isNotEmpty &&
+                              (currentPasswordController.text.isNotEmpty &&
                                   newPasswordController.text.isEmpty)) {
                             return 'Please fill in both password fields.';
-                          } else if (((oldPasswordController.text.isEmpty &&
-                                      newPasswordController.text.isNotEmpty) ||
-                                  (oldPasswordController.text.isNotEmpty &&
-                                      newPasswordController.text.isEmpty)) &&
-                              oldPasswordController.text.length < 8) {
+                          } else if (currentPasswordController.text.length <
+                              8) {
                             return 'Password must be at least 8 characters.';
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                          labelText: 'Old Password',
-                          hintText: 'Enter your old password',
+                          labelText: 'Current Password',
+                          hintText: 'Enter your current password',
                           border: const OutlineInputBorder(
                             borderSide: BorderSide(),
                           ),
                           suffixIcon: InkWell(
-                            onTap: _toggle,
+                            onTap: _togglecurrentPassword,
                             child: Icon(
-                              _obscureText
+                              _showcurrentPassword
                                   ? FontAwesomeIcons.eye
                                   : FontAwesomeIcons.eyeSlash,
                               size: 15.0,
@@ -169,18 +174,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       TextFormField(
                         keyboardType: TextInputType.text,
                         controller: newPasswordController,
-                        obscureText: _obscureText,
+                        obscureText: _showNewPassword,
                         validator: (value) {
-                          if ((oldPasswordController.text.isEmpty &&
+                          if ((currentPasswordController.text.isEmpty &&
                                   newPasswordController.text.isNotEmpty) ||
-                              (oldPasswordController.text.isNotEmpty &&
+                              (currentPasswordController.text.isNotEmpty &&
                                   newPasswordController.text.isEmpty)) {
                             return 'Please fill in both password fields.';
-                          } else if (((oldPasswordController.text.isEmpty &&
-                                      newPasswordController.text.isNotEmpty) ||
-                                  (oldPasswordController.text.isNotEmpty &&
-                                      newPasswordController.text.isEmpty)) &&
-                              newPasswordController.text.length < 8) {
+                          } else if (newPasswordController.text.length < 8) {
                             return 'Password must be at least 8 characters.';
                           }
                           return null;
@@ -192,9 +193,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             borderSide: BorderSide(),
                           ),
                           suffixIcon: InkWell(
-                            onTap: _toggle,
+                            onTap: _toggleNewPassword,
                             child: Icon(
-                              _obscureText
+                              _showNewPassword
                                   ? FontAwesomeIcons.eye
                                   : FontAwesomeIcons.eyeSlash,
                               size: 15.0,
@@ -255,7 +256,7 @@ class _ProfilePageState extends State<ProfilePage> {
           } else if (snap.hasError) {
             return Scaffold(
                 appBar: AppBar(
-                  title: const Text('Goal'),
+                  title: const Text('Profile'),
                   backgroundColor: Theme.of(context).primaryColor,
                 ),
                 body: Center(
