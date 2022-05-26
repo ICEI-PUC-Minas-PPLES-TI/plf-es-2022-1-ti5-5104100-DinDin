@@ -8,7 +8,6 @@ const categoryTypes = ["IN", "OUT"];
 class CreateCategoryController {
     async create(request, response) {
         const scheme = yup.object().shape({
-            wallet_id: yup.number("'wallet_id' must be numeric!").required(),
             description: yup
                 .string("'description' must be string!")
                 .max(30)
@@ -26,10 +25,10 @@ class CreateCategoryController {
                 .min(6)
                 .required(),
         });
-
         try {
             await scheme.validate(request.body, { abortEarly: false });
         } catch (error) {
+            console.log(error)
             throw new AppError(error.name, 422, error.errors);
         }
 
