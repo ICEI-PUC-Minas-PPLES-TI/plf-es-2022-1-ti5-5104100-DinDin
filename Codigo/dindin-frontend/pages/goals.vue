@@ -254,7 +254,7 @@
                                         <h5
                                             class="mt-0 text-subtitle-2 font-weight-black"
                                         >
-                                            {{ goalToView.wallet_id }}
+                                            {{ goalToView.wallet.description }}
                                         </h5>
                                     </v-col>
                                 </v-row>
@@ -405,6 +405,7 @@ export default {
             this.showModal = true;
         },
         viewGoal(goal) {
+            console.log(goal);
             this.goalToView = goal;
             this.viewGoalDetails = true;
         },
