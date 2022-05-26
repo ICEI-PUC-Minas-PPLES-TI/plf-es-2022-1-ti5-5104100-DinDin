@@ -11,13 +11,16 @@ import 'package:intl/intl.dart';
 
 class TransactionsList extends StatelessWidget {
   final int? maxItems;
-  const TransactionsList({Key? key, this.maxItems}) : super(key: key);
+  final bool? nestedList;
+  const TransactionsList({Key? key, this.maxItems, this.nestedList})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return LazyListBuilder<Transaction>(
         fetch: fetchTransaction,
         maxItems: maxItems,
+        nestedList: nestedList,
         itemBuilder: (BuildContext context, transaction, index) {
           return Card(
             child: InkWell(

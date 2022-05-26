@@ -295,6 +295,7 @@ class Dashboard extends StatelessWidget {
             ),
             const TransactionsList(
               maxItems: 5,
+              nestedList: true,
             )
           ],
         ),

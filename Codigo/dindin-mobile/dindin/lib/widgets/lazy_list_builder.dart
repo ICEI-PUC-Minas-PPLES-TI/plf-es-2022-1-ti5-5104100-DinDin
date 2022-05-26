@@ -3,9 +3,18 @@ import 'package:flutter/material.dart';
 class LazyListBuilder<T> extends StatefulWidget {
   final Future<List<T>> Function(int page) fetch;
   final int? maxItems;
-  final Widget Function(BuildContext context, T data, int index) itemBuilder;
+  final bool? nestedList;
+  final Widget Function(
+    BuildContext context,
+    T data,
+    int index,
+  ) itemBuilder;
   const LazyListBuilder(
-      {Key? key, required this.fetch, required this.itemBuilder, this.maxItems})
+      {Key? key,
+      required this.fetch,
+      required this.itemBuilder,
+      this.maxItems,
+      this.nestedList})
       : super(key: key);
 
   @override
@@ -57,7 +66,7 @@ class _ListScreenState<T> extends State<LazyListBuilder<T>> {
       // Need to display a loading tile if more items are coming
       itemCount: _hasMore ? _dataList.length + 1 : _dataList.length,
       // maybe change the shrinkWrap for performance issues
-      shrinkWrap: true,
+      shrinkWrap: widget.nestedList ?? false,
       itemBuilder: (BuildContext context, int index) {
         if (index >= _dataList.length) {
           // Don't trigger if one async loading is already under way

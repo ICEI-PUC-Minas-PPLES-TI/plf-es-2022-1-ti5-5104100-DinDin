@@ -83,22 +83,24 @@ class _ExtractState extends State<Extract> {
                               fontSize: 24,
                             ))),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 25.0),
-                    child: Text(
-                      '\$' + formatMoney.format(1372.50).toString(),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700, fontSize: 42),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 60.0),
-                    child: Text(
-                      "See bank details",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700, color: Colors.green),
-                    ),
-                  ),
+                  FutureBuilder(
+                      future: getUserExtract(),
+                      builder: ((context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(0, 10.0, 0, 25.0),
+                            child: Text(
+                              '\$' +
+                                  formatMoney.format(snapshot.data).toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 42),
+                            ),
+                          );
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      }))
                 ],
               ),
             ),
@@ -113,7 +115,9 @@ class _ExtractState extends State<Extract> {
                     color: Colors.black),
               ),
             ),
-            const TransactionsList()
+            const TransactionsList(
+              nestedList: true,
+            )
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -127,6 +131,13 @@ class _ExtractState extends State<Extract> {
           backgroundColor: Theme.of(context).primaryColor,
         ));
   }
+}
+
+Future getUserExtract() async {
+  final response = await ApiURL.get("/report/usertotal");
+  int total = jsonDecode(response.body)["total"];
+
+  return total;
 }
 
 Color fromHex(String hexString) {
