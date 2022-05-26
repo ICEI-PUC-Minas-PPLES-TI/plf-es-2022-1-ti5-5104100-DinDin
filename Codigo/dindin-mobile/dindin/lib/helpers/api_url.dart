@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ApiURL {
   static final String baseUrl =
-      dotenv.get('API_BASE_URL', fallback: 'http://3.133.200.9:3001/api/');
+      dotenv.get('API_BASE_URL', fallback: 'http://40.76.212.193:3001/api/');
 
   static Future<String> getToken() async {
     final prefs = await StreamingSharedPreferences.instance;

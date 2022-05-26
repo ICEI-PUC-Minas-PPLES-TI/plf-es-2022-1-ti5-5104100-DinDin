@@ -1,10 +1,12 @@
 import 'dart:convert';
 // import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
 
 import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/models/user.dart';
+import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -14,14 +16,22 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final GlobalKey<FormState> _formKey = GlobalKey();
+  final _formKey = GlobalKey<FormState>();
 
-  late bool _passwordVisible = false;
+  final nameController = TextEditingController();
+  final oldPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+
+  bool _obscureText = true;
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    _passwordVisible = false;
   }
 
   Future<User> getUser() async {
@@ -33,6 +43,30 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  void updateUser() async {
+    final body = {'name': nameController.text};
+    if (oldPasswordController.text.length >= 8 &&
+        newPasswordController.text.length >= 8) {
+      body['oldPassword'] = oldPasswordController.text;
+      body['password'] = newPasswordController.text;
+    }
+    var response = await ApiURL.put("/user", body: body);
+
+    var status = response.statusCode;
+    if (status == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Changes saved')),
+      );
+    } else if (status == 409) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('The old password is wrong')),
+      );
+    } else {
+      print(status);
+      print(response.body);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -40,6 +74,9 @@ class _ProfilePageState extends State<ProfilePage> {
         builder: (context, snap) {
           if (snap.hasData) {
             User user = snap.data! as User;
+            nameController.text = user.name;
+            oldPasswordController.text = '';
+            newPasswordController.text = '';
             return Scaffold(
               appBar: AppBar(
                 title: const Text('Edit Profile'),
@@ -54,8 +91,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(height: 60),
                       TextFormField(
                         keyboardType: TextInputType.text,
-                        initialValue: user.name,
                         maxLength: 100,
+                        controller: nameController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
                         decoration: const InputDecoration(
                           labelText: 'Name',
                           border: OutlineInputBorder(
@@ -85,28 +128,38 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       TextFormField(
                         keyboardType: TextInputType.text,
-                        obscureText:
-                            !_passwordVisible, //This will obscure text dynamically
+                        controller: oldPasswordController,
+                        obscureText: _obscureText,
+                        validator: (value) {
+                          if ((oldPasswordController.text.isEmpty &&
+                                  newPasswordController.text.isNotEmpty) ||
+                              (oldPasswordController.text.isNotEmpty &&
+                                  newPasswordController.text.isEmpty)) {
+                            return 'Please fill in both password fields.';
+                          } else if (((oldPasswordController.text.isEmpty &&
+                                      newPasswordController.text.isNotEmpty) ||
+                                  (oldPasswordController.text.isNotEmpty &&
+                                      newPasswordController.text.isEmpty)) &&
+                              oldPasswordController.text.length < 8) {
+                            return 'Password must be at least 8 characters.';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           labelText: 'Old Password',
                           hintText: 'Enter your old password',
                           border: const OutlineInputBorder(
                             borderSide: BorderSide(),
                           ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              // Based on passwordVisible state choose the icon
-                              _passwordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Theme.of(context).primaryColorDark,
+                          suffixIcon: InkWell(
+                            onTap: _toggle,
+                            child: Icon(
+                              _obscureText
+                                  ? FontAwesomeIcons.eye
+                                  : FontAwesomeIcons.eyeSlash,
+                              size: 15.0,
+                              color: Colors.black,
                             ),
-                            onPressed: () {
-                              // Update the state i.e. toogle the state of passwordVisible variable
-                              setState(() {
-                                _passwordVisible = !_passwordVisible;
-                              });
-                            },
                           ),
                         ),
                       ),
@@ -115,28 +168,38 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       TextFormField(
                         keyboardType: TextInputType.text,
-                        obscureText:
-                            !_passwordVisible, //This will obscure text dynamically
+                        controller: newPasswordController,
+                        obscureText: _obscureText,
+                        validator: (value) {
+                          if ((oldPasswordController.text.isEmpty &&
+                                  newPasswordController.text.isNotEmpty) ||
+                              (oldPasswordController.text.isNotEmpty &&
+                                  newPasswordController.text.isEmpty)) {
+                            return 'Please fill in both password fields.';
+                          } else if (((oldPasswordController.text.isEmpty &&
+                                      newPasswordController.text.isNotEmpty) ||
+                                  (oldPasswordController.text.isNotEmpty &&
+                                      newPasswordController.text.isEmpty)) &&
+                              newPasswordController.text.length < 8) {
+                            return 'Password must be at least 8 characters.';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           labelText: 'New Password',
                           hintText: 'Enter your new password',
                           border: const OutlineInputBorder(
                             borderSide: BorderSide(),
                           ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              // Based on passwordVisible state choose the icon
-                              _passwordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Theme.of(context).primaryColorDark,
+                          suffixIcon: InkWell(
+                            onTap: _toggle,
+                            child: Icon(
+                              _obscureText
+                                  ? FontAwesomeIcons.eye
+                                  : FontAwesomeIcons.eyeSlash,
+                              size: 15.0,
+                              color: Colors.black,
                             ),
-                            onPressed: () {
-                              // Update the state i.e. toogle the state of passwordVisible variable
-                              setState(() {
-                                _passwordVisible = !_passwordVisible;
-                              });
-                            },
                           ),
                         ),
                       ),
@@ -174,7 +237,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Theme.of(context).primaryColor,
                             textColor: Colors.white,
                             onPressed: () {
-                              _formKey.currentState?.validate();
+                              if (_formKey.currentState!.validate()) {
+                                // If the form is valid, display a snackbar. In the real world,
+                                // you'd often call a server or save the information in a database.
+                                updateUser();
+                              }
                             },
                           ),
                           Container(height: 20.0),
