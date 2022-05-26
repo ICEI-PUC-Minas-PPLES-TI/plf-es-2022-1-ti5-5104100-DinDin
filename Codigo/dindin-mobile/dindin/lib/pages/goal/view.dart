@@ -102,26 +102,50 @@ class GoalView extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Column(
+                            child: FutureBuilder<num>(
+                              future: getWalletExtract(goal.walletId as int),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData){
+                                  num walletValue = snapshot.data!;
+                                  double perc;
+
+                                  if (walletValue > goal.value!){
+                                    perc = 1;
+                                  }
+                                  else if (walletValue <= 0){
+                                    perc = 0;
+                                  }
+                                  else {
+                                    perc = walletValue / goal.value!;
+                                  } 
+
+                                  String valueString = "\$ " + walletValue.toString();
+
+                                  return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 LinearProgressIndicator(
                                   backgroundColor: Colors.grey.shade100,
                                   color: Colors.lightGreen,
                                   minHeight: 15,
-                                  semanticsLabel: "\$ 741.50",
-                                  value: 0.75,
+                                  semanticsLabel: valueString,
+                                  value: perc,
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 8.0),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
                                   child: Text(
-                                    "\$ 741.50",
+                                    valueString,
                                     style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                        const TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 )
                               ],
-                            ),
+                            );
+                                }
+                                else {
+                                  return const CircularProgressIndicator();
+                                }
+                              },)
                           ),
                           const SizedBox(
                             height: 35,
@@ -211,6 +235,13 @@ class GoalView extends StatelessWidget {
           }
         });
   }
+}
+
+Future<num> getWalletExtract(int walletId) async {
+  final response = await ApiURL.get("/report/usertotal?wallet_id=" + walletId.toString());
+  num total = jsonDecode(response.body)["total"];
+
+  return total;
 }
 
 Future<Goal> getGoal(int idGoal) async {
