@@ -28,7 +28,6 @@ class CreateCategoryController {
         try {
             await scheme.validate(request.body, { abortEarly: false });
         } catch (error) {
-            console.log(error)
             throw new AppError(error.name, 422, error.errors);
         }
 
