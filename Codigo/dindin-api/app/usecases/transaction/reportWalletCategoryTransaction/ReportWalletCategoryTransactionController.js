@@ -4,6 +4,7 @@ const AppError = require("../../../errors/AppError");
 const ReportWalletCategoryTransactionUseCase = require("./ReportWalletCategoryTransactionUseCase");
 
 const orderEnum = ["ASC", "DESC"];
+const types = ["IN", "OUT"];
 
 class ReportWalletCategoryTransactionController {
     // * Route: /api/report/category
@@ -18,6 +19,9 @@ class ReportWalletCategoryTransactionController {
                     orderEnum,
                     `'order' must be one of these: ${orderEnum}.`
                 ),
+            type: yup
+                .mixed()
+                .oneOf(types, `'type' must be one of these: ${types}.`),
             wallet_id: yup.number("'wallet_id' must be numeric!"),
 
             description: yup.string("'description' must be string!").max(30),
