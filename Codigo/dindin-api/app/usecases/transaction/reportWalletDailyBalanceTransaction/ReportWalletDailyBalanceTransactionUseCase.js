@@ -97,6 +97,8 @@ class ReportWalletBalanceTransactionUseCase {
         if (query.deleted_at_start || query.deleted_at_end)
             whre.deleted_at = sortPaginateOptions.where.deleted_at;
 
+        console.log(sortPaginateOptions.order);
+
         const dateFilter = "`Transaction`.`date`";
         const transactionsWalletDailyBalance = await Transaction.findAll({
             attributes: [
@@ -123,6 +125,7 @@ class ReportWalletBalanceTransactionUseCase {
             ],
             group: sequelize.literal(`DATE(${dateFilter})`),
             paranoid: sortPaginateOptions.paranoid,
+            order: sortPaginateOptions.order,
         }).catch((error) => {
             throw new AppError("Erro interno do servidor!", 500, error);
         });
