@@ -45,7 +45,7 @@ class ReportWalletGoalTransactionController {
         } catch (error) {
             throw new AppError(error.name, 422, error.errors);
         }
-        const wallet_id = request.params.id; // * wallet_id of the transaction
+        // const wallet_id = request.params.id; // * wallet_id of the transaction
         const user_id = request.userId;
 
         const reportWalletBalanceTransactionController =
