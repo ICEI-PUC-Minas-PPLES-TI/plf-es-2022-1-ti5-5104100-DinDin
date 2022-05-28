@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dindin/models/goal.dart';
 import 'package:dindin/pages/goal/list.dart';
 import 'package:dindin/pages/goal/view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import '../../database/DBProvider.dart';
@@ -46,6 +48,28 @@ class _GoalEditState extends State<GoalEdit> {
     }
   }
 
+  num currencyFormat(var value) {
+      var firstnum = 0;
+      for (var a = 0; a < value.length; a++) {
+        if (_isNumeric(value.substring(a, a + 1))) {
+          firstnum = a;
+          a = value.length;
+        }
+      }
+      String removedot = value.replaceAll(".", "");
+      String chageforcomma = removedot.replaceAll(",", ".");
+      double resp = double.parse(chageforcomma.substring(firstnum));
+      return resp;
+    }
+
+  bool _isNumeric(String str) {
+      // ignore: unnecessary_null_comparison
+      if (str == null) {
+        return false;
+      }
+      return double.tryParse(str) != null;
+    }
+
   void updateGoal() async {
     var url = ApiURL.baseUrl + "/goal/" + widget.goal!.id.toString();
     final Uri uri = Uri.parse(url);
@@ -56,7 +80,7 @@ class _GoalEditState extends State<GoalEdit> {
         headers: {'Authorization': token},
         body: {
           'description': _descriptionController.text,
-          'value': _valuecontroller.text,
+          'value': currencyFormat(_valuecontroller.text).toString(),
           'type': _goalType == 2 ? 'A' : 'B',
           'expire_at': selectedDate.toString(),
           'wallet_id': (widget.goal?.walletId).toString()
@@ -119,12 +143,6 @@ class _GoalEditState extends State<GoalEdit> {
         "${today.day.toString().padLeft(2, '0')}/${today.month.toString().padLeft(2, '0')}/${today.year.toString()}";
     var array1 = date1.split('/');
     var array2 = date2.split('/');
-    print(array1);
-    print(array2);
-    print(int.parse(array1[2]) > int.parse(array2[2]));
-    print(int.parse(array1[1]) > int.parse(array2[1]));
-    print(int.parse(array1[1]) > int.parse(array2[1]));
-    print(int.parse(array1[0]));
     if (int.parse(array1[2]) > int.parse(array2[2])) {
       return true;
     } else if (int.parse(array1[1]) > int.parse(array2[1])) {
@@ -240,6 +258,12 @@ class _GoalEditState extends State<GoalEdit> {
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     TextFormField(
                       controller: _valuecontroller,
+                      inputFormatters: <TextInputFormatter>[
+                        CurrencyTextInputFormatter(
+                          locale: 'pt_BR',
+                          decimalDigits: 2,
+                        ),
+                      ],
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),

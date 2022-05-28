@@ -1,14 +1,12 @@
-import 'package:dindin/models/wallet.dart';
 import 'package:dindin/pages/goal/create.dart';
 import 'package:dindin/pages/goal/view.dart';
 import 'package:dindin/models/goal.dart';
 import 'package:dindin/helpers/api_url.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class GoalList extends StatefulWidget {
   const GoalList({Key? key}) : super(key: key);

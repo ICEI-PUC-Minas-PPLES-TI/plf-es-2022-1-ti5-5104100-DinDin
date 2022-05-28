@@ -31,6 +31,28 @@ class _GoalCreateState extends State<GoalCreate> {
     //_key.currentState!.setWallet(_isIncome ? "IN" : "OUT", id);
   }
 
+  num currencyFormat(var value) {
+    var firstnum = 0;
+    for (var a = 0; a < value.length; a++) {
+      if (_isNumeric(value.substring(a, a + 1))) {
+        firstnum = a;
+        a = value.length;
+      }
+    }
+    String removedot = value.replaceAll(".", "");
+    String chageforcomma = removedot.replaceAll(",", ".");
+    double resp = double.parse(chageforcomma.substring(firstnum));
+    return resp;
+  }
+
+  bool _isNumeric(String str) {
+    // ignore: unnecessary_null_comparison
+    if (str == null) {
+      return false;
+    }
+    return double.tryParse(str) != null;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -248,8 +270,7 @@ class _GoalCreateState extends State<GoalCreate> {
                               'Authorization': token
                             }, body: {
                               'description': _descriptionController.text,
-                              'value': _valueController.text
-                                  .replaceAll(RegExp(r"\D"), ""),
+                              'value': currencyFormat(_valueController.text).toString(),
                               'type': _goalType == 1 ? "A" : "B",
                               'expire_at':
                                   '${date.year}-${date.month}-${date.day}',

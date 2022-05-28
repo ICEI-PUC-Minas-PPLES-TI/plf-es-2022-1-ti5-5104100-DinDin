@@ -34,6 +34,7 @@ class _GoalViewState extends State<GoalView> {
   String type = '';
   String expireAt = '';
   String walletId = '';
+  // ignore: prefer_typing_uninitialized_variables
   var walletDescription;
   @override
   void initState() {
@@ -55,7 +56,7 @@ class _GoalViewState extends State<GoalView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(description),
+        title: Text(description,style: TextStyle(fontSize: description.length > 8 ? 15 : 20),),
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0,0,20,0),
@@ -94,10 +95,10 @@ class _GoalViewState extends State<GoalView> {
                       children: [
                         Center(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                              padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
                               child: Text(description,
-                                  style: const TextStyle(
-                                      fontSize: 50,
+                                  style: TextStyle(
+                                      fontSize: description.length > 8 ? 30 : 50,
                                       fontWeight: FontWeight.bold)),
                             )),
                         Padding(
