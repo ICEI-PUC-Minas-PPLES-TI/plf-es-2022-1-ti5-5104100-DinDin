@@ -6,8 +6,8 @@ const ReportWalletGoalTransactionUseCase = require("./ReportWalletGoalTransactio
 const orderEnum = ["ASC", "DESC"];
 
 class ReportWalletGoalTransactionController {
-    // * Route: /api/report/wallet/:id/goal
-    // * {id} == wallet_id of the transactions
+    // * Route: /api/report/goal/:id
+    // * {id} == goal id
     async report(request, response) {
         const scheme = yup.object().shape({
             page: yup.number("'value' must be numeric!"),
@@ -45,7 +45,7 @@ class ReportWalletGoalTransactionController {
         } catch (error) {
             throw new AppError(error.name, 422, error.errors);
         }
-        // const wallet_id = request.params.id; // * wallet_id of the transaction
+        const goal_id = request.params.id;
         const user_id = request.userId;
 
         const reportWalletBalanceTransactionController =
@@ -53,6 +53,7 @@ class ReportWalletGoalTransactionController {
         const transactionsBalance =
             await reportWalletBalanceTransactionController.report(
                 request.query,
+                goal_id,
                 user_id
             );
 
