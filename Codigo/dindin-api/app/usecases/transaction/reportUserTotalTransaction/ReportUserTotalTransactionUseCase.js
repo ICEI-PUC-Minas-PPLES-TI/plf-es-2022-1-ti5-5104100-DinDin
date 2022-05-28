@@ -7,6 +7,7 @@ const Category = require("../../../models/Category");
 
 const Transaction = require("../../../models/Transaction");
 const UserHasWallet = require("../../../models/UserHasWallet");
+const Wallet = require("../../../models/Wallet");
 
 class ReportUserTotalTransactionUseCase {
     async report(query, user_id) {
@@ -28,6 +29,30 @@ class ReportUserTotalTransactionUseCase {
                     "User does not have this wallet permission!",
                     403
                 );
+        }
+
+        const userWallets = await UserHasWallet.findAll({
+            attributes: ["wallet_id"],
+            where: {
+                user_id: user_id,
+            },
+            raw: true,
+        });
+        const userWalletsIds = [];
+        for (let index = 0; index < userWallets.length; index++) {
+            userWalletsIds.push(userWallets[index]["wallet_id"]);
+            console.log(userWallets[index]["wallet_id"]);
+        }
+        const wallets = await Wallet.findAll({
+            attributes: ["initial_value"],
+            where: {
+                id: userWalletsIds,
+            },
+            raw: true,
+        });
+        let initialValueSum = 0;
+        for (let index = 0; index < userWallets.length; index++) {
+            initialValueSum += wallets[index]["initial_value"];
         }
 
         if (query.description) {
@@ -99,7 +124,7 @@ class ReportUserTotalTransactionUseCase {
         });
 
         return {
-            total: transactionsUserTotal,
+            total: transactionsUserTotal + initialValueSum,
         };
     }
 }
