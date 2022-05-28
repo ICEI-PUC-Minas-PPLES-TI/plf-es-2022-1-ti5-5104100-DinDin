@@ -161,9 +161,7 @@ export default {
         return {
             show1: false,
             show2: false,
-            toast: false,
             redirect: false,
-            toastMensagem: "",
             user: {
                 name: "",
                 password: "",
@@ -226,7 +224,6 @@ export default {
 
         redirectToLogin() {
             this.$router.push("/login");
-            this.toast = false;
         },
     },
 };
