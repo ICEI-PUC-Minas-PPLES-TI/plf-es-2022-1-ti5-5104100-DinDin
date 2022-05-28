@@ -23,7 +23,6 @@ class _LoginState extends State<Register> {
   String confirmPassword = '';
   String name = '';
   bool acceptedTerms = false;
-  Color colorOfButton = Colors.grey;
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -74,12 +73,6 @@ class _LoginState extends State<Register> {
                       ),
                       Form(
                         key: formKey,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        onChanged: () {
-                        if (formKey.currentState!.validate()) {
-                          colorOfButton = Colors.green;
-                        }
-                      },
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -227,35 +220,43 @@ class _LoginState extends State<Register> {
                                   child: ElevatedButton(
                                     child: Text("Register"),
                                     style: ElevatedButton.styleFrom(
-                                      primary: colorOfButton,
+                                      primary: Colors.green,
                                     ),
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
-                                        final snackBarTrue = SnackBar(
-                                            content: Text('User created'));
-                                        createUser(email, name, password)
-                                            .then((res) async {
-                                          if (res == true) {
-                                            _scaffoldKey.currentState!
-                                                .showSnackBar(snackBarTrue);
+                                        if (acceptedTerms == false) {
+                                          final snackBar = SnackBar(
+                                              content: Text(
+                                                  'Accept terms is required!'));
+                                          _scaffoldKey.currentState!
+                                              .showSnackBar(snackBar);
+                                        } else {
+                                          final snackBarTrue = SnackBar(
+                                              content: Text('User created'));
+                                          createUser(email, name, password)
+                                              .then((res) async {
+                                            if (res == true) {
+                                              _scaffoldKey.currentState!
+                                                  .showSnackBar(snackBarTrue);
 
-                                            bool logged =
-                                                await userAuth(email, password);
-                                            if (logged) {
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const Dashboard()),
-                                              );
+                                              bool logged = await userAuth(
+                                                  email, password);
+                                              if (logged) {
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const Dashboard()),
+                                                );
+                                              }
+                                            } else {
+                                              final snackBarFalse = SnackBar(
+                                                  content: Text(res as String));
+                                              _scaffoldKey.currentState!
+                                                  .showSnackBar(snackBarFalse);
                                             }
-                                          } else {
-                                            final snackBarFalse = SnackBar(
-                                                content: Text(res as String));
-                                            _scaffoldKey.currentState!
-                                                .showSnackBar(snackBarFalse);
-                                          }
-                                        });
+                                          });
+                                        }
                                       } else {
                                         final snackBar = SnackBar(
                                             content:
