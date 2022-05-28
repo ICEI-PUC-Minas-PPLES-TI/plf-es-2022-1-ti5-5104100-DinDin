@@ -1,14 +1,17 @@
 <template>
     <!--Container-->
     <v-container class="fill-height" fluid>
-        <v-row align="center" justify="center" dense>
+        <v-row align="center" justify="center">
             <v-col cols="12" sm="12" md="10" lg="6">
                 <v-card width="100%" style="padding: 5vh">
                     <v-card-title
                         ><h2><b>Register</b></h2></v-card-title
                     >
 
-                    <v-card-text style="padding: 7vh">
+                    <v-card-text
+                        class="register-card-text"
+                        style="padding: 7vh"
+                    >
                         <v-form ref="user" lazy-validation autocomplete="off">
                             <v-row>
                                 <v-col cols="12" sm="12" md="12">
@@ -146,27 +149,11 @@
                 </v-card>
             </v-col>
         </v-row>
-
-        <v-snackbar v-model="toast" shaped>
-            {{ toastMensagem }}
-
-            <template #action="{ attrs }">
-                <v-btn
-                    color="blue"
-                    text
-                    v-bind="attrs"
-                    @click="
-                        redirect == true ? redirectToLogin() : (toast = false)
-                    "
-                >
-                    Ok
-                </v-btn>
-            </template>
-        </v-snackbar>
     </v-container>
 </template>
 
 <script>
+import Swal from "sweetalert2";
 export default {
     layout: "main",
 
@@ -199,14 +186,32 @@ export default {
                 this.$axios
                     .post("/user", this.user)
                     .then((res) => {
-                        if (res.data?.user?.id > 0) {
-                            this.showToast("User registered successfully");
+                        if (res.data?.id > 0) {
+                            Swal.fire({
+                                title: "Success!",
+                                text: "User registered successfully!",
+                                icon: "success",
+                                showConfirmButton: false,
+                                toast: true,
+                                position: "top-end",
+                                timer: 3000,
+                                timerProgressBar: true,
+                            });
                             this.redirect = true;
                         }
                         this.cleanData();
                     })
                     .catch((err) => {
-                        this.showToast(err.response.data.message);
+                        Swal.fire({
+                            title: "Error!",
+                            text: err.response.data.message,
+                            icon: "error",
+                            showConfirmButton: false,
+                            toast: true,
+                            position: "top-end",
+                            timer: 3000,
+                            timerProgressBar: true,
+                        });
                     });
             }
         },
@@ -219,11 +224,6 @@ export default {
             this.$refs.user.reset();
         },
 
-        showToast(mensagem) {
-            this.toastMensagem = mensagem;
-            this.toast = true;
-        },
-
         redirectToLogin() {
             this.$router.push("/login");
             this.toast = false;
@@ -231,3 +231,12 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+@media only screen and (max-width: 700px) {
+    .register-card-text {
+        /* background-color: lightblue; */
+        padding: 1vh !important;
+    }
+}
+</style>
