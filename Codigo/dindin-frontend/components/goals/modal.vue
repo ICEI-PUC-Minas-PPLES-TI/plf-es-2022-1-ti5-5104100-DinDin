@@ -99,7 +99,7 @@
                                 label="Goal Type"
                             />
                         </v-row>
-                        <v-row class="mt-0 pt-0">
+                        <v-row v-if="goalToEdit == null" class="mt-0 pt-0">
                             <v-select
                                 :rules="[rules.required]"
                                 v-model="goal.wallet_id"
