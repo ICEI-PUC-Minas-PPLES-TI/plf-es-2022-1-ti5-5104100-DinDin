@@ -1,5 +1,6 @@
 const { Op, Sequelize } = require("sequelize");
-const Goal = require("../models/Goal")
+const Goal = require("../models/Goal");
+const WalletServices = require("./walletServices");
 
 module.exports = class GoalService{
 
@@ -43,7 +44,7 @@ module.exports = class GoalService{
 
     async updateExpiredGoals(){
         try {
-            console.log("verifying andupdatig expired goals");
+            console.log("verifying and updatig expired goals");
             const goals = await Goal.findAll({
                 where: {
                     status: "PENDING",
@@ -105,10 +106,11 @@ async function getWalletCurrentValueInMap(walletCurrentValueMap, wallet_id){
         walletCurrentValue = walletCurrentValueMap.get(wallet_id)
     }
     else{
-        // mock value: change for getting wallets current value 
-        walletCurrentValue = 1000; // get wallet current value
+        const walletServices = new WalletServices();
+        walletCurrentValue = await walletServices.getWalletCurrentValue(wallet_id); // get wallet current value
         walletCurrentValueMap.set(wallet_id, walletCurrentValue);
     }
 
+    console.log(walletCurrentValue);
     return walletCurrentValue;
 }
