@@ -34,6 +34,7 @@ class _GoalViewState extends State<GoalView> {
   String type = '';
   String expireAt = '';
   String walletId = '';
+  var progress = 0.0;
   // ignore: prefer_typing_uninitialized_variables
   var walletDescription;
   @override
@@ -49,23 +50,32 @@ class _GoalViewState extends State<GoalView> {
       walletId = (widget.goal.walletId).toString();
       walletDescription = widget.goal.walletDescription;
     });
+    getReportProgress();
     super.initState();
+  }
+
+  void getReportProgress() {
+    progress = 0.85;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(description,style: TextStyle(fontSize: description.length > 8 ? 15 : 20),),
+        title: Text(
+          description,
+          style: TextStyle(fontSize: description.length > 8 ? 15 : 20),
+        ),
         actions: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(0,0,20,0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
             child: IconButton(
               icon: const FaIcon(FontAwesomeIcons.penToSquare),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => GoalEdit(widget.goal)),
+                  MaterialPageRoute(
+                      builder: (context) => GoalEdit(widget.goal)),
                 );
               },
             ),
@@ -95,12 +105,12 @@ class _GoalViewState extends State<GoalView> {
                       children: [
                         Center(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
-                              child: Text(description,
-                                  style: TextStyle(
-                                      fontSize: description.length > 8 ? 30 : 50,
-                                      fontWeight: FontWeight.bold)),
-                            )),
+                          padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
+                          child: Text(description,
+                              style: TextStyle(
+                                  fontSize: description.length > 8 ? 30 : 50,
+                                  fontWeight: FontWeight.bold)),
+                        )),
                         Padding(
                           padding: const EdgeInsets.only(
                               top: 8.0, left: 8, right: 8, bottom: 40),
@@ -123,13 +133,13 @@ class _GoalViewState extends State<GoalView> {
                           backgroundColor: Colors.grey.shade100,
                           color: Colors.lightGreen,
                           minHeight: 15,
-                          semanticsLabel: "\$ 741.50",
-                          value: 0.75,
+                          semanticsLabel: 'Progress = ${progress*100}%',
+                          value: progress,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Text(
-                            ('\$' + value.toString()),
+                            ('${100-(progress*100)}% left to reach your goal!'),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         )
