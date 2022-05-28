@@ -93,8 +93,8 @@
                                 hide-details="auto"
                                 outlined
                                 :items="[
-                                    { text: 'Saving', value: 'A' },
-                                    { text: 'Achievement', value: 'B' },
+                                    { text: 'Saving', value: 'B' },
+                                    { text: 'Achievement', value: 'A' },
                                 ]"
                                 label="Goal Type"
                             />
