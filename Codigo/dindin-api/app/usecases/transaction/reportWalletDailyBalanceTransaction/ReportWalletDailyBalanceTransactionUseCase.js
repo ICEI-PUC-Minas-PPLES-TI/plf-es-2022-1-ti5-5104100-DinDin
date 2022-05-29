@@ -1,5 +1,6 @@
-const sequelize = require("sequelize");
+const Sequelize = require("sequelize");
 const { Op } = require("sequelize");
+const { getCurrentDateFromDatabase } = require("../../../database");
 
 const AppError = require("../../../errors/AppError");
 const { SortPaginate } = require("../../../helpers/SortPaginate");
@@ -47,10 +48,10 @@ class ReportWalletBalanceTransactionUseCase {
         }
 
         if (query.description) {
-            whre.description = sequelize.where(
-                sequelize.fn(
+            whre.description = Sequelize.where(
+                Sequelize.fn(
                     "LOWER",
-                    sequelize.col("`Transaction`.`description`")
+                    Sequelize.col("`Transaction`.`description`")
                 ),
                 "LIKE",
                 "%" + query.description.toLowerCase() + "%"
@@ -100,15 +101,15 @@ class ReportWalletBalanceTransactionUseCase {
         const dateFilter = "`Transaction`.`date`";
         const transactionsWalletDailyBalance = await Transaction.findAll({
             attributes: [
-                [sequelize.literal(`DATE(${dateFilter})`), "dt"],
+                [Sequelize.literal(`DATE(${dateFilter})`), "dt"],
                 [
-                    sequelize.literal(
+                    Sequelize.literal(
                         `SUM(CASE WHEN value > 0 THEN value ELSE 0 END)`
                     ),
                     "incoming",
                 ],
                 [
-                    sequelize.literal(
+                    Sequelize.literal(
                         `ABS(SUM(CASE WHEN value < 0 THEN value ELSE 0 END))`
                     ),
                     "outcoming",
@@ -117,17 +118,74 @@ class ReportWalletBalanceTransactionUseCase {
             where: [
                 whre,
 
-                sequelize.literal(
+                Sequelize.literal(
                     `DATE(${dateFilter}) BETWEEN DATE(NOW() - INTERVAL 7 DAY) AND DATE(NOW())`
                 ),
             ],
-            group: sequelize.literal(`DATE(${dateFilter})`),
+            group: Sequelize.literal(`DATE(${dateFilter})`),
             paranoid: sortPaginateOptions.paranoid,
+            order: sortPaginateOptions.order,
+            raw: true,
         }).catch((error) => {
             throw new AppError("Erro interno do servidor!", 500, error);
         });
 
-        return transactionsWalletDailyBalance;
+        const currentDate = new Date(await getCurrentDateFromDatabase());
+        currentDate.setSeconds(currentDate.getSeconds() + 1);
+        const sevenDaysAgo = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            currentDate.getDate() - 7
+        );
+
+        const orderDefined = sortPaginateOptions.order[0][1];
+        let indexStart;
+        let indexEnd;
+        if (orderDefined == "ASC") {
+            indexStart = 1;
+            indexEnd = 7;
+        } else {
+            indexStart = 7;
+            indexEnd = 1;
+        }
+
+        // * Daily balance with reseted incoming and outcoming transactions
+        const resetDays = [];
+        for (
+            let index = indexStart;
+            orderDefined == "ASC" ? index <= indexEnd : index >= indexEnd;
+            orderDefined == "ASC" ? index++ : index--
+        ) {
+            const dayToAdd = new Date(
+                sevenDaysAgo.getFullYear(),
+                sevenDaysAgo.getMonth(),
+                sevenDaysAgo.getDate() + index
+            );
+            const year = dayToAdd.getFullYear();
+            const month = dayToAdd.getMonth() + 1;
+            const day = dayToAdd.getDate() + 1;
+            const dayToAddWithoutTime =
+                year +
+                "-" +
+                (month < 10 ? "0" + month : month) +
+                "-" +
+                (day < 10 ? "0" + day : day);
+            const newElement = {
+                dt: dayToAddWithoutTime,
+                incoming: 0,
+                outcoming: 0,
+            };
+            let existsInDatabase = false;
+            for (let i = 0; i < transactionsWalletDailyBalance.length; i++) {
+                if (transactionsWalletDailyBalance[i].dt == newElement.dt) {
+                    resetDays.push(transactionsWalletDailyBalance[i]);
+                    existsInDatabase = true;
+                }
+            }
+            if (!existsInDatabase) resetDays.push(newElement);
+        }
+
+        return resetDays;
     }
 }
 

@@ -1,13 +1,13 @@
 const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
-const ReportWalletCategoryTransactionUseCase = require("./ReportWalletCategoryTransactionUseCase");
+const ReportWalletGoalTransactionUseCase = require("./ReportWalletGoalTransactionUseCase");
 
 const orderEnum = ["ASC", "DESC"];
-const types = ["IN", "OUT"];
 
-class ReportWalletCategoryTransactionController {
-    // * Route: /api/report/category
+class ReportWalletGoalTransactionController {
+    // * Route: /api/report/goal/:id
+    // * {id} == goal id
     async report(request, response) {
         const scheme = yup.object().shape({
             page: yup.number("'value' must be numeric!"),
@@ -19,10 +19,6 @@ class ReportWalletCategoryTransactionController {
                     orderEnum,
                     `'order' must be one of these: ${orderEnum}.`
                 ),
-            type: yup
-                .mixed()
-                .oneOf(types, `'type' must be one of these: ${types}.`),
-            wallet_id: yup.number("'wallet_id' must be numeric!"),
 
             description: yup.string("'description' must be string!").max(30),
             value: yup.number("'value' must be numeric!"),
@@ -49,18 +45,20 @@ class ReportWalletCategoryTransactionController {
         } catch (error) {
             throw new AppError(error.name, 422, error.errors);
         }
+        const goal_id = request.params.id;
         const user_id = request.userId;
 
-        const reportWalletCategoryTransactionUseCase =
-            new ReportWalletCategoryTransactionUseCase();
-        const transactionsCategory =
-            await reportWalletCategoryTransactionUseCase.report(
+        const reportWalletBalanceTransactionController =
+            new ReportWalletGoalTransactionUseCase();
+        const transactionsBalance =
+            await reportWalletBalanceTransactionController.report(
                 request.query,
+                goal_id,
                 user_id
             );
 
-        return response.status(200).json(transactionsCategory);
+        return response.status(200).json(transactionsBalance);
     }
 }
 
-module.exports = ReportWalletCategoryTransactionController;
+module.exports = ReportWalletGoalTransactionController;

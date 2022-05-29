@@ -7,6 +7,7 @@ const ReportUserTotalTransactionController = require("../usecases/transaction/re
 const ReportWalletBalanceTransactionController = require("../usecases/transaction/reportWalletBalanceTransaction/ReportWalletBalanceTransactionController");
 const ReportWalletDailyBalanceTransactionController = require("../usecases/transaction/reportWalletDailyBalanceTransaction/ReportWalletDailyBalanceTransactionController");
 const ReportWalletCategoryTransactionController = require("../usecases/transaction/reportWalletCategoryTransaction/ReportWalletCategoryTransactionController");
+const ReportWalletGoalTransactionController = require("../usecases/transaction/reportWalletGoalTransaction/ReportWalletGoalTransactionController");
 
 const reportUserTotalTransactionController =
     new ReportUserTotalTransactionController();
@@ -16,6 +17,8 @@ const reportWalletDailyBalanceTransactionController =
     new ReportWalletDailyBalanceTransactionController();
 const reportWalletCategoryTransactionController =
     new ReportWalletCategoryTransactionController();
+const reportWalletGoalTransactionController =
+    new ReportWalletGoalTransactionController();
 
 transactionReportRoutes.get(
     "/usertotal",
@@ -39,6 +42,12 @@ transactionReportRoutes.get(
     "/category",
     [AuthenticationMiddleware.verifyToken],
     reportWalletCategoryTransactionController.report
+);
+
+transactionReportRoutes.get(
+    "/goal/:id",
+    [AuthenticationMiddleware.verifyToken],
+    reportWalletGoalTransactionController.report
 );
 
 module.exports = transactionReportRoutes;

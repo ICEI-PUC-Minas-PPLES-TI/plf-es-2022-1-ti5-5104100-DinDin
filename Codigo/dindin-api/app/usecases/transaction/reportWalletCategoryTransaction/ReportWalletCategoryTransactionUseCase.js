@@ -57,7 +57,8 @@ class ReportWalletCategoryTransactionUseCase {
             );
         }
 
-        whre.value = { [Op.gte]: 0 };
+        if (query.type == "IN") whre.value = { [Op.gt]: 0 };
+        else if (query.type == "OUT") whre.value = { [Op.lt]: 0 };
 
         if (query.category_id == 0) whre.category_id = { [Op.is]: null };
         else if (query.category_id) {
@@ -94,7 +95,6 @@ class ReportWalletCategoryTransactionUseCase {
         }
 
         const attributes = Object.keys(Transaction.getAttributes);
-        console.log(Object.keys(Transaction.rawAttributes));
         const transactionQuantity = await Transaction.count();
         const sortPaginateOptions = SortPaginate(
             query,
