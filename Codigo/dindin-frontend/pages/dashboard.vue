@@ -21,7 +21,14 @@
                                         <v-col cols="12" md="9">
                                             Current
                                             <br />
-                                            <b>R${{ (ioValues.incoming - ioValues.outcoming).toFixed(2) }}</b>
+                                            <b
+                                                >R${{
+                                                    (
+                                                        ioValues.incoming -
+                                                        ioValues.outcoming
+                                                    ).toFixed(2)
+                                                }}</b
+                                            >
                                         </v-col>
                                     </v-row>
                                 </v-col>
@@ -35,7 +42,11 @@
                                         <v-col cols="12" md="9">
                                             Incomes
                                             <br />
-                                            <b>R${{ ioValues.incoming.toFixed(2) }}</b>
+                                            <b
+                                                >R${{
+                                                    ioValues.incoming.toFixed(2)
+                                                }}</b
+                                            >
                                         </v-col>
                                     </v-row>
                                 </v-col>
@@ -49,7 +60,13 @@
                                         <v-col cols="12" md="9">
                                             Expenses
                                             <br />
-                                            <b>R${{ ioValues.outcoming.toFixed(2) }}</b>
+                                            <b
+                                                >R${{
+                                                    ioValues.outcoming.toFixed(
+                                                        2
+                                                    )
+                                                }}</b
+                                            >
                                         </v-col>
                                     </v-row>
                                 </v-col>
@@ -86,17 +103,30 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(t, tidx) in transactions" :key="tidx">
+                                        <tr
+                                            v-for="(t, tidx) in transactions"
+                                            :key="tidx"
+                                        >
                                             <td>
                                                 <i
                                                     class="dash-table-icon"
-                                                    :class="t.value > 0 ? 'dash-table-icon-green': 'dash-table-icon-red'"
+                                                    :class="
+                                                        t.value > 0
+                                                            ? 'dash-table-icon-green'
+                                                            : 'dash-table-icon-red'
+                                                    "
                                                 ></i>
-                                                <span class="dash-table-description">{{ t.description }}</span>
+                                                <span
+                                                    class="dash-table-description"
+                                                    >{{ t.description }}</span
+                                                >
                                             </td>
-                                            <td> {{ formatDate(t.date) }}</td>
-                                            <td> {{ t.value > 0 ? '+':'-'}} R${{ Math.abs(t.value) }}</td>
-                                            <td> {{ t.wallet.description }} </td>
+                                            <td>{{ formatDate(t.date) }}</td>
+                                            <td>
+                                                {{ t.value > 0 ? "+" : "-" }}
+                                                R${{ Math.abs(t.value) }}
+                                            </td>
+                                            <td>{{ t.wallet.description }}</td>
                                         </tr>
                                     </tbody>
                                 </template>
@@ -128,7 +158,11 @@
                                             color="#85DFB4"
                                         ></v-tabs-slider>
 
-                                        <v-tab v-for="(w,widx) in wallets" :key="widx">{{ w.description }}</v-tab>
+                                        <v-tab
+                                            v-for="(w, widx) in wallets"
+                                            :key="widx"
+                                            >{{ w.description }}</v-tab
+                                        >
                                     </v-tabs>
                                 </v-col>
                             </v-row>
@@ -205,7 +239,7 @@ export default {
     layout: "home",
     data() {
         return {
-            name: 'Name',
+            name: "Name",
             tabWallets: null,
             wallets: [],
             chartWalletBalance: null,
@@ -215,80 +249,69 @@ export default {
                 incoming: 0,
                 outcoming: 0,
             },
-            transactions: []
+            transactions: [],
         };
     },
-    async fetch(){
-        this.$axios
-            .get('/wallet')
-            .then(res => {
-                this.wallets = res.data.wallets
-            })
-        this.$axios
-            .get('/user')
-            .then(res => {
-                this.name = res.data.name
-            })
-        this.$axios
-            .get('/transaction?limit=5')
-            .then(res => {
-                this.transactions = res.data.transactions
-            })
+    async fetch() {
+        await this.$axios.get("/wallet").then((res) => {
+            this.wallets = res.data.wallets;
+        });
+        await this.$axios.get("/user").then((res) => {
+            this.name = res.data.name;
+        });
+        await this.$axios.get("/transaction?limit=5").then((res) => {
+            this.transactions = res.data.transactions;
+        });
     },
     mounted() {
-        
-        this.$axios
-            .get(`/report/balance`)
-            .then(res => {
-                this.ioValues.incoming = res.data.incoming
-                this.ioValues.outcoming = res.data.outcoming
-                const ctxMain = document.getElementById("chartMain");
-                new Chart(ctxMain, {
-                    type: "pie",
-                    data: {
-                        labels: ["Incomes", "Expenses"],
-                        datasets: [
-                            {
-                                label: "Overview",
-                                data: [res.data.incoming, res.data.outcoming],
-                                backgroundColor: ["#60AB6C", "#E15151"],
-                                borderWidth: 1,
-                            },
-                        ],
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
+        this.$axios.get(`/report/balance`).then((res) => {
+            this.ioValues.incoming = res.data.incoming;
+            this.ioValues.outcoming = res.data.outcoming;
+            const ctxMain = document.getElementById("chartMain");
+            new Chart(ctxMain, {
+                type: "pie",
+                data: {
+                    labels: ["Incomes", "Expenses"],
+                    datasets: [
+                        {
+                            label: "Overview",
+                            data: [res.data.incoming, res.data.outcoming],
+                            backgroundColor: ["#60AB6C", "#E15151"],
+                            borderWidth: 1,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            display: false,
+                            grid: {
                                 display: false,
-                                grid: {
-                                    display: false,
-                                },
-                            },
-                        },
-                        plugins: {
-                            legend: {
-                                position: "bottom",
                             },
                         },
                     },
-                });
-            })
+                    plugins: {
+                        legend: {
+                            position: "bottom",
+                        },
+                    },
+                },
+            });
+        });
 
-        if(this.wallets.length > 0)
-            this.changeChartTab(0)
-
+        if (this.wallets.length > 0) this.changeChartTab(0);
     },
     methods: {
-        changeChartTab(tab){
+        changeChartTab(tab) {
             // Wallet General Balance
             this.$axios
                 .get(`/report/balance?wallet_id=${this.wallets[tab].id}`)
-                .then(res => {
-                    if(this.chartWalletBalance)
-                        this.chartWalletBalance.destroy()
-                    
+                .then((res) => {
+                    if (this.chartWalletBalance)
+                        this.chartWalletBalance.destroy();
+
                     const ctx = document.getElementById("chart2");
                     this.chartWalletBalance = new Chart(ctx, {
                         type: "pie",
@@ -297,7 +320,10 @@ export default {
                             datasets: [
                                 {
                                     label: "Overview",
-                                    data: [res.data.incoming, res.data.outcoming],
+                                    data: [
+                                        res.data.incoming,
+                                        res.data.outcoming,
+                                    ],
                                     backgroundColor: ["#60AB6C", "#E15151"],
                                     borderWidth: 1,
                                 },
@@ -320,13 +346,13 @@ export default {
                             },
                         },
                     });
-                })
+                });
             // Wallet Week Balance
             this.$axios
                 .get(`/report/dailybalance?wallet_id=${this.wallets[tab].id}`)
-                .then(res => {
-                    if(this.chartWalletWeekBalance)
-                        this.chartWalletWeekBalance.destroy()
+                .then((res) => {
+                    if (this.chartWalletWeekBalance)
+                        this.chartWalletWeekBalance.destroy();
 
                     var labels = [];
                     var dataset = [
@@ -341,11 +367,11 @@ export default {
                             backgroundColor: "#E15151",
                         },
                     ];
-                    res.data.forEach(element => {
-                        let dt = new Date(element.dt)
-                        labels.push(`${dt.toLocaleDateString()}`)
-                        dataset[0].data.push(element.incoming)
-                        dataset[1].data.push(element.outcoming)
+                    res.data.forEach((element) => {
+                        let dt = new Date(element.dt);
+                        labels.push(`${dt.toLocaleDateString()}`);
+                        dataset[0].data.push(element.incoming);
+                        dataset[1].data.push(element.outcoming);
                     });
                     const ctx3 = document.getElementById("chart1");
                     this.chartWalletWeekBalance = new Chart(ctx3, {
@@ -376,21 +402,21 @@ export default {
                             },
                         },
                     });
-                })
+                });
             // Wallet Category Balance
             this.$axios
                 .get(`/report/category?wallet_id=${this.wallets[tab].id}`)
-                .then(res => {
-                    let label = []
-                    let data = []
-                    let color = []
-                    res.data.forEach(element => {
-                        label.push(element.description)
-                        data.push(element.total)
-                        color.push(this.getDarkColor())
+                .then((res) => {
+                    let label = [];
+                    let data = [];
+                    let color = [];
+                    res.data.forEach((element) => {
+                        label.push(element.description);
+                        data.push(element.total);
+                        color.push(this.getDarkColor());
                     });
-                    if(this.chartWalletCategoryBalance)
-                        this.chartWalletCategoryBalance.destroy()
+                    if (this.chartWalletCategoryBalance)
+                        this.chartWalletCategoryBalance.destroy();
                     const ctx2 = document.getElementById("chart3");
                     this.chartWalletCategoryBalance = new Chart(ctx2, {
                         type: "pie",
@@ -422,19 +448,18 @@ export default {
                             },
                         },
                     });
-                })
+                });
         },
         getDarkColor() {
-            let color = '#'
-            for (let i = 0; i < 6; i++)
-                color += Math.floor(Math.random() * 10)
+            let color = "#";
+            for (let i = 0; i < 6; i++) color += Math.floor(Math.random() * 10);
             return color;
         },
-        formatDate(date){
-            const dt = new Date(date)
-            return dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString()
-        }
-    }
+        formatDate(date) {
+            const dt = new Date(date);
+            return dt.toLocaleDateString() + " " + dt.toLocaleTimeString();
+        },
+    },
 };
 </script>
 
@@ -469,7 +494,7 @@ export default {
         }
     }
     &-table {
-        &-icon{
+        &-icon {
             font-size: 0.7rem;
             border-radius: 100%;
             height: 25px;
@@ -478,20 +503,20 @@ export default {
             text-align: center;
             color: #fff;
             padding: 5px 5px 3px 5px;
-            &-green{
+            &-green {
                 background: #60ab6c;
             }
             &-red {
                 background: #e15151;
             }
         }
-        &-description{
+        &-description {
             margin-left: 10px;
             display: inline-block;
             transform: translateY(-50%);
         }
     }
-    
+
     &-chart {
         width: 250px;
         height: 250px;
