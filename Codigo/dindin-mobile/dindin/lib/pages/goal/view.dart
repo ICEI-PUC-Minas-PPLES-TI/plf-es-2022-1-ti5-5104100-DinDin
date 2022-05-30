@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:dindin/pages/goal/edit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -39,6 +39,7 @@ class _GoalViewState extends State<GoalView> {
   String walletId = '';
   var progress = 0.0;
   bool hasProgress = false;
+  num valueUntilNow = 0;
   // ignore: prefer_typing_uninitialized_variables
   var walletDescription;
   @override
@@ -62,8 +63,8 @@ class _GoalViewState extends State<GoalView> {
     var response = await ApiURL.get('/report/goal/$id');
     Map<String, dynamic> body = jsonDecode(response.body);
     if (body['value'] != null) {
-      num valueUntilNow = double.parse(body['value']);
       setState(() {
+        valueUntilNow = double.parse(body['value']);
         progress = valueUntilNow / value;
         hasProgress = true;
       });
@@ -142,12 +143,20 @@ class _GoalViewState extends State<GoalView> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          LinearProgressIndicator(
+                          LinearPercentIndicator(
                             backgroundColor: Colors.grey.shade100,
-                            color: Colors.lightGreen,
-                            minHeight: 15,
-                            semanticsLabel: 'Progress = ${progress * 100}%',
-                            value: progress,
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            animation: true,
+                            lineHeight: 20.0,
+                            linearStrokeCap: LinearStrokeCap.roundAll,
+                            animationDuration: 1000,
+                            center: Text(
+                              "\$$valueUntilNow",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            percent: progress,
+                            progressColor: Colors.lightGreen,
                           ),
                           if (progress < 1)
                             Padding(
