@@ -164,6 +164,11 @@ module.exports = {
         }
     },
 
+    async getCurrentDateFromDatabase() {
+        return (await sequelize.query("SELECT DATE(NOW()) as current;"))[0][0]
+            .current;
+    },
+
     async close() {
         await sequelize.close();
     },
