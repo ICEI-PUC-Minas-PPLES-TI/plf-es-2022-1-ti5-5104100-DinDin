@@ -88,7 +88,7 @@
                     </div>
                 </v-col>
             </v-row>
-            <v-navigation-drawer v-model="drawer" absolute left temporary>
+            <v-navigation-drawer v-model="drawer" absolute left temporary class="dindin-drawer">
                 <v-list nav dense>
                     <v-list-item-group
                         active-class="light-green lighten-3 text--accent-4"
@@ -113,7 +113,7 @@
                             </v-list-item-icon>
                             <v-list-item-title>My Account</v-list-item-title>
                         </v-list-item>
-                        <v-list-item>
+                        <v-list-item to="/logout">
                             <v-list-item-icon>
                                 <i class="fa-solid fa-right-from-bracket"></i>
                             </v-list-item-icon>
@@ -237,5 +237,12 @@ export default {
     overflow-x: hidden;
     max-height: 100vh;
     width: 100%;
+}
+</style>
+<style lang="scss">
+.dindin-drawer{
+    .v-navigation-drawer__content{
+        height: 100vh;
+    }
 }
 </style>
