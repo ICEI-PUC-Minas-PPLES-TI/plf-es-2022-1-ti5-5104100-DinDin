@@ -1,5 +1,6 @@
 import 'package:dindin/pages/goal/list.dart';
 import 'package:dindin/pages/profile/edit.dart';
+import 'package:dindin/pages/report/reportbalance.dart';
 import 'package:dindin/pages/transactions/form.dart';
 import 'package:dindin/pages/transactions/list.dart';
 import 'package:dindin/pages/wallet/list.dart';
@@ -200,6 +201,37 @@ class Dashboard extends StatelessWidget {
                           ),
                         ),
                         const Text('Wallets')
+                      ],
+                    ),
+                    flex: 2),
+                // Reports
+                Expanded(
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.grey.shade100,
+                          child: IconButton(
+                            alignment: Alignment.topRight,
+                            icon: const Center(
+                              child: FaIcon(
+                                FontAwesomeIcons.chartColumn,
+                                size: 25.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                            color: Colors.black,
+                            onPressed: () {
+                              // Respond to icon toggle
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const ReportBalance()),
+                              );
+                            },
+                          ),
+                        ),
+                        const Text('Reports')
                       ],
                     ),
                     flex: 2),
