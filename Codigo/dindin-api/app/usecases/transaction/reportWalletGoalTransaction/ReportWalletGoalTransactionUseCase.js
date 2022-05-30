@@ -6,15 +6,37 @@ const { SortPaginate } = require("../../../helpers/SortPaginate");
 const Category = require("../../../models/Category");
 
 const Transaction = require("../../../models/Transaction");
-const TransactionRecurrencies = require("../../../models/TransactionRecurrencies");
-const User = require("../../../models/User");
-const Wallet = require("../../../models/Wallet");
+const Goal = require("../../../models/Goal");
+const UserHasWallet = require("../../../models/UserHasWallet");
 
-class ListWalletTransactionUseCase {
-    async list(query, wallet_id, user_id) {
+class ReportWalletGoalTransactionUseCase {
+    async report(query, goal_id, user_id) {
         let whre = {};
 
-        whre.wallet_id = wallet_id;
+        const goalInfo = await Goal.findOne({
+            attributes: ["wallet_id", "expire_at", "created_at"],
+            where: {
+                id: goal_id,
+            },
+            raw: true,
+        });
+
+        const user = await UserHasWallet.findOne({
+            where: {
+                user_id: user_id,
+                wallet_id: goalInfo.wallet_id,
+            },
+        }).catch((error) => {
+            throw new AppError(error.message, 500, error);
+        });
+        if (user) whre.wallet_id = goalInfo.wallet_id;
+        else
+            throw new AppError(
+                "User does not have permission for the wallet of this Goal!",
+                403
+            );
+
+        whre.date = { [Op.between]: [goalInfo.created_at, goalInfo.expire_at] };
 
         if (query.description) {
             whre.description = sequelize.where(
@@ -50,23 +72,15 @@ class ListWalletTransactionUseCase {
         if (query.transaction_recurrencies_id)
             whre.transaction_recurrencies_id =
                 query.transaction_recurrencies_id;
-
-        if (query.date_start || query.date_end) {
-            const startDate = query.date_start
-                ? new Date(query.date_start)
-                : new Date(null); // * new Date(null) == 1970
-            const endDate = query.date_end
-                ? new Date(query.date_end)
-                : new Date("2999/01/01");
-            whre.date = { [Op.between]: [startDate, endDate] };
-        }
+        if (query.transaction_recurrencies_id == "null")
+            whre.transaction_recurrencies_id = { [Op.is]: null };
 
         const attributes = Object.keys(Transaction.getAttributes);
-        const walletQuantity = await Transaction.count();
+        const transactionQuantity = await Transaction.count();
         const sortPaginateOptions = SortPaginate(
             query,
             attributes,
-            walletQuantity
+            transactionQuantity
         );
         if (query.created_at_start || query.created_at_end)
             whre.created_at = sortPaginateOptions.where.created_at;
@@ -75,41 +89,15 @@ class ListWalletTransactionUseCase {
         if (query.deleted_at_start || query.deleted_at_end)
             whre.deleted_at = sortPaginateOptions.where.deleted_at;
 
-        const transactions = await Transaction.findAndCountAll({
+        const transactionsSumOfTheGoal = await Transaction.sum("value", {
             where: whre,
-            limit: sortPaginateOptions.limit,
-            offset: sortPaginateOptions.offset,
-            order: sortPaginateOptions.order,
             paranoid: sortPaginateOptions.paranoid,
-            include: [
-                {
-                    model: User,
-                    as: "user",
-                },
-                {
-                    model: Wallet,
-                    as: "wallet",
-                },
-                {
-                    model: Category,
-                    as: "category",
-                },
-                {
-                    model: TransactionRecurrencies,
-                    as: "transaction_recurrencies",
-                },
-            ],
         }).catch((error) => {
             throw new AppError("Erro interno do servidor!", 500, error);
         });
 
-        return {
-            count: transactions.rows.length,
-            total: transactions.count,
-            pages: Math.ceil(transactions.count / sortPaginateOptions.limit),
-            transactions: transactions.rows,
-        };
+        return { value: transactionsSumOfTheGoal };
     }
 }
 
-module.exports = ListWalletTransactionUseCase;
+module.exports = ReportWalletGoalTransactionUseCase;
