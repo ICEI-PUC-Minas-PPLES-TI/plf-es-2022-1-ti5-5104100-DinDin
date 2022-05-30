@@ -70,7 +70,7 @@ describe("POST /wallet/:id/cattegory test suite", () => {
         expect(createdCategory.dataValues.color).toEqual("000000");
     });
 
-    it("should fail validation missing wallet_id", async () => {
+    it("should pass", async () => {
         const response = await request
             .post(`/api/wallet/${walletToCreate}/category/`)
             .send({
@@ -78,7 +78,7 @@ describe("POST /wallet/:id/cattegory test suite", () => {
                 type: "IN",
                 color: "FF0000",
             });
-        expect(response.statusCode).toEqual(422);
+        expect(response.statusCode).toEqual(201);
     });
 
     it("should fail validation missing description", async () => {

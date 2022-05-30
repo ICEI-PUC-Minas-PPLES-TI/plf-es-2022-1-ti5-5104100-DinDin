@@ -6,15 +6,45 @@ const { SortPaginate } = require("../../../helpers/SortPaginate");
 const Category = require("../../../models/Category");
 
 const Transaction = require("../../../models/Transaction");
-const TransactionRecurrencies = require("../../../models/TransactionRecurrencies");
-const User = require("../../../models/User");
-const Wallet = require("../../../models/Wallet");
+const UserHasWallet = require("../../../models/UserHasWallet");
 
-class ListWalletTransactionUseCase {
-    async list(query, wallet_id, user_id) {
+class ReportWalletBalanceTransactionUseCase {
+    async report(query, user_id) {
         let whre = {};
 
-        whre.wallet_id = wallet_id;
+        if (query.wallet_id) {
+            const user = await UserHasWallet.findOne({
+                where: {
+                    user_id: user_id,
+                    wallet_id: query.wallet_id,
+                },
+            }).catch((error) => {
+                throw new AppError(error.message, 500, error);
+            });
+            if (user) whre.wallet_id = query.wallet_id;
+            else
+                throw new AppError(
+                    "User does not have this wallet permission!",
+                    403
+                );
+        }
+
+        // * If not send wallet_id, find all wallet_ids belongs to this user_id and SQL: `Transaction`.`wallet_id` IN ('2', '1'));
+        if (!whre.wallet_id) {
+            const wallets = await UserHasWallet.findAll({
+                attributes: ["wallet_id"],
+                where: {
+                    user_id: user_id,
+                },
+            }).catch((error) => {
+                throw new AppError(error.message, 500, error);
+            });
+            let wallet_ids = [];
+            for (let index = 0; index < wallets.length; index++) {
+                wallet_ids.push(wallets[index].dataValues.wallet_id);
+            }
+            whre.wallet_id = wallet_ids;
+        }
 
         if (query.description) {
             whre.description = sequelize.where(
@@ -50,6 +80,8 @@ class ListWalletTransactionUseCase {
         if (query.transaction_recurrencies_id)
             whre.transaction_recurrencies_id =
                 query.transaction_recurrencies_id;
+        if (query.transaction_recurrencies_id == "null")
+            whre.transaction_recurrencies_id = { [Op.is]: null };
 
         if (query.date_start || query.date_end) {
             const startDate = query.date_start
@@ -62,11 +94,11 @@ class ListWalletTransactionUseCase {
         }
 
         const attributes = Object.keys(Transaction.getAttributes);
-        const walletQuantity = await Transaction.count();
+        const transactionQuantity = await Transaction.count();
         const sortPaginateOptions = SortPaginate(
             query,
             attributes,
-            walletQuantity
+            transactionQuantity
         );
         if (query.created_at_start || query.created_at_end)
             whre.created_at = sortPaginateOptions.where.created_at;
@@ -75,41 +107,33 @@ class ListWalletTransactionUseCase {
         if (query.deleted_at_start || query.deleted_at_end)
             whre.deleted_at = sortPaginateOptions.where.deleted_at;
 
-        const transactions = await Transaction.findAndCountAll({
-            where: whre,
-            limit: sortPaginateOptions.limit,
-            offset: sortPaginateOptions.offset,
-            order: sortPaginateOptions.order,
-            paranoid: sortPaginateOptions.paranoid,
-            include: [
-                {
-                    model: User,
-                    as: "user",
-                },
-                {
-                    model: Wallet,
-                    as: "wallet",
-                },
-                {
-                    model: Category,
-                    as: "category",
-                },
-                {
-                    model: TransactionRecurrencies,
-                    as: "transaction_recurrencies",
-                },
+        const transactionsWalletBalance = await Transaction.findAll({
+            attributes: [
+                [
+                    sequelize.literal(
+                        `SUM(CASE WHEN value > 0 THEN value ELSE 0 END)`
+                    ),
+                    "incoming",
+                ],
+                [
+                    sequelize.literal(
+                        `ABS(SUM(CASE WHEN value < 0 THEN value ELSE 0 END))`
+                    ),
+                    "outcoming",
+                ],
             ],
+            where: whre,
+            paranoid: sortPaginateOptions.paranoid,
         }).catch((error) => {
             throw new AppError("Erro interno do servidor!", 500, error);
         });
 
-        return {
-            count: transactions.rows.length,
-            total: transactions.count,
-            pages: Math.ceil(transactions.count / sortPaginateOptions.limit),
-            transactions: transactions.rows,
-        };
+        if (transactionsWalletBalance[0].dataValues.incoming == null)
+            transactionsWalletBalance[0].dataValues.incoming = 0;
+        if (transactionsWalletBalance[0].dataValues.outcoming == null)
+            transactionsWalletBalance[0].dataValues.outcoming = 0;
+        return transactionsWalletBalance[0];
     }
 }
 
-module.exports = ListWalletTransactionUseCase;
+module.exports = ReportWalletBalanceTransactionUseCase;

@@ -1,13 +1,13 @@
 const yup = require("yup");
+
 const AppError = require("../../../errors/AppError");
-const ListCategoriesUseCase = require("./ListCategoriesUseCase");
+const ReportWalletBalanceTransactionUseCase = require("./ReportWalletBalanceTransactionUseCase");
 
 const orderEnum = ["ASC", "DESC"];
 
-const typeEnum = ["IN", "OUT"];
-
-class ListCategoriesController {
-    async list(request, response) {
+class ReportWalletBalanceTransactionController {
+    // * Route: /api/report/balance
+    async report(request, response) {
         const scheme = yup.object().shape({
             page: yup.number("'value' must be numeric!"),
             limit: yup.number("'value' must be numeric!"),
@@ -18,13 +18,13 @@ class ListCategoriesController {
                     orderEnum,
                     `'order' must be one of these: ${orderEnum}.`
                 ),
+            wallet_id: yup.number("'wallet_id' must be numeric!"),
 
-            user_id: yup.number("'user_id' must be numeric!"),
-            description: yup.string().max(100),
-            color: yup.string().min(6).max(6),
-            type: yup
-                .mixed()
-                .oneOf(typeEnum, `'type' must be one of these: ${typeEnum}.`),
+            description: yup.string("'description' must be string!").max(30),
+            value: yup.number("'value' must be numeric!"),
+
+            date_start: yup.date("'date_start' must be date!"),
+            date_end: yup.date("'date_end' must be date!"),
 
             created_at_start: yup.date("'created_at_start' must be date!"),
             created_at_end: yup.date("'created_at_end' must be date!"),
@@ -39,18 +39,24 @@ class ListCategoriesController {
                 .date("'deleted_at_end' must be date!")
                 .nullable(),
         });
+
         try {
             await scheme.validate(request.query, { abortEarly: false });
         } catch (error) {
             throw new AppError(error.name, 422, error.errors);
         }
-        const listCategoriesUseCase = new ListCategoriesUseCase();
-        const categories = await listCategoriesUseCase.list(
-            request.query,
-            request.params.id
-        );
-        return response.status(200).json(categories);
+        const user_id = request.userId;
+
+        const reportWalletBalanceTransactionController =
+            new ReportWalletBalanceTransactionUseCase();
+        const transactionsBalance =
+            await reportWalletBalanceTransactionController.report(
+                request.query,
+                user_id
+            );
+
+        return response.status(200).json(transactionsBalance);
     }
 }
 
-module.exports = ListCategoriesController;
+module.exports = ReportWalletBalanceTransactionController;

@@ -57,7 +57,8 @@
                                 hide-details="auto"
                                 :clearable="true"
                                 placeholder="0,00"
-                                maxlength="40"
+                                maxlength="10"
+                                max="999999999"
                             />
                         </v-row>
                         <v-row class="pb-2">
@@ -69,7 +70,7 @@
                                 hide-details="auto"
                                 :clearable="true"
                                 label="Description"
-                                maxlength="40"
+                                maxlength="30"
                             />
                         </v-row>
                         <v-row class="pb-2">

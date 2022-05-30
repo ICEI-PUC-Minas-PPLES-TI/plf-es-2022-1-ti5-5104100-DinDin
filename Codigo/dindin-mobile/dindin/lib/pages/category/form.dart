@@ -11,7 +11,8 @@ class CategoryForm extends StatefulWidget {
   final Category? category;
   final int walletId;
 
-  const CategoryForm(this.walletId, this.category, {Key? key}) : super(key: key);
+  const CategoryForm(this.walletId, this.category, {Key? key})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -27,11 +28,18 @@ class _CategoryFormState extends State<CategoryForm> {
   final TextEditingController _descriptionController = TextEditingController();
 
   void createCategory() async {
-    var url = ApiURL.baseUrl + "/category";
+    var url =
+        ApiURL.baseUrl + "/wallet/" + widget.walletId.toString() + "/category";
     final Uri uri = Uri.parse(url);
     var token = await ApiURL.getToken();
     try {
-      var response = await http.post(uri, headers: {'Authorization': token}, body: {'description' : _descriptionController.text, 'type': _catType, 'color': _catColor, 'wallet_id': widget.walletId.toString() });
+      var response = await http.post(uri, headers: {
+        'Authorization': token
+      }, body: {
+        'description': _descriptionController.text,
+        'type': _catType,
+        'color': _catColor
+      });
       var status = response.statusCode;
       if (status == 201) {
         var json = jsonDecode(response.body);
@@ -45,11 +53,22 @@ class _CategoryFormState extends State<CategoryForm> {
   }
 
   void editCategory() async {
-    var url = ApiURL.baseUrl + "/category/"+ widget.category!.id.toString();
+    var url = ApiURL.baseUrl +
+        "/wallet/" +
+        widget.walletId.toString() +
+        "/category/" +
+        widget.category!.id.toString();
+    ;
     final Uri uri = Uri.parse(url);
     var token = await ApiURL.getToken();
     try {
-      var response = await http.put(uri, headers: {'Authorization': token}, body: {'description' : _descriptionController.text, 'type': _catType, 'color': _catColor });
+      var response = await http.put(uri, headers: {
+        'Authorization': token
+      }, body: {
+        'description': _descriptionController.text,
+        'type': _catType,
+        'color': _catColor
+      });
       var status = response.statusCode;
       if (status == 200) {
         var json = jsonDecode(response.body);
@@ -63,11 +82,21 @@ class _CategoryFormState extends State<CategoryForm> {
   }
 
   void deleteCategory() async {
-    var url = ApiURL.baseUrl + "/category/"+ widget.category!.id.toString();
+    var url = ApiURL.baseUrl +
+        "/wallet/" +
+        widget.walletId.toString() +
+        "/category/" +
+        widget.category!.id.toString();
     final Uri uri = Uri.parse(url);
     var token = await ApiURL.getToken();
     try {
-      var response = await http.delete(uri, headers: {'Authorization': token}, body: {'description' : _descriptionController.text, 'type': _catType, 'color': _catColor });
+      var response = await http.delete(uri, headers: {
+        'Authorization': token
+      }, body: {
+        'description': _descriptionController.text,
+        'type': _catType,
+        'color': _catColor
+      });
       var status = response.statusCode;
       if (status == 204) {
         Navigator.of(context).pop();
@@ -364,12 +393,11 @@ class _CategoryFormState extends State<CategoryForm> {
                           primary: Theme.of(context).primaryColor,
                         ),
                         onPressed: () {
-                          if(widget.category == null) {
+                          if (widget.category == null) {
                             createCategory();
                           } else {
                             editCategory();
                           }
-
                         },
                       ),
                     ),
