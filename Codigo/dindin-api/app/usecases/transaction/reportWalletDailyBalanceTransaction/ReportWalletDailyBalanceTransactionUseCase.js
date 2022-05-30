@@ -124,7 +124,12 @@ class ReportWalletBalanceTransactionUseCase {
             ],
             group: Sequelize.literal(`DATE(${dateFilter})`),
             paranoid: sortPaginateOptions.paranoid,
-            order: sortPaginateOptions.order,
+            order: [
+                [
+                    Sequelize.literal(`DATE(${dateFilter})`),
+                    query.order ? query.order : "ASC",
+                ],
+            ],
             raw: true,
         }).catch((error) => {
             throw new AppError("Erro interno do servidor!", 500, error);
