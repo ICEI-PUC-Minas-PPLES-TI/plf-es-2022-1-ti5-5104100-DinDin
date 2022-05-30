@@ -198,6 +198,7 @@ export default {
                             this.redirect = true;
                         }
                         this.cleanData();
+                        this.$router.push("/login");
                     })
                     .catch((err) => {
                         Swal.fire({
