@@ -64,7 +64,7 @@ class _GoalViewState extends State<GoalView> {
     if (body['value'] != null) {
       num valueUntilNow = double.parse(body['value']);
       setState(() {
-        progress = valueUntilNow / value * 100;
+        progress = valueUntilNow / value;
         hasProgress = true;
       });
     }
@@ -149,22 +149,23 @@ class _GoalViewState extends State<GoalView> {
                             semanticsLabel: 'Progress = ${progress * 100}%',
                             value: progress,
                           ),
-                          if(progress<1) Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              ('${100 - (progress * 100)}% left to reach your goal!'),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                          if (progress < 1)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                ('${100 - (progress * 100)}% left to reach your goal!'),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                          if(progress>=1) const Padding(
-                            padding: EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              ('Congratulations, you reach your goal!'),
-                              style:
-                                  TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          )
+                          if (progress >= 1)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                ('Congratulations, you reach your goal!'),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            )
                         ],
                       ),
                     ),
