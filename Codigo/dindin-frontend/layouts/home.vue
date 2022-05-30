@@ -88,7 +88,13 @@
                     </div>
                 </v-col>
             </v-row>
-            <v-navigation-drawer v-model="drawer" absolute left temporary class="dindin-drawer">
+            <v-navigation-drawer
+                v-model="drawer"
+                absolute
+                left
+                temporary
+                class="dindin-drawer"
+            >
                 <v-list nav dense>
                     <v-list-item-group
                         active-class="light-green lighten-3 text--accent-4"
@@ -240,8 +246,8 @@ export default {
 }
 </style>
 <style lang="scss">
-.dindin-drawer{
-    .v-navigation-drawer__content{
+.dindin-drawer {
+    .v-navigation-drawer__content {
         height: 100vh;
     }
 }
