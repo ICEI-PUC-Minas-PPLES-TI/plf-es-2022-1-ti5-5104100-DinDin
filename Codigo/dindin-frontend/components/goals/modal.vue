@@ -113,6 +113,21 @@
                                 label="Wallet"
                             />
                         </v-row>
+                        <v-row v-else class="mt-0 pt-0">
+                            <v-select
+                                :rules="[rules.required]"
+                                v-model="goal.wallet_id"
+                                name="wallets"
+                                prepend-inner-icon="mdi-wallet"
+                                outlined
+                                disabled
+                                hide-details="auto"
+                                :items="wallets"
+                                item-text="description"
+                                item-value="id"
+                                label="Wallet"
+                            />
+                        </v-row>
                     </v-form>
                 </v-container>
             </v-card-text>
