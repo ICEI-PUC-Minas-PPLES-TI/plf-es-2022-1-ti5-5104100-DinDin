@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:dindin/pages/goal/edit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../helpers/api_url.dart';
 import '../../models/goal.dart';
 
 class GoalView extends StatefulWidget {
@@ -35,6 +38,7 @@ class _GoalViewState extends State<GoalView> {
   String expireAt = '';
   String walletId = '';
   var progress = 0.0;
+  bool hasProgress = false;
   // ignore: prefer_typing_uninitialized_variables
   var walletDescription;
   @override
@@ -50,12 +54,20 @@ class _GoalViewState extends State<GoalView> {
       walletId = (widget.goal.walletId).toString();
       walletDescription = widget.goal.walletDescription;
     });
-    getReportProgress();
     super.initState();
+    getReportProgress(widget.goal.id);
   }
 
-  void getReportProgress() {
-    progress = 0.85;
+  void getReportProgress(id) async {
+    var response = await ApiURL.get('/report/goal/$id');
+    Map<String, dynamic> body = jsonDecode(response.body);
+    if (body['value'] != null) {
+      num valueUntilNow = double.parse(body['value']);
+      setState(() {
+        progress = valueUntilNow / value * 100;
+        hasProgress = true;
+      });
+    }
   }
 
   @override
@@ -124,28 +136,38 @@ class _GoalViewState extends State<GoalView> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        LinearProgressIndicator(
-                          backgroundColor: Colors.grey.shade100,
-                          color: Colors.lightGreen,
-                          minHeight: 15,
-                          semanticsLabel: 'Progress = ${progress*100}%',
-                          value: progress,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            ('${100-(progress*100)}% left to reach your goal!'),
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                  if (hasProgress)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          LinearProgressIndicator(
+                            backgroundColor: Colors.grey.shade100,
+                            color: Colors.lightGreen,
+                            minHeight: 15,
+                            semanticsLabel: 'Progress = ${progress * 100}%',
+                            value: progress,
                           ),
-                        )
-                      ],
+                          if(progress<1) Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              ('${100 - (progress * 100)}% left to reach your goal!'),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          if(progress>=1) const Padding(
+                            padding: EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              ('Congratulations, you reach your goal!'),
+                              style:
+                                  TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
                   const SizedBox(
                     height: 20,
                   ),
