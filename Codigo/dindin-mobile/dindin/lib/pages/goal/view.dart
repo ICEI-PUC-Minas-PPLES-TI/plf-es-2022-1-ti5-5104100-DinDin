@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:dindin/pages/goal/edit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -62,6 +61,17 @@ class _GoalViewState extends State<GoalView> {
   void getReportProgress(id) async {
     var response = await ApiURL.get('/report/goal/$id');
     Map<String, dynamic> body = jsonDecode(response.body);
+     setState(() {
+        valueUntilNow = 50;
+        progress = 50 / value;
+        if(progress>1) {
+          progress=1;
+        }
+        else if(progress<0){
+          progress=0;
+        }
+        hasProgress = true;
+      });
     if (body['value'] != null) {
       setState(() {
         valueUntilNow = double.parse(body['value']);
@@ -149,21 +159,11 @@ class _GoalViewState extends State<GoalView> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          LinearPercentIndicator(
-                            backgroundColor: Colors.grey.shade100,
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            animation: true,
-                            lineHeight: 20.0,
-                            linearStrokeCap: LinearStrokeCap.roundAll,
-                            animationDuration: 1000,
-                            center: Text(valueUntilNow>0?
-                              "\$$valueUntilNow": "-\$${valueUntilNow*-1}",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            percent: progress>1?1:progress,
-                            progressColor: progress < 0.3 ? Colors.red : progress<0.7? Colors.amber:Colors.green,
-                          ),
+                          LinearProgressIndicator(
+                          backgroundColor: Colors.grey.shade100,
+                          color: progress < 0.3 ? Colors.red : progress<0.7? Colors.amber:Colors.green,
+                          minHeight: 20,
+                          value: progress,),
                           if (progress < 1)
                             Padding(
                               padding: const EdgeInsets.only(top: 8.0),
