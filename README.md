@@ -6,7 +6,7 @@
     <p align="center">
       <a href="#-sobre">Sobre</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
       <a href="#-alunos-integrantes-da-equipe">Alunos Integrantes da Equipe</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="#-professoras-responsáveis">Professores responsáveis</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+      <a href="#-professores-responsáveis">Professores responsáveis</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
       <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
       <a href="#-instruções-de-utilização">Instruções de utilização</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
       <a href="#-licença">Licença</a>
@@ -38,7 +38,7 @@ As funcionalidades principais são:
 * [Victor Boaventura Goes Campos](https://github.com/777-victor)
 * [Vinícius Marini Costa E Oliveria](https://github.com/marinisz)
 
-## 👩‍🏫 Professoras responsáveis
+## 👩‍🏫 Professores responsáveis
 
 * Cleiton Silva Tavares
 * Pedro Alves De Oliveira
