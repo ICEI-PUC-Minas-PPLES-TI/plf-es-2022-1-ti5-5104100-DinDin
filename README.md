@@ -62,6 +62,7 @@ As funcionalidades principais são:
 - Backend:
   - [ExpressJs](https://expressjs.com/)
   - [JavaScript](https://www.javascript.com/)
+  - [JestJs](https://jestjs.io/)
   - [MySQL Server](https://www.mysql.com/)
   - [NodeJs](https://nodejs.org/)
   - [Sequelize](https://sequelize.org/)
