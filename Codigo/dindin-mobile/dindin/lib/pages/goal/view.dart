@@ -61,17 +61,6 @@ class _GoalViewState extends State<GoalView> {
   void getReportProgress(id) async {
     var response = await ApiURL.get('/report/goal/$id');
     Map<String, dynamic> body = jsonDecode(response.body);
-     setState(() {
-        valueUntilNow = 50;
-        progress = 50 / value;
-        if(progress>1) {
-          progress=1;
-        }
-        else if(progress<0){
-          progress=0;
-        }
-        hasProgress = true;
-      });
     if (body['value'] != null) {
       setState(() {
         valueUntilNow = double.parse(body['value']);
