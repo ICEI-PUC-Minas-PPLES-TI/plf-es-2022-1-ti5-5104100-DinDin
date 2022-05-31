@@ -66,6 +66,12 @@ class _GoalViewState extends State<GoalView> {
       setState(() {
         valueUntilNow = double.parse(body['value']);
         progress = valueUntilNow / value;
+        if(progress>1) {
+          progress=1;
+        }
+        else if(progress<0){
+          progress=0;
+        }
         hasProgress = true;
       });
     }
@@ -150,19 +156,19 @@ class _GoalViewState extends State<GoalView> {
                             lineHeight: 20.0,
                             linearStrokeCap: LinearStrokeCap.roundAll,
                             animationDuration: 1000,
-                            center: Text(
-                              "\$$valueUntilNow",
+                            center: Text(valueUntilNow>0?
+                              "\$$valueUntilNow": "-\$${valueUntilNow*-1}",
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            percent: progress,
-                            progressColor: Colors.lightGreen,
+                            percent: progress>1?1:progress,
+                            progressColor: progress < 0.3 ? Colors.red : progress<0.7? Colors.amber:Colors.green,
                           ),
                           if (progress < 1)
                             Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Text(
-                                ('${100 - (progress * 100)}% left to reach your goal!'),
+                                ('\$${(value-valueUntilNow).toStringAsFixed(2)} left to reach your goal!'),
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                               ),
@@ -171,10 +177,10 @@ class _GoalViewState extends State<GoalView> {
                             const Padding(
                               padding: EdgeInsets.only(top: 8.0),
                               child: Text(
-                                ('Congratulations, you reach your goal!'),
+                                ('Congratulations, you reached your goal!'),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                            )
+                            ),
                         ],
                       ),
                     ),
