@@ -28,7 +28,7 @@ class AuthGate extends StatelessWidget {
         stream: authStream,
         builder: (context, snapshot) {
           if (snapshot.data?.token?.isNotEmpty == true) {
-            return const Dashboard();
+            return Dashboard();
           } else if (snapshot.data?.firebaseUser != null) {
             return FutureBuilder(
                 future: autheticateToServerViaFirebaseUser(
@@ -98,6 +98,20 @@ Future autheticateToServerViaFirebaseUser(User firebaseUser) {
       StreamingSharedPreferences.instance.then((sharedPref) {
         sharedPref.setString("token", json["token"]);
       });
+
+      var urlMe = dotenv.get('API_BASE_URL', fallback: 'http://localhost:3001/api') +
+          "/user";
+      final Uri uriMe = Uri.parse(urlMe);
+
+      var response2 = await http.get(uriMe, headers: {'Authorization': json["token"]});
+      var status = response.statusCode;
+      if (status == 200) {
+        var jsonUser = jsonDecode(response.body);
+        StreamingSharedPreferences.instance.then((sharedPref) {
+          sharedPref.setString("username", jsonUser["name"]);
+        });
+      }
+
     }
   }).catchError((err) {
     print("Error while trying to authenticate with backend server" +

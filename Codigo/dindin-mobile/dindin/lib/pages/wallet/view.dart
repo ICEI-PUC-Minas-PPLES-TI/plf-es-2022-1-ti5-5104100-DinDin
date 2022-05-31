@@ -3,6 +3,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dindin/pages/wallet/members.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 import '../../models/wallet.dart';
 import '../category/list.dart';
@@ -217,6 +218,33 @@ class _WalletViewState extends State<WalletView> {
                         ),
                         title: Text('Bank Name'),
                         subtitle: Text('Inter')),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      await StreamingSharedPreferences.instance.then((sharedPref) async {
+                        await sharedPref.setString("dashwalletName", description);
+                        await sharedPref.setInt("dashwalletID", int.parse(widget.wallet.id.toString()));
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Wallet Changed"),
+                      ));
+                    },
+                    child: const Card(
+                      child: ListTile(
+                          leading: Padding(
+                            padding: EdgeInsets.only(top: 4.0, left: 4.0),
+                            child: FaIcon(
+                              FontAwesomeIcons.house,
+                              size: 30.0,
+                              color: Colors.black,
+                            ),
+                          ),
+                          title: Text('Set Dashboard Wallet'),
+                          subtitle: Text('')),
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
