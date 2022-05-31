@@ -4,7 +4,6 @@ import 'package:dindin/widgets/category_drop.dart';
 import 'package:dindin/widgets/wallet_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class TransactionForm extends StatefulWidget {
@@ -25,36 +24,51 @@ class _TransactionFormState extends State<TransactionForm> {
   DateTime date = DateTime.now();
   DateTime? endDate;
   bool _isIncome = true;
-  String? category = "";
+  String? category;
   String wallet = "";
   double amount = 0;
   String recurrency = "D";
-  double buttonHeight = 0.06;
-  double buttonWidth = 0.45;
+
+  num currencyFormat(var value) {
+    var firstnum = 0;
+    for (var a = 0; a < value.length; a++) {
+      if (_isNumeric(value.substring(a, a + 1))) {
+        firstnum = a;
+        a = value.length;
+      }
+    }
+    String removedot = value.replaceAll(".", "");
+    String chageforcomma = removedot.replaceAll(",", ".");
+    double resp = double.parse(chageforcomma.substring(firstnum));
+    return resp;
+  }
+
+  bool _isNumeric(String str) {
+    // ignore: unnecessary_null_comparison
+    if (str == null) {
+      return false;
+    }
+    return double.tryParse(str) != null;
+  }
 
   void changeButtonState() {
     setState(() {
-      category = null;
-      _key.currentState!.setWallet(_isIncome ? "IN" : "OUT", null);
       _isIncome = !_isIncome;
     });
+    category = null;
     changeWalletId(wallet);
   }
 
   void changeWalletId(String id) {
     setState(() {
-      _key.currentState!.setWallet(_isIncome ? "IN" : "OUT", null);
-      category = "";
       wallet = id;
     });
     _key.currentState!.setWallet(_isIncome ? "IN" : "OUT", id);
   }
 
   void changeCategoryId(String id) {
-    setState(() {
-      category = id;
-    });
-    print(category);
+    category = id;
+    print(id);
   }
 
   void insertTransaction() async {
@@ -79,18 +93,15 @@ class _TransactionFormState extends State<TransactionForm> {
       ));
       return;
     }
-    print(wallet);
-    print("category:");
-    print(category);
+
     var url = ApiURL.baseUrl + "/wallet/" + wallet + "/transaction";
     final Uri uri = Uri.parse(url);
     var token = await ApiURL.getToken();
 
     var body = {
       'description': _descriptionController.text,
-      'value': _amountController.text.replaceAll(new RegExp(r"\D"), ""),
+      'value': currencyFormat(_amountController.text).toString(),
       'date': '${date.year}-${date.month}-${date.day}',
-      'category_id': category
     };
 
     if (category?.isEmpty ?? false) {
@@ -152,13 +163,11 @@ class _TransactionFormState extends State<TransactionForm> {
                   children: [
                     // Income / Outcoming Button
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         SizedBox(
-                          height:
-                              MediaQuery.of(context).size.height * buttonHeight,
-                          width:
-                              MediaQuery.of(context).size.width * buttonWidth,
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          width: MediaQuery.of(context).size.width * 0.4,
                           child: ElevatedButton(
                             onPressed: () {
                               _isIncome ? null : changeButtonState();
@@ -181,10 +190,8 @@ class _TransactionFormState extends State<TransactionForm> {
                           ),
                         ),
                         SizedBox(
-                          height:
-                              MediaQuery.of(context).size.height * buttonHeight,
-                          width:
-                              MediaQuery.of(context).size.width * buttonWidth,
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          width: MediaQuery.of(context).size.width * 0.4,
                           child: ElevatedButton(
                               onPressed: () {
                                 !_isIncome ? null : changeButtonState();
@@ -193,7 +200,7 @@ class _TransactionFormState extends State<TransactionForm> {
                                   ? ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
-                                              Color.fromARGB(255, 233, 86, 75)),
+                                              Colors.red),
                                     )
                                   : ButtonStyle(
                                       backgroundColor:
@@ -207,7 +214,6 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                     const SizedBox(height: 10),
                     DropWallet(changeWalletId),
-                    const Divider(height: 10),
                     // Amount text field
                     TextField(
                       inputFormatters: <TextInputFormatter>[
@@ -219,41 +225,31 @@ class _TransactionFormState extends State<TransactionForm> {
                       keyboardType: TextInputType.number,
                       controller: _amountController,
                       decoration: InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(16, 0, 0, 0),
                           labelText: "Amount",
-                          labelStyle: const TextStyle(fontSize: 20),
-                          suffixIcon: Icon(FontAwesomeIcons.moneyBill,
-                              size: 30.0,
-                              color: Theme.of(context).primaryColor),
+                          labelStyle: const TextStyle(fontSize: 16),
+                          border: const UnderlineInputBorder(),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Theme.of(context).primaryColor,
                             ),
                           )),
                     ),
-                    const Divider(height: 10),
+                    const SizedBox(height: 10),
                     // Description text field
                     TextField(
                       keyboardType: TextInputType.text,
                       controller: _descriptionController,
                       decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(16, 0, 0, 0),
-                          border: InputBorder.none,
                           labelText: "Description",
-                          suffixIcon: Icon(FontAwesomeIcons.info,
-                              size: 30.0,
-                              color: Theme.of(context).primaryColor),
-                          labelStyle: const TextStyle(fontSize: 20),
+                          labelStyle: const TextStyle(fontSize: 16),
+                          border: const UnderlineInputBorder(),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Theme.of(context).primaryColor,
                             ),
                           )),
                     ),
-                    const Divider(height: 10),
+                    const SizedBox(height: 10),
                     // Date picker
                     TextField(
                       controller: _dateController,
@@ -287,29 +283,22 @@ class _TransactionFormState extends State<TransactionForm> {
                             });
                       },
                       decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(16, 0, 0, 0),
                           labelText: "Date",
-                          suffixIcon: Icon(FontAwesomeIcons.calendar,
-                              size: 30.0,
-                              color: Theme.of(context).primaryColor),
-                          labelStyle: const TextStyle(fontSize: 20),
-                          border: InputBorder.none,
+                          labelStyle: const TextStyle(fontSize: 16),
+                          border: const UnderlineInputBorder(),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Theme.of(context).primaryColor,
                             ),
                           )),
                     ),
-                    const Divider(height: 10),
+                    const SizedBox(height: 10),
                     DropCategory(changeCategoryId, key: _key),
-                    const Divider(height: 10),
                     // Reccurrent
                     CheckboxListTile(
-                      activeColor: Theme.of(context).primaryColor,
                       title: const Text(
                         "Recurrent?",
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(fontSize: 12),
                       ),
                       value: _isChecked,
                       onChanged: (bool? opt) {
@@ -320,16 +309,14 @@ class _TransactionFormState extends State<TransactionForm> {
                       controlAffinity: ListTileControlAffinity
                           .leading, //  <-- leading Checkbox
                     ),
-                    if (_isChecked) const Divider(height: 10),
+                    const SizedBox(height: 10),
                     if (_isChecked)
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           SizedBox(
-                            height: MediaQuery.of(context).size.height *
-                                buttonHeight,
-                            width:
-                                MediaQuery.of(context).size.width * buttonWidth,
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            width: MediaQuery.of(context).size.width * 0.4,
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
@@ -340,7 +327,8 @@ class _TransactionFormState extends State<TransactionForm> {
                                   ? ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
-                                              Colors.grey))
+                                      Colors.grey,
+                                    ))
                                   : ButtonStyle(
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
@@ -353,10 +341,8 @@ class _TransactionFormState extends State<TransactionForm> {
                             ),
                           ),
                           SizedBox(
-                            height: MediaQuery.of(context).size.height *
-                                buttonHeight,
-                            width:
-                                MediaQuery.of(context).size.width * buttonWidth,
+                            height: MediaQuery.of(context).size.height * 0.08,
+                            width: MediaQuery.of(context).size.width * 0.4,
                             child: ElevatedButton(
                                 onPressed: () {
                                   setState(() {
@@ -379,13 +365,12 @@ class _TransactionFormState extends State<TransactionForm> {
                           ),
                         ],
                       ),
-                    if (_isChecked) const Divider(height: 10),
                     if (_isChecked)
                       TextField(
                         controller: _endDateController,
                         enableInteractiveSelection: false,
                         onTap: () async {
-                          FocusScope.of(context).requestFocus(FocusNode());
+                          FocusScope.of(context).requestFocus(new FocusNode());
                           DateTime? newDate = await showDatePicker(
                             context: context,
                             initialDate: date,
@@ -414,57 +399,51 @@ class _TransactionFormState extends State<TransactionForm> {
                         },
                         decoration: InputDecoration(
                             labelText: "End Date",
-                            contentPadding:
-                                const EdgeInsets.fromLTRB(16, 10, 0, 0),
-                            labelStyle: const TextStyle(fontSize: 20),
-                            suffixIcon: Icon(FontAwesomeIcons.calendar,
-                                size: 30.0,
-                                color: Theme.of(context).primaryColor),
-                            border: InputBorder.none,
+                            labelStyle: const TextStyle(fontSize: 16),
+                            border: const UnderlineInputBorder(),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Theme.of(context).primaryColor,
                               ),
                             )),
                       ),
-                    if (_isChecked) const Divider(height: 10),
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height *
-                                buttonHeight,
-                            width:
-                                MediaQuery.of(context).size.width * buttonWidth,
-                            child: ElevatedButton(
-                                onPressed: insertTransaction,
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Theme.of(context).primaryColor),
-                                ),
-                                child: const Text("Insert",
-                                    style: TextStyle(fontSize: 20))),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height *
-                                buttonHeight,
-                            width:
-                                MediaQuery.of(context).size.width * buttonWidth,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.grey),
-                                ),
-                                child: const Text("Cancel",
-                                    style: TextStyle(fontSize: 20))),
-                          ),
-                        ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: ElevatedButton(
+                                  onPressed: insertTransaction,
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                      Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                  child: const Text("Insert",
+                                      style: TextStyle(fontSize: 20))),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.grey),
+                                  ),
+                                  child: const Text("Cancel",
+                                      style: TextStyle(fontSize: 20))),
+                            ),
+                          ],
+                        ),
                       ),
                     )
                   ],
