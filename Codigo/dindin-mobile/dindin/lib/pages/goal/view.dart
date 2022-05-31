@@ -63,7 +63,7 @@ class _GoalViewState extends State<GoalView> {
     Map<String, dynamic> body = jsonDecode(response.body);
     if (body['value'] != null) {
       setState(() {
-        valueUntilNow = double.parse(body['value']);
+        valueUntilNow = body['value'];
         progress = valueUntilNow / value;
         if(progress>1) {
           progress=1;
