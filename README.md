@@ -61,11 +61,13 @@ As funcionalidades principais são:
   - [Sqflite](https://pub.dev/packages/sqflite)
 - Backend:
   - [ExpressJs](https://expressjs.com/)
+  - [FirebaseAdmin](https://firebase.google.com/support/release-notes/admin/node)
   - [JavaScript](https://www.javascript.com/)
   - [JestJs](https://jestjs.io/)
   - [MySQL Server](https://www.mysql.com/)
   - [NodeJs](https://nodejs.org/)
   - [Sequelize](https://sequelize.org/)
+  - [Yup](https://github.com/jquense/yup)
 - Devops:
   - [Docker](https://www.docker.com/)
   - [Docker Compose](https://docs.docker.com/compose/)
