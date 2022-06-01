@@ -36,7 +36,7 @@ goalRoutes.get(
 goalRoutes.get(
     "/:id",
     [AuthenticationMiddleware.verifyToken, verifyGoalPermission],
-    findGoalController.find, 
+    findGoalController.find
 );
 goalRoutes.delete(
     "/:id",

@@ -2,14 +2,16 @@ const cron = require("node-cron");
 const { Op, Sequelize } = require("sequelize");
 const { v4: uuidv4 } = require("uuid");
 
-const { EVERY_DAY_03AM,/* EVERY_MINUTE, EVERY_SECOND*/ } = require("./scheduleConstants");
+const {
+    EVERY_DAY_03AM /* EVERY_MINUTE, EVERY_SECOND*/,
+} = require("./scheduleConstants");
 
 const TransactionRecurrencies = require("../models/TransactionRecurrencies");
 const Transaction = require("../models/Transaction");
 const GoalService = require("../services/goalServices");
 
 const generateTransactions = cron.schedule(EVERY_DAY_03AM, async () => {
-    console.log("cronjob running ")
+    console.log("cronjob running ");
     /*
           SELECT *
           FROM `transaction_recurrencies` AS `TransactionRecurrencies`
@@ -100,9 +102,11 @@ const generateTransactions = cron.schedule(EVERY_DAY_03AM, async () => {
         });
 
     const goalService = new GoalService();
-    
+
     // put it that here because it necessaryly has to run after recurrent transactions are registered
-    await goalService.updateAchievemetWalletGoals(...walletWithNewTrasactionsSet.values());
+    await goalService.updateAchievemetWalletGoals(
+        ...walletWithNewTrasactionsSet.values()
+    );
 
     await goalService.updateExpiredGoals();
 });
