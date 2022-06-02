@@ -271,14 +271,13 @@ class _GoalCreateState extends State<GoalCreate> {
                             }, body: {
                               'description': _descriptionController.text,
                               'value': currencyFormat(_valueController.text).toString(),
-                              'type': _goalType == 1 ? "A" : "B",
+                              'type': _goalType == 2 ? "A" : "B",
                               'expire_at':
                                   '${date.year}-${date.month}-${date.day}',
                               'wallet_id': wallet
                             });
                             var status = response.statusCode;
                             if (status == 201) {
-                              //var json = jsonDecode(response.body);
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
