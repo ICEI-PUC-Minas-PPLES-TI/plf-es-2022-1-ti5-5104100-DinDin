@@ -278,6 +278,7 @@ class _GoalCreateState extends State<GoalCreate> {
                             });
                             var status = response.statusCode;
                             if (status == 201) {
+                              Navigator.pop(context);
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(

@@ -88,6 +88,8 @@ class _GoalEditState extends State<GoalEdit> {
       );
       var status = response.statusCode;
       if (status == 200) {
+        Navigator.pop(context);
+        Navigator.pop(context);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const GoalList()),

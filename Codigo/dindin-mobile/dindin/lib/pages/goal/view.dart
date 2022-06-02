@@ -90,7 +90,7 @@ class _GoalViewState extends State<GoalView> {
             child: IconButton(
               icon: const FaIcon(FontAwesomeIcons.penToSquare),
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => GoalEdit(widget.goal)),
