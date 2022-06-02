@@ -354,7 +354,7 @@ class _DashboardState extends State<Dashboard> {
                         const Text('BALANCE',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w300)),
-                        Text('\$${(incoming != null && outcoming  != null)? (incoming - outcoming).toStringAsFixed(2) : 0}',
+                        Text('\$${(incoming != null && outcoming  != null)? (incoming - outcoming) : 0}',
                             style: const TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.w600)),
                         const Text('US Dollars'),
@@ -381,7 +381,7 @@ class _DashboardState extends State<Dashboard> {
                             const Text('Outcoming',
                                 style: TextStyle(
                                     fontSize: 22, color: Colors.white)),
-                            Text('\$${outcoming.toStringAsFixed(2) ?? 0}',
+                            Text('\$${outcoming ?? 0}',
                                 style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold,
@@ -404,7 +404,7 @@ class _DashboardState extends State<Dashboard> {
                             const Text('Incoming',
                                 style: TextStyle(
                                     fontSize: 22, color: Colors.white)),
-                            Text('\$${incoming.toStringAsFixed(2) ?? 0}',
+                            Text('\$${incoming ?? 0}',
                                 style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold,
