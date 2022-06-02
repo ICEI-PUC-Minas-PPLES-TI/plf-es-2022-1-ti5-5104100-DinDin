@@ -29,6 +29,7 @@ As funcionalidades principais são:
 - Permitir ao usuário, junto de outros usuários, lançar despesas e receitas de modo compartilhado.
 - Permitir que o usuário controle de onde o dinheiro está saindo ou entrando.
 
+---
 
 ## 👨‍💻 Alunos integrantes da equipe
 
@@ -38,15 +39,20 @@ As funcionalidades principais são:
 * [Victor Boaventura Goes Campos](https://github.com/777-victor)
 * [Vinícius Marini Costa E Oliveria](https://github.com/marinisz)
 
+---
+
 ## 👩‍🏫 Professores responsáveis
 
 * Cleiton Silva Tavares
 * Pedro Alves De Oliveira
 
+---
+
 ## 🚀 Tecnologias
 
 - Frontend:
   - [Chart.js](https://www.chartjs.org/)
+  - [FontAwesome](https://fontawesome.com/)
   - [JavaScript](https://www.javascript.com/)
   - [NuxtJs](https://nuxtjs.org/)
   - [NuxtFirebase](https://firebase.nuxtjs.org/service-options/auth/)
@@ -55,57 +61,114 @@ As funcionalidades principais são:
   - [Vuetify](https://vuetifyjs.com/en/)
 - Mobile
   - [ChartsFlutter ](https://pub.dev/packages/charts_flutter)
-  - [FirebaseAuth](https://pub.dev/packages/firebase_auth)
+  - [Firebase](https://pub.dev/packages/firebase_auth)
   - [FontAwesome](https://fontawesome.com/)
   - [Flutter](https://flutter.dev/)
   - [Sqflite](https://pub.dev/packages/sqflite)
 - Backend:
+  - [NodeCron](https://www.npmjs.com/package/node-cron)
   - [ExpressJs](https://expressjs.com/)
   - [FirebaseAdmin](https://firebase.google.com/support/release-notes/admin/node)
   - [JavaScript](https://www.javascript.com/)
   - [JestJs](https://jestjs.io/)
-  - [MySQL Server](https://www.mysql.com/)
   - [NodeJs](https://nodejs.org/)
   - [Sequelize](https://sequelize.org/)
   - [Yup](https://github.com/jquense/yup)
+- Database:
+  - [MySQL Server](https://www.mysql.com/)
 - Devops:
+  - [GitHub Actions (CI/CD)](https://github.com/features/actions)
   - [Docker](https://www.docker.com/)
   - [Docker Compose](https://docs.docker.com/compose/)
 - Cloud:
   - [Azure](https://azure.microsoft.com/) 
 
-## ⤵ Instruções de utilização
-
-Essas instruções vão te levar a uma cópia do projeto rodando em sua máquina local para propósitos de testes e desenvolvimento.
-
-#### Modelo MySql
+### Modelo MySql
 - [ModeloMySQL.sql](./Artefatos/BancoDeDados/model.mwb)
 
 ---
 
+## ⤵ Instruções de utilização
+
+Essas instruções vão te levar a uma cópia do projeto rodando em sua máquina local para propósitos de testes e desenvolvimento.
+
+### Passo a passo de: como instalar e iniciar a aplicação utilizando Docker-Compose:
+
+<br>
+
+- Passo 1: Clonar o repositório:
 ```bash
-- git clone https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin
-- cd plf-es-2022-1-ti5-5104100-DinDin
-- cd Codigo
-```
-#### Altere as informações de autenticação do banco
-``` bash
-$ mv .env.example .env
-```
-#### Instalar dependências
-``` bash
-$ npm install
+$ git clone https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin
 ```
 
-#### Rodar a aplicação localmente em dev
-``` bash
-$ npm run dev
+<br>
+- Passo 2: Configurar o API NodeJS (backend)
+
+- Passo 2.1: Entrar na pasta do backend:
+```bash
+$ cd plf-es-2022-1-ti5-5104100-DinDin/Codigo/dindin-api/
 ```
-#### Ou, rodar a aplicação localmente
-``` bash
-$ npm run build
-$ npm run start
+
+- Passo 2.2: Criar o arquivo .env com as variáveis de ambiente do backend:
+```bash
+$ mv .env.sample .env
 ```
+
+- Passo 2.3: Adicionar a sua chave (entre aspas) do Firebase na variável FB_PRIVATE_KEY dentro do arquivo .env:
+```bash
+$ vim .env
+```
+
+- Passo 2.4: Iniciar o Docker-Compose da API:
+```bash
+$ docker-compose up
+```
+
+- API estará rodando em http://localhost:3001/
+
+<br>
+
+- Passo 3: Configurar o Nuxt VueJS (Frontend web)
+
+- Passo 3.1: Entrar na pasta do frontend web:
+```bash
+$ cd plf-es-2022-1-ti5-5104100-DinDin/Codigo/dindin-frontend/
+```
+
+- Passo 3.2: Criar o arquivo .env com as variáveis de ambiente do frontend web:
+```bash
+$ mv .env.sample .env
+```
+
+- Passo 3.3: Iniciar o Docker-Compose do Nuxt VueJS:
+```bash
+$ docker-compose up
+```
+
+- Frontend estará rodando em http://localhost:80/
+
+<br>
+
+- Passo 4: Configurar o Flutter (Frontend mobile)
+
+- Passo 4.1: Entrar na pasta do frontend mobile:
+```bash
+$ cd plf-es-2022-1-ti5-5104100-DinDin/Codigo/dindin-mobile/dindin/
+```
+
+- Passo 4.2: Criar o arquivo .env com as variáveis de ambiente do frontend mobile:
+```bash
+$ mv .env-example .env
+```
+
+- Passo 4.3: Iniciar o Flutter no Navegador Chrome (Usando celular ou emulador necessita de trocar o API_BASE_URL da .env para o IPv4 da sua máquina na mesma rede, além disso dar permissão do seu SHA265 do Android na sua conta do Firebase):
+```bash
+$ flutter run -d chrome
+```
+
+- Aplicação mobile irá gerar a build e abrir no navegador chrome
+
+---
 
 ## 🔗 Links do projeto
 
@@ -113,6 +176,8 @@ $ npm run start
 - [Codigo](Codigo)
 - [Divulgacao](Divulgacao)
 - [Documentacao](Documentacao)
+
+---
 
 ## 📝 Licença
 
