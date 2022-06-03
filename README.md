@@ -160,12 +160,17 @@ $ docker-compose up
 $ cd plf-es-2022-1-ti5-5104100-DinDin/Codigo/dindin-mobile/dindin/
 ```
 
-- Passo 4.2: Criar o arquivo .env com as variáveis de ambiente do frontend mobile:
+- Passo 4.2: Instalar as dependências do projeto Flutter:
+```bash
+$ flutter pub get
+```
+
+- Passo 4.3: Criar o arquivo .env com as variáveis de ambiente do frontend mobile:
 ```bash
 $ mv .env-example .env
 ```
 
-- Passo 4.3: Iniciar o Flutter no Navegador Chrome (Usando celular ou emulador necessita de trocar o API_BASE_URL da .env para o IPv4 da sua máquina na mesma rede, além disso dar permissão do seu SHA265 do Android na sua conta do Firebase):
+- Passo 4.4: Iniciar o Flutter no Navegador Chrome (Usando celular ou emulador necessita de trocar o API_BASE_URL da .env para o IPv4 da sua máquina na mesma rede, além disso dar permissão do seu SHA265 do Android na sua conta do Firebase):
 ```bash
 $ flutter run -d chrome
 ```
