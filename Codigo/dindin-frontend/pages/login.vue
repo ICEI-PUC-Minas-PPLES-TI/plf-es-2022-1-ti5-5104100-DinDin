@@ -45,6 +45,7 @@
                                         :type="show1 ? 'text' : 'password'"
                                         outlined
                                         class="rounded-0"
+                                        @keypress.enter="handleSubmit"
                                         @click:append="show1 = !show1"
                                     ></v-text-field>
 
