@@ -96,7 +96,9 @@ class ReportWalletGoalTransactionUseCase {
             throw new AppError("Erro interno do servidor!", 500, error);
         });
 
-        return { value: transactionsSumOfTheGoal };
+        return {
+            value: transactionsSumOfTheGoal ? transactionsSumOfTheGoal : 0,
+        };
     }
 }
 
