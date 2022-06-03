@@ -49,28 +49,29 @@ class _GoalEditState extends State<GoalEdit> {
   }
 
   num currencyFormat(var value) {
-      var firstnum = 0;
-      for (var a = 0; a < value.length; a++) {
-        if (_isNumeric(value.substring(a, a + 1))) {
-          firstnum = a;
-          a = value.length;
-        }
+    var firstnum = 0;
+    for (var a = 0; a < value.length; a++) {
+      if (_isNumeric(value.substring(a, a + 1))) {
+        firstnum = a;
+        a = value.length;
       }
-      String removedot = value.replaceAll(".", "");
-      String chageforcomma = removedot.replaceAll(",", ".");
-      double resp = double.parse(chageforcomma.substring(firstnum));
-      return resp;
     }
+    String removedot = value.replaceAll(".", "");
+    String chageforcomma = removedot.replaceAll(",", ".");
+    double resp = double.parse(chageforcomma.substring(firstnum));
+    return resp;
+  }
 
   bool _isNumeric(String str) {
-      // ignore: unnecessary_null_comparison
-      if (str == null) {
-        return false;
-      }
-      return double.tryParse(str) != null;
+    // ignore: unnecessary_null_comparison
+    if (str == null) {
+      return false;
     }
+    return double.tryParse(str) != null;
+  }
 
   void updateGoal() async {
+    Goal? goal = widget.goal;
     var url = ApiURL.baseUrl + "/goal/" + widget.goal!.id.toString();
     final Uri uri = Uri.parse(url);
     var token = await ApiURL.getToken();
@@ -95,7 +96,6 @@ class _GoalEditState extends State<GoalEdit> {
           MaterialPageRoute(builder: (context) => const GoalList()),
         );
       } else {
-        print(response.body);
         errorMessage = true;
       }
     } catch (e) {
