@@ -95,8 +95,8 @@ Essas instruções vão te levar a uma cópia do projeto rodando em sua máquina
 ### Passo a passo de: como instalar e iniciar a aplicação utilizando Docker-Compose:
 
 Pré-requisitos:
-- Ter instalado [Docker](https://docs.docker.com/engine/install/ubuntu/)
-- Ter instalado [Flutter na versão 2.10.3](https://docs.flutter.dev/development/tools/sdk/releases?tab=linux)
+- Ter instalado [Docker na versão >=20.10](https://docs.docker.com/engine/install/ubuntu/)
+- Ter instalado [Flutter na versão 2.10.5](https://docs.flutter.dev/development/tools/sdk/releases?tab=linux)
 
 <br>
 
