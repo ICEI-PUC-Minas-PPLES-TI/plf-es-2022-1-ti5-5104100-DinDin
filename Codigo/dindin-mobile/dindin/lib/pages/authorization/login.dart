@@ -22,9 +22,15 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String email = '';
-  String password = '';
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -74,9 +80,7 @@ class _LoginState extends State<Login> {
                             child: Column(
                               children: [
                                 TextFormField(
-                                  onChanged: (text) {
-                                    email = text;
-                                  },
+                                  controller: _emailController,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: const InputDecoration(
                                       labelText: 'Enter Email Adress',
@@ -98,10 +102,8 @@ class _LoginState extends State<Login> {
                                 ),
                                 const SizedBox(height: 20),
                                 TextFormField(
-                                  onChanged: (text) {
-                                    password = text;
-                                  },
                                   obscureText: true,
+                                  controller: _passController,
                                   decoration: const InputDecoration(
                                       labelText: 'Password',
                                       border: OutlineInputBorder(),
@@ -134,7 +136,7 @@ class _LoginState extends State<Login> {
                                             SnackBar(content: Text('Loging'));
                                         const snackBarFalse = SnackBar(
                                             content: Text('User not Found'));
-                                        userAuth(email, password)
+                                        userAuth(_emailController.text, _passController.text)
                                             .then((res) => {
                                                   print(res),
                                                   if (res == true)
@@ -146,7 +148,7 @@ class _LoginState extends State<Login> {
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: (context) =>
-                                                                const Dashboard()),
+                                                                Dashboard()),
                                                       )
                                                     }
                                                   else
@@ -244,6 +246,21 @@ Future<bool> userAuth(String email, String password) async {
       print(
           "Não foi possível fazer a inscrição para receber mensagens no tópico");
     }
+
+    var urlMe = ApiURL.baseUrl +
+        "/user";
+    final Uri uriMe = Uri.parse(urlMe);
+    var response2 = await http.get(uriMe, headers: {'Authorization': json["token"]});
+    var status2 = response2.statusCode;
+    if (status2 == 200) {
+      var jsonUser = jsonDecode(response2.body);
+      await StreamingSharedPreferences.instance.then((sharedPref) async {
+        await sharedPref.setString("username", jsonUser["name"]);
+      });
+
+      print(jsonUser["name"]);
+    }
+
     return true;
   }
   return false;

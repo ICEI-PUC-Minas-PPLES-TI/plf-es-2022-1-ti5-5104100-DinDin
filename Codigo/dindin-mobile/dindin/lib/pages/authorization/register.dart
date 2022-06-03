@@ -239,7 +239,7 @@ class _LoginState extends State<Register> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const Dashboard()),
+                                                        Dashboard()),
                                               );
                                             }
                                           } else {
