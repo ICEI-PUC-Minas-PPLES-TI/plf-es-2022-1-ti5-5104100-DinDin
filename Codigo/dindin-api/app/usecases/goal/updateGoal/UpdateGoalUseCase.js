@@ -2,7 +2,7 @@ const AppError = require("../../../errors/AppError");
 const FindGoalUseCase = require("../findGoal/FindGoalUseCase");
 
 class UpdateGoalUseCase {
-    async update(id, description, value, type, expire_at, wallet_id) {
+    async update(id, description, value, type, expire_at) {
         const findGoalUseCase = new FindGoalUseCase();
         const goal = await findGoalUseCase.find(id);
 
@@ -13,7 +13,6 @@ class UpdateGoalUseCase {
                     value,
                     type,
                     expire_at,
-                    wallet_id,
                 },
                 {
                     where: { id: id },

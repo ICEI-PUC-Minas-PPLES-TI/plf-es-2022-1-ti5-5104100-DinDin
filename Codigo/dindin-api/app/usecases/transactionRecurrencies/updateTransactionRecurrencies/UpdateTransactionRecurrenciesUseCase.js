@@ -1,4 +1,5 @@
 const AppError = require("../../../errors/AppError");
+const Category = require("../../../models/Category");
 
 const FindTransactionRecurrenciesUseCase = require("../findTransactionRecurrencies/FindTransactionRecurrenciesUseCase");
 
@@ -19,6 +20,44 @@ class UpdateTransactionRecurrenciesUseCase {
             await findTransactionRecurrenciesUseCase.find(id, wallet_id);
 
         if (category_id == 0) category_id = null;
+
+        if (category_id) {
+            const category = await Category.findOne({
+                where: {
+                    id: category_id,
+                },
+                raw: true,
+            });
+            if (value && category.type == "OUT" && value > 0)
+                throw new AppError(
+                    "You cannot update an income Transaction Recurrencie (value greater than 0) with a outcome Category.",
+                    422
+                );
+            else if (
+                !value &&
+                category.type == "OUT" &&
+                transactionRecurrencies.dataValues.value > 0
+            )
+                throw new AppError(
+                    "You cannot update an income Transaction Recurrencie (value greater than 0) with a outcome Category.",
+                    422
+                );
+
+            if (value && category.type == "IN" && value < 0)
+                throw new AppError(
+                    "You cannot update an outcome Transaction Recurrencie (value less than 0) with an income Category.",
+                    422
+                );
+            else if (
+                !value &&
+                category.type == "IN" &&
+                transactionRecurrencies.dataValues.value < 0
+            )
+                throw new AppError(
+                    "You cannot update an outcome Transaction Recurrencie (value less than 0) with an income Category.",
+                    422
+                );
+        }
 
         await transactionRecurrencies
             .update({
