@@ -487,30 +487,52 @@ ___
 
 Evidências dos testes realizados
 
-Acessibilidade:
+**Acessibilidade:**
 
-Tela sem zoom:
 ![Normal Img ](../Artefatos/Imagens/evidencias/normal.png "Sem zoom ")
 
-Tela com pouco zoom:
+**Figura 6 – Tela do sistema sem zoom. Fonte: o próprio autor.**
+
 ![Zoom Img ](../Artefatos/Imagens/evidencias/zoomed.png "Zoom ")
 
-Tela com muito zoom:
+**Figura 7 – Tela do sistema com pouco zoom. Fonte: o próprio autor.**
+
 ![More Zoomed Img ](../Artefatos/Imagens/evidencias/morezoomed.png "Muito zoom ")
 
-Segurança:
+**Figura 8 – Tela do sistema com muito zoom. Fonte: o próprio autor.**
 
-Senhas criptografadas:
+**Mautenabildiade:**
+
+![Dir Structure Img](../Artefatos/Imagens/evidencias/directoryStructure.png "Backend Directory Structure")
+
+**Figura 9 – Estrutura modular de pastas do backend da aplicação. Fonte: o próprio autor.**
+
+**Segurança:**
+
 ![Cripetd Img ](../Artefatos/Imagens/evidencias/cripted.png "Senhas criptografadas ")
 
-Interoperabilidade:
+**Figura 10 – Senhas criptografadas armazenadas no banco de dados. Fonte: o próprio autor.**
 
-Versão Web:
+**Interoperabilidade:**
+
 ![Goal Web Img ](../Artefatos/Imagens/evidencias/goalWeb.png "Goal versão Web")
 
-Versão Mobile:
+**Figura 11 – Tela de objetivos, versão Web. Fonte: o próprio autor.**
+
 ![Goal Mobile Img ](../Artefatos/Imagens/evidencias/goallist.png "Goal versão Mobile")
+
+**Figura 12 – Tela de lista de objetivos, versão Mobile. Fonte: o próprio autor.**
+
 ![Goal Mobile Img ](../Artefatos/Imagens/evidencias/goalview.png "Goal versão Mobile")
+
+**Figura 13 – Tela de visualizar objetivos, versão Mobile. Fonte: o próprio autor.**
+
+**Testabilidade:**
+
+![Tests Img ](../Artefatos/Imagens/evidencias/tests.png "Testes de integração da API")
+
+**Figura 14 – Suítes de teste do sistema. Fonte: o próprio autor.**
+
 
 <a name="referencias"></a>
 # 5. REFERÊNCIAS
@@ -521,5 +543,5 @@ Versão Mobile:
 <a name="apendices"></a>
 # 6. APÊNDICES
 
-_Inclua o URL do repositório (Github, Bitbucket, etc) onde você armazenou o código da sua prova de conceito/protótipo arquitetural da aplicação como anexos. A inclusão da URL desse repositório de código servirá como base para garantir a autenticidade dos trabalhos._
->>>>>>> 9fcf23331636e2d17f1fa8cd0b12989c59c03096
+Github: [ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin](ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin)
+
