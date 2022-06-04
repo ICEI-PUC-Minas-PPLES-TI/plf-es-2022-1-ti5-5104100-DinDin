@@ -487,7 +487,30 @@ ___
 
 Evidências dos testes realizados
 
-_Apresente imagens, descreva os testes de tal forma que se comprove a realização da avaliação._
+Acessibilidade:
+
+Tela sem zoom:
+![Normal Img ](../Artefatos/Imagens/evidencias/normal.png "Sem zoom ")
+
+Tela com pouco zoom:
+![Zoom Img ](../Artefatos/Imagens/evidencias/zoomed.png "Zoom ")
+
+Tela com muito zoom:
+![More Zoomed Img ](../Artefatos/Imagens/evidencias/morezoomed.png "Muito zoom ")
+
+Segurança:
+
+Senhas criptografadas:
+![Cripetd Img ](../Artefatos/Imagens/evidencias/cripted.png "Senhas criptografadas ")
+
+Interoperabilidade:
+
+Versão Web:
+![Goal Web Img ](../Artefatos/Imagens/evidencias/goalWeb.png "Goal versão Web")
+
+Versão Mobile:
+![Goal Mobile Img ](../Artefatos/Imagens/evidencias/goallist.png "Goal versão Mobile")
+![Goal Mobile Img ](../Artefatos/Imagens/evidencias/goalview.png "Goal versão Mobile")
 
 <a name="referencias"></a>
 # 5. REFERÊNCIAS
