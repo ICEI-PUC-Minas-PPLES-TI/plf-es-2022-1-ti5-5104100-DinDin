@@ -84,7 +84,7 @@ As funcionalidades principais são:
   - [Azure](https://azure.microsoft.com/) 
 
 ### Modelo MySql
-- [ModeloMySQL.sql](./Artefatos/BancoDeDados/model.mwb)
+- [ModeloMySQL](./Documentacao/imagens/der.png)
 
 ---
 
