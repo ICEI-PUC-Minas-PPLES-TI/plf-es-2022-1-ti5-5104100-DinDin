@@ -71,7 +71,6 @@ class _GoalEditState extends State<GoalEdit> {
   }
 
   void updateGoal() async {
-    Goal? goal = widget.goal;
     var url = ApiURL.baseUrl + "/goal/" + widget.goal!.id.toString();
     final Uri uri = Uri.parse(url);
     var token = await ApiURL.getToken();
