@@ -433,15 +433,15 @@ export default {
         saveTransaction() {
             this.errors = [];
             let endPoint = `wallet/${this.transaction.wallet_id}/`;
-            if (this.transaction.recurrent == false) {
-                endPoint += "transaction";
-            } else {
+            if (this.transaction.recurrent === true) {
                 endPoint += "transactionrecurrencies";
                 this.transaction.day = parseInt(
                     new Date(this.transaction.expired_at)
                         .toLocaleDateString()
                         .split("/")[0]
                 );
+            } else {
+                endPoint += "transaction";
             }
 
             if (this.transaction.type == "OUT") {
