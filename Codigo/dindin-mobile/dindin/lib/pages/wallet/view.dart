@@ -1,9 +1,13 @@
+import 'dart:convert';
+
+import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/pages/wallet/form.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dindin/pages/wallet/members.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import '../../models/wallet.dart';
 import '../category/list.dart';
@@ -89,6 +93,24 @@ class _WalletViewState extends State<WalletView> {
       description = widget.wallet.description!;
     });
     super.initState();
+    fetchWallet();
+  }
+
+  Future<Wallet> fetchWallet() async {
+    var id = widget.wallet.id;
+    var url = ApiURL.baseUrl + "/wallet/" + id.toString();
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    var response = await http.get(uri, headers: {'Authorization': token});
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      print(json);
+      Wallet wallet = Wallet.fromJson(json);
+      print(wallet);
+      return wallet;
+    } else {
+      throw Exception('Failed to load wallet');
+    }
   }
 
   @override
@@ -224,9 +246,12 @@ class _WalletViewState extends State<WalletView> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      await StreamingSharedPreferences.instance.then((sharedPref) async {
-                        await sharedPref.setString("dashwalletName", description);
-                        await sharedPref.setInt("dashwalletID", int.parse(widget.wallet.id.toString()));
+                      await StreamingSharedPreferences.instance
+                          .then((sharedPref) async {
+                        await sharedPref.setString(
+                            "dashwalletName", description);
+                        await sharedPref.setInt("dashwalletID",
+                            int.parse(widget.wallet.id.toString()));
                       });
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Wallet Changed"),

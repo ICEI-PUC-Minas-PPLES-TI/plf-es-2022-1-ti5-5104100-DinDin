@@ -17,15 +17,14 @@ class Wallet {
     required this.deletedAt,
   });
 
-
   factory Wallet.fromJson(Map<String, dynamic> json) {
     return Wallet(
-      id: json['id'],
-      description: json['description'],
-      currentValue: json['current_value'],
-      shared: json['shared'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      id: int.parse(json['id']),
+      description: (json['description']).toString(),
+      currentValue: json['initial_value'],
+      shared: json['shared'] ? 1 : 0,
+      createdAt: json['created_at'].toString(),
+      updatedAt: json['updated_at'].toString(),
       deletedAt: json['deleted_at'],
     );
   }
