@@ -2,7 +2,6 @@ const yup = require("yup");
 
 const AppError = require("../../../errors/AppError");
 const UpdateGoalUseCase = require("./UpdateGoalUseCase");
-const FindWalletUseCase = require("../../wallet/findWallet/FindWalletUseCase");
 
 const typeEnum = ["A", "B"];
 
@@ -20,7 +19,6 @@ class UpdateGoalController {
             expire_at: yup
                 .date("'expire_at' must be date!")
                 .min(today, "expire_at' cannot be in the past"),
-            wallet_id: yup.number("'wallet_id' must be numeric!"),
         });
 
         try {
@@ -29,15 +27,7 @@ class UpdateGoalController {
             throw new AppError(error.name, 422, error.errors);
         }
 
-        const { description, value, type, expire_at, wallet_id } = request.body;
-
-        const findWalletUseCase = new FindWalletUseCase();
-
-        try {
-            await findWalletUseCase.find(wallet_id);
-        } catch (error) {
-            throw new AppError("'wallet_id' does not exist", 422);
-        }
+        const { description, value, type, expire_at } = request.body;
 
         const id = request?.params?.id;
         if (!id || !(id > 0))
@@ -49,8 +39,7 @@ class UpdateGoalController {
             description,
             value,
             type,
-            expire_at,
-            wallet_id
+            expire_at
         );
 
         return response.status(200).json(goal);
