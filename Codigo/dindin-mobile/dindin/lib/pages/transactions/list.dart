@@ -1,5 +1,8 @@
+import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/pages/transactions/form.dart';
 import 'package:dindin/models/transaction.dart';
+import 'package:dindin/widgets/lazy_list_builder.dart';
+import 'package:dindin/widgets/transactions_list.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,13 +20,12 @@ class Extract extends StatefulWidget {
   State<Extract> createState() => _ExtractState();
 }
 
-Future<List<Transaction>> fetchTransaction() async {
+Future<List<Transaction>> fetchTransaction(int page) async {
   List<Transaction> extract = <Transaction>[];
   http.Response response;
 
   try {
-    response = await http.get(Uri.parse(
-        'http://localhost:3001/api/extract?page=1&limit=5&attribute=id&order=ASC'));
+    response = await ApiURL.get('/transaction?page=$page');
   } catch (e) {
     final String response =
         await rootBundle.loadString('assets/data/transactions.json');
@@ -46,12 +48,9 @@ Future<List<Transaction>> fetchTransaction() async {
 }
 
 class _ExtractState extends State<Extract> {
-  late Future<List<Transaction>> extract;
-
   @override
   void initState() {
     super.initState();
-    extract = fetchTransaction();
   }
 
   @override
@@ -61,148 +60,84 @@ class _ExtractState extends State<Extract> {
           title: const Text('Transactions'),
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        body: FutureBuilder<List<dynamic>>(
-          future: fetchTransaction(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              return ListView(
+        body: ListView(
+          children: [
+            Card(
+              key: const Key("keyBoxCurrentBalance"),
+              elevation: 5,
+              color: fromHex("F5F6FA"),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
                 children: [
-                  Card(
-                    key: const Key("keyBoxCurrentBalance"),
-                    elevation: 5,
-                    color: fromHex("F5F6FA"),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(10.0),
-                          child: const Center(
-                              child: Text('Your Balance',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                  ))),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10.0, 0, 25.0),
-                          child: Text(
-                            '\$' + formatMoney.format(1372.50).toString(),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 42),
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 60.0),
-                          child: Text(
-                            "See bank details",
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(10.0),
+                    child: const Center(
+                        child: Text('Your Balance',
                             style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.green),
-                          ),
-                        ),
-                      ],
-                    ),
+                              fontSize: 24,
+                            ))),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 12.0, top: 10),
-                    child: Text(
-                      'Recent transactions',
-                      maxLines: 20,
-                      style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                    ),
-                  ),
-                  ListView.builder(
-                      key: const Key("keyListBuilderTransactions"),
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(8),
-                      itemCount: snapshot.data?.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          child: InkWell(
-                            onTap: () {
-                              print("Open Transaction Visualization at id: " +
-                                  snapshot.data[index].id.toString());
-                            },
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                              child: ListTile(
-                                  leading: CircleAvatar(
-                                    backgroundColor: fromHex(
-                                        snapshot.data[index].categoryColor),
-                                    child: const FaIcon(
-                                      FontAwesomeIcons.cartShopping,
-                                      size: 20.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                              (snapshot
-                                                  .data[index].description),
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold)),
-                                          Text(
-                                            DateFormat.yMEd().add_jms().format(
-                                                DateTime.parse(snapshot
-                                                    .data[index].createdAt)),
-                                            style:
-                                                const TextStyle(fontSize: 12),
-                                          )
-                                        ],
-                                      ),
-                                      Text(
-                                          '\$' +
-                                              formatMoney.format(snapshot
-                                                  .data[index].value
-                                                  .abs()),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 10,
-                                              color:
-                                                  snapshot.data[index].value < 0
-                                                      ? Colors.red
-                                                      : Colors.black)),
-                                    ],
-                                  )),
+                  FutureBuilder(
+                      future: getUserExtract(),
+                      builder: ((context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(0, 10.0, 0, 25.0),
+                            child: Text(
+                              '\$' +
+                                  formatMoney.format(snapshot.data).toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 42),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      }))
                 ],
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 12.0, top: 10),
+              child: Text(
+                'Recent transactions',
+                maxLines: 20,
+                style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+            ),
+            const TransactionsList(
+              nestedList: true,
+            )
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const TransactionForm()),
+              MaterialPageRoute(builder: (context) => const TransactionForm()),
             );
           },
           child: const Icon(Icons.add),
           backgroundColor: Theme.of(context).primaryColor,
         ));
   }
+}
+
+Future getUserExtract() async {
+  final response = await ApiURL.get("/report/usertotal");
+  int total = jsonDecode(response.body)["total"];
+
+  return total;
 }
 
 Color fromHex(String hexString) {

@@ -10,7 +10,7 @@ class UpdateUserAccountUseCase {
         const findUserAccountUseCase = new FindUserAccountUseCase();
         await findUserAccountUseCase.find(id);
 
-        const user = await User.scope("withPassword").findByPk(id);
+        let user = await User.scope("withPassword").findByPk(id);
 
         let bcryptPassword;
         if (password) {
@@ -31,7 +31,8 @@ class UpdateUserAccountUseCase {
             .catch((error) => {
                 throw new AppError(error.message, 500, error);
             });
-        return { id: user.id };
+        user = await User.findByPk(id);
+        return user;
     }
 }
 

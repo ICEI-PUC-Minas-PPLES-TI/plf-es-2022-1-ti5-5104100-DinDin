@@ -1,27 +1,27 @@
+import 'package:dindin/models/category.dart';
+
 class Transaction {
-  final num id;
+  final String id;
   final num value;
-  final String categoryIcon;
-  final String categoryColor;
+  final Category? category;
   final String description;
   final String createdAt;
 
   const Transaction(
       {required this.value,
-      required this.categoryIcon,
-      required this.categoryColor,
       required this.description,
       required this.createdAt,
-      required this.id});
+      required this.id,
+      required this.category});
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
       id: json['id'],
       value: json['value'],
-      categoryIcon: json['categoryIcon'],
+      category:
+          json['category'] != null ? Category.fromJson(json['category']) : null,
       description: json['description'],
-      categoryColor: json['categoryColor'],
-      createdAt: json['createdAt'],
+      createdAt: json['created_at'],
     );
   }
 }

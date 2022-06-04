@@ -12,7 +12,15 @@
                 <v-card elevation="0" class="p-20">
                     <!-- Table top toolbar -->
                     <v-row class="pr-6">
-                        <v-col cols="2" offset="10">
+                        <v-col
+                            cols="12"
+                            md="2"
+                            sm="2"
+                            lg="2"
+                            offset-lg="10"
+                            offset-md="10"
+                            offset-sm="10"
+                        >
                             <v-btn
                                 block
                                 color="success"
@@ -171,13 +179,20 @@
 
         <v-dialog v-model="viewGoalDetails" max-width="600px">
             <v-card v-if="goalToView != null">
+                <v-card-title
+                    class="text-h6 goals-modal-title mt-0 ml-3 mb-0 pt-3 pa-6 pb-0"
+                >
+                    <h4>
+                        <span> {{ goalToView.description }}</span>
+                    </h4>
+                    <v-btn icon @click="viewGoalDetails = false">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-card-title>
                 <v-card-text elevation="4">
                     <v-container fluid>
                         <v-row>
                             <v-col>
-                                <h2 class="mt-3 black--text">
-                                    {{ goalToView.description }}
-                                </h2>
                                 <p
                                     class="text-subtitle-2 mb-1"
                                     :style="{ color: viewStatusColor }"
@@ -203,10 +218,11 @@
                                 </p>
                             </v-col>
                         </v-row>
+
                         <v-row>
-                            <v-col>
+                            <v-col cols="12" sm="6" xs="12" md="6" ld="6">
                                 <v-row>
-                                    <v-col :sm="3">
+                                    <v-col cols="3">
                                         <v-icon
                                             x-large
                                             dense
@@ -230,10 +246,9 @@
                                     </v-col>
                                 </v-row>
                             </v-col>
-
-                            <v-col>
+                            <v-col cols="12" sm="6" xs="12" md="6" ld="6">
                                 <v-row>
-                                    <v-col :sm="3">
+                                    <v-col cols="3">
                                         <v-icon
                                             x-large
                                             dense
@@ -246,16 +261,17 @@
                                         <h5
                                             class="mt-0 text-subtitle-2 font-weight-black"
                                         >
-                                            {{ goalToView.wallet_id }}
+                                            {{ goalToView.wallet.description }}
                                         </h5>
                                     </v-col>
                                 </v-row>
                             </v-col>
                         </v-row>
+
                         <v-row>
-                            <v-col>
+                            <v-col cols="12" sm="6" xs="12" md="6" ld="6">
                                 <v-row>
-                                    <v-col :sm="3">
+                                    <v-col cols="3">
                                         <v-icon
                                             x-large
                                             dense
@@ -273,10 +289,9 @@
                                     </v-col>
                                 </v-row>
                             </v-col>
-
-                            <v-col>
+                            <v-col cols="12" sm="6" xs="12" md="6" ld="6">
                                 <v-row>
-                                    <v-col :sm="3">
+                                    <v-col cols="3">
                                         <v-icon
                                             x-large
                                             dense
@@ -385,9 +400,9 @@ export default {
                             timer: 3000,
                             timerProgressBar: true,
                         });
+                        this.$fetch();
                     });
                 }
-                this.$fetch();
             });
         },
         editGoal(goal) {
@@ -397,6 +412,7 @@ export default {
             this.showModal = true;
         },
         viewGoal(goal) {
+            console.log(goal);
             this.goalToView = goal;
             this.viewGoalDetails = true;
         },

@@ -16,7 +16,7 @@ const deleteCategoryController = new DeleteCategoryController();
 const updateCategoryController = new UpdateCategoryController();
 
 walletCategoryRoutes.post(
-    "/wallet/:id/category/",
+    "/:id/category/",
     [
         AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
@@ -24,7 +24,7 @@ walletCategoryRoutes.post(
     createCategoryController.create
 );
 walletCategoryRoutes.get(
-    "/wallet/:id/category/:categoryId",
+    "/:id/category/:categoryId",
     [
         AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
@@ -32,7 +32,7 @@ walletCategoryRoutes.get(
     findCategoryController.find
 );
 walletCategoryRoutes.get(
-    "/wallet/:id/category/",
+    "/:id/category/",
     [
         AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
@@ -40,7 +40,7 @@ walletCategoryRoutes.get(
     listCategoryController.list
 );
 walletCategoryRoutes.put(
-    "/wallet/:id/category/:categoryId",
+    "/:id/category/:categoryId",
     [
         AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,
@@ -48,7 +48,7 @@ walletCategoryRoutes.put(
     updateCategoryController.update
 );
 walletCategoryRoutes.delete(
-    "/wallet/:id/category/:categoryId",
+    "/:id/category/:categoryId",
     [
         AuthenticationMiddleware.verifyToken,
         UserAccessWalletMiddleware.verifyWalletPermission,

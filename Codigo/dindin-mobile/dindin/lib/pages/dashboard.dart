@@ -1,17 +1,119 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dindin/pages/goal/list.dart';
 import 'package:dindin/pages/profile/edit.dart';
+import 'package:dindin/pages/report/reportbalance.dart';
 import 'package:dindin/pages/transactions/form.dart';
 import 'package:dindin/pages/transactions/list.dart';
 import 'package:dindin/pages/wallet/list.dart';
+import 'package:dindin/widgets/transactions_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:dindin/helpers/api_url.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
+
+  @override
+  _DashboardState createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+
+  var userName = " ";
+  var hasInternet = true;
+  int walletID = 0;
+  var walletName = 'Not Defined';
+  var incoming;
+  var outcoming;
+
+  @override
+  void initState() {
+    super.initState();
+    getMe();
+    checkInternet();
+    getCurrentWallet();
+    getBalance();
+  }
+
+  void getMe() async {
+    final prefs = await StreamingSharedPreferences.instance;
+    final Preference<String> name = prefs.getString("username", defaultValue: 'Name');
+    setState(() {
+      userName = name.getValue();
+    });
+
+    StreamingSharedPreferences.instance.then((value) => {
+      value.getString("username", defaultValue: "Name").listen((value) {
+        setState(() {
+          userName = name.getValue();
+        });
+      })
+    });
+  }
+
+  void checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print("con");
+        setState(() {
+          hasInternet = true;
+        });
+      }
+    } on SocketException catch (_) {
+      // Not Connected to Internet
+      print("not con");
+      setState(() {
+        hasInternet = false;
+      });
+    }
+  }
+
+  void getCurrentWallet() async {
+    final prefs = await StreamingSharedPreferences.instance;
+    final Preference<int> walletPrefID = prefs.getInt("dashwalletID", defaultValue: 0);
+    final Preference<String> walletPrefName = prefs.getString("dashwalletName", defaultValue: '');
+    if(walletPrefID.getValue() > 0) {
+      setState(() {
+        walletID = walletPrefID.getValue();
+        walletName = walletPrefName.getValue();
+      });
+    }
+
+    StreamingSharedPreferences.instance.then((value) => {
+      value.getInt("dashwalletID", defaultValue: 0).listen((value) {
+        if(value > 0) {
+          setState(() {
+            walletID = walletPrefID.getValue();
+            walletName = walletPrefName.getValue();
+          });
+        }
+      })
+    });
+  }
+
+  void getBalance() async {
+    var url = ApiURL.baseUrl + "/report/balance";
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    var response = await http.get(uri, headers: {'Authorization': token});
+    if(response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      print(json);
+      setState(() {
+        incoming = json['incoming'];
+        outcoming = json['outcoming'];
+      });
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,22 +159,22 @@ class Dashboard extends StatelessWidget {
                 decoration: BoxDecoration(color: Colors.grey.shade100),
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Column(children: const [
-                    Center(
+                  child: Column(children: [
+                    const Center(
                       child: FaIcon(
                         FontAwesomeIcons.circleUser,
                         size: 30.0,
                         color: Colors.black,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Text(
-                      'Lucas Vinicius',
+                      userName,
                       style:
-                          TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+                      const TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 20),
-                    Text('Current Wallet: Wallet X')
+                    const SizedBox(height: 20),
+                    Text('Current Wallet: $walletName')
                   ]),
                 ),
               ),
@@ -80,6 +182,37 @@ class Dashboard extends StatelessWidget {
             // Buttons Row
             Row(
               children: [
+                // Wallets
+                Expanded(
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.grey.shade100,
+                          child: IconButton(
+                            alignment: Alignment.topRight,
+                            icon: const Center(
+                              child: FaIcon(
+                                FontAwesomeIcons.wallet,
+                                size: 25.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                            color: Colors.black,
+                            onPressed: () {
+                              // Respond to icon toggle
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const WalletList()),
+                              );
+                            },
+                          ),
+                        ),
+                        const Text('Wallets')
+                      ],
+                    ),
+                    flex: 2),
                 // Transaction Button
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -112,6 +245,7 @@ class Dashboard extends StatelessWidget {
                       flex: 2),
                 ),
                 // Account Button
+                if(hasInternet)
                 Expanded(
                     child: Column(
                       children: [
@@ -142,6 +276,7 @@ class Dashboard extends StatelessWidget {
                     ),
                     flex: 2),
                 // Goal
+                if(hasInternet)
                 Expanded(
                     child: Column(
                       children: [
@@ -171,7 +306,7 @@ class Dashboard extends StatelessWidget {
                       ],
                     ),
                     flex: 2),
-                // Wallets
+                // Reports
                 Expanded(
                     child: Column(
                       children: [
@@ -182,7 +317,7 @@ class Dashboard extends StatelessWidget {
                             alignment: Alignment.topRight,
                             icon: const Center(
                               child: FaIcon(
-                                FontAwesomeIcons.wallet,
+                                FontAwesomeIcons.chartColumn,
                                 size: 25.0,
                                 color: Colors.black,
                               ),
@@ -193,12 +328,12 @@ class Dashboard extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const WalletList()),
+                                    builder: (context) => const ReportBalance()),
                               );
                             },
                           ),
                         ),
-                        const Text('Wallets')
+                        const Text('Reports')
                       ],
                     ),
                     flex: 2),
@@ -215,14 +350,14 @@ class Dashboard extends StatelessWidget {
                   padding: const EdgeInsets.all(20),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text('BALANCE',
+                      children: [
+                        const Text('BALANCE',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w300)),
-                        Text('\$11,000,000.05',
-                            style: TextStyle(
+                        Text('\$${(incoming != null && outcoming  != null)? (incoming - outcoming) : 0}',
+                            style: const TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.w600)),
-                        Text('US Dollars'),
+                        const Text('US Dollars'),
                       ]),
                 ),
               ),
@@ -242,12 +377,12 @@ class Dashboard extends StatelessWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(10),
-                          child: Column(children: const [
-                            Text('Outcoming',
+                          child: Column(children: [
+                            const Text('Outcoming',
                                 style: TextStyle(
                                     fontSize: 22, color: Colors.white)),
-                            Text('\$100,00',
-                                style: TextStyle(
+                            Text('\$${outcoming ?? 0}',
+                                style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white)),
@@ -265,12 +400,12 @@ class Dashboard extends StatelessWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(10),
-                          child: Column(children: const [
-                            Text('Incoming',
+                          child: Column(children: [
+                            const Text('Incoming',
                                 style: TextStyle(
                                     fontSize: 22, color: Colors.white)),
-                            Text('\$22,50',
-                                style: TextStyle(
+                            Text('\$${incoming ?? 0}',
+                                style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white)),
@@ -292,99 +427,17 @@ class Dashboard extends StatelessWidget {
                 ]),
               ),
             ),
-            FutureBuilder<List<dynamic>>(
-              future: fetchTransaction(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  return Expanded(
-                    child: Column(
-                      children: [
-                        ListView.builder(
-                            key: const Key("keyListBuilderTransactions"),
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.all(8),
-                            itemCount: snapshot.data?.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Card(
-                                child: InkWell(
-                                  onTap: () {
-                                    print(
-                                        "Open Transaction Visualization at id: " +
-                                            snapshot.data[index].id.toString());
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 8.0, bottom: 8.0),
-                                    child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: fromHex(snapshot
-                                              .data[index].categoryColor),
-                                          child: const FaIcon(
-                                            FontAwesomeIcons.cartShopping,
-                                            size: 20.0,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                    (snapshot.data[index]
-                                                        .description),
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                Text(
-                                                  DateFormat.yMEd()
-                                                      .add_jms()
-                                                      .format(DateTime.parse(
-                                                          snapshot.data[index]
-                                                              .createdAt)),
-                                                  style: const TextStyle(
-                                                      fontSize: 12),
-                                                )
-                                              ],
-                                            ),
-                                            Text(
-                                                '\$' +
-                                                    formatMoney.format(snapshot
-                                                        .data[index].value
-                                                        .abs()),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 10,
-                                                    color: snapshot.data[index]
-                                                                .value <
-                                                            0
-                                                        ? Colors.red
-                                                        : Colors.black)),
-                                          ],
-                                        )),
-                                  ),
-                                ),
-                              );
-                            }),
-                      ],
-                    ),
-                  );
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
+            const TransactionsList(
+              maxItems: 5,
+              nestedList: true,
+            )
           ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const TransactionForm()),
+              MaterialPageRoute(builder: (context) => const TransactionForm()),
             );
           },
           child: const Icon(Icons.add),

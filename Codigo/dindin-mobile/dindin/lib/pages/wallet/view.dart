@@ -3,6 +3,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dindin/pages/wallet/members.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 import '../../models/wallet.dart';
 import '../category/list.dart';
@@ -33,7 +34,7 @@ class _WalletViewState extends State<WalletView> {
   String inviteExpireDate = "17/05/2022";
   String description = ' ';
   bool walletIsShared = true;
-  
+
   final GlobalKey<FormState> _formKey = GlobalKey();
   showInviteDialog(BuildContext context) {
     return showDialog(
@@ -102,7 +103,9 @@ class _WalletViewState extends State<WalletView> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ListCategories(widget.wallet.id.toInt())),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ListCategories(widget.wallet.id.toInt())),
               );
             },
           ),
@@ -146,15 +149,18 @@ class _WalletViewState extends State<WalletView> {
                                         builder: (context) =>
                                             WalletForm(widget.wallet)),
                                   ).then((value) => {
-                                    if(value is Wallet) {
-                                      setState(() {
-                                        description = value.description!;
-                                      }),
-                                    } else if (value is String){
-                                      if(value == 'CLOSE')
-                                        Navigator.of(context).pop()
-                                    }
-                                  });
+                                        if (value is Wallet)
+                                          {
+                                            setState(() {
+                                              description = value.description!;
+                                            }),
+                                          }
+                                        else if (value is String)
+                                          {
+                                            if (value == 'CLOSE')
+                                              Navigator.of(context).pop()
+                                          }
+                                      });
                                 },
                               ),
                             ],
@@ -174,7 +180,7 @@ class _WalletViewState extends State<WalletView> {
                         ),
                         const SizedBox(height: 25.0),
                         Text(
-                          widget.wallet.shared == 1 ? 'Shared': 'Private',
+                          widget.wallet.shared == 1 ? 'Shared' : 'Private',
                           style: const TextStyle(fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(height: 60.0),
@@ -217,6 +223,33 @@ class _WalletViewState extends State<WalletView> {
                     height: 10,
                   ),
                   GestureDetector(
+                    onTap: () async {
+                      await StreamingSharedPreferences.instance.then((sharedPref) async {
+                        await sharedPref.setString("dashwalletName", description);
+                        await sharedPref.setInt("dashwalletID", int.parse(widget.wallet.id.toString()));
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Wallet Changed"),
+                      ));
+                    },
+                    child: const Card(
+                      child: ListTile(
+                          leading: Padding(
+                            padding: EdgeInsets.only(top: 4.0, left: 4.0),
+                            child: FaIcon(
+                              FontAwesomeIcons.house,
+                              size: 30.0,
+                              color: Colors.black,
+                            ),
+                          ),
+                          title: Text('Set Dashboard Wallet'),
+                          subtitle: Text('')),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
                     onTap: () => {showInviteDialog(context)},
                     child: const Card(
                       child: ListTile(
@@ -232,34 +265,37 @@ class _WalletViewState extends State<WalletView> {
                           subtitle: Text('zejoao@protonmail.com')),
                     ),
                   ),
-                  if(!walletIsShared) const SizedBox(
-                    height: 10,
-                  ),
-                  if(walletIsShared) const SizedBox(
-                    height: 10,
-                  ),
-                  if(walletIsShared) GestureDetector(
-                    onTap: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MembersList()),
-                      )
-                    },
-                    child: const Card(
-                      child: ListTile(
-                          leading: Padding(
-                            padding: EdgeInsets.only(top: 4.0, left: 4.0),
-                            child: FaIcon(
-                              FontAwesomeIcons.users,
-                              size: 30.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                          title: Text('Wallet Users'),
-                          subtitle: Text('Ana, pedro, neymar...')),
+                  if (!walletIsShared)
+                    const SizedBox(
+                      height: 10,
                     ),
-                  ),
+                  if (walletIsShared)
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  if (walletIsShared)
+                    GestureDetector(
+                      onTap: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MembersList()),
+                        )
+                      },
+                      child: const Card(
+                        child: ListTile(
+                            leading: Padding(
+                              padding: EdgeInsets.only(top: 4.0, left: 4.0),
+                              child: FaIcon(
+                                FontAwesomeIcons.users,
+                                size: 30.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                            title: Text('Wallet Users'),
+                            subtitle: Text('Ana, pedro, neymar...')),
+                      ),
+                    ),
                   const SizedBox(
                     height: 10,
                   ),
