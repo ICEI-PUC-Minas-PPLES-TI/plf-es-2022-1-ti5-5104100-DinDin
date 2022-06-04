@@ -3,12 +3,12 @@ version: '3.8'
 services:
   app:
     build:
-      context: .
+      context: ./
     networks:
       - frontend-net
     working_dir: /usr/src/dindin-frontend
     container_name: dindin-frontend
-    restart: always
+    restart: unless-stopped
     env_file: ./.env
     volumes:
       - ./:/usr/src/dindin-frontend
