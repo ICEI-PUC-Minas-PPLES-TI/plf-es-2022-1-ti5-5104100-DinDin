@@ -103,16 +103,14 @@ UC: Use Case (Caso de Uso)
 
 | **ID** | **Descrição** | **Prioridade** |
 | --- | --- | --- |
-| RF001 | O usuário deve poder realizar um cadastro de conta | Alta |
-| RF002 | O usuário deve poder fazer CRUD de seus lançamentos (recorrentes ou não) | Alta |
-| RF003 | O usuário deve poder cadastrar categorias para seus lançamentos | Média |
-| RF004 | O usuário deve conseguir convidar outro usuário para uma conta conjunta de lançamentos | Média |
-| RF005 | O usuário pode cadastrar quais bancos ele possui conta e o respectivo valor que possui nessas contas | Baixa |
-| RF006 | O usuário pode selecionar qual o banco de origem de uma transação | Baixa |
+| RF001 | O usuário deve poder realizar um cadastro de carteira | Alta |
+| RF002 | O usuário deve poder fazer CRUD de suas transações (recorrentes ou não) | Alta |
+| RF003 | O usuário deve poder cadastrar categorias para suas transações | Média |
+| RF004 | O usuário deve conseguir convidar outro usuário para uma carteira conjunta de transações | Média |
+| RF005 | O usuário pode cadastrar uma carteira para os bancos ele possui conta e o respectivo valor que possui nessas contas | Baixa |
+| RF006 | O usuário pode selecionar qual a carteira de origem de uma transação | Baixa |
 | RF007 | O usuário deve possuir uma tela de gráficos para um visão geral de seus gastos | Média |
-| RF008 | O usuário deve conseguir comunicar com a alexa sobre seus lançamentos | Baixa |
-| RF009 | O usuário deve conseguir criar um objetivo financeiro | Média |
-| RF010 | O usuário deve conseguir visualizar estatísticas informando médias entre despesas em dias, semanas ou meses, detalhando média diária e realizando comparações com outros períodos | Baixa |
+| RF008 | O usuário deve conseguir criar um objetivo financeiro | Média |
 
 ## 2.2. Requisitos Não-Funcionais
 
@@ -124,7 +122,7 @@ UC: Use Case (Caso de Uso)
 | RNF004 | O sistema deve ser compatível com sistema operacional Linux, com o objetivo de proporcionar a disponibilidade em nuvem de pelo menos 98% do tempo de atividade (uptime) |
 | RNF005 | O sistema deve ser dimensionado para suportar até 100 usuários conectados ao mesmo tempo com delay máximo de 3 segundos de carregamento |
 | RNF006 | O sistema deve garantir a segurança das senhas dos usuários, criptografando-as em SHA256 ao serem inseridas no banco de dados |
-| RNF007 | A aplicação deve estar disponível nos modos claro e escuro, possibilitando maior conforto para o usuário |
+| RNF007 | A aplicação móvel deve estar disponível nos modos claro e escuro, possibilitando maior conforto para o usuário |
 
 ## 2.3. Restrições Arquiteturais
 
@@ -166,14 +164,10 @@ O banco local que estará presente na aplicação mobile será utilizado para ca
 
 1. O sistema deve controlar todo e qualquer tipo de renda (contas bancárias, salário, rendas informais, comércio, etc).
 2. O sistema deve controlar todo e qualquer tipo de despesas e receitas (parceladas, fixas e variáveis).
-3. O sistema deve permitir uma categorização e subcategorização de receitas e despesas para organizar bem as finanças e ter consciência com o quê está gastando e ganhando mais.
-4. O sistema deve fornecer multicategorias para despesas: Informe as divisões para uma despesa.
-5. O sistema deve fornecer diversos gráficos para exibição de evolução de despesas e/ou receitas em forma de gráficos de linhas, barras ou pizza.
-7. O sistema deve permitir exportação de dados para Excel, PDF, CSV e HTML.
-8. O sistema deve fornecer um calendário disponível para que seja possível ver no mês inteiro como estão distribuídas suas finanças no mês.
-9. O sistema deve possuir uma integração com a Alexa para que o usuário registre sua despesa/receita comunicando com a Alexa.
-10. O sistema deve fornecer estatísticas informando médias entre despesas em dias, semanas ou meses, detalhando média diária e realizando comparações com outros períodos para fornecer um pleno conhecimento sobre como o usuário está economizando em relação aos seus hábitos passados.
-11. O sistema deve possuir um filtro do histórico de receitas e despesas por conta, categorias e subcategorias.
+3. O sistema deve permitir uma categorização de receitas e despesas para organizar bem as finanças e ter consciência com o quê está gastando e ganhando mais.
+4. O sistema deve fornecer categorias para transações.
+5. O sistema deve fornecer diversos gráficos para exibição de evolução de despesas e/ou receitas em forma de gráficos de linhas, barras ou setores.
+6. O sistema deve possuir um filtro do histórico de receitas e despesas por carteira e categorias.
 
 ### Descrição resumida dos Casos de Uso / Histórias de Usuário
 
@@ -196,14 +190,14 @@ Casos de uso:
 | **Requisitos associados** | RF001 |
 | **Fluxo Principal** | Entrar no aplicativo e cadastrar uma despesa |
 
-#### UC03 – Criar Conta Conjunta
+#### UC03 – Criar carteira Conjunta
 
-| **Descrição** | Eu como usuário quero criar uma conta conjunta |
+| **Descrição** | Eu como usuário quero criar uma carteira conjunta |
 | --- | --- |
 | **Atores** | Usuário |
 | **Prioridade** | Média |
 | **Requisitos associados** | RF004 |
-| **Fluxo Principal** | Entrar no aplicativo e cadastrar uma conta conjunta e adicionar outros usuários |
+| **Fluxo Principal** | Entrar no aplicativo e cadastrar uma carteira conjunta e adicionar outros usuários |
 
 #### UC04 – Categorizar Despesa
 
@@ -223,14 +217,14 @@ Casos de uso:
 | **Requisitos associados** | RF006 |
 | **Fluxo Principal** | Entrar no aplicativo, criar uma categoria e categorizar uma ou mais receita |
 
-#### UC06 – Cadastrar Banco
+#### UC06 – Cadastrar Carteira do Banco
 
-| **Descrição** | Eu como usuário quero cadastrar banco |
+| **Descrição** | Eu como usuário quero criar uma carteira para o meu banco |
 | --- | --- |
 | **Atores** | Usuário |
 | **Prioridade** | Média |
 | **Requisitos associados** | RF007 e RF008 |
-| **Fluxo Principal** | Entrar no aplicativo cadastrar no banco |
+| **Fluxo Principal** | Entrar no aplicativo criar a carteira |
 
 #### UC07 – Acessar relatório
 
@@ -241,16 +235,7 @@ Casos de uso:
 | **Requisitos associados** | RF009 e  RF012 |
 | **Fluxo Principal** | Entrar no aplicativo e acessar os relatórios |
 
-#### UC08 – Inserir lançamento via Alexa
-
-| **Descrição** | Eu como usuário quero inserir lançamentos via Alexa |
-| --- | --- |
-| **Atores** | Usuário |
-| **Prioridade** | Baixa |
-| **Requisitos associados** | RF010 |
-| **Fluxo Principal** | Vincular conta do aplicativo com Alexa e informar valor para a Alexa |
-
-#### UC09 – Criar objetivo financeiro
+#### UC08 – Criar objetivo financeiro
 
 | **Descrição** | Eu como usuário quero criar um objetivo financeiro |
 | --- | --- |
@@ -259,14 +244,6 @@ Casos de uso:
 | **Requisitos associados** | RF011 |
 | **Fluxo Principal** | Entrar no aplicativo e cadastrar um objetivo financeiro |
 
-#### UC10 – Consultar extrato
-
-| **Descrição** | Eu como usuário quero consultar extrato |
-| --- | --- |
-| **Atores** | Usuário |
-| **Prioridade** | Média |
-| **Requisitos associados** | RF009 |
-| **Fluxo Principal** | Entrar no aplicativo e consultar o extrato |
 
 Histórias de Usuário:
 
@@ -274,21 +251,18 @@ Histórias de Usuário:
 
 - Como usuário eu quero lançar minhas despesas pessoais para ter controle sobre meus gastos.
 
-- Como usuário eu quero criar uma conta conjunta para gerenciar lançamentos meus e dos meus familiares.
+- Como usuário eu quero criar uma carteira conjunta para gerenciar minhas transações e dos meus familiares.
 
 - Como usuário eu quero categorizar minhas despesas para saber em qual categoria é responsável pelos maiores gastos. 
 
 - Como usuário eu quero categorizar minhas receitas para saber em qual categoria é responsável pelos maiores ganhos. 
 
-- Como usuário eu quero conseguir cadastrar meus bancos para poder gerenciar qual é meu capital em cada um deles.
+- Como usuário eu quero conseguir cadastrar as carteiras dos meus bancos para poder gerenciar qual é meu capital em cada um deles.
 
 - Como usuário eu quero acessar relatórios para ver gráficos e estatísticas de médias entre despesas e receitas em dias, semanas ou meses, e realizar comparações com outros períodos para fornecer um pleno conhecimento sobre como está  a economia em relação ao passado.
 
-- Como usuário eu quero inserir lançamentos via comandos de voz da Alexa para uma maior comodidade em usar o aplicativo para gerenciar meu capital.
-
 - Como usuário eu quero criar um objetivo financeiro para poder acompanhar como estão minhas metas pessoas de ganho, econômica ou despesa.
 
-- Como usuário eu quero poder consultar extratos no aplicativo ou gerar para poder verificar meus lançamentos e exportar para outras pessoas caso necessário.
 
 
 ## 3.2. Visão Lógica
@@ -301,10 +275,10 @@ Histórias de Usuário:
 
 Entities:
 - User: cliente do sistema, representa a instância de um usuário do aplicativo.
-- Wallet: Agrupamento de lançamentos, usuários e metas. Pode ser conjunta (possuir mais de um usuário).
+- Wallet: Agrupamento de transações, usuários e metas. Pode ser conjunta (possuir mais de um usuário).
 - WalletIvite: Convite de um usuário para participar de uma carteira.
-- Transaction: Lançamentos monetários de gastos ou receitas, viculado a uma carteira.
-- Category: Categoria de um lançamento. É vinculado a carteira, para poder ser atribuído à qualquer lançamento desta carteira.
+- Transaction: transações monetários de gastos ou receitas, viculado a uma carteira.
+- Category: Categoria de um transação. É vinculado a carteira, para poder ser atribuído à qualquer transação desta carteira.
 - TransactionRecurency: Registro de um lancamento mensal, que se efetua e gera um lancamento quando atinge o dia registrado.
 - Goal: Objetivo de economia em um determinado período de uma carteira.
 
@@ -337,12 +311,12 @@ Repositories: As entidades do sistema possuem um respectiva interface repositór
 Diagrama de Entidade Relacionamento desenvolvido para garantir melhor visualização da persistência e integração dos dados utilizados no sistema.
 
 - user: Dados de usuários para autenticação.
-- wallet: Grupo que engloba várias transações. Ex: Conta do Banco Nubank, Conta conjunta de Ful e Ane
-- user_has_wallet: Vinculo entre usuário e contas
-- wallet_invites: Convites enviados de um usuário para outro usuário participar de conta conjunta
-- transaction: Lançamentos monetários de gastos ou receitas
-- category: Categoria de cada lançamento. Ex: Despesas com alimentação, Salário
-- transaction_recurrencies: Tabela de lançamentos que ocorrem mais de uma vez. Ex: Assinatura Netflix, Mensalidade PUC, Parcela 1 de 3 de TV
+- wallet: Grupo que engloba várias transações. Ex: carteira do Banco Nubank, carteira conjunta de Ful e Ane
+- user_has_wallet: Vinculo entre usuário e carteiras
+- wallet_invites: Convites enviados de um usuário para outro usuário participar de carteira conjunta
+- transaction: transações monetárias de gastos ou receitas
+- category: Categoria de cada transação. Ex: Despesas com alimentação, Salário
+- transaction_recurrencies: Tabela de transações que ocorrem mais de uma vez. Ex: Assinatura Netflix, Mensalidade PUC, Parcela 1 de 3 de TV
 - goal: Meta de economia em um determinado período
 
 
@@ -357,33 +331,93 @@ Nosso sistema tem apenas um ator, o Cliente Online (Usuário conectado a interne
 <a name="avaliacao"></a>
 # 4. Avaliação da Arquitetura
 
-_Esta seção descreve a avaliação da arquitetura apresentada, baseada no método ATAM._
+A avaliação da arquitetura desse projeto foi baseada no método ATAM (_Architecture Tradeoff Analysis Method_), que consiste basicamente em validar os requisitos não funcionais definidos no início do projeto. A metodologia avalia acessibilidade, desempenho, interoperabilidade, manutenibilidade, segurança e testabilidade. 
 
 ## 4.1. Cenários
 
-_Apresente os cenários de testes utilizados na realização dos testes da sua aplicação. Escolha cenários de testes que demonstrem os requisitos não funcionais sendo satisfeitos. Os requisitos a seguir são apenas exemplos de possíveis requisitos, devendo ser revistos, adequados a cada projeto e complementados de forma a terem uma especificação completa e auto-explicativa._
 
-**Cenário 1 - Acessibilidade:** Suspendisse consequat consectetur velit. Sed sem risus, dictum dictum facilisis vitae, commodo quis leo. Vivamus nulla sem, cursus a mollis quis, interdum at nulla. Nullam dictum congue mauris. Praesent nec nisi hendrerit, ullamcorper tortor non, rutrum sem. In non lectus tortor. Nulla vel tincidunt eros.
+**Cenário 1 - Acessibilidade:** Um usuário que possui problemas de visão, seja por idade avançada ou deficiência visual, necessita que os elementos da interface adaptem seus tamanhos ao aplicar zoom  (RNF001).
 
-**Cenário 2 - Interoperabilidade:** Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce ut accumsan erat. Pellentesque in enim tempus, iaculis sem in, semper arcu.
+**Cenário 2 - Desempenho:** Multíplos usuários registram transações financeiras simultaneamente pelo aplicativo mobile. Com isso, é necessário um servidor que suporte essa ação com um tempo de carregamento mínimo que não afete a experiência do usuário (RNF005).
 
-**Cenário 3 - Manutenibilidade:** Phasellus magna tellus, consectetur quis scelerisque eget, ultricies eu ligula. Sed rhoncus fermentum nisi, a ullamcorper leo fringilla id. Nulla lacinia sem vel magna ornare, non tincidunt ipsum rhoncus. Nam euismod semper ante id tristique. Mauris vel elit augue.
+**Cenário 3 - Interoperabilidade:** Um administrador da aplicação, necessita que a aplicação seja interoperável de modo a garantir que independente do sistema operacional que ele instalar o sistema funcione corretamente sem que fique fora do ar (RNF005).
 
-**Cenário 4 - Segurança:** Suspendisse consectetur porta tortor non convallis. Sed lobortis erat sed dignissim dignissim. Nunc eleifend elit et aliquet imperdiet. Ut eu quam at lacus tincidunt fringilla eget maximus metus. Praesent finibus, sapien eget molestie porta, neque turpis congue risus, vel porttitor sapien tortor ac nulla. Aliquam erat volutpat.
+**Cenário 4 - Manutenibilidade:** Um desenvolvedor que realizará uma manutenção na aplicação, terá facilidades ao encontrar uma aplicação modularizada, onde cada funcionalidade desempenhe apenas um papel (RNF003).
+
+**Cenário 5 - Segurança:** Um usuário deve se sentir seguro ao criar uma carteira tendo a garantia de que seus dados estão seguros e criptografados (RNF006).
+
+**Cenário 6 - Testabilidade:** A equipe de desenvolvimento, ao adicionar uma nova feature necessita verificar se não houve impacto nas outras funcionalidades. Nesse sentido, por ser um sistema distribuído, cada aplicação possui funcionalidades e testes que necessitam serem executados continuamente para garantir maior robustez (RNF002).
+
+**Cenário 7 - Acessibilidade:** Usuários com sensibilidade à luminosidade serão capazes de utilizar a aplicação em ambientes com pouca luz usando o modo escuro (RNF007).
 
 ## 4.2. Avaliação
 
-_Apresente as medidas registradas na coleta de dados. O que não for possível quantificar apresente uma justificativa baseada em evidências qualitativas que suportam o atendimento do requisito não-funcional. Apresente uma avaliação geral da arquitetura indicando os pontos fortes e as limitações da arquitetura proposta._
-
-| **Atributo de Qualidade:** | Segurança |
+| **Atributo de Qualidade:** | Acessibilidade |
 | --- | --- |
-| **Requisito de Qualidade** | Acesso aos recursos restritos deve ser controlado |
-| **Preocupação:** | Os acessos de usuários devem ser controlados de forma que cada um tenha acesso apenas aos recursos condizentes as suas credenciais. |
+| **Requisito de Qualidade** | Possuir uma interface responsiva |
+| **Preocupação:** | Os tamnhos dos elementos da interface deverão se adaptar à tela ao aplicar zoom. |
+| **Cenários(s):** | Cenário 1 |
+| **Ambiente:** | Aplicação web em operação normal |
+| **Estímulo:** | Acesso de usuários com problemas de visão que necessitam de zoom na tela. |
+| **Mecanismo:** | A aplicação possui elementos responsivos graças ao framework VueJs com Vuetify que se adapta às diferentes resoluções. |
+| **Medida de Resposta:** | A adaptação da tela não deve prejudicar nenhuma funcionalidade. |
+
+**Considerações sobre a arquitetura:**
+
+| **Riscos:** | Existe |
+| --- | --- |
+| **Pontos de Sensibilidade:** | Existe |
+| **Tradeoff:** | Existe |
+
+___
+
+| **Atributo de Qualidade:** | Desempenho |
+| --- | --- |
+| **Requisito de Qualidade** | Manter bom desempenho independente da quantidade de usuários  |
+| **Preocupação:** | A aplicação deve responder em um tempo que não afete a experiência do usuário. |
+| **Cenários(s):** | Cenário 2 |
+| **Ambiente:** | Sistema em sobrecarga de acessos |
+| **Estímulo:** | Mais de 100 usuários efetuando transações |
+| **Mecanismo:** | APIs RESTful desenvolvida em NodeJs, com endpoints otimizados para receber transações constantes utilizando arquitetura não bloqueante irá impedir mau desempenho. |
+| **Medida de Resposta:** | O tempo maximo de delay deverá ser de 3 segundos. |
+
+**Considerações sobre a arquitetura:**
+
+| **Riscos:** | Existe |
+| --- | --- |
+| **Pontos de Sensibilidade:** | Existe |
+| **Tradeoff:** | Não existe |
+
+___
+
+| **Atributo de Qualidade:** | Interoperabildiade |
+| --- | --- |
+| **Requisito de Qualidade** | O Sistema deve possuir comunicação entre suas aplicações distribuídas |
+| **Preocupação:** | Replicação e Consistência de dados. |
+| **Cenários(s):** | Cenário 3 |
+| **Ambiente:** | Sistema sendo utilizado em múltiplas plataformas |
+| **Estímulo:** | Usuário pode utilizar aplicação na mesma conta nas versões web e mobile. |
+| **Mecanismo:** | O sistema é distribuido e arquitetado via API NodeJs que possibilita a integração e comunicação dos serviços. |
+| **Medida de Resposta:** | Os dados inseridos não devem sofrer perdas ou alterações entre as plataformas. |
+
+**Considerações sobre a arquitetura:**
+
+| **Riscos:** | Existe |
+| --- | --- |
+| **Pontos de Sensibilidade:** | Existe |
+| **Tradeoff:** | Existe |
+
+___
+
+| **Atributo de Qualidade:** | Manutenabilidade |
+| --- | --- |
+| **Requisito de Qualidade** | O sistema deve ser modularizado |
+| **Preocupação:** | Manutenções futuras devem ser facilitadas. |
 | **Cenários(s):** | Cenário 4 |
-| **Ambiente:** | Sistema em operação normal |
-| **Estímulo:** | Acesso do administrador do sistema as funcionalidades de cadastro de novos produtos e exclusão de produtos. |
-| **Mecanismo:** | O servidor de aplicação (Rails) gera um _token_ de acesso para o usuário que se autentica no sistema. Este _token_ é transferido para a camada de visualização (Angular) após a autenticação e o tratamento visual das funcionalidades podem ser tratados neste nível. |
-| **Medida de Resposta:** | As áreas restritas do sistema devem ser disponibilizadas apenas quando há o acesso de usuários credenciados. |
+| **Ambiente:** | Sistema em manutenção |
+| **Estímulo:** | O sistema precisa de manutenção após a entrega. |
+| **Mecanismo:** | A aplicação é modularizada, onde cada funcionalidade desempenhe apenas um papel |
+| **Medida de Resposta:** | Cada caso de uso é modularizado o que facilita a manutenabilidade. |
 
 **Considerações sobre a arquitetura:**
 
@@ -391,6 +425,65 @@ _Apresente as medidas registradas na coleta de dados. O que não for possível q
 | --- | --- |
 | **Pontos de Sensibilidade:** | Não existe |
 | _ **Tradeoff** _ **:** | Não existe |
+
+___
+
+| **Atributo de Qualidade:** | Segurança |
+| --- | --- |
+| **Requisito de Qualidade** | Senhas devem ser criptografadas |
+| **Preocupação:** | Os dados críticos dos usuários devem ser armazenados de forma seguro. |
+| **Cenários(s):** | Cenário 5 |
+| **Ambiente:** | Sistema em operação normal |
+| **Estímulo:** | Usuário cria sua conta. |
+| **Mecanismo:** | O sistema criptofrafa as senhas do usuário em SHA256 ao serem inseridas no banco de dados. |
+| **Medida de Resposta:** | As áreas restritas do sistema devem exibir as senhas criptografadas. |
+
+**Considerações sobre a arquitetura:**
+
+| **Riscos:** | Não existe |
+| --- | --- |
+| **Pontos de Sensibilidade:** | Existe |
+| **Tradeoff:** | Não existe |
+
+___
+
+| **Atributo de Qualidade:** | Testabilidade |
+| --- | --- |
+| **Requisito de Qualidade** | Possuir cobertura de teste em todas as funcionalidades |
+| **Preocupação:** | Ao adicionar uma feature ou realizar manutenção, as demais funcionalidades não envolvidas devem manter suas funções intactas. |
+| **Cenários(s):** | Cenário 6 |
+| **Ambiente:** | Sistema com altearções |
+| **Estímulo:** | O sistema precisa de manutenção após a entrega. |
+| **Mecanismo:** | O sistema realiza teste de regreção, testando todas as funcionalidades para garantir o funcionamento. Caso exista alguma inconsistência, a modificação será detectada. |
+| **Medida de Resposta:** | As modificações não impactarão nenhuma das funcionalidades.|
+
+**Considerações sobre a arquitetura:**
+
+| **Riscos:** | Existe |
+| --- | --- |
+| **Pontos de Sensibilidade:** | Existe |
+| **Tradeoff:** | Não existe |
+
+___
+
+| **Atributo de Qualidade:** | Acessibilidade |
+| --- | --- |
+| **Requisito de Qualidade** | Possuir modo escuro |
+| **Preocupação:** | Usuários com sensibilidade à luminosidade serão capazes de utilizar a aplicação. |
+| **Cenários(s):** | Cenário 7 |
+| **Ambiente:** | Aplicação mobile em operação normal |
+| **Estímulo:** | Acesso de usuários em ambientes com baixa luminosidade. |
+| **Mecanismo:** | A aplicação possui o modo escuro, garantindo que os usuários não sintam qualquer tipo de incômodo causado pelo excesso de claridade. |
+| **Medida de Resposta:** | A mudança de tema deverá ser executada em menos de 2 segundos. |
+
+**Considerações sobre a arquitetura:**
+
+| **Riscos:** | Não existe |
+| --- | --- |
+| **Pontos de Sensibilidade:** | Não existe |
+| **Tradeoff:** | Não existe |
+
+___
 
 Evidências dos testes realizados
 
