@@ -277,14 +277,13 @@ Entities:
 - User: cliente do sistema, representa a instância de um usuário do aplicativo.
 - Wallet: Agrupamento de transações, usuários e metas. Pode ser conjunta (possuir mais de um usuário).
 - WalletIvite: Convite de um usuário para participar de uma carteira.
+- UserHasWallet: Tabela ternária entre Wallet e User, necessária para os vínculos de usuários em carteira compartilhadas.
 - Transaction: transações monetários de gastos ou receitas, viculado a uma carteira.
 - Category: Categoria de um transação. É vinculado a carteira, para poder ser atribuído à qualquer transação desta carteira.
 - TransactionRecurency: Registro de um lancamento mensal, que se efetua e gera um lancamento quando atinge o dia registrado.
 - Goal: Objetivo de economia em um determinado período de uma carteira.
 
-UseCases: Cada caso de uso do sistema possui uma classe UseCase ( regra de negócio ) e uma classe Controller ( handle de requests da API ), que toda Controller implementa a interface IController.
-
-Repositories: As entidades do sistema possuem um respectiva interface repositório para recuperar os dados, sem depender de implementação. A implementação é especificada na DBxRepository.
+UseCases: Cada caso de uso do sistema possui uma classe UseCase ( regra de negócio ) e uma classe Controller ( handle de requests da API ).
 
 ### Diagrama de componentes
 
