@@ -73,20 +73,26 @@
                                                 R${{
                                                     parseFloat(
                                                         wallet.initial_value
-                                                    ).toFixed(2)
+                                                    )
+                                                        .toFixed(2)
+                                                        .toString()
+                                                        .replace(".", ",")
                                                 }}
                                             </td>
                                             <td
                                                 v-if="
                                                     parseFloat(
                                                         wallet.currentAmount
-                                                    ) > 0
+                                                    ) >= 0
                                                 "
                                             >
                                                 R${{
                                                     parseFloat(
                                                         wallet.currentAmount
-                                                    ).toFixed(2)
+                                                    )
+                                                        .toFixed(2)
+                                                        .toString()
+                                                        .replace(".", ",")
                                                 }}
                                             </td>
                                             <td v-else>
@@ -95,7 +101,10 @@
                                                         parseFloat(
                                                             wallet.currentAmount
                                                         ) * -1
-                                                    ).toFixed(2)
+                                                    )
+                                                        .toFixed(2)
+                                                        .toString()
+                                                        .replace(".", ",")
                                                 }}
                                             </td>
                                             <td style="width: 200px">
@@ -449,7 +458,6 @@ export default {
                     .then((res) => {
                         this.wallets[i].currentAmount =
                             res.incoming - res.outcoming;
-                        console.log(this.wallets[i]);
                     })
                     .finally(() => {
                         this.loading = false;
