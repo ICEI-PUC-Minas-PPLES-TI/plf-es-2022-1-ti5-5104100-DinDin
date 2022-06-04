@@ -52,6 +52,8 @@ class UpdateTransactionController {
         const wallet_id = request.params.id; // * wallet_id of the transaction
         const transaction_id = request.params.trid; // * id of the transaction to be update
 
+        if (expired_at) expired_at += " 00:00";
+
         // TODO: need finish others intervals
         if (interval && interval != "M" && interval != "D")
             throw new AppError(

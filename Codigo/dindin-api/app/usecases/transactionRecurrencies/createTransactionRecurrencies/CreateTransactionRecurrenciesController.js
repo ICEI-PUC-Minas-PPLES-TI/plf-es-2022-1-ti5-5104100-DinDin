@@ -54,6 +54,8 @@ class CreateTransactionRecurrenciesController {
         const wallet_id = request.params.id; // * wallet_id of the transaction
         const user_id = request.userId;
 
+        if (expired_at) expired_at += " 00:00";
+
         // * Check fields
         if (!interval)
             throw new AppError(
