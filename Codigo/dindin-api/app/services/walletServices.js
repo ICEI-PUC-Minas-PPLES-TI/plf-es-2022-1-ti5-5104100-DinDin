@@ -23,7 +23,6 @@ module.exports = class WalletServices {
                 wallet_id,
             },
         });
-        const wallet = await Wallet.findByPk(wallet_id);
 
         return (
             (transactionsWalletBalance.dataValues.incoming ?? 0) -

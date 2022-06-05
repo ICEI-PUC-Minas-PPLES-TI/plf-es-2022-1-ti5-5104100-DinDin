@@ -21,10 +21,18 @@ class CreateWalletUseCase {
             throw new AppError(error.message, 500, error);
         });
 
-        if(initial_value > 0) {
+        if (initial_value > 0) {
             const createTransactionUseCase = new CreateTransactionUseCase();
             const dt = new Date();
-            await createTransactionUseCase.create(wallet.id, initial_value, 'Initial Value', `${dt.getFullYear()}-${dt.getMonth() +1}-${dt.getDate()}`,null,userID,null)
+            await createTransactionUseCase.create(
+                wallet.id,
+                initial_value,
+                "Initial Value",
+                `${dt.getFullYear()}-${dt.getMonth() + 1}-${dt.getDate()}`,
+                null,
+                userID,
+                null
+            );
         }
 
         return { id: wallet.id };

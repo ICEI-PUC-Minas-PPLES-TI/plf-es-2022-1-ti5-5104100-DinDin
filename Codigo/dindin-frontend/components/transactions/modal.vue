@@ -271,7 +271,9 @@
         <v-card v-else>
             <v-card-title class="text-h5 transactions-modal-title">
                 <h4>
-                    <span class="d-block text-center"> No wallets created! </span>
+                    <span class="d-block text-center">
+                        No wallets created!
+                    </span>
                 </h4>
                 <v-btn icon @click="$emit('input', false)">
                     <v-icon>mdi-close</v-icon>

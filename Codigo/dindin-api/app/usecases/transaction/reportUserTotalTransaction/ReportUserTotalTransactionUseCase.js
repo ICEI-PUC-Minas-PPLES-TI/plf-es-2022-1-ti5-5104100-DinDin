@@ -7,7 +7,6 @@ const Category = require("../../../models/Category");
 
 const Transaction = require("../../../models/Transaction");
 const UserHasWallet = require("../../../models/UserHasWallet");
-const Wallet = require("../../../models/Wallet");
 
 class ReportUserTotalTransactionUseCase {
     async report(query, user_id) {
