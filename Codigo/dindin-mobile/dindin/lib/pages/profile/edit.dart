@@ -51,10 +51,10 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void updateUser() async {
+  void updateUser(bool? hasPassword) async {
     final body = {'name': nameController.text};
-    if (currentPasswordController.text.length >= 8 &&
-        newPasswordController.text.length >= 8) {
+    if (newPasswordController.text.length >= 8 &&
+        (hasPassword == false || currentPasswordController.text.length >= 8)) {
       body['oldPassword'] = currentPasswordController.text;
       body['password'] = newPasswordController.text;
     }
@@ -134,40 +134,41 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(
                         height: 5,
                       ),
-                      TextFormField(
-                        keyboardType: TextInputType.visiblePassword,
-                        controller: currentPasswordController,
-                        obscureText: _showcurrentPassword,
-                        validator: (value) {
-                          if ((currentPasswordController.text.isEmpty &&
-                                  newPasswordController.text.isNotEmpty) ||
-                              (currentPasswordController.text.isNotEmpty &&
-                                  newPasswordController.text.isEmpty)) {
-                            return 'Please fill in both password fields.';
-                          } else if (currentPasswordController.text.length <
-                              8) {
-                            return 'Password must be at least 8 characters.';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Current Password',
-                          hintText: 'Enter your current password',
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(),
-                          ),
-                          suffixIcon: InkWell(
-                            onTap: _togglecurrentPassword,
-                            child: Icon(
-                              _showcurrentPassword
-                                  ? FontAwesomeIcons.eye
-                                  : FontAwesomeIcons.eyeSlash,
-                              size: 15.0,
-                              color: Colors.black,
+                      if (user.hasPassword == true)
+                        TextFormField(
+                          keyboardType: TextInputType.visiblePassword,
+                          controller: currentPasswordController,
+                          obscureText: _showcurrentPassword,
+                          validator: (value) {
+                            if ((currentPasswordController.text.isEmpty &&
+                                    newPasswordController.text.isNotEmpty) ||
+                                (currentPasswordController.text.isNotEmpty &&
+                                    newPasswordController.text.isEmpty)) {
+                              return 'Please fill in both password fields.';
+                            } else if (currentPasswordController.text.length <
+                                8) {
+                              return 'Password must be at least 8 characters.';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Current Password',
+                            hintText: 'Enter your current password',
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(),
+                            ),
+                            suffixIcon: InkWell(
+                              onTap: _togglecurrentPassword,
+                              child: Icon(
+                                _showcurrentPassword
+                                    ? FontAwesomeIcons.eye
+                                    : FontAwesomeIcons.eyeSlash,
+                                size: 15.0,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ),
-                      ),
                       const SizedBox(
                         height: 10,
                       ),
@@ -176,8 +177,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         controller: newPasswordController,
                         obscureText: _showNewPassword,
                         validator: (value) {
-                          if ((currentPasswordController.text.isEmpty &&
-                                  newPasswordController.text.isNotEmpty) ||
+                          if (user.hasPassword == true &&
+                                  (currentPasswordController.text.isEmpty &&
+                                      newPasswordController.text.isNotEmpty) ||
                               (currentPasswordController.text.isNotEmpty &&
                                   newPasswordController.text.isEmpty)) {
                             return 'Please fill in both password fields.';
@@ -241,7 +243,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               if (_formKey.currentState!.validate()) {
                                 // If the form is valid, display a snackbar. In the real world,
                                 // you'd often call a server or save the information in a database.
-                                updateUser();
+                                updateUser(user.hasPassword);
                               }
                             },
                           ),

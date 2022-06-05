@@ -63,7 +63,6 @@
                         </h4>
                     </v-card-title>
                     <v-card-text>
-                        <!-- wallet Add Form -->
                         <v-container fluids>
                             <v-form
                                 ref="formUserPassword"
@@ -72,6 +71,7 @@
                             >
                                 <v-row class="pb-2">
                                     <v-text-field
+                                        v-if="user.hasPassword"
                                         v-model="user.oldPassword"
                                         :rules="[rules.required]"
                                         outlined
@@ -156,6 +156,7 @@ export default {
             .then((res) => {
                 this.user.id = res.data.id;
                 this.user.name = res.data.name;
+                this.user.hasPassword = res.data.hasPassword;
             })
             .catch((err) => {
                 Swal.fire({

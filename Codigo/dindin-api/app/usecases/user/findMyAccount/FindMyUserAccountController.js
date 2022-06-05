@@ -9,6 +9,7 @@ class FindMyUserAccountController {
             throw new AppError("Please send a valid id on url", 422);
         const findUserAccountUseCase = new FindUserAccountUseCase();
         const user = await findUserAccountUseCase.find(id);
+        user.hasPassword = await user.verifyUserHasPassword();
         return response.status(200).json(user);
     }
 }
