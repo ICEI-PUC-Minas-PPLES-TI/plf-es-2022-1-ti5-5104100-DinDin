@@ -124,7 +124,7 @@ class _ExtractState extends State<Extract> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const TransactionForm()),
+              MaterialPageRoute(builder: (context) => const TransactionForm(null)),
             );
           },
           child: const Icon(Icons.add),

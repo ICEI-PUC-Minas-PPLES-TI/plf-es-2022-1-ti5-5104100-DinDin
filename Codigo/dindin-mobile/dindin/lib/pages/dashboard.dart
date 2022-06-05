@@ -437,7 +437,7 @@ class _DashboardState extends State<Dashboard> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const TransactionForm()),
+              MaterialPageRoute(builder: (context) => const TransactionForm(null)),
             );
           },
           child: const Icon(Icons.add),

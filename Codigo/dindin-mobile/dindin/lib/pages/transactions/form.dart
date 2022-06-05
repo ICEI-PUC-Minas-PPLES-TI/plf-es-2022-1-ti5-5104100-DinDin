@@ -1,5 +1,6 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dindin/helpers/api_url.dart';
+import 'package:dindin/models/transaction.dart';
 import 'package:dindin/widgets/category_drop.dart';
 import 'package:dindin/widgets/wallet_drop.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class TransactionForm extends StatefulWidget {
-  const TransactionForm({Key? key}) : super(key: key);
+  final Transaction? transaction;
+  const TransactionForm(this.transaction ,{Key? key}) : super(key: key);
 
   @override
   _TransactionFormState createState() => _TransactionFormState();
@@ -31,6 +33,16 @@ class _TransactionFormState extends State<TransactionForm> {
   String recurrency = "D";
   double buttonHeight = 0.06;
   double buttonWidth = 0.45;
+
+  @override
+  void initState(){
+    if(widget.transaction != null) { // Edit
+      _descriptionController.text = widget.transaction!.description;
+      _amountController.text = widget.transaction!.value.toString();
+      _isIncome = widget.transaction!.value > 0;
+    }
+    super.initState();
+  }
 
   void changeButtonState() {
     setState(() {
