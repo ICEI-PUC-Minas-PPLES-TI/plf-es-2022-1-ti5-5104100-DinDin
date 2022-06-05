@@ -7,7 +7,7 @@ class UpdateGoalUseCase {
         const findGoalUseCase = new FindGoalUseCase();
         const goal = await findGoalUseCase.find(id);
 
-        let status = goal.status;
+        let status = undefined;
 
         // when a goal is updated to saving and the expire_at is not past,
         // the goal status should be updated to "PENDING"
@@ -39,7 +39,7 @@ class UpdateGoalUseCase {
             });
 
         if (type === "A")
-            new GoalService().updateAchievemetWalletGoals(wallet_id);
+            new GoalService().updateAchievemetWalletGoals(goal.wallet_id);
 
         return goal;
     }
