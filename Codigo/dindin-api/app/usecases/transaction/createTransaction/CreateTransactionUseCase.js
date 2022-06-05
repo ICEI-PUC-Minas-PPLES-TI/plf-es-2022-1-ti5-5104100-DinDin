@@ -2,6 +2,7 @@ const AppError = require("../../../errors/AppError");
 const Category = require("../../../models/Category");
 
 const Transaction = require("../../../models/Transaction");
+const GoalService = require("../../../services/goalServices");
 
 class CreateTransactionUseCase {
     async create(
@@ -45,6 +46,9 @@ class CreateTransactionUseCase {
         }).catch((error) => {
             throw new AppError(error.message, 500, error);
         });
+
+        // don't put a await in this, of it will slow down the create transaction process
+        new GoalService().updateAchievemetWalletGoals(wallet_id);
 
         return { id: transaction.id };
     }
