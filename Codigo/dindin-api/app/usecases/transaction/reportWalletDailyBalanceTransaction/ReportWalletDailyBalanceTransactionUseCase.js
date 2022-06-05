@@ -159,11 +159,13 @@ class ReportWalletBalanceTransactionUseCase {
             const dayToAdd = new Date(
                 sevenDaysAgo.getFullYear(),
                 sevenDaysAgo.getMonth(),
-                sevenDaysAgo.getDate() + index
+                sevenDaysAgo.getDate()
             );
+            dayToAdd.setDate(dayToAdd.getDate() + index + 1);
+
             const year = dayToAdd.getFullYear();
             const month = dayToAdd.getMonth() + 1;
-            const day = dayToAdd.getDate() + 1;
+            const day = dayToAdd.getDate();
             const dayToAddWithoutTime =
                 year +
                 "-" +

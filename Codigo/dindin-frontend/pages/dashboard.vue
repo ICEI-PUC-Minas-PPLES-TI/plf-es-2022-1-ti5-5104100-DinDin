@@ -26,7 +26,9 @@
                                                     (
                                                         ioValues.incoming -
                                                         ioValues.outcoming
-                                                    ).toFixed(2)
+                                                    )
+                                                        .toFixed(2)
+                                                        .replace(".", ",")
                                                 }}</b
                                             >
                                         </v-col>
@@ -44,7 +46,9 @@
                                             <br />
                                             <b
                                                 >R${{
-                                                    ioValues.incoming.toFixed(2)
+                                                    ioValues.incoming
+                                                        .toFixed(2)
+                                                        .replace(".", ",")
                                                 }}</b
                                             >
                                         </v-col>
@@ -62,9 +66,9 @@
                                             <br />
                                             <b
                                                 >R${{
-                                                    ioValues.outcoming.toFixed(
-                                                        2
-                                                    )
+                                                    ioValues.outcoming
+                                                        .toFixed(2)
+                                                        .replace(".", ",")
                                                 }}</b
                                             >
                                         </v-col>
