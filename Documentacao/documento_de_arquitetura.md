@@ -542,5 +542,6 @@ Evidências dos testes realizados
 <a name="apendices"></a>
 # 6. APÊNDICES
 
-Github: [ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin](ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin)
+- Vídeo de apresentação: [Projeto Dindin](https://youtu.be/-tOTOLV3k0w)
+- Github: [ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin](https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin)
 
