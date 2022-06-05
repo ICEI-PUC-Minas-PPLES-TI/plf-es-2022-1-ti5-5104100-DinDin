@@ -433,13 +433,10 @@ export default {
             this.goalToView = goal;
             this.viewGoalDetails = true;
 
-            this.$axios
-                .get(
-                    `/report/balance?wallet_id=${goal.wallet_id}&created_at_end=${goal.expire_at}`
-                )
-                .then((res) => {
-                    this.goalProgressValue =
-                        res.data.incoming - res.data.outcoming;
+            this.$axios.get(`/report/goal/${goal.id}`).then((res) => {
+                console.log(res);
+                if (res.data?.value) {
+                    this.goalProgressValue = res.data.value;
                     this.goalProgressBarValue = Math.ceil(
                         (this.goalProgressValue / this.goalToView.value) * 100
                     );
@@ -448,7 +445,11 @@ export default {
                     } else if (this.goalProgressBarValue < 0) {
                         this.goalProgressBarValue = 0;
                     }
-                });
+                } else {
+                    this.goalProgressValue = 0;
+                    this.goalProgressBarValue = 0;
+                }
+            });
         },
     },
     computed: {

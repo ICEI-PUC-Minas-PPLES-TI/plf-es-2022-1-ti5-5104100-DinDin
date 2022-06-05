@@ -60,17 +60,16 @@ class _GoalViewState extends State<GoalView> {
       expireAt = splited[2] + "/" + splited[1] + "/" + splited[0];
       walletId = body['wallet_id'];
       walletDescription = (body['wallet']['description']);
-      getReportProgress(walletId, body['expire_at']);
+      getReportProgress(id);
     });
   }
 
-  void getReportProgress(id, expiredAt) async {
-    var response = await ApiURL.get(
-        '/report/balance?wallet_id=$id&&created_at_end=$expiredAt');
+  void getReportProgress(id) async {
+    var response = await ApiURL.get('/report/goal/$id');
     Map<String, dynamic> body = jsonDecode(response.body);
-    if (body['incoming'] != null) {
+    if (body['value'] != null) {
       setState(() {
-        valueUntilNow = body['incoming'] - body['outcoming'];
+        valueUntilNow = body['value'];
         progress = valueUntilNow / value;
 
         if (progress > 1) {
