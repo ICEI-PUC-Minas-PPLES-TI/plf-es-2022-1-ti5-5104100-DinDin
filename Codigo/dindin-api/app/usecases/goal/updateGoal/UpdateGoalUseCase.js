@@ -7,7 +7,7 @@ class UpdateGoalUseCase {
         const findGoalUseCase = new FindGoalUseCase();
         const goal = await findGoalUseCase.find(id);
 
-        let status = undefined;
+        let status = goal.status;
 
         // when a goal is updated to saving and the expire_at is not past,
         // the goal status should be updated to "PENDING"
