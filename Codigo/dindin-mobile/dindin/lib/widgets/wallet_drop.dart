@@ -8,8 +8,9 @@ import 'package:http/http.dart' as http;
 
 class DropWallet extends StatefulWidget {
   final Function changeWalletDrop;
+  final String? walletID;
 
-  const DropWallet(this.changeWalletDrop, {Key? key}) : super(key: key);
+  const DropWallet(this.changeWalletDrop, this.walletID, {Key? key}) : super(key: key);
 
   @override
   _DropWalletState createState() => _DropWalletState();
@@ -23,6 +24,10 @@ class _DropWalletState extends State<DropWallet> {
   void initState() {
     super.initState();
     getWallets();
+
+    if(widget.walletID != null){
+      dropValue.value = widget.walletID!;
+    }
   }
 
   void getWallets() async {

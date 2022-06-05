@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class TransactionForm extends StatefulWidget {
   final Transaction? transaction;
@@ -37,12 +38,30 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   void initState(){
+    super.initState();
+
     if(widget.transaction != null) { // Edit
       _descriptionController.text = widget.transaction!.description;
-      _amountController.text = widget.transaction!.value.toString();
+      _amountController.text = (widget.transaction!.value).abs().toStringAsFixed(2).replaceAll('.', ',');
       _isIncome = widget.transaction!.value > 0;
+      final DateFormat formatter = DateFormat('dd/MM/yyyy');
+      date = DateTime.parse(widget.transaction!.date);
+      var dt = formatter.format(DateTime.parse(widget.transaction!.date)).toString();
+      _dateController.text = dt;
+      wallet = widget.transaction!.walletId;
+      if(widget.transaction!.category != null) {
+        category = widget.transaction!.category!.id.toString();
+      }
+      
+      if(widget.transaction!.transactionRecurrencies != null) {
+        _isChecked = true;
+        recurrency = widget.transaction!.transactionRecurrencies!.interval;
+        if(widget.transaction!.transactionRecurrencies!.expiredAt != null) {
+          _endDateController.text = formatter.format(DateTime.parse(widget.transaction!.transactionRecurrencies!.expiredAt!)).toString();
+          endDate = DateTime.parse(widget.transaction!.transactionRecurrencies!.expiredAt!);
+        }
+      }
     }
-    super.initState();
   }
 
   void changeButtonState() {
@@ -67,7 +86,6 @@ class _TransactionFormState extends State<TransactionForm> {
     setState(() {
       category = id;
     });
-    print(category);
   }
 
   void insertTransaction() async {
@@ -92,12 +110,6 @@ class _TransactionFormState extends State<TransactionForm> {
       ));
       return;
     }
-    print(wallet);
-    print("category:");
-    print(category);
-    var url = ApiURL.baseUrl + "/wallet/" + wallet + "/transaction";
-    final Uri uri = Uri.parse(url);
-    var token = await ApiURL.getToken();
 
     var body = {
       'description': _descriptionController.text,
@@ -111,39 +123,73 @@ class _TransactionFormState extends State<TransactionForm> {
       body['category_id'] = category!;
     }
 
-    var response =
-        await http.post(uri, headers: {'Authorization': token}, body: body);
-    var status = response.statusCode;
-    if (status == 201) {
-      print('created');
-      print(response.body);
-    } else {
-      print(response.body);
+    var token = await ApiURL.getToken();
+
+    if(widget.transaction == null) { // Create
+      var url = ApiURL.baseUrl + "/wallet/" + wallet + "/transaction";
+      final Uri uri = Uri.parse(url);
+      var response =
+          await http.post(uri, headers: {'Authorization': token}, body: body);
+      var status = response.statusCode;
+      if (status == 201) {
+        print('created');
+        print(response.body);
+      } else {
+        print(response.body);
+      }
+    } else { // Edit
+      var url = ApiURL.baseUrl + "/wallet/" + wallet + "/transaction/" + widget.transaction!.id;
+      final Uri uri = Uri.parse(url);
+
+      var response =
+          await http.put(uri, headers: {'Authorization': token}, body: body);
+      var status = response.statusCode;
+      if (status == 200) {
+        print('updated');
+        print(response.body);
+      } else {
+        print(response.body);
+      }
     }
 
     if (_isChecked) {
+      var bodyRec = {
+          'description': _descriptionController.text,
+          'value': _isIncome ? currencyFormat(_amountController.text).toString() : (double.parse(currencyFormat(_amountController.text).toString()) * -1)
+          .toString(),
+          'day': '${date.day}',
+          'category_id': category ?? "0",
+          'interval': recurrency,
+          'expired_at': '${endDate!.year}-${endDate!.month}-${endDate!.day}'
+        };
+      print(bodyRec);
       // Recurrency ON
-      var url2 =
-          ApiURL.baseUrl + "/wallet/" + wallet + "/transactionrecurrencies";
-      final Uri uri2 = Uri.parse(url2);
-
-      var response2 = await http.post(uri2, headers: {
-        'Authorization': token
-      }, body: {
-        'description': _descriptionController.text,
-        'value': _isIncome ? currencyFormat(_amountController.text).toString() : (double.parse(currencyFormat(_amountController.text).toString()) * -1)
-        .toString(),
-        'day': '${date.day}',
-        'category_id': category ?? "0",
-        'interval': recurrency,
-        'expired_at': '${endDate!.year}-${endDate!.month}-${endDate!.day}'
-      });
-      var status2 = response2.statusCode;
-      if (status2 == 201) {
-        print('created rec');
-        print(response2.body);
-      } else {
-        print(response2.body);
+      if(widget.transaction == null || widget.transaction?.transactionRecurrencies == null ) { // Create
+        var url2 = ApiURL.baseUrl + "/wallet/" + wallet + "/transactionrecurrencies";
+        final Uri uri2 = Uri.parse(url2);
+        var response2 = await http.post(uri2, headers: {
+          'Authorization': token
+        }, body: bodyRec);
+        var status2 = response2.statusCode;
+        if (status2 == 201) {
+          print('created rec');
+          print(response2.body);
+        } else {
+          print(response2.body);
+        }
+      } else if(widget.transaction?.transactionRecurrencies != null) { // Edit
+        var url2 = ApiURL.baseUrl + "/wallet/" + wallet + "/transactionrecurrencies/" + widget.transaction!.transactionRecurrencies!.id.toString();
+        final Uri uri2 = Uri.parse(url2);
+        var response2 = await http.put(uri2, headers: {
+          'Authorization': token
+        }, body: bodyRec);
+        var status2 = response2.statusCode;
+        if (status2 == 200) {
+          print('update rec');
+          print(response2.body);
+        } else {
+          print(response2.body);
+        }
       }
     }
     Navigator.pushReplacement(
@@ -246,7 +292,7 @@ class _TransactionFormState extends State<TransactionForm> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    DropWallet(changeWalletId),
+                    DropWallet(changeWalletId, widget.transaction != null? widget.transaction!.walletId: null),
                     const Divider(height: 10),
                     // Amount text field
                     TextField(
@@ -342,7 +388,7 @@ class _TransactionFormState extends State<TransactionForm> {
                           )),
                     ),
                     const Divider(height: 10),
-                    DropCategory(changeCategoryId, key: _key),
+                    DropCategory(changeCategoryId,  widget.transaction , key: _key),
                     const Divider(height: 10),
                     // Reccurrent
                     CheckboxListTile(

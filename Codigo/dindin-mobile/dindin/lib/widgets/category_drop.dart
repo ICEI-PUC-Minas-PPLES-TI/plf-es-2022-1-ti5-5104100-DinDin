@@ -2,14 +2,16 @@ import 'dart:convert';
 
 import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/models/category.dart';
+import 'package:dindin/models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class DropCategory extends StatefulWidget {
   final Function changeCategoryDrop;
+  final Transaction? transaction;
 
-  const DropCategory(this.changeCategoryDrop, {Key? key}) : super(key: key);
+  const DropCategory(this.changeCategoryDrop, this.transaction, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => DropCategoryState();
@@ -19,6 +21,19 @@ class DropCategoryState extends State<DropCategory> {
   List<Category> categories = [];
   final dropValue = ValueNotifier('');
   var walletId = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    if(widget.transaction != null){
+      setWallet(widget.transaction!.value > 0 ? "IN": "OUT",widget.transaction!.walletId);
+      if(widget.transaction!.category != null) {
+        dropValue.value = widget.transaction!.category!.id.toString();
+      }
+    }
+  }
+
 
   void setWallet(String type, wallet) async {
     if (wallet == null) {
