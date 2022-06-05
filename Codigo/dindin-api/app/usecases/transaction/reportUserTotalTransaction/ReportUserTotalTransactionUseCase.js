@@ -31,30 +31,6 @@ class ReportUserTotalTransactionUseCase {
                 );
         }
 
-        const userWallets = await UserHasWallet.findAll({
-            attributes: ["wallet_id"],
-            where: {
-                user_id: user_id,
-            },
-            raw: true,
-        });
-        const userWalletsIds = [];
-        for (let index = 0; index < userWallets.length; index++) {
-            userWalletsIds.push(userWallets[index]["wallet_id"]);
-            console.log(userWallets[index]["wallet_id"]);
-        }
-        const wallets = await Wallet.findAll({
-            attributes: ["initial_value"],
-            where: {
-                id: userWalletsIds,
-            },
-            raw: true,
-        });
-        let initialValueSum = 0;
-        for (let index = 0; index < userWallets.length; index++) {
-            initialValueSum += wallets[index]["initial_value"];
-        }
-
         if (query.description) {
             whre.description = sequelize.where(
                 sequelize.fn(
@@ -124,7 +100,7 @@ class ReportUserTotalTransactionUseCase {
         });
 
         return {
-            total: transactionsUserTotal + initialValueSum,
+            total: transactionsUserTotal,
         };
     }
 }

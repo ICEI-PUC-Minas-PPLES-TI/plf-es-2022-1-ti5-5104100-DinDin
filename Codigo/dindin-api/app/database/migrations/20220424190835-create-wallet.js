@@ -23,10 +23,6 @@ module.exports = {
                     allowNull: false,
                     defaultValue: false,
                 },
-                initial_value: {
-                    type: DataTypes.DOUBLE,
-                    defaultValue: 0,
-                },
                 owner_id: {
                     type: DataTypes.INTEGER.UNSIGNED,
                     allowNull: false,

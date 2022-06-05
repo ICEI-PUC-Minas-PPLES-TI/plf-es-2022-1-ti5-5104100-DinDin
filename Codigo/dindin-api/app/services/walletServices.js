@@ -26,7 +26,6 @@ module.exports = class WalletServices {
         const wallet = await Wallet.findByPk(wallet_id);
 
         return (
-            wallet.initial_value +
             (transactionsWalletBalance.dataValues.incoming ?? 0) -
             (transactionsWalletBalance.dataValues.outcoming ?? 0)
         );
