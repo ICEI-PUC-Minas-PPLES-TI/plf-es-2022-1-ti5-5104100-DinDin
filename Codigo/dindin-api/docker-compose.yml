@@ -5,6 +5,7 @@ services:
     image: mysql:5.7
     networks:
       - db-net
+    container_name: dindin-mysql
     restart: unless-stopped
     env_file: ./.env
     environment:
@@ -26,7 +27,7 @@ services:
       - 'mysqldb:mysql'
     working_dir: /usr/src/dindin-api
     container_name: dindin-api
-    restart: always
+    restart: unless-stopped
     env_file: ./.env
     volumes:
       - ./:/usr/src/dindin-api

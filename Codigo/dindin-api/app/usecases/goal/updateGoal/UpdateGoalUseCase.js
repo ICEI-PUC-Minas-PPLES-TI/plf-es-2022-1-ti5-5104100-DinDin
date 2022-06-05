@@ -3,7 +3,7 @@ const GoalService = require("../../../services/goalServices");
 const FindGoalUseCase = require("../findGoal/FindGoalUseCase");
 
 class UpdateGoalUseCase {
-    async update(id, description, value, type, expire_at, wallet_id) {
+    async update(id, description, value, type, expire_at) {
         const findGoalUseCase = new FindGoalUseCase();
         const goal = await findGoalUseCase.find(id);
 
@@ -28,7 +28,6 @@ class UpdateGoalUseCase {
                     value,
                     type,
                     expire_at,
-                    wallet_id,
                     status,
                 },
                 {

@@ -47,7 +47,6 @@ class ListCategoriesController {
         const listCategoriesUseCase = new ListCategoriesUseCase();
         const categories = await listCategoriesUseCase.list(
             request.query,
-            request.userId,
             request.params.id
         );
         return response.status(200).json(categories);

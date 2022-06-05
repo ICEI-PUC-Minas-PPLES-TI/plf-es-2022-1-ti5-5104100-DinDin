@@ -58,7 +58,7 @@ describe("PUT /goal test suite", () => {
         expect(response.body.value).toEqual(mockGoal.value);
         expect(response.body.type).toEqual(mockGoal.type);
         expect(response.body.expire_at).toEqual(mockGoal.expire_at);
-        expect(response.body.wallet_id).toEqual(mockGoal.wallet_id);
+        expect(response.body.wallet_id).toEqual(walletToCreate.toString());
     });
 
     it("should not update a goal's status", async () => {
@@ -103,7 +103,7 @@ describe("PUT /goal test suite", () => {
         expect(response.body.value).toEqual(mockGoal.value);
         expect(response.body.type).toEqual(mockGoal.type);
         expect(response.body.expire_at).toEqual(mockGoal.expire_at);
-        expect(response.body.wallet_id).toEqual(mockGoal.wallet_id);
+        expect(response.body.wallet_id).toEqual(walletToCreate.toString());
     });
 
     it("should update only value", async () => {
@@ -127,7 +127,7 @@ describe("PUT /goal test suite", () => {
         expect(response.body.value).toEqual(mockGoal.value);
         expect(response.body.type).toEqual(mockGoal.type);
         expect(response.body.expire_at).toEqual(mockGoal.expire_at);
-        expect(response.body.wallet_id).toEqual(mockGoal.wallet_id);
+        expect(response.body.wallet_id).toEqual(walletToCreate.toString());
     });
 
     it("should update only type", async () => {
@@ -151,7 +151,7 @@ describe("PUT /goal test suite", () => {
         expect(response.body.value).toEqual(mockGoal.value);
         expect(response.body.type).toEqual(mockGoal.type);
         expect(response.body.expire_at).toEqual(mockGoal.expire_at);
-        expect(response.body.wallet_id).toEqual(mockGoal.wallet_id);
+        expect(response.body.wallet_id).toEqual(walletToCreate.toString());
     });
 
     it("should update only expire_at", async () => {
@@ -175,10 +175,10 @@ describe("PUT /goal test suite", () => {
         expect(response.body.value).toEqual(mockGoal.value);
         expect(response.body.type).toEqual(mockGoal.type);
         expect(response.body.expire_at).toEqual(mockGoal.expire_at);
-        expect(response.body.wallet_id).toEqual(mockGoal.wallet_id);
+        expect(response.body.wallet_id).toEqual(walletToCreate.toString());
     });
 
-    it("should update only wallet_id", async () => {
+    it("should not update wallet_id", async () => {
         const mockGoal = {
             description: "goal to update",
             value: 2000,
@@ -199,23 +199,7 @@ describe("PUT /goal test suite", () => {
         expect(response.body.value).toEqual(mockGoal.value);
         expect(response.body.type).toEqual(mockGoal.type);
         expect(response.body.expire_at).toEqual(mockGoal.expire_at);
-        expect(response.body.wallet_id).toEqual(mockGoal.wallet_id);
-    });
-
-    it("should not create a goal that has an unexisting wallet", async () => {
-        const mockGoal = {
-            description: "my goal",
-            value: 2000,
-            type: "A",
-            expire_at: "2030-10-10",
-            wallet_id: 125999002, //unexisting wallet
-        };
-
-        const response = await request
-            .put("/api/goal/" + goalIdToValidations)
-            .send(mockGoal);
-
-        expect(response.statusCode).toEqual(422);
+        expect(response.body.wallet_id).toEqual(walletToCreate.toString());
     });
 
     it("should not create a goal that has a past limit date", async () => {
@@ -289,22 +273,6 @@ describe("PUT /goal test suite", () => {
             type: "A",
             expire_at: "notADate",
             wallet_id: walletToCreate,
-        };
-
-        const response = await request
-            .put("/api/goal/" + goalIdToValidations)
-            .send(mockGoal);
-
-        expect(response.statusCode).toEqual(422);
-    });
-
-    it("should fail validation with a invalid wallet_id", async () => {
-        const mockGoal = {
-            description: "my goal",
-            value: 2000,
-            type: "A",
-            expire_at: "2030-10-10",
-            wallet_id: "notAId",
         };
 
         const response = await request

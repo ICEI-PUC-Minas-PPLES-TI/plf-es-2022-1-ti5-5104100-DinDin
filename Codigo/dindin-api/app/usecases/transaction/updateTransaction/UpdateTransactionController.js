@@ -34,6 +34,8 @@ class UpdateTransactionController {
         const wallet_id = request.params.id; // * wallet_id of the transaction
         const transaction_id = request.params.tid; // * id of the transaction to be update
 
+        if (date) date += " 00:00";
+
         const updateTransactionUseCase = new UpdateTransactionUseCase();
         const transaction = await updateTransactionUseCase.update(
             transaction_id,
