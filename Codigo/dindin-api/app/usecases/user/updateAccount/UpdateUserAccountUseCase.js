@@ -12,12 +12,12 @@ class UpdateUserAccountUseCase {
 
         let user = await User.scope("withPassword").findByPk(id);
 
-        console.log("update trem", id, name, password, oldPassword, user)
+        console.log("update trem", id, name, password, oldPassword, user);
 
         let bcryptPassword;
         if (password) {
             const hasPassword = await user.verifyUserHasPassword();
-            
+
             if (hasPassword && !oldPassword)
                 throw new AppError(
                     "Current password is required when changing the password!",
