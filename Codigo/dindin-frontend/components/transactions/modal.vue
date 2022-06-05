@@ -5,7 +5,7 @@
         @click:outside="$emit('input', false)"
         @keydown.esc="$emit('input', false)"
     >
-        <v-card class="pa-2">
+        <v-card v-if="wallets.length > 0" class="pa-2">
             <v-card-title class="text-h5 transactions-modal-title">
                 <h4>
                     <span> {{ title }}</span>
@@ -170,7 +170,7 @@
                                     outlined
                                     mandatory
                                 >
-                                    <v-btn value="D"> Daylly </v-btn>
+                                    <v-btn value="D"> Daily </v-btn>
                                     <v-btn value="M"> Monthly </v-btn>
                                 </v-btn-toggle>
                             </v-col>
@@ -267,6 +267,26 @@
                     </v-col>
                 </v-row>
             </v-card-actions>
+        </v-card>
+        <v-card v-else>
+            <v-card-title class="text-h5 transactions-modal-title">
+                <h4>
+                    <span class="d-block text-center"> No wallets created! </span>
+                </h4>
+                <v-btn icon @click="$emit('input', false)">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+            </v-card-title>
+            <v-card-text>
+                <v-btn
+                    color="blue"
+                    text
+                    class="d-block text-center"
+                    to="/wallets"
+                    @click.stop="$emit('input', false)"
+                    >Create One</v-btn
+                >
+            </v-card-text>
         </v-card>
     </v-dialog>
 </template>

@@ -115,7 +115,7 @@
                                     outlined
                                     mandatory
                                 >
-                                    <v-btn value="D"> Daylly </v-btn>
+                                    <v-btn value="D"> Daily </v-btn>
                                     <v-btn value="M"> Monthly </v-btn>
                                 </v-btn-toggle>
                             </v-col>
