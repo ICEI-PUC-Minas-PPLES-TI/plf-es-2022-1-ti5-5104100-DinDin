@@ -1,8 +1,9 @@
+import 'package:dindin/pages/goal/list.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:dindin/helpers/api_url.dart';
-import 'package:dindin/widgets/wallet_drop.dart';
+import 'package:dindin/widgets/wallet_drop_border.dart';
 import 'package:flutter/services.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
@@ -28,6 +29,28 @@ class _GoalCreateState extends State<GoalCreate> {
       wallet = id;
     });
     //_key.currentState!.setWallet(_isIncome ? "IN" : "OUT", id);
+  }
+
+  num currencyFormat(var value) {
+    var firstnum = 0;
+    for (var a = 0; a < value.length; a++) {
+      if (_isNumeric(value.substring(a, a + 1))) {
+        firstnum = a;
+        a = value.length;
+      }
+    }
+    String removedot = value.replaceAll(".", "");
+    String chageforcomma = removedot.replaceAll(",", ".");
+    double resp = double.parse(chageforcomma.substring(firstnum));
+    return resp;
+  }
+
+  bool _isNumeric(String str) {
+    // ignore: unnecessary_null_comparison
+    if (str == null) {
+      return false;
+    }
+    return double.tryParse(str) != null;
   }
 
   @override
@@ -247,17 +270,20 @@ class _GoalCreateState extends State<GoalCreate> {
                               'Authorization': token
                             }, body: {
                               'description': _descriptionController.text,
-                              'value': _valueController.text
-                                  .replaceAll(RegExp(r"\D"), ""),
-                              'type': _goalType == 1 ? "A" : "B",
+                              'value': currencyFormat(_valueController.text).toString(),
+                              'type': _goalType == 2 ? "A" : "B",
                               'expire_at':
                                   '${date.year}-${date.month}-${date.day}',
                               'wallet_id': wallet
                             });
                             var status = response.statusCode;
                             if (status == 201) {
-                              //var json = jsonDecode(response.body);
-                              Navigator.of(context).pop();
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const GoalList()),
+                              );
                             } else {
                               print(response.body);
                             }
