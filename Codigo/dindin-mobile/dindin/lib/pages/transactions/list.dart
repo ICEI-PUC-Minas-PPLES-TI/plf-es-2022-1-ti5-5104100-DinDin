@@ -86,13 +86,13 @@ class _ExtractState extends State<Extract> {
                   FutureBuilder(
                       future: getUserExtract(),
                       builder: ((context, snapshot) {
-                        if (snapshot.hasData) {
+                        if (snapshot.connectionState != ConnectionState.waiting) {
                           return Padding(
                             padding:
                                 const EdgeInsets.fromLTRB(0, 10.0, 0, 25.0),
                             child: Text(
                               '\$' +
-                                  formatMoney.format(snapshot.data).toString(),
+                                  formatMoney.format(snapshot.data ?? 0).toString(),
                               style: const TextStyle(
                                   fontWeight: FontWeight.w700, fontSize: 42),
                             ),

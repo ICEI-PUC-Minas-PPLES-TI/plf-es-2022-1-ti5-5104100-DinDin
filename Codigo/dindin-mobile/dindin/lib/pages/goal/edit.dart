@@ -1,8 +1,19 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:dindin/models/goal.dart';
+import 'package:dindin/pages/goal/list.dart';
+import 'package:dindin/pages/goal/view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
+import '../../database/DBProvider.dart';
+import '../../helpers/api_url.dart';
 
 class GoalEdit extends StatefulWidget {
-  const GoalEdit({Key? key}) : super(key: key);
+  final Goal? goal;
+  const GoalEdit(this.goal, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -11,12 +22,16 @@ class GoalEdit extends StatefulWidget {
 }
 
 class _GoalEditState extends State<GoalEdit> {
+  final formKey = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
-  final List _wallets = ["Wallet X", "Wallet Y", "Wallet Z"];
-  late List<DropdownMenuItem<String>> _dropDownMenuItems;
-  late String _currentWallet;
+  // final List _wallets = [];
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _valuecontroller = TextEditingController();
+  // late String _currentWallet;
   final TextEditingController _dateController = TextEditingController();
-  int _goalType = 1;
+  int _goalType = 0;
+  bool showEditDeleteBtn = false;
+  bool errorMessage = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -33,29 +48,110 @@ class _GoalEditState extends State<GoalEdit> {
     }
   }
 
-  // Fill wallet dropdown function
-  List<DropdownMenuItem<String>> getDropDownMenuItems() {
-    List<DropdownMenuItem<String>> items = [];
-    for (String wallet in _wallets) {
-      // here we are creating the drop down menu items, you can customize the item right here
-      // but I'll just use a simple text for this
-      items.add(DropdownMenuItem(value: wallet, child: Text(wallet)));
+  num currencyFormat(var value) {
+    var firstnum = 0;
+    for (var a = 0; a < value.length; a++) {
+      if (_isNumeric(value.substring(a, a + 1))) {
+        firstnum = a;
+        a = value.length;
+      }
     }
-    return items;
+    String removedot = value.replaceAll(".", "");
+    String chageforcomma = removedot.replaceAll(",", ".");
+    double resp = double.parse(chageforcomma.substring(firstnum));
+    return resp;
   }
 
-  // Change wallet dropdown function
-  void changedDropDownItem(String? selectedWallet) {
-    setState(() {
-      _currentWallet = selectedWallet!;
-    });
+  bool _isNumeric(String str) {
+    // ignore: unnecessary_null_comparison
+    if (str == null) {
+      return false;
+    }
+    return double.tryParse(str) != null;
+  }
+
+  void updateGoal() async {
+    var url = ApiURL.baseUrl + "/goal/" + widget.goal!.id.toString();
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    try {
+      var response = await http.put(
+        uri,
+        headers: {'Authorization': token},
+        body: {
+          'description': _descriptionController.text,
+          'value': currencyFormat(_valuecontroller.text).toString(),
+          'type': _goalType == 2 ? 'A' : 'B',
+          'expire_at': selectedDate.toString(),
+          'wallet_id': (widget.goal?.walletId).toString()
+        },
+      );
+      var status = response.statusCode;
+      if (status == 200) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const GoalList()),
+        );
+      } else {
+        errorMessage = true;
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   void initState() {
-    _dropDownMenuItems = getDropDownMenuItems();
-    _currentWallet = _dropDownMenuItems[0].value!;
+    if (widget.goal != null) {
+      // Edit
+      selectedDate = DateTime.parse((widget.goal?.expireAt).toString());
+      _dateController.text =
+          "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString()}";
+      _descriptionController.text = widget.goal!.description;
+      // checkInternet();
+      _goalType = widget.goal?.type == 'B' ? 1 : 2;
+      _valuecontroller.text = (widget.goal?.value).toString();
+    }
     super.initState();
+  }
+
+  void checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          showEditDeleteBtn = true;
+        });
+      }
+    } on SocketException catch (_) {
+      // Not Connected to Internet
+      final dbProvider = DBProvider.instance;
+      final goal =
+          await dbProvider.queryId('wallet', widget.goal!.id.toString());
+      if (goal[0]['offline'] == 1) {
+        setState(() {
+          showEditDeleteBtn = true;
+        });
+      }
+    }
+  }
+
+  bool checkdate(String date1) {
+    var today = DateTime.now();
+    String date2 =
+        "${today.day.toString().padLeft(2, '0')}/${today.month.toString().padLeft(2, '0')}/${today.year.toString()}";
+    var array1 = date1.split('/');
+    var array2 = date2.split('/');
+    if (int.parse(array1[2]) > int.parse(array2[2])) {
+      return true;
+    } else if (int.parse(array1[1]) > int.parse(array2[1])) {
+      return true;
+    } else if (int.parse(array1[0]) > int.parse(array2[0])) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -67,6 +163,8 @@ class _GoalEditState extends State<GoalEdit> {
             ),
             backgroundColor: Theme.of(context).primaryColor),
         body: Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          key: formKey,
           child: Scrollbar(
             child: SingleChildScrollView(
               child: Padding(
@@ -77,13 +175,16 @@ class _GoalEditState extends State<GoalEdit> {
                     // Description field
                     const Text('Description',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    const TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Save money for eurotrip',
-                          suffixIcon:
-                              Icon(FontAwesomeIcons.penToSquare, size: 20.0)),
-                    ),
+                    TextFormField(
+                        controller: _descriptionController,
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Save money for eurotrip',
+                            suffixIcon:
+                                Icon(FontAwesomeIcons.penToSquare, size: 20.0)),
+                        validator: (value) => value == null || value.isEmpty
+                            ? "Description can't be empty"
+                            : null),
                     const SizedBox(height: 20),
                     // End description dield
                     // Goal type option chooser
@@ -156,43 +257,40 @@ class _GoalEditState extends State<GoalEdit> {
                     // Numeric input saving amount
                     const Text('Saving/Achievement Amount',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    const TextField(
+                    TextFormField(
+                      controller: _valuecontroller,
+                      inputFormatters: <TextInputFormatter>[
+                        CurrencyTextInputFormatter(
+                          locale: 'pt_BR',
+                          decimalDigits: 2,
+                        ),
+                      ],
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: '9999,99',
                           suffixIcon:
                               Icon(FontAwesomeIcons.penToSquare, size: 20.0)),
+                      validator: (value2) => value2 == null || value2.isEmpty
+                          ? "Amount can't be empty"
+                          : null,
                     ),
                     const SizedBox(height: 20),
                     //End saving amount
                     // Date Limit field
                     const Text('Date Limit',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextField(
+                    TextFormField(
                       controller: _dateController,
                       readOnly: true,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: '12/12/2030',
-                          suffixIcon:
-                              Icon(FontAwesomeIcons.calendar, size: 20.0)),
+                      decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          hintText: _dateController.text,
+                          suffixIcon: const Icon(FontAwesomeIcons.calendar,
+                              size: 20.0)),
                       onTap: () => _selectDate(context),
-                    ),
-                    const SizedBox(height: 20),
-                    // End date limit
-                    // Wallet dropdown list field
-                    const Text('Wallet',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    DropdownButtonFormField(
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Wallet 2',
-                          suffixIcon:
-                              Icon(FontAwesomeIcons.wallet, size: 20.0)),
-                      value: _currentWallet,
-                      items: _dropDownMenuItems,
-                      onChanged: changedDropDownItem,
+                      validator: (value3) =>
+                          !checkdate(value3!) ? "Date alredy over" : null,
                     ),
                     const SizedBox(height: 20),
                     SizedBox(
@@ -203,10 +301,15 @@ class _GoalEditState extends State<GoalEdit> {
                         style: ElevatedButton.styleFrom(
                           primary: Theme.of(context).primaryColor,
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          final isValidForm = formKey.currentState!.validate();
+                          print(isValidForm);
+                          if (isValidForm) {
+                            updateGoal();
+                          }
+                        },
                       ),
-                    )
-                    // End wallet list
+                    ), // End wallet list
                   ],
                 ),
               ),

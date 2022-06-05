@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 class LazyListBuilder<T> extends StatefulWidget {
   final Future<List<T>> Function(int page) fetch;
   final int? maxItems;
   final bool? nestedList;
+  final String? noDataIndicator; 
   final Widget Function(
     BuildContext context,
     T data,
@@ -14,6 +16,7 @@ class LazyListBuilder<T> extends StatefulWidget {
       required this.fetch,
       required this.itemBuilder,
       this.maxItems,
+      this.noDataIndicator,
       this.nestedList})
       : super(key: key);
 
@@ -62,13 +65,16 @@ class _ListScreenState<T> extends State<LazyListBuilder<T>> {
 
   @override
   Widget build(BuildContext context) {
+
+    int itemCount = (_hasMore || (_dataList.isEmpty && widget.noDataIndicator?.isNotEmpty == true)) ? _dataList.length + 1 : _dataList.length;
+
     return ListView.builder(
       // Need to display a loading tile if more items are coming
-      itemCount: _hasMore ? _dataList.length + 1 : _dataList.length,
+      itemCount: itemCount,
       // maybe change the shrinkWrap for performance issues
       shrinkWrap: widget.nestedList ?? false,
       itemBuilder: (BuildContext context, int index) {
-        if (index >= _dataList.length) {
+        if (index >= _dataList.length && _hasMore) {
           // Don't trigger if one async loading is already under way
           if (!_isLoading && (_maxItems == null || _maxItems! > _items)) {
             _loadMore();
@@ -80,6 +86,9 @@ class _ListScreenState<T> extends State<LazyListBuilder<T>> {
               width: 24,
             ),
           );
+        }
+        else if (index >= _dataList.length && widget.noDataIndicator?.isNotEmpty == true){
+          return Center( child: Text(widget.noDataIndicator!, style: const TextStyle(color: Colors.black45),));
         }
         // In last case, render using the builder passed as parameter
         return widget.itemBuilder(context, _dataList[index], index);

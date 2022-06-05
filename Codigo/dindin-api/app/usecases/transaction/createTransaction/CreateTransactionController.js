@@ -36,6 +36,8 @@ class CreateTransactionController {
         const wallet_id = request.params.id; // * wallet_id of the transaction
         const user_id = request.userId;
 
+        date += " 00:00";
+
         const createTransactionUseCase = new CreateTransactionUseCase();
         const transaction = await createTransactionUseCase.create(
             wallet_id,

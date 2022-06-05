@@ -225,6 +225,7 @@
                                                         : "-") +
                                                     "R$" +
                                                     transaction.value
+                                                        .toFixed(2)
                                                         .toString()
                                                         .replace(".", ",")
                                                         .replace("-", "")
@@ -367,6 +368,7 @@ export default {
             menuData1: false,
             menuData2: false,
             loading: false,
+            loadingTotalBalance: false,
             showModal: false,
             showModalTransactionRecurrencie: false,
             transactionToEdit: null,
@@ -407,7 +409,10 @@ export default {
             .$get(`report/usertotal${filters.replace("&", "?")}`)
             .then((res) => {
                 if (res.total) {
-                    res.total = res.total.toString().replace(".", ",");
+                    res.total = res.total
+                        .toFixed(2)
+                        .toString()
+                        .replace(".", ",");
                     this.totalBalance = res.total;
                 } else if (res.total == null) {
                     this.totalBalance = "0,00";
