@@ -37,7 +37,7 @@ As funcionalidades principais são:
 * [Henrique Penna Forte Monteiro](https://github.com/Henrikkee)
 * [Lucas Ângelo Oliveira Martins Rocha](https://lucasangelo.com)
 * [Victor Boaventura Goes Campos](https://github.com/777-victor)
-* [Vinícius Marini Costa E Oliveria](https://github.com/marinisz)
+* [Vinícius Marini Costa E Oliveira](https://github.com/marinisz)
 
 ---
 
