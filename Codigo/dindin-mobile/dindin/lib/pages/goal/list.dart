@@ -20,7 +20,6 @@ Future<List<Goal>> fetchGoals() async {
   http.Response response;
   try {
     response = await ApiURL.get('/goal');
-    print(response.body);
     final goalsJson = jsonDecode(response.body)['goals'];
     num status = response.statusCode;
     if (status == 200) {
@@ -99,8 +98,6 @@ class _GoalListState extends State<GoalList> {
                             status: snapshot.data[index].status,
                             walletDescription:
                                 snapshot.data[index].walletDescription);
-                        print("Open Goal Visualization at id: " +
-                            snapshot.data[index].id.toString());
                         Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -45,10 +45,10 @@
                                         <tr>
                                             <th class="text-left">Name</th>
                                             <th class="text-left">
-                                                Total Amount
+                                                Starter Amount
                                             </th>
                                             <th class="text-left">
-                                                Current Month Amount
+                                                Current Amount
                                             </th>
                                             <th class="text-left">Options</th>
                                         </tr>
@@ -70,10 +70,42 @@
                                                 >
                                             </td>
                                             <td>
-                                                R${{ wallet.initial_value }}
+                                                R${{
+                                                    parseFloat(
+                                                        wallet.initial_value
+                                                    )
+                                                        .toFixed(2)
+                                                        .toString()
+                                                        .replace(".", ",")
+                                                }}
                                             </td>
-                                            <td>
-                                                R${{ wallet.initial_value }}
+                                            <td
+                                                v-if="
+                                                    parseFloat(
+                                                        wallet.currentAmount
+                                                    ) >= 0
+                                                "
+                                            >
+                                                R${{
+                                                    parseFloat(
+                                                        wallet.currentAmount
+                                                    )
+                                                        .toFixed(2)
+                                                        .toString()
+                                                        .replace(".", ",")
+                                                }}
+                                            </td>
+                                            <td v-else>
+                                                -R${{
+                                                    (
+                                                        parseFloat(
+                                                            wallet.currentAmount
+                                                        ) * -1
+                                                    )
+                                                        .toFixed(2)
+                                                        .toString()
+                                                        .replace(".", ",")
+                                                }}
                                             </td>
                                             <td style="width: 200px">
                                                 <v-tooltip top>
@@ -281,6 +313,7 @@ export default {
             .finally(() => {
                 this.loading = false;
             });
+        this.getCurrentMonthAmount();
     },
     methods: {
         changePagination() {
@@ -416,6 +449,20 @@ export default {
         },
         redirecToCategories(wallet) {
             this.$router.push(`wallets/${wallet.id}/categories`);
+        },
+        async getCurrentMonthAmount() {
+            for (let i = 0; i < this.wallets.length; i++) {
+                this.loading = true;
+                await this.$axios
+                    .$get(`/report/balance?wallet_id=${this.wallets[i].id}`)
+                    .then((res) => {
+                        this.wallets[i].currentAmount =
+                            res.incoming - res.outcoming;
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
+            }
         },
     },
 };

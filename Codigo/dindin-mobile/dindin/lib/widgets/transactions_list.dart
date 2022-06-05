@@ -21,6 +21,7 @@ class TransactionsList extends StatelessWidget {
     return LazyListBuilder<Transaction>(
         fetch: fetchTransaction,
         maxItems: maxItems,
+        noDataIndicator: "Cound't find any transaction!",
         nestedList: nestedList,
         itemBuilder: (BuildContext context, transaction, index) {
           return Card(

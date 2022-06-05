@@ -40,22 +40,28 @@ class _GoalViewState extends State<GoalView> {
   bool hasProgress = false;
   num valueUntilNow = 0;
   // ignore: prefer_typing_uninitialized_variables
-  var walletDescription;
+  var walletDescription = '';
   @override
   void initState() {
+    getGoal(widget.goal.id);
+    getReportProgress(widget.goal.id);
+    super.initState();
+  }
+
+  void getGoal(id) async {
+    var response = await ApiURL.get('/goal/$id');
+    Map<String, dynamic> body = jsonDecode(response.body);
     setState(() {
-      description = widget.goal.description;
-      status = widget.goal.status!;
-      type = widget.goal.type == 'B' ? 'Saving' : 'Achievement';
-      value = widget.goal.value!;
-      expireAt = widget.goal.expireAt!;
+      description = body['description'];
+      status = body['status'];
+      type = body['type'] == 'B' ? 'Saving' : 'Achievement';
+      value = body['value'];
+      expireAt = body['expire_at'];
       var splited = (expireAt.substring(0, 10)).split('-');
       expireAt = splited[2] + "/" + splited[1] + "/" + splited[0];
-      walletId = (widget.goal.walletId).toString();
-      walletDescription = widget.goal.walletDescription;
+      walletId = body['wallet_id'];
+      walletDescription = (body['wallet']['description']);
     });
-    super.initState();
-    getReportProgress(widget.goal.id);
   }
 
   void getReportProgress(id) async {
@@ -65,11 +71,10 @@ class _GoalViewState extends State<GoalView> {
       setState(() {
         valueUntilNow = body['value'];
         progress = valueUntilNow / value;
-        if(progress>1) {
-          progress=1;
-        }
-        else if(progress<0){
-          progress=0;
+        if (progress > 1) {
+          progress = 1;
+        } else if (progress < 0) {
+          progress = 0;
         }
         hasProgress = true;
       });
@@ -149,15 +154,20 @@ class _GoalViewState extends State<GoalView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           LinearProgressIndicator(
-                          backgroundColor: Colors.grey.shade100,
-                          color: progress < 0.3 ? Colors.red : progress<0.7? Colors.amber:Colors.green,
-                          minHeight: 20,
-                          value: progress,),
+                            backgroundColor: Colors.grey.shade100,
+                            color: progress < 0.3
+                                ? Colors.red
+                                : progress < 0.7
+                                    ? Colors.amber
+                                    : Colors.green,
+                            minHeight: 20,
+                            value: progress,
+                          ),
                           if (progress < 1)
                             Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Text(
-                                ('\$${(value-valueUntilNow).toStringAsFixed(2)} left to reach your goal!'),
+                                ('\$${(value - valueUntilNow).toStringAsFixed(2)} left to reach your goal!'),
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                               ),
@@ -235,7 +245,7 @@ class _GoalViewState extends State<GoalView> {
                           ),
                         ),
                         title: const Text('Wallet'),
-                        subtitle: Text(walletDescription['description'])),
+                        subtitle: Text(walletDescription)),
                   ),
                 ],
               ),

@@ -1,6 +1,7 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/models/transaction.dart';
+import 'package:dindin/pages/dashboard.dart';
 import 'package:dindin/widgets/category_drop.dart';
 import 'package:dindin/widgets/wallet_drop.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +101,8 @@ class _TransactionFormState extends State<TransactionForm> {
 
     var body = {
       'description': _descriptionController.text,
-      'value': _amountController.text.replaceAll(new RegExp(r"\D"), ""),
+      'value': _isIncome ? currencyFormat(_amountController.text).toString() : (double.parse(currencyFormat(_amountController.text).toString()) * -1)
+        .toString(),
       'date': '${date.year}-${date.month}-${date.day}',
       'category_id': category
     };
@@ -129,7 +131,8 @@ class _TransactionFormState extends State<TransactionForm> {
         'Authorization': token
       }, body: {
         'description': _descriptionController.text,
-        'value': _amountController.text.replaceAll(new RegExp(r"\D"), ""),
+        'value': _isIncome ? currencyFormat(_amountController.text).toString() : (double.parse(currencyFormat(_amountController.text).toString()) * -1)
+        .toString(),
         'day': '${date.day}',
         'category_id': category ?? "0",
         'interval': recurrency,
@@ -143,7 +146,32 @@ class _TransactionFormState extends State<TransactionForm> {
         print(response2.body);
       }
     }
-    Navigator.of(context).pop();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const Dashboard()),
+    );
+  }
+
+  num currencyFormat(var value) {
+    var firstnum = 0;
+    for (var a = 0; a < value.length; a++) {
+      if (_isNumeric(value.substring(a, a + 1))) {
+        firstnum = a;
+        a = value.length;
+      }
+    }
+    String removedot = value.replaceAll(".", "");
+    String chageforcomma = removedot.replaceAll(",", ".");
+    double resp = double.parse(chageforcomma.substring(firstnum));
+    return resp;
+  }
+
+  bool _isNumeric(String str) {
+    // ignore: unnecessary_null_comparison
+    if (str == null) {
+      return false;
+    }
+    return double.tryParse(str) != null;
   }
 
   @override

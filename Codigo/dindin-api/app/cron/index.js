@@ -2,12 +2,16 @@ const cron = require("node-cron");
 const { Op, Sequelize } = require("sequelize");
 const { v4: uuidv4 } = require("uuid");
 
-const { EVERY_DAY_03AM /*EVERY_SECOND*/ } = require("./scheduleConstants");
+const {
+    EVERY_DAY_03AM /* EVERY_MINUTE, EVERY_SECOND*/,
+} = require("./scheduleConstants");
 
 const TransactionRecurrencies = require("../models/TransactionRecurrencies");
 const Transaction = require("../models/Transaction");
+const GoalService = require("../services/goalServices");
 
 const generateTransactions = cron.schedule(EVERY_DAY_03AM, async () => {
+    console.log("cronjob running ");
     /*
           SELECT *
           FROM `transaction_recurrencies` AS `TransactionRecurrencies`
@@ -69,6 +73,8 @@ const generateTransactions = cron.schedule(EVERY_DAY_03AM, async () => {
     });
 
     let transactionsToCreate = [];
+    const walletWithNewTrasactionsSet = new Set(); // [ id ]
+
     for (const transactionRecurrency of unexpiredTransactionsR) {
         const transactionToCreate = {
             id: uuidv4(),
@@ -84,15 +90,25 @@ const generateTransactions = cron.schedule(EVERY_DAY_03AM, async () => {
             deleted_at: null,
         };
         transactionsToCreate.push(transactionToCreate);
+        walletWithNewTrasactionsSet.add(transactionRecurrency.wallet_id);
     }
 
     await Transaction.bulkCreate(transactionsToCreate)
         .then(function () {
-            console.log("Transactions has been created by cronjob");
+            console.log("Transactions have been created by cronjob");
         })
         .catch(function (error) {
             console.log(error);
         });
+
+    const goalService = new GoalService();
+
+    // put it that here because it necessaryly has to run after recurrent transactions are registered
+    await goalService.updateAchievemetWalletGoals(
+        ...walletWithNewTrasactionsSet.values()
+    );
+
+    await goalService.updateExpiredGoals();
 });
 
 module.exports = {
