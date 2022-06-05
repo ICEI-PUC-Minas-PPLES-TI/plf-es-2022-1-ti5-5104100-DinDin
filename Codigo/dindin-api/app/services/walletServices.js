@@ -4,7 +4,7 @@ const Wallet = require("../models/Wallet");
 
 module.exports = class WalletServices {
     async getWalletCurrentValue(wallet_id) {
-        const transactionsWalletBalance = await Transaction.findAll({
+        const transactionsWalletBalance = await Transaction.findOne({
             attributes: [
                 [
                     Sequelize.literal(
@@ -27,8 +27,8 @@ module.exports = class WalletServices {
 
         return (
             wallet.initial_value +
-            (transactionsWalletBalance[0].dataValues.incoming ?? 0) -
-            (transactionsWalletBalance[0].dataValues.outcoming ?? 0)
+            (transactionsWalletBalance.dataValues.incoming ?? 0) -
+            (transactionsWalletBalance.dataValues.outcoming ?? 0)
         );
     }
 };

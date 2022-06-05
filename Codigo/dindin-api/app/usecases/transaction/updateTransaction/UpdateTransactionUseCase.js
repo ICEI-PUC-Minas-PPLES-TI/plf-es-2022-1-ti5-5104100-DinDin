@@ -1,4 +1,5 @@
 const AppError = require("../../../errors/AppError");
+const GoalService = require("../../../services/goalServices");
 
 const FindTransactionUseCase = require("../findTransaction/FindTransactionUseCase");
 
@@ -19,6 +20,8 @@ class UpdateTransactionUseCase {
             .catch((error) => {
                 throw new AppError(error.message, 500, error);
             });
+
+        new GoalService().updateAchievemetWalletGoals(wallet_id);
 
         return transaction;
     }

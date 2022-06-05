@@ -124,6 +124,5 @@ async function getWalletCurrentValueInMap(walletCurrentValueMap, wallet_id) {
         walletCurrentValueMap.set(wallet_id, walletCurrentValue);
     }
 
-    console.log(walletCurrentValue);
     return walletCurrentValue;
 }

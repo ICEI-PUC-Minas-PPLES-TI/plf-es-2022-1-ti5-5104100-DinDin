@@ -21,7 +21,7 @@ beforeAll(async () => {
 
         const goalResponse = await request.post("/api/goal").send({
             description: `mockup goal to  test ${i}`,
-            value: 2000,
+            value: 5000,
             type: "A",
             expire_at: "2030-10-10",
             wallet_id: response.body.wallet.id,
@@ -111,7 +111,7 @@ describe("GET /goal test suite", () => {
     });
 
     it("should list user's goals with value search", async () => {
-        const response = await request.get("/api/goal?value=2000").send();
+        const response = await request.get("/api/goal?value=5000").send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -219,7 +219,7 @@ describe("GET /goal test suite", () => {
     it("should list user's goals with all filters", async () => {
         const response = await request
             .get(
-                `/api/goal?page=1&limit=5&attribute=id&order=DESC&description=goal&value=2000&status=PENDING&type=A&expire_at_start=2010-01-01 11:50:00&expire_at_end=2099-01-01 11:50:00&wallet_id=${toDeleteGoal.wallet}&created_at_start=2010-01-01 11:50:00&created_at_end=2099-01-01 11:50:00&updated_at_start=2010-01-01 11:50:00&updated_at_end=2099-01-01 11:50:00&deleted_at_start=2010-01-01 11:50:00&deleted_at_end=2099-01-01 11:50:00`
+                `/api/goal?page=1&limit=5&attribute=id&order=DESC&description=goal&value=5000&status=PENDING&type=A&expire_at_start=2010-01-01 11:50:00&expire_at_end=2099-01-01 11:50:00&wallet_id=${toDeleteGoal.wallet}&created_at_start=2010-01-01 11:50:00&created_at_end=2099-01-01 11:50:00&updated_at_start=2010-01-01 11:50:00&updated_at_end=2099-01-01 11:50:00&deleted_at_start=2010-01-01 11:50:00&deleted_at_end=2099-01-01 11:50:00`
             )
             .send();
 
