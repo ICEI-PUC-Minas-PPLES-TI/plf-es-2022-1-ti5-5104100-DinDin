@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/helpers/color_helper.dart';
 import 'package:dindin/models/transaction.dart';
+import 'package:dindin/pages/transactions/form.dart';
 import 'package:dindin/widgets/lazy_list_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,6 +29,14 @@ class TransactionsList extends StatelessWidget {
               onTap: () {
                 print("Open Transaction Visualization at id: " +
                     transaction.id.toString());
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                TransactionForm(transaction)),
+                      ).then((value) => {
+                        
+                      });
               },
               child: Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),

@@ -1,15 +1,19 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dindin/helpers/api_url.dart';
+import 'package:dindin/models/transaction.dart';
 import 'package:dindin/pages/dashboard.dart';
+import 'package:dindin/pages/transactions/list.dart';
 import 'package:dindin/widgets/category_drop.dart';
 import 'package:dindin/widgets/wallet_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class TransactionForm extends StatefulWidget {
-  const TransactionForm({Key? key}) : super(key: key);
+  final Transaction? transaction;
+  const TransactionForm(this.transaction ,{Key? key}) : super(key: key);
 
   @override
   _TransactionFormState createState() => _TransactionFormState();
@@ -33,6 +37,34 @@ class _TransactionFormState extends State<TransactionForm> {
   double buttonHeight = 0.06;
   double buttonWidth = 0.45;
 
+  @override
+  void initState(){
+    super.initState();
+
+    if(widget.transaction != null) { // Edit
+      _descriptionController.text = widget.transaction!.description;
+      _amountController.text = (widget.transaction!.value).abs().toStringAsFixed(2).replaceAll('.', ',');
+      _isIncome = widget.transaction!.value > 0;
+      final DateFormat formatter = DateFormat('dd/MM/yyyy');
+      date = DateTime.parse(widget.transaction!.date);
+      var dt = formatter.format(DateTime.parse(widget.transaction!.date)).toString();
+      _dateController.text = dt;
+      wallet = widget.transaction!.walletId;
+      if(widget.transaction!.category != null) {
+        category = widget.transaction!.category!.id.toString();
+      }
+      
+      if(widget.transaction!.transactionRecurrencies != null) {
+        _isChecked = true;
+        recurrency = widget.transaction!.transactionRecurrencies!.interval;
+        if(widget.transaction!.transactionRecurrencies!.expiredAt != null) {
+          _endDateController.text = formatter.format(DateTime.parse(widget.transaction!.transactionRecurrencies!.expiredAt!)).toString();
+          endDate = DateTime.parse(widget.transaction!.transactionRecurrencies!.expiredAt!);
+        }
+      }
+    }
+  }
+
   void changeButtonState() {
     setState(() {
       category = null;
@@ -55,7 +87,33 @@ class _TransactionFormState extends State<TransactionForm> {
     setState(() {
       category = id;
     });
-    print(category);
+  }
+
+  void deleteTransaction() async{
+    var url = ApiURL.baseUrl +
+        "/wallet/" +
+        widget.transaction!.walletId.toString() +
+        "/transaction/" +
+        widget.transaction!.id.toString();
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    try {
+      var response = await http.delete(uri, headers: {
+        'Authorization': token
+      });
+      var status = response.statusCode;
+      if (status == 204) {
+        Navigator.of(context).pop();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Extract()),
+        );
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   void insertTransaction() async {
@@ -80,12 +138,6 @@ class _TransactionFormState extends State<TransactionForm> {
       ));
       return;
     }
-    print(wallet);
-    print("category:");
-    print(category);
-    var url = ApiURL.baseUrl + "/wallet/" + wallet + "/transaction";
-    final Uri uri = Uri.parse(url);
-    var token = await ApiURL.getToken();
 
     var body = {
       'description': _descriptionController.text,
@@ -99,39 +151,73 @@ class _TransactionFormState extends State<TransactionForm> {
       body['category_id'] = category!;
     }
 
-    var response =
-        await http.post(uri, headers: {'Authorization': token}, body: body);
-    var status = response.statusCode;
-    if (status == 201) {
-      print('created');
-      print(response.body);
-    } else {
-      print(response.body);
+    var token = await ApiURL.getToken();
+
+    if(widget.transaction == null) { // Create
+      var url = ApiURL.baseUrl + "/wallet/" + wallet + "/transaction";
+      final Uri uri = Uri.parse(url);
+      var response =
+          await http.post(uri, headers: {'Authorization': token}, body: body);
+      var status = response.statusCode;
+      if (status == 201) {
+        print('created');
+        print(response.body);
+      } else {
+        print(response.body);
+      }
+    } else { // Edit
+      var url = ApiURL.baseUrl + "/wallet/" + wallet + "/transaction/" + widget.transaction!.id;
+      final Uri uri = Uri.parse(url);
+
+      var response =
+          await http.put(uri, headers: {'Authorization': token}, body: body);
+      var status = response.statusCode;
+      if (status == 200) {
+        print('updated');
+        print(response.body);
+      } else {
+        print(response.body);
+      }
     }
 
     if (_isChecked) {
+      var bodyRec = {
+          'description': _descriptionController.text,
+          'value': _isIncome ? currencyFormat(_amountController.text).toString() : (double.parse(currencyFormat(_amountController.text).toString()) * -1)
+          .toString(),
+          'day': '${date.day}',
+          'category_id': category ?? "0",
+          'interval': recurrency,
+          'expired_at': '${endDate!.year}-${endDate!.month}-${endDate!.day}'
+        };
+      print(bodyRec);
       // Recurrency ON
-      var url2 =
-          ApiURL.baseUrl + "/wallet/" + wallet + "/transactionrecurrencies";
-      final Uri uri2 = Uri.parse(url2);
-
-      var response2 = await http.post(uri2, headers: {
-        'Authorization': token
-      }, body: {
-        'description': _descriptionController.text,
-        'value': _isIncome ? currencyFormat(_amountController.text).toString() : (double.parse(currencyFormat(_amountController.text).toString()) * -1)
-        .toString(),
-        'day': '${date.day}',
-        'category_id': category ?? "0",
-        'interval': recurrency,
-        'expired_at': '${endDate!.year}-${endDate!.month}-${endDate!.day}'
-      });
-      var status2 = response2.statusCode;
-      if (status2 == 201) {
-        print('created rec');
-        print(response2.body);
-      } else {
-        print(response2.body);
+      if(widget.transaction == null || widget.transaction?.transactionRecurrencies == null ) { // Create
+        var url2 = ApiURL.baseUrl + "/wallet/" + wallet + "/transactionrecurrencies";
+        final Uri uri2 = Uri.parse(url2);
+        var response2 = await http.post(uri2, headers: {
+          'Authorization': token
+        }, body: bodyRec);
+        var status2 = response2.statusCode;
+        if (status2 == 201) {
+          print('created rec');
+          print(response2.body);
+        } else {
+          print(response2.body);
+        }
+      } else if(widget.transaction?.transactionRecurrencies != null) { // Edit
+        var url2 = ApiURL.baseUrl + "/wallet/" + wallet + "/transactionrecurrencies/" + widget.transaction!.transactionRecurrencies!.id.toString();
+        final Uri uri2 = Uri.parse(url2);
+        var response2 = await http.put(uri2, headers: {
+          'Authorization': token
+        }, body: bodyRec);
+        var status2 = response2.statusCode;
+        if (status2 == 200) {
+          print('update rec');
+          print(response2.body);
+        } else {
+          print(response2.body);
+        }
       }
     }
     Navigator.pushReplacement(
@@ -167,7 +253,7 @@ class _TransactionFormState extends State<TransactionForm> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: const Text("Add transaction"),
+          title: Text(widget.transaction == null ? "Add transaction": "Edit Transaction"),
           backgroundColor: Theme.of(context).primaryColor,
         ),
         body: Form(
@@ -234,7 +320,7 @@ class _TransactionFormState extends State<TransactionForm> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    DropWallet(changeWalletId),
+                    DropWallet(changeWalletId, widget.transaction != null? widget.transaction!.walletId: null),
                     const Divider(height: 10),
                     // Amount text field
                     TextField(
@@ -330,7 +416,7 @@ class _TransactionFormState extends State<TransactionForm> {
                           )),
                     ),
                     const Divider(height: 10),
-                    DropCategory(changeCategoryId, key: _key),
+                    DropCategory(changeCategoryId,  widget.transaction , key: _key),
                     const Divider(height: 10),
                     // Reccurrent
                     CheckboxListTile(
@@ -493,6 +579,53 @@ class _TransactionFormState extends State<TransactionForm> {
                                     style: TextStyle(fontSize: 20))),
                           ),
                         ],
+                      ),
+                    ),
+                    if (widget.transaction != null)
+                    const Divider(height: 10),
+                    if (widget.transaction != null)
+                    Center(
+                      child: TextButton(
+                        onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Padding(
+                              padding: EdgeInsets.only(left: 90.0),
+                              child: FaIcon(FontAwesomeIcons.trash,
+                                  size: 50.0, color: Colors.red),
+                            ),
+                            content: const Text(
+                              "Delete ?",
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('No',
+                                    style: TextStyle(color: Colors.black)),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).canvasColor,
+                                ),
+                              ),
+                              TextButton(
+                              onPressed: () async {
+                                  deleteTransaction();
+                                },
+                                child: const Text('Yes',
+                                    style: TextStyle(color: Colors.black)),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).canvasColor,
+                                ),
+                              ),
+                            ],
+                            actionsAlignment: MainAxisAlignment.spaceAround,
+                            actionsPadding: const EdgeInsets.all(16.0),
+                          ),
+                        ),
+                        child: const Text(
+                          'Delete Transaction',
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
                     )
                   ],
