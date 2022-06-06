@@ -2,6 +2,7 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/models/transaction.dart';
 import 'package:dindin/pages/dashboard.dart';
+import 'package:dindin/pages/transactions/list.dart';
 import 'package:dindin/widgets/category_drop.dart';
 import 'package:dindin/widgets/wallet_drop.dart';
 import 'package:flutter/material.dart';
@@ -86,6 +87,33 @@ class _TransactionFormState extends State<TransactionForm> {
     setState(() {
       category = id;
     });
+  }
+
+  void deleteTransaction() async{
+    var url = ApiURL.baseUrl +
+        "/wallet/" +
+        widget.transaction!.walletId.toString() +
+        "/transaction/" +
+        widget.transaction!.id.toString();
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    try {
+      var response = await http.delete(uri, headers: {
+        'Authorization': token
+      });
+      var status = response.statusCode;
+      if (status == 204) {
+        Navigator.of(context).pop();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Extract()),
+        );
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   void insertTransaction() async {
@@ -225,7 +253,7 @@ class _TransactionFormState extends State<TransactionForm> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: const Text("Add transaction"),
+          title: Text(widget.transaction == null ? "Add transaction": "Edit Transaction"),
           backgroundColor: Theme.of(context).primaryColor,
         ),
         body: Form(
@@ -551,6 +579,53 @@ class _TransactionFormState extends State<TransactionForm> {
                                     style: TextStyle(fontSize: 20))),
                           ),
                         ],
+                      ),
+                    ),
+                    if (widget.transaction != null)
+                    const Divider(height: 10),
+                    if (widget.transaction != null)
+                    Center(
+                      child: TextButton(
+                        onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Padding(
+                              padding: EdgeInsets.only(left: 90.0),
+                              child: FaIcon(FontAwesomeIcons.trash,
+                                  size: 50.0, color: Colors.red),
+                            ),
+                            content: const Text(
+                              "Delete ?",
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('No',
+                                    style: TextStyle(color: Colors.black)),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).canvasColor,
+                                ),
+                              ),
+                              TextButton(
+                              onPressed: () async {
+                                  deleteTransaction();
+                                },
+                                child: const Text('Yes',
+                                    style: TextStyle(color: Colors.black)),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).canvasColor,
+                                ),
+                              ),
+                            ],
+                            actionsAlignment: MainAxisAlignment.spaceAround,
+                            actionsPadding: const EdgeInsets.all(16.0),
+                          ),
+                        ),
+                        child: const Text(
+                          'Delete Transaction',
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
                     )
                   ],
