@@ -103,6 +103,10 @@ module.exports = {
                 foreignKey: "wallet_id",
             });
             Category.belongsTo(User, { as: "user", foreignKey: "user_id" });
+            Wallet.belongsTo(User, {
+                as: "owner_user",
+                foreignKey: "owner_id",
+            });
             Wallet.hasMany(UserHasWallet, {
                 as: "users",
                 foreignKey: "wallet_id",
