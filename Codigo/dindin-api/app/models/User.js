@@ -44,6 +44,9 @@ class User extends Model {
                     unique: true,
                     allowNull: true,
                 },
+                hasPassword: {
+                    type: DataTypes.VIRTUAL(DataTypes.BOOLEAN),
+                },
                 created_at: {
                     type: DataTypes.DATE,
                     allowNull: false,
@@ -89,5 +92,16 @@ class User extends Model {
         );
     }
 }
+
+User.prototype.verifyUserHasPassword = async function () {
+    const password = (await User.scope("withPassword").findByPk(this.id))
+        .password;
+
+    if (password) {
+        return true;
+    } else {
+        return false;
+    }
+};
 
 module.exports = User;

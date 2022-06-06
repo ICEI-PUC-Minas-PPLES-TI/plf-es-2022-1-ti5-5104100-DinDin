@@ -8,7 +8,7 @@ class UpdateUserAccountController {
         const scheme = yup.object().shape({
             name: yup.string("'name' must be string").max(100),
             password: yup.string("'password' must be string").min(8),
-            oldPassword: yup.string("'oldPassword' must be string").min(8),
+            oldPassword: yup.string("'oldPassword' must be string"),
         });
 
         try {
