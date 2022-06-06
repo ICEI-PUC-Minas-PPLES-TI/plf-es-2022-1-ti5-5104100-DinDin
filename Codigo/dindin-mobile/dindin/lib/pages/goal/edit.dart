@@ -48,6 +48,28 @@ class _GoalEditState extends State<GoalEdit> {
     }
   }
 
+  void deleteGoal(id) async {
+    id = id.toString();
+    var url = ApiURL.baseUrl + "/goal/" + id;
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    try {
+      var response = await http.delete(uri, headers: {'Authorization': token});
+      var status = response.statusCode;
+      if (status == 204) {
+        print('delete');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const GoalList()),
+        );
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   num currencyFormat(var value) {
     var firstnum = 0;
     for (var a = 0; a < value.length; a++) {
@@ -309,7 +331,51 @@ class _GoalEditState extends State<GoalEdit> {
                           }
                         },
                       ),
-                    ), // End wallet list
+                    ),
+                    Center(
+                      child: TextButton(
+                        onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Padding(
+                              padding: EdgeInsets.only(left: 90.0),
+                              child: FaIcon(FontAwesomeIcons.trash,
+                                  size: 50.0, color: Colors.red),
+                            ),
+                            content: const Text(
+                              "Delete ?",
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('No',
+                                    style: TextStyle(color: Colors.black)),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).canvasColor,
+                                ),
+                              ),
+                              TextButton(
+                              onPressed: () async {
+                                  deleteGoal(widget.goal?.id);
+                                },
+                                child: const Text('Yes',
+                                    style: TextStyle(color: Colors.black)),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).canvasColor,
+                                ),
+                              ),
+                            ],
+                            actionsAlignment: MainAxisAlignment.spaceAround,
+                            actionsPadding: const EdgeInsets.all(16.0),
+                          ),
+                        ),
+                        child: const Text(
+                          'Delete Goal',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
