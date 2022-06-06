@@ -283,8 +283,8 @@ export default {
             .finally(() => {
                 this.loading = false;
             });
-        this.getCurrentAmount();
-        this.getCurrentMonthAmount();
+        await this.getCurrentAmount();
+        await this.getCurrentMonthAmount();
     },
     methods: {
         changePagination() {
