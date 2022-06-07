@@ -128,7 +128,11 @@
                                             <td>{{ formatDate(t.date) }}</td>
                                             <td>
                                                 {{ t.value > 0 ? "+" : "-" }}
-                                                R${{ Math.abs(t.value) }}
+                                                R${{
+                                                    Math.abs(t.value)
+                                                        .toFixed(2)
+                                                        .replace(".", ",")
+                                                }}
                                             </td>
                                             <td>{{ t.wallet.description }}</td>
                                         </tr>
