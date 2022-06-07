@@ -27,21 +27,23 @@ Future<List<Wallet>> fetchWallets() async {
   var token = await ApiURL.getToken();
   final dbProvider = DBProvider.instance;
 
-
-
   try {
-    var response =
-    await http.get(uri, headers: {'Authorization': token});
+    var response = await http.get(uri, headers: {'Authorization': token});
     var status = response.statusCode;
     if (status == 200) {
-
       // Check if has any wallet created while offline
       final prefs = await StreamingSharedPreferences.instance;
-      final Preference<bool> sincroniza =  prefs.getBool("update_wallet", defaultValue: false);
-      if(sincroniza.getValue()) {
+      final Preference<bool> sincroniza =
+          prefs.getBool("update_wallet", defaultValue: false);
+      if (sincroniza.getValue()) {
         final lines = await dbProvider.queryRaw('wallet', 'offline = 1');
         lines.forEach((line) async {
-          http.post(uri, headers: {'Authorization': token}, body: {'description' : line['description'], 'initial_value': line['initial_value'].toString() });
+          http.post(uri, headers: {
+            'Authorization': token
+          }, body: {
+            'description': line['description'],
+            'initial_value': line['initial_value'].toString()
+          });
         });
         (await prefs).setBool("update_wallet", false);
         return fetchWallets();
@@ -52,19 +54,27 @@ Future<List<Wallet>> fetchWallets() async {
       dbProvider.deleteAll('wallet');
       Map<String, dynamic> row2;
       json['wallets'].forEach((row) => {
-        walletList.add(Wallet(id: int.parse(row['id']), updatedAt: row['updated_at'], createdAt: row['created_at'], deletedAt: '', currentValue: null, shared: row['shared']? 1: 0, description: row['description'])),
-        if(!row['shared']) {
-          dbProvider.insert('wallet', {
-            'description': row['description'],
-            'initial_value': row['initial_value'],
-            'id': int.parse(row['id'])
-          })
-        }
-      });
+            walletList.add(Wallet(
+                id: int.parse(row['id']),
+                updatedAt: row['updated_at'],
+                createdAt: row['created_at'],
+                deletedAt: '',
+                currentValue: null,
+                shared: row['shared'] ? 1 : 0,
+                description: row['description'])),
+            if (!row['shared'])
+              {
+                dbProvider.insert('wallet', {
+                  'description': row['description'],
+                  'initial_value': row['initial_value'],
+                  'id': int.parse(row['id'])
+                })
+              }
+          });
     } else {
       walletList = await fetchWalletsOffline();
     }
-  } catch (e){
+  } catch (e) {
     print(e);
     walletList = await fetchWalletsOffline();
   }
@@ -72,15 +82,22 @@ Future<List<Wallet>> fetchWallets() async {
   return walletList;
 }
 
-Future<List<Wallet>> fetchWalletsOffline() async{
+Future<List<Wallet>> fetchWalletsOffline() async {
   List<Wallet> walletList = <Wallet>[];
 
   final dbProvider = DBProvider.instance;
 
   final lines = await dbProvider.queryAllRows('wallet');
   lines.forEach((row) => {
-    walletList.add(Wallet(id: row['id'], updatedAt: '', createdAt: '', deletedAt: '', currentValue: null, shared: 0, description: row['description'])),
-  });
+        walletList.add(Wallet(
+            id: row['id'],
+            updatedAt: '',
+            createdAt: '',
+            deletedAt: '',
+            currentValue: null,
+            shared: 0,
+            description: row['description'])),
+      });
   return walletList;
 }
 
@@ -97,7 +114,7 @@ class _WalletListState extends State<WalletList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Wallet'),
+        title: const Text('Wallets'),
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
           IconButton(
@@ -107,10 +124,10 @@ class _WalletListState extends State<WalletList> {
                 context,
                 MaterialPageRoute(builder: (context) => const WalletJoin()),
               ).then((value) => {
-                setState(() {
-                  wallets = fetchWallets();
-                })
-              });
+                    setState(() {
+                      wallets = fetchWallets();
+                    })
+                  });
             },
           ),
           // add more IconButton
@@ -127,7 +144,14 @@ class _WalletListState extends State<WalletList> {
                   return Card(
                     child: InkWell(
                       onTap: () {
-                        final Wallet w = Wallet(id: snapshot.data[index].id, createdAt: '', deletedAt: '', updatedAt: '', currentValue: null, shared: snapshot.data[index].shared, description: snapshot.data[index].description);
+                        final Wallet w = Wallet(
+                            id: snapshot.data[index].id,
+                            createdAt: '',
+                            deletedAt: '',
+                            updatedAt: '',
+                            currentValue: null,
+                            shared: snapshot.data[index].shared,
+                            description: snapshot.data[index].description);
                         print("Open Wallet Visualization at id: " +
                             snapshot.data[index].id.toString());
                         Navigator.push(
@@ -135,10 +159,10 @@ class _WalletListState extends State<WalletList> {
                           MaterialPageRoute(
                               builder: (context) => WalletView(w)),
                         ).then((value) => {
-                          setState(() {
-                            wallets = fetchWallets();
-                          })
-                        });
+                              setState(() {
+                                wallets = fetchWallets();
+                              })
+                            });
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
@@ -166,10 +190,10 @@ class _WalletListState extends State<WalletList> {
             context,
             MaterialPageRoute(builder: (context) => const WalletForm(null)),
           ).then((value) => {
-            setState(() {
-              wallets = fetchWallets();
-            })
-          });
+                setState(() {
+                  wallets = fetchWallets();
+                })
+              });
         },
         backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
