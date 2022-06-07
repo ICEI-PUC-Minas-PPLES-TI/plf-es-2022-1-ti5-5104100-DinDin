@@ -44,7 +44,6 @@ class _GoalViewState extends State<GoalView> {
   @override
   void initState() {
     getGoal(widget.goal.id);
-    getReportProgress(widget.goal.id);
     super.initState();
   }
 
@@ -61,6 +60,7 @@ class _GoalViewState extends State<GoalView> {
       expireAt = splited[2] + "/" + splited[1] + "/" + splited[0];
       walletId = body['wallet_id'];
       walletDescription = (body['wallet']['description']);
+      getReportProgress(id);
     });
   }
 
@@ -71,6 +71,7 @@ class _GoalViewState extends State<GoalView> {
       setState(() {
         valueUntilNow = body['value'];
         progress = valueUntilNow / value;
+
         if (progress > 1) {
           progress = 1;
         } else if (progress < 0) {

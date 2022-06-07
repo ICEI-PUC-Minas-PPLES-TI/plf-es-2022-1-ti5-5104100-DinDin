@@ -69,7 +69,14 @@
                                                         : "Saving"
                                                 }}
                                             </td>
-                                            <td>R${{ goal.value }}</td>
+                                            <td>
+                                                R${{
+                                                    parseFloat(goal.value)
+                                                        .toFixed(2)
+                                                        .toString()
+                                                        .replace(".", ",")
+                                                }}
+                                            </td>
                                             <td>
                                                 {{ dateFormat(goal.expire_at) }}
                                             </td>
@@ -200,21 +207,26 @@
                                     Status: {{ goalToView.status }}
                                 </p>
                                 <v-progress-linear
-                                    :value="this.goalProgressValue"
+                                    :value="this.goalProgressBarValue"
                                     color="#28FF8B"
                                     height="35"
                                     rounded
                                 >
                                     <strong
                                         >{{
-                                            Math.ceil(goalProgressValue)
+                                            this.goalProgressBarValue
                                         }}%</strong
                                     >
                                 </v-progress-linear>
                                 <p
                                     class="text-subtitle-2 mt-1 text-center black--text"
                                 >
-                                    R$9000.fake
+                                    R${{
+                                        parseFloat(goalProgressValue)
+                                            .toFixed(2)
+                                            .toString()
+                                            .replace(".", ",")
+                                    }}
                                 </p>
                             </v-col>
                         </v-row>
@@ -284,7 +296,12 @@
                                         <h5
                                             class="mt-0 text-subtitle-2 font-weight-black"
                                         >
-                                            R${{ goalToView.value }}
+                                            R${{
+                                                parseFloat(goalToView.value)
+                                                    .toFixed(2)
+                                                    .toString()
+                                                    .replace(".", ",")
+                                            }}
                                         </h5>
                                     </v-col>
                                 </v-row>
@@ -353,7 +370,8 @@ export default {
             modalEdit: false,
             viewGoalDetails: false,
             goalToView: null,
-            goalProgressValue: 60,
+            goalProgressValue: 0,
+            goalProgressBarValue: 0,
         };
     },
     async fetch() {
@@ -412,9 +430,26 @@ export default {
             this.showModal = true;
         },
         viewGoal(goal) {
-            console.log(goal);
             this.goalToView = goal;
             this.viewGoalDetails = true;
+
+            this.$axios.get(`/report/goal/${goal.id}`).then((res) => {
+                console.log(res);
+                if (res.data?.value) {
+                    this.goalProgressValue = res.data.value;
+                    this.goalProgressBarValue = Math.ceil(
+                        (this.goalProgressValue / this.goalToView.value) * 100
+                    );
+                    if (this.goalProgressBarValue > 100) {
+                        this.goalProgressBarValue = 100;
+                    } else if (this.goalProgressBarValue < 0) {
+                        this.goalProgressBarValue = 0;
+                    }
+                } else {
+                    this.goalProgressValue = 0;
+                    this.goalProgressBarValue = 0;
+                }
+            });
         },
     },
     computed: {
