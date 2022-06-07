@@ -24,10 +24,8 @@ class GoalEdit extends StatefulWidget {
 class _GoalEditState extends State<GoalEdit> {
   final formKey = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
-  // final List _wallets = [];
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _valuecontroller = TextEditingController();
-  // late String _currentWallet;
   final TextEditingController _dateController = TextEditingController();
   int _goalType = 0;
   bool showEditDeleteBtn = false;
@@ -45,6 +43,28 @@ class _GoalEditState extends State<GoalEdit> {
         _dateController.text =
             "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year.toString()}";
       });
+    }
+  }
+
+  void deleteGoal(id) async {
+    id = id.toString();
+    var url = ApiURL.baseUrl + "/goal/" + id;
+    final Uri uri = Uri.parse(url);
+    var token = await ApiURL.getToken();
+    try {
+      var response = await http.delete(uri, headers: {'Authorization': token});
+      var status = response.statusCode;
+      if (status == 204) {
+        print('delete');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const GoalList()),
+        );
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -110,32 +130,10 @@ class _GoalEditState extends State<GoalEdit> {
       _dateController.text =
           "${selectedDate.day.toString().padLeft(2, '0')}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString()}";
       _descriptionController.text = widget.goal!.description;
-      // checkInternet();
       _goalType = widget.goal?.type == 'B' ? 1 : 2;
       _valuecontroller.text = (widget.goal?.value).toString();
     }
     super.initState();
-  }
-
-  void checkInternet() async {
-    try {
-      final result = await InternetAddress.lookup('example.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        setState(() {
-          showEditDeleteBtn = true;
-        });
-      }
-    } on SocketException catch (_) {
-      // Not Connected to Internet
-      final dbProvider = DBProvider.instance;
-      final goal =
-          await dbProvider.queryId('wallet', widget.goal!.id.toString());
-      if (goal[0]['offline'] == 1) {
-        setState(() {
-          showEditDeleteBtn = true;
-        });
-      }
-    }
   }
 
   bool checkdate(String date1) {
@@ -309,7 +307,51 @@ class _GoalEditState extends State<GoalEdit> {
                           }
                         },
                       ),
-                    ), // End wallet list
+                    ),
+                    Center(
+                      child: TextButton(
+                        onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Padding(
+                              padding: EdgeInsets.only(left: 90.0),
+                              child: FaIcon(FontAwesomeIcons.trash,
+                                  size: 50.0, color: Colors.red),
+                            ),
+                            content: const Text(
+                              "Delete ?",
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('No',
+                                    style: TextStyle(color: Colors.black)),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).canvasColor,
+                                ),
+                              ),
+                              TextButton(
+                              onPressed: () async {
+                                  deleteGoal(widget.goal?.id);
+                                },
+                                child: const Text('Yes',
+                                    style: TextStyle(color: Colors.black)),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).canvasColor,
+                                ),
+                              ),
+                            ],
+                            actionsAlignment: MainAxisAlignment.spaceAround,
+                            actionsPadding: const EdgeInsets.all(16.0),
+                          ),
+                        ),
+                        child: const Text(
+                          'Delete Goal',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
