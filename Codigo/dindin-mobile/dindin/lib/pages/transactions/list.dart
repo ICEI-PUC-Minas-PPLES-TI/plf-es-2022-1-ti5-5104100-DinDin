@@ -1,3 +1,4 @@
+import 'package:dindin/database/DBProvider.dart';
 import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/pages/transactions/form.dart';
 import 'package:dindin/models/transaction.dart';
@@ -26,26 +27,21 @@ Future<List<Transaction>> fetchTransaction(int page) async {
 
   try {
     response = await ApiURL.get('/transaction?page=$page');
+    if (response.statusCode == 200) {
+      final extractJson = jsonDecode(response.body)['transactions'];
+      for (var transaction in extractJson) {
+        extract.add(Transaction.fromJson(transaction));
+      }
+      return extract;
+    } else {
+      throw Exception('Failed to load goals');
+    }
   } catch (e) {
-    final String response =
-        await rootBundle.loadString('assets/data/transactions.json');
-    final extractJson = jsonDecode(response)['transactions'];
-    for (var transaction in extractJson) {
-      extract.add(Transaction.fromJson(transaction));
-    }
     return extract;
-  }
-
-  if (response.statusCode == 200) {
-    final extractJson = jsonDecode(response.body)['transactions'];
-    for (var transaction in extractJson) {
-      extract.add(Transaction.fromJson(transaction));
-    }
-    return extract;
-  } else {
-    throw Exception('Failed to load goals');
   }
 }
+
+
 
 class _ExtractState extends State<Extract> {
   @override

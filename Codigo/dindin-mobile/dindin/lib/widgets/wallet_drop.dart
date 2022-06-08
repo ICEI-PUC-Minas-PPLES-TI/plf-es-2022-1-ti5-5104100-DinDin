@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dindin/database/DBProvider.dart';
 import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/models/wallet.dart';
 import 'package:flutter/material.dart';
@@ -43,20 +44,36 @@ class _DropWalletState extends State<DropWallet> {
     var url = ApiURL.baseUrl + "/wallet";
     final Uri uri = Uri.parse(url);
     var token = await ApiURL.getToken();
-    var response = await http.get(uri, headers: {'Authorization': token});
-    var status = response.statusCode;
-    if (status == 200) {
-      var json = jsonDecode(response.body);
-      json['wallets'].forEach((row) => {
-            walletList.add(Wallet(
-                id: int.parse(row['id']),
-                updatedAt: row['updated_at'],
-                createdAt: row['created_at'],
-                deletedAt: '',
-                currentValue: null,
-                shared: row['shared'] ? 1 : 0,
-                description: row['description'])),
-          });
+    try {
+      var response = await http.get(uri, headers: {'Authorization': token});
+      var status = response.statusCode;
+      if (status == 200) {
+        var json = jsonDecode(response.body);
+        json['wallets'].forEach((row) => {
+          walletList.add(Wallet(
+              id: int.parse(row['id']),
+              updatedAt: row['updated_at'],
+              createdAt: row['created_at'],
+              deletedAt: '',
+              currentValue: null,
+              shared: row['shared'] ? 1 : 0,
+              description: row['description'])),
+        });
+      }
+    } catch (e) {
+      final dbProvider = DBProvider.instance;
+
+      final lines = await dbProvider.queryAllRows('wallet');
+      lines.forEach((row) => {
+        walletList.add(Wallet(
+            id: row['id'],
+            updatedAt: '',
+            createdAt: '',
+            deletedAt: '',
+            currentValue: null,
+            shared: 0,
+            description: row['description'])),
+      });
     }
 
     return walletList;

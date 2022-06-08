@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 class DBProvider {
   
   static final _databaseName = "DinDind.db";
-  static final _databaseVersion = 3;
+  static final _databaseVersion = 5;
 
   // torna esta classe singleton
   DBProvider._privateConstructor();
@@ -34,6 +34,16 @@ class DBProvider {
             id INTEGER PRIMARY KEY,
             description TEXT NOT NULL,
             initial_value REAL NOT NULL,
+            offline INTEGER NULL
+          )
+          ''');
+    await db.execute('''
+          CREATE TABLE wtransaction (
+            id INTEGER PRIMARY KEY,
+            wallet_id INTEGER NOT NULL,
+            description TEXT NOT NULL,
+            date TEXT NOT NULL,
+            value REAL NOT NULL,
             offline INTEGER NULL
           )
           ''');

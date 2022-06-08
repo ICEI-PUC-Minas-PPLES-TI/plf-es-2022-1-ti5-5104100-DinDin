@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dindin/database/DBProvider.dart';
 import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/helpers/color_helper.dart';
 import 'package:dindin/models/transaction.dart';
@@ -88,15 +89,42 @@ Future<List<Transaction>> fetchTransaction(int page) async {
   List<Transaction> extract = <Transaction>[];
   http.Response response;
 
-  response = await ApiURL.get('/transaction?page=$page&limit=5');
+  try {
+    response = await ApiURL.get('/transaction?page=$page&limit=5');
 
-  if (response.statusCode == 200) {
-    final extractJson = jsonDecode(response.body)['transactions'];
-    for (var transaction in extractJson) {
-      extract.add(Transaction.fromJson(transaction));
+    if (response.statusCode == 200) {
+      final extractJson = jsonDecode(response.body)['transactions'];
+      for (var transaction in extractJson) {
+        extract.add(Transaction.fromJson(transaction));
+      }
+      return extract;
+    } else {
+      throw Exception('Failed to load goals');
     }
+  } catch(e){
+    extract = await fetchTransactionOffline();
     return extract;
-  } else {
-    throw Exception('Failed to load goals');
   }
 }
+
+Future<List<Transaction>> fetchTransactionOffline() async{
+  List<Transaction> transactionList = <Transaction>[];
+
+  final dbProvider = DBProvider.instance;
+
+  final lines = await dbProvider.queryAllRows('wtransaction');
+  lines.forEach((row) => {
+    transactionList.add(Transaction(
+        id: row['id'].toString(),
+        description: row['description'],
+        value: row['value'],
+        createdAt: '1970-01-01',
+        date: row['date'],
+        walletId: row['wallet_id'].toString(),
+        category: null,
+        transactionRecurrencies: null
+    )),
+  });
+  return transactionList;
+}
+

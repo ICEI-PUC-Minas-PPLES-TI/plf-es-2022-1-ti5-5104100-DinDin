@@ -1,4 +1,5 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:dindin/database/DBProvider.dart';
 import 'package:dindin/helpers/api_url.dart';
 import 'package:dindin/models/transaction.dart';
 import 'package:dindin/pages/dashboard.dart';
@@ -154,17 +155,35 @@ class _TransactionFormState extends State<TransactionForm> {
     var token = await ApiURL.getToken();
 
     if(widget.transaction == null) { // Create
-      var url = ApiURL.baseUrl + "/wallet/" + wallet + "/transaction";
-      final Uri uri = Uri.parse(url);
-      var response =
-          await http.post(uri, headers: {'Authorization': token}, body: body);
-      var status = response.statusCode;
-      if (status == 201) {
-        print('created');
-        print(response.body);
-      } else {
-        print(response.body);
+      try {
+        var url = ApiURL.baseUrl + "/wallet/" + wallet + "/transaction";
+        final Uri uri = Uri.parse(url);
+        var response =
+        await http.post(uri, headers: {'Authorization': token}, body: body);
+        var status = response.statusCode;
+        if (status == 201) {
+          print('created');
+          print(response.body);
+        } else {
+          print(response.body);
+        }
+      } catch (e) {
+        final dbProvider = DBProvider.instance;
+        Map<String, dynamic> row = {
+          'description' : _descriptionController.text,
+          'value': _isIncome ? currencyFormat(_amountController.text).toString() : (double.parse(currencyFormat(_amountController.text).toString()) * -1).toString(),
+          'date': '${date.year}-${date.month}-${date.day}',
+          'wallet_id': wallet,
+          'offline': 1
+        };
+        final id = await dbProvider.insert('wtransaction',row);
+        print('linha inserida id: $id');
+        //var prefs = StreamingSharedPreferences.instance;
+        //(await prefs).setBool("update_wallet", true);
+
+        Navigator.of(context).pop();
       }
+
     } else { // Edit
       var url = ApiURL.baseUrl + "/wallet/" + wallet + "/transaction/" + widget.transaction!.id;
       final Uri uri = Uri.parse(url);
