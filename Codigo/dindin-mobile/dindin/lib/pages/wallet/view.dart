@@ -195,14 +195,17 @@ class _WalletViewState extends State<WalletView> {
                                           padding: const EdgeInsets.all(10.0),
                                           child: Center(
                                               child: Text(
-                                                  "R\$" +
-                                                      (totalValue.data != null
-                                                          ? totalValue.data!
+                                                      (((totalValue.data != null)&&totalValue.data!>=0)
+                                                          ? "R\$" +totalValue.data!
                                                               .toStringAsFixed(
                                                                   2)
                                                               .replaceAll(
                                                                   '.', ',')
-                                                          : "0,00"),
+                                                          : "-R\$" +(totalValue.data!*-1)
+                                                              .toStringAsFixed(
+                                                                  2)
+                                                              .replaceAll(
+                                                                  '.', ',')),
                                                   style: const TextStyle(
                                                       fontSize: 50,
                                                       fontWeight:
