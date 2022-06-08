@@ -356,7 +356,7 @@ class _DashboardState extends State<Dashboard> {
                         const Text('BALANCE',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w300)),
-                        Text(((incoming != null && outcoming != null)&&((incoming - outcoming)>0))?
+                        Text(((incoming != null && outcoming != null)&&((incoming - outcoming)>=0))?
                             '\$${(incoming - outcoming).toStringAsFixed(2).replaceAll(".",",")}':'-\$${((incoming - outcoming)*-1).toStringAsFixed(2).replaceAll(".",",")}',
                             style: const TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.w600)),
