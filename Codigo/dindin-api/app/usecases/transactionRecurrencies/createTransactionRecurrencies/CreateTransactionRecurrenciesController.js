@@ -16,6 +16,7 @@ class CreateTransactionRecurrenciesController {
             value: yup
                 .number("'value' must be numeric!")
                 .nullable(false)
+                .notOneOf([0], "'value' cannot be 0!")
                 .required("'value' is a required field!"),
             description: yup
                 .string("'description' must be string!")
