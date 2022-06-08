@@ -42,7 +42,7 @@ afterAll(async () => {
     await close();
 });
 
-describe("POST /transaction test suite", ()=>{
+describe("POST wallet/:id/transaction/:tid  test suite", ()=>{
     it("should create an income transaction without category", async () => {
         const mockTransaction = {
             description: "my transaction",
@@ -145,6 +145,18 @@ describe("POST /transaction test suite", ()=>{
         expect(response.statusCode).toEqual(422);
     })
 
+    it("should not create an transaction with long description", async () => {
+        const mockTransaction = {
+            value: -2000,
+            description: "this is a long, very long, absolety long description",
+            date: "2021-10-10",
+            category_id: OUTCategory
+        };
+
+        const response = await request.post(url("/transaction")).send(mockTransaction);
+        expect(response.statusCode).toEqual(422);
+    })
+
     it("should not create an transaction without value", async () => {
         const mockTransaction = {
             description: "my transaction",
@@ -158,7 +170,7 @@ describe("POST /transaction test suite", ()=>{
 
     it("should not create an transaction without description", async () => {
         const mockTransaction = {
-            value: 2000,
+            value: -2000,
             date: "2021-10-10",
             category_id: OUTCategory
         };
