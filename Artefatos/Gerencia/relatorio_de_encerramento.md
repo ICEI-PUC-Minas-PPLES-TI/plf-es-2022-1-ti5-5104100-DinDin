@@ -16,12 +16,12 @@ usuários uma forma mais prática de controlar suas despesas e receitas.
 
 ### Objetivos específicos
 
- - 1. Permitir ao usuário dividir suas despesas em categorias;
- - 2. Permitir ao usuário lançar suas despesas e receitas diárias;
- - 3. Permitir ao usuário, junto de outros usuários, lançar despesas e receitas
-de modo compartilhado.
- - 4. Permitir que o usuário controle de onde o dinheiro está saindo ou
-entrando.
+ - 1. Permitir ao usuário criar carteiras para referenciar onde está o dinheiro (físicos, bancos…);
+ - 2. Permitir ao usuário lançar suas transações de entrada ou saída (receita/despesa) para cada carteira;
+ - 3. Permitir ao usuário definir categoria de transações;
+ - 4. Permitir ao usuário cadastrar transações recorrentes;
+ - 5. Permitir ao usuário, junto de outros usuários, lançar transações em carteiras compartilhadas;
+ - 6. Apresentar dashboard com gráficos de movimentações financeiras categorizadas.
 
 ---
 
