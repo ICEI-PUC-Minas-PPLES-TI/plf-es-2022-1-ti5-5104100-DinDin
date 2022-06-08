@@ -11,7 +11,6 @@ import 'package:dindin/widgets/transactions_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:dindin/helpers/api_url.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
@@ -25,7 +24,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
   var userName = " ";
   var hasInternet = true;
   int walletID = 0;
@@ -44,18 +42,19 @@ class _DashboardState extends State<Dashboard> {
 
   void getMe() async {
     final prefs = await StreamingSharedPreferences.instance;
-    final Preference<String> name = prefs.getString("username", defaultValue: 'Name');
+    final Preference<String> name =
+        prefs.getString("username", defaultValue: 'Name');
     setState(() {
       userName = name.getValue();
     });
 
     StreamingSharedPreferences.instance.then((value) => {
-      value.getString("username", defaultValue: "Name").listen((value) {
-        setState(() {
-          userName = name.getValue();
+          value.getString("username", defaultValue: "Name").listen((value) {
+            setState(() {
+              userName = name.getValue();
+            });
+          })
         });
-      })
-    });
   }
 
   void checkInternet() async {
@@ -78,9 +77,11 @@ class _DashboardState extends State<Dashboard> {
 
   void getCurrentWallet() async {
     final prefs = await StreamingSharedPreferences.instance;
-    final Preference<int> walletPrefID = prefs.getInt("dashwalletID", defaultValue: 0);
-    final Preference<String> walletPrefName = prefs.getString("dashwalletName", defaultValue: '');
-    if(walletPrefID.getValue() > 0) {
+    final Preference<int> walletPrefID =
+        prefs.getInt("dashwalletID", defaultValue: 0);
+    final Preference<String> walletPrefName =
+        prefs.getString("dashwalletName", defaultValue: '');
+    if (walletPrefID.getValue() > 0) {
       setState(() {
         walletID = walletPrefID.getValue();
         walletName = walletPrefName.getValue();
@@ -88,15 +89,15 @@ class _DashboardState extends State<Dashboard> {
     }
 
     StreamingSharedPreferences.instance.then((value) => {
-      value.getInt("dashwalletID", defaultValue: 0).listen((value) {
-        if(value > 0) {
-          setState(() {
-            walletID = walletPrefID.getValue();
-            walletName = walletPrefName.getValue();
-          });
-        }
-      })
-    });
+          value.getInt("dashwalletID", defaultValue: 0).listen((value) {
+            if (value > 0) {
+              setState(() {
+                walletID = walletPrefID.getValue();
+                walletName = walletPrefName.getValue();
+              });
+            }
+          })
+        });
   }
 
   void getBalance() async {
@@ -104,7 +105,7 @@ class _DashboardState extends State<Dashboard> {
     final Uri uri = Uri.parse(url);
     var token = await ApiURL.getToken();
     var response = await http.get(uri, headers: {'Authorization': token});
-    if(response.statusCode == 200) {
+    if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
       print(json);
       setState(() {
@@ -112,7 +113,6 @@ class _DashboardState extends State<Dashboard> {
         outcoming = json['outcoming'];
       });
     }
-
   }
 
   @override
@@ -170,8 +170,8 @@ class _DashboardState extends State<Dashboard> {
                     const SizedBox(height: 20),
                     Text(
                       userName,
-                      style:
-                      const TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 27, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 20),
                     Text('Current Wallet: $walletName')
@@ -245,67 +245,68 @@ class _DashboardState extends State<Dashboard> {
                       flex: 2),
                 ),
                 // Account Button
-                if(hasInternet)
-                Expanded(
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Colors.grey.shade100,
-                          child: IconButton(
-                            alignment: Alignment.topRight,
-                            icon: const Center(
-                              child: FaIcon(
-                                FontAwesomeIcons.circleUser,
-                                size: 25.0,
-                                color: Colors.black,
+                if (hasInternet)
+                  Expanded(
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.grey.shade100,
+                            child: IconButton(
+                              alignment: Alignment.topRight,
+                              icon: const Center(
+                                child: FaIcon(
+                                  FontAwesomeIcons.circleUser,
+                                  size: 25.0,
+                                  color: Colors.black,
+                                ),
                               ),
+                              color: Colors.black,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ProfilePage()),
+                                );
+                              },
                             ),
-                            color: Colors.black,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const ProfilePage()),
-                              );
-                            },
                           ),
-                        ),
-                        const Text('Account')
-                      ],
-                    ),
-                    flex: 2),
+                          const Text('Account')
+                        ],
+                      ),
+                      flex: 2),
                 // Goal
-                if(hasInternet)
-                Expanded(
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Colors.grey.shade100,
-                          child: IconButton(
-                            alignment: Alignment.topRight,
-                            icon: const Center(
-                              child: FaIcon(
-                                FontAwesomeIcons.bullseye,
-                                size: 25.0,
-                                color: Colors.black,
+                if (hasInternet)
+                  Expanded(
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.grey.shade100,
+                            child: IconButton(
+                              alignment: Alignment.topRight,
+                              icon: const Center(
+                                child: FaIcon(
+                                  FontAwesomeIcons.bullseye,
+                                  size: 25.0,
+                                  color: Colors.black,
+                                ),
                               ),
+                              color: Colors.black,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const GoalList()),
+                                );
+                              },
                             ),
-                            color: Colors.black,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const GoalList()),
-                              );
-                            },
                           ),
-                        ),
-                        const Text('Goals')
-                      ],
-                    ),
-                    flex: 2),
+                          const Text('Goals')
+                        ],
+                      ),
+                      flex: 2),
                 // Reports
                 Expanded(
                     child: Column(
@@ -328,7 +329,8 @@ class _DashboardState extends State<Dashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const ReportBalance()),
+                                    builder: (context) =>
+                                        const ReportBalance()),
                               );
                             },
                           ),
@@ -354,7 +356,8 @@ class _DashboardState extends State<Dashboard> {
                         const Text('BALANCE',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w300)),
-                        Text('\$${(incoming != null && outcoming  != null)? (incoming - outcoming).toStringAsFixed(2) : 0}',
+                        Text(((incoming != null && outcoming != null)&&((incoming - outcoming)>0))?
+                            '\$${(incoming - outcoming).toStringAsFixed(2)}':'-\$${((incoming - outcoming)*-1).toStringAsFixed(2)}',
                             style: const TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.w600)),
                         const Text('US Dollars'),
@@ -381,7 +384,8 @@ class _DashboardState extends State<Dashboard> {
                             const Text('Outcoming',
                                 style: TextStyle(
                                     fontSize: 22, color: Colors.white)),
-                            Text('\$${outcoming != null ? outcoming.toStringAsFixed(2) : 0}',
+                            Text(
+                                '\$${outcoming != null ? outcoming.toStringAsFixed(2) : 0}',
                                 style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold,
@@ -404,7 +408,8 @@ class _DashboardState extends State<Dashboard> {
                             const Text('Incoming',
                                 style: TextStyle(
                                     fontSize: 22, color: Colors.white)),
-                            Text('\$${incoming != null ? incoming.toStringAsFixed(2) : 0}',
+                            Text(
+                                '\$${incoming != null ? incoming.toStringAsFixed(2) : 0}',
                                 style: const TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold,
@@ -437,7 +442,8 @@ class _DashboardState extends State<Dashboard> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const TransactionForm(null)),
+              MaterialPageRoute(
+                  builder: (context) => const TransactionForm(null)),
             );
           },
           child: const Icon(Icons.add),
