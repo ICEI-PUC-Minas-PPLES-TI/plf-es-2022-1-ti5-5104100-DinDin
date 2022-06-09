@@ -3,6 +3,9 @@ const Category = require("../../../models/Category");
 
 const Transaction = require("../../../models/Transaction");
 const GoalService = require("../../../services/goalServices");
+const FindWalletUseCase = require("../../wallet/findWallet/FindWalletUseCase");
+const ListWalletUsersUseCase = require("../../wallet/listWalletUsers/ListWalletUsersUseCase");
+const { firebaseServices } = require("../../../services/firebaseServices");
 
 class CreateTransactionUseCase {
     async create(
@@ -49,6 +52,23 @@ class CreateTransactionUseCase {
 
         // don't put a await in this, of it will slow down the create transaction process
         new GoalService().updateAchievemetWalletGoals(wallet_id);
+
+        const findWalletUseCase = new FindWalletUseCase();
+        const wallet = await findWalletUseCase.find(wallet_id);
+        if(wallet.shared){
+            const listWalletUsersUseCase = new ListWalletUsersUseCase();
+            const members = await listWalletUsersUseCase.list(wallet_id)
+            members.users.forEach(async element => {
+                console.log(element.id, `New Transaction on ${wallet.description}`, `${element.name} added ${description} - $${value}`)
+                if(element.id != user_id) {
+                    await firebaseServices.sendCloudMessage(
+                        element.id,
+                        `New Transaction on ${wallet.description}`,
+                        `${element.name} added ${description} - $${value}`
+                    );
+                }                
+            })
+        }
 
         return { id: transaction.id };
     }
