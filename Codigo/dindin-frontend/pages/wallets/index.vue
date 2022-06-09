@@ -270,6 +270,7 @@ export default {
             modalEdit: false,
             showMembersModal: false,
             walletToShowMembersId: "",
+            walletToShowMembers: null,
         };
     },
     async fetch() {

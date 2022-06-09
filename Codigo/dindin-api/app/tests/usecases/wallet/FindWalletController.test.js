@@ -30,11 +30,8 @@ describe("get one wallet test suite", () => {
         expect(response.body).toHaveProperty("id");
         expect(response.body).toHaveProperty("description");
         expect(response.body.description).toEqual(mockWallet.description);
-        expect(response.body).toHaveProperty("initial_value");
-        expect(response.body.initial_value).toEqual(mockWallet.initial_value);
         expect(response.body).toHaveProperty("created_at");
         expect(response.body).toHaveProperty("shared");
         expect(response.body).toHaveProperty("updated_at");
-        //expect(response.body.initial_value).toEqual(mockWallet.initial_value);
     });
 });

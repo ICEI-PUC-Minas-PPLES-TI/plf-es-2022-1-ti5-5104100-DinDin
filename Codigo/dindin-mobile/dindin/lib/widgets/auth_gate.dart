@@ -106,9 +106,9 @@ Future autheticateToServerViaFirebaseUser(User firebaseUser) {
 
       var response2 =
           await http.get(uriMe, headers: {'Authorization': json["token"]});
-      var status = response.statusCode;
-      if (status == 200) {
-        var jsonUser = jsonDecode(response.body);
+      var status2 = response2.statusCode;
+      if (status2 == 200) {
+        var jsonUser = jsonDecode(response2.body);
         StreamingSharedPreferences.instance.then((sharedPref) {
           sharedPref.setString("username", jsonUser["name"]);
         });

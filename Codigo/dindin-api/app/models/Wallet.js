@@ -28,12 +28,6 @@ class Wallet extends Model {
                     allowNull: false,
                     defaultValue: false,
                 },
-                initial_value: {
-                    type: DataTypes.DOUBLE,
-                    allowNull: false,
-                    defaultValue: 0,
-                    notEmpty: true,
-                },
                 owner_id: {
                     type: DataTypes.INTEGER.UNSIGNED,
                     autoIncrement: false,

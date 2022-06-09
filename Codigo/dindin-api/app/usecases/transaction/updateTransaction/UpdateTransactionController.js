@@ -12,7 +12,10 @@ class UpdateTransactionController {
         today.setHours(0, 0, 0, 0);
 
         const scheme = yup.object().shape({
-            value: yup.number("'value' must be numeric!").nullable(false),
+            value: yup
+                .number("'value' must be numeric!")
+                .notOneOf([0], "'value' cannot be 0!")
+                .nullable(false),
             description: yup
                 .string("'description' must be string!")
                 .min(1)

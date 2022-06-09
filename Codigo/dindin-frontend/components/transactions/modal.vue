@@ -5,7 +5,7 @@
         @click:outside="$emit('input', false)"
         @keydown.esc="$emit('input', false)"
     >
-        <v-card class="pa-2">
+        <v-card v-if="wallets.length > 0" class="pa-2">
             <v-card-title class="text-h5 transactions-modal-title">
                 <h4>
                     <span> {{ title }}</span>
@@ -170,7 +170,7 @@
                                     outlined
                                     mandatory
                                 >
-                                    <v-btn value="D"> Daylly </v-btn>
+                                    <v-btn value="D"> Daily </v-btn>
                                     <v-btn value="M"> Monthly </v-btn>
                                 </v-btn-toggle>
                             </v-col>
@@ -263,6 +263,31 @@
                             color="primary"
                             @click.stop="saveTransaction()"
                             >Save</v-btn
+                        >
+                    </v-col>
+                </v-row>
+            </v-card-actions>
+        </v-card>
+        <v-card v-else class="overflow-none">
+            <v-card-title class="text-h5 d-block">
+                <h4 class="d-inline-block">You must create a wallet first!</h4>
+                <v-btn class="float-right" icon @click="$emit('input', false)">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+            </v-card-title>
+            <v-card-actions>
+                <v-row>
+                    <v-col cols="4" align="center">
+                        <v-btn
+                            text
+                            color="black"
+                            @click.stop="$emit('input', false)"
+                            >Cancel</v-btn
+                        >
+                    </v-col>
+                    <v-col>
+                        <v-btn block color="primary" to="/wallets"
+                            >Create Wallet</v-btn
                         >
                     </v-col>
                 </v-row>
