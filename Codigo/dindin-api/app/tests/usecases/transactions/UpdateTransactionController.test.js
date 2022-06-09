@@ -25,12 +25,12 @@ beforeAll(async () => {
         color: "FF0000",
     });
     INCategory = responseINCategory.body.id;
-    const responseOUTCategory = await request.post(url("/category/")).send({
-        description: "category OUT",
-        type: "OUT",
-        color: "FF0000",
-    });
-    OUTCategory = responseOUTCategory.body.id;
+    // const responseOUTCategory = await request.post(url("/category/")).send({
+    //     description: "category OUT",
+    //     type: "OUT",
+    //     color: "FF0000",
+    // });
+    // OUTCategory = responseOUTCategory.body.id;
 });
 
 afterAll(async () => {
