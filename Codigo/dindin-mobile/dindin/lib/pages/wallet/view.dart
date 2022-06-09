@@ -206,8 +206,8 @@ class _WalletViewState extends State<WalletView> {
                                                                   2)
                                                               .replaceAll(
                                                                   '.', ',')),
-                                                  style: const TextStyle(
-                                                      fontSize: 50,
+                                                  style: TextStyle(
+                                                      fontSize: (totalValue.data!.toString().length>6)?40:50,
                                                       fontWeight:
                                                           FontWeight.bold))),
                                         ),
