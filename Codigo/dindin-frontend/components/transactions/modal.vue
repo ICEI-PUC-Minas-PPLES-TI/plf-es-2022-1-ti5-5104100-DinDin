@@ -268,27 +268,32 @@
                 </v-row>
             </v-card-actions>
         </v-card>
-        <v-card v-else>
-            <v-card-title class="text-h5 transactions-modal-title">
-                <h4>
-                    <span class="d-block text-center">
-                        No wallets created!
-                    </span>
+        <v-card v-else class="overflow-none">
+            <v-card-title class="text-h5 d-block">
+                <h4 class="d-inline-block">
+                    You must create a wallet first!
                 </h4>
-                <v-btn icon @click="$emit('input', false)">
+                <v-btn class="float-right" icon @click="$emit('input', false)">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
             </v-card-title>
-            <v-card-text>
-                <v-btn
-                    color="blue"
-                    text
-                    class="d-block text-center"
-                    to="/wallets"
-                    @click.stop="$emit('input', false)"
-                    >Create One</v-btn
-                >
-            </v-card-text>
+            <v-card-actions>
+                <v-row>
+                    <v-col cols="4" align="center">
+                        <v-btn
+                            text
+                            color="black"
+                            @click.stop="$emit('input', false)"
+                            >Cancel</v-btn
+                        >
+                    </v-col>
+                    <v-col>
+                        <v-btn block color="primary" to="/wallets"
+                            >Create Wallet</v-btn
+                        >
+                    </v-col>
+                </v-row>
+            </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
