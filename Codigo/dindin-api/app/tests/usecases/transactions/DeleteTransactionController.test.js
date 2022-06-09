@@ -7,7 +7,7 @@ const Transaction = require("../../../models/Transaction");
 
 let walletToCreate;
 
-function url(url){
+function url(url) {
     return `/api/wallet/${walletToCreate}${url}`;
 }
 
@@ -30,18 +30,22 @@ describe("DELETE wallet/:id/transaction/:tid test suite", () => {
         const mockTransaction = {
             description: "my transaction",
             value: 2000,
-            date: "2021-10-10"
+            date: "2021-10-10",
         };
 
-        const createMockResponse = await request.post(url("/transaction")).send(mockTransaction);
-        
+        const createMockResponse = await request
+            .post(url("/transaction"))
+            .send(mockTransaction);
+
         const response = await request
             .delete(url("/transaction/") + createMockResponse.body.id)
             .send();
 
         expect(response.statusCode).toEqual(204);
 
-        const tryToFindGoal = await Transaction.findByPk(createMockResponse.body.id);
+        const tryToFindGoal = await Transaction.findByPk(
+            createMockResponse.body.id
+        );
         expect(tryToFindGoal).toBeNull();
     });
 
