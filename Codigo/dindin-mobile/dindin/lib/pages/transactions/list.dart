@@ -92,7 +92,7 @@ class _ExtractState extends State<Extract> {
                                 const EdgeInsets.fromLTRB(0, 10.0, 0, 25.0),
                             child: Text(
                               '\$' +
-                                  formatMoney.format(snapshot.data ?? 0).toString(),
+                                  formatMoney.format(snapshot.data ?? 0).toString().replaceAll(".",","),
                               style: const TextStyle(
                                   fontWeight: FontWeight.w700, fontSize: 42),
                             ),

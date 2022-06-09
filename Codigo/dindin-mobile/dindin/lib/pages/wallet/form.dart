@@ -1,4 +1,3 @@
-
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'dart:io';
 import 'dart:convert';
@@ -24,7 +23,6 @@ class WalletForm extends StatefulWidget {
 }
 
 class _WalletFormState extends State<WalletForm> {
-
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _startingController = TextEditingController();
   bool showEditDeleteBtn = false;
@@ -50,8 +48,9 @@ class _WalletFormState extends State<WalletForm> {
     } on SocketException catch (_) {
       // Not Connected to Internet
       final dbProvider = DBProvider.instance;
-      final wallet = await dbProvider.queryId('wallet', widget.wallet!.id.toString());
-      if(wallet[0]['offline'] == 1) {
+      final wallet =
+          await dbProvider.queryId('wallet', widget.wallet!.id.toString());
+      if (wallet[0]['offline'] == 1) {
         setState(() {
           showEditDeleteBtn = true;
         });
@@ -66,7 +65,12 @@ class _WalletFormState extends State<WalletForm> {
     final dbProvider = DBProvider.instance;
 
     try {
-      var response = await http.post(uri, headers: {'Authorization': token}, body: {'description' : _descriptionController.text, 'initial_value': _startingController.text.replaceAll(new RegExp(r"\D"), "") });
+      var response = await http.post(uri, headers: {
+        'Authorization': token
+      }, body: {
+        'description': _descriptionController.text,
+        'initial_value': currencyFormat(_startingController.text).toString()
+      });
       var status = response.statusCode;
       if (status == 201) {
         var json = jsonDecode(response.body);
@@ -76,11 +80,11 @@ class _WalletFormState extends State<WalletForm> {
       }
     } catch (e) {
       Map<String, dynamic> row = {
-        'description' : _descriptionController.text,
-        'initial_value': _startingController.text.replaceAll(new RegExp(r"\D"), ""),
+        'description': _descriptionController.text,
+        'initial_value': currencyFormat(_startingController.text).toString(),
         'offline': 1
       };
-      final id = await dbProvider.insert('wallet',row);
+      final id = await dbProvider.insert('wallet', row);
       print('linha inserida id: $id');
       var prefs = StreamingSharedPreferences.instance;
       (await prefs).setBool("update_wallet", true);
@@ -96,23 +100,39 @@ class _WalletFormState extends State<WalletForm> {
     final dbProvider = DBProvider.instance;
 
     try {
-      var response = await http.put(uri, headers: {'Authorization': token}, body: {'description' : _descriptionController.text });
+      var response = await http.put(uri,
+          headers: {'Authorization': token},
+          body: {'description': _descriptionController.text});
       var status = response.statusCode;
       if (status == 200) {
         var json = jsonDecode(response.body);
-        Wallet newWallet = Wallet(id: widget.wallet!.id, shared: widget.wallet!.shared, deletedAt: widget.wallet!.deletedAt, description: _descriptionController.text, createdAt: widget.wallet!.createdAt, updatedAt: widget.wallet!.updatedAt, currentValue: widget.wallet!.currentValue);
+        Wallet newWallet = Wallet(
+            id: widget.wallet!.id,
+            shared: widget.wallet!.shared,
+            deletedAt: widget.wallet!.deletedAt,
+            description: _descriptionController.text,
+            createdAt: widget.wallet!.createdAt,
+            updatedAt: widget.wallet!.updatedAt,
+            currentValue: widget.wallet!.currentValue);
         Navigator.of(context).pop(newWallet);
       } else {
         print(response.body);
       }
     } catch (e) {
-      if(showEditDeleteBtn) {
+      if (showEditDeleteBtn) {
         Map<String, dynamic> row = {
           'id': widget.wallet?.id,
-          'description' : _descriptionController.text
+          'description': _descriptionController.text
         };
-        await dbProvider.update('wallet',row);
-        Wallet newWallet = Wallet(id: widget.wallet!.id, shared: widget.wallet!.shared, deletedAt: widget.wallet!.deletedAt, description: _descriptionController.text, createdAt: widget.wallet!.createdAt, updatedAt: widget.wallet!.updatedAt, currentValue: widget.wallet!.currentValue);
+        await dbProvider.update('wallet', row);
+        Wallet newWallet = Wallet(
+            id: widget.wallet!.id,
+            shared: widget.wallet!.shared,
+            deletedAt: widget.wallet!.deletedAt,
+            description: _descriptionController.text,
+            createdAt: widget.wallet!.createdAt,
+            updatedAt: widget.wallet!.updatedAt,
+            currentValue: widget.wallet!.currentValue);
         Navigator.of(context).pop(newWallet);
       }
     }
@@ -134,7 +154,7 @@ class _WalletFormState extends State<WalletForm> {
         print(response.body);
       }
     } catch (e) {
-      if(showEditDeleteBtn) {
+      if (showEditDeleteBtn) {
         dbProvider.delete('wallet', widget.wallet!.id.toInt());
         Navigator.of(context).pop();
         Navigator.of(context).pop('CLOSE');
@@ -142,12 +162,34 @@ class _WalletFormState extends State<WalletForm> {
     }
   }
 
+  num currencyFormat(var value) {
+    var firstnum = 0;
+    for (var a = 0; a < value.length; a++) {
+      if (_isNumeric(value.substring(a, a + 1))) {
+        firstnum = a;
+        a = value.length;
+      }
+    }
+    String removedot = value.replaceAll(".", "");
+    String chageforcomma = removedot.replaceAll(",", ".");
+    double resp = double.parse(chageforcomma.substring(firstnum));
+    return resp;
+  }
+
+  bool _isNumeric(String str) {
+    // ignore: unnecessary_null_comparison
+    if (str == null) {
+      return false;
+    }
+    return double.tryParse(str) != null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
             title: Text(
-              widget.wallet != null ? 'Update Wallet': 'Create Wallet',
+              widget.wallet != null ? 'Update Wallet' : 'Create Wallet',
             ),
             backgroundColor: Theme.of(context).primaryColor),
         body: Form(
@@ -171,17 +213,18 @@ class _WalletFormState extends State<WalletForm> {
                     ),
                     const SizedBox(height: 20),
                     if (widget.wallet == null)
-                    const Text('Starting Amount',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                      const Text('Starting Amount',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     if (widget.wallet == null)
                       TextField(
                         controller: _startingController,
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
-                                  CurrencyTextInputFormatter(
-                                    locale: 'pt_BR',
-                                    decimalDigits: 2,
-                                  )],
+                          CurrencyTextInputFormatter(
+                            locale: 'pt_BR',
+                            decimalDigits: 2,
+                          )
+                        ],
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: 'ex: 9999,99',
@@ -199,10 +242,10 @@ class _WalletFormState extends State<WalletForm> {
                           primary: Theme.of(context).primaryColor,
                         ),
                         onPressed: () async {
-                          if(widget.wallet == null) {
+                          if (widget.wallet == null) {
                             createWallet();
                           } else {
-                            if(showEditDeleteBtn) {
+                            if (showEditDeleteBtn) {
                               updateWallet();
                             }
                           }
@@ -210,56 +253,56 @@ class _WalletFormState extends State<WalletForm> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    if(widget.wallet != null && !showEditDeleteBtn)
-                    const Text(
-                      'You can\'t edit a cloud saved wallet while offline!',
-                      style: TextStyle(color: Colors.red),
-                    ),
+                    if (widget.wallet != null && !showEditDeleteBtn)
+                      const Text(
+                        'You can\'t edit a cloud saved wallet while offline!',
+                        style: TextStyle(color: Colors.red),
+                      ),
                     if (widget.wallet != null && showEditDeleteBtn)
-                    Center(
-                      child: TextButton(
-                        onPressed: () => showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Padding(
-                              padding: EdgeInsets.only(left: 90.0),
-                              child: FaIcon(FontAwesomeIcons.trash,
-                                  size: 50.0, color: Colors.red),
-                            ),
-                            content: const Text(
-                              "Delete ?",
-                              textAlign: TextAlign.center,
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, 'OK'),
-                                child: const Text('No',
-                                    style: TextStyle(color: Colors.black)),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Theme.of(context).canvasColor,
-                                ),
+                      Center(
+                        child: TextButton(
+                          onPressed: () => showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Padding(
+                                padding: EdgeInsets.only(left: 90.0),
+                                child: FaIcon(FontAwesomeIcons.trash,
+                                    size: 50.0, color: Colors.red),
                               ),
-                              TextButton(
-                              onPressed: () async {
-                                  deleteWallet();
-                                },
-                                child: const Text('Yes',
-                                    style: TextStyle(color: Colors.black)),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Theme.of(context).canvasColor,
-                                ),
+                              content: const Text(
+                                "Delete ?",
+                                textAlign: TextAlign.center,
                               ),
-                            ],
-                            actionsAlignment: MainAxisAlignment.spaceAround,
-                            actionsPadding: const EdgeInsets.all(16.0),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                  child: const Text('No',
+                                      style: TextStyle(color: Colors.black)),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Theme.of(context).canvasColor,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    deleteWallet();
+                                  },
+                                  child: const Text('Yes',
+                                      style: TextStyle(color: Colors.black)),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Theme.of(context).canvasColor,
+                                  ),
+                                ),
+                              ],
+                              actionsAlignment: MainAxisAlignment.spaceAround,
+                              actionsPadding: const EdgeInsets.all(16.0),
+                            ),
+                          ),
+                          child: const Text(
+                            'Delete Wallet',
+                            style: TextStyle(color: Colors.red),
                           ),
                         ),
-                        child: const Text(
-                          'Delete Wallet',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ),
-                    )
+                      )
                   ],
                 ),
               ),

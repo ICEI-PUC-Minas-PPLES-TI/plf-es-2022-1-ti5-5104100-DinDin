@@ -66,7 +66,7 @@ class TransactionsList extends StatelessWidget {
                             )
                           ],
                         ),
-                        Text('\$' + formatMoney.format(transaction.value.abs()),
+                        Text((transaction.value>=0)?'\$' + transaction.value.toStringAsFixed(2).replaceAll(".",","):'-\$' + (transaction.value*-1).toStringAsFixed(2).replaceAll(".",","),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 10,
