@@ -270,9 +270,7 @@
         </v-card>
         <v-card v-else class="overflow-none">
             <v-card-title class="text-h5 d-block">
-                <h4 class="d-inline-block">
-                    You must create a wallet first!
-                </h4>
+                <h4 class="d-inline-block">You must create a wallet first!</h4>
                 <v-btn class="float-right" icon @click="$emit('input', false)">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
