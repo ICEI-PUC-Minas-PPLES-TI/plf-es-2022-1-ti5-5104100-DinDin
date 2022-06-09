@@ -156,9 +156,7 @@
         </v-card>
         <v-card v-else class="pa-2">
             <v-card-title class="text-h5 goals-modal-title">
-                <h4>
-                    <span>You must create a wallet first!</span>
-                </h4>
+                <h4>You must create a wallet first!</h4>
                 <v-btn icon @click="$emit('input', false)">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
@@ -394,7 +392,6 @@ export default {
 .goals-modal-title h4 {
     width: calc(100% - 37px);
     text-align: left;
-    line-height: 0.1em;
     margin: 20px 0 20px;
 }
 </style>

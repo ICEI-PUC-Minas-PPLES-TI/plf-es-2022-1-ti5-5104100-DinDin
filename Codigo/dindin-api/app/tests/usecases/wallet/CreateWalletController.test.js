@@ -31,7 +31,6 @@ describe("POST /wallet test suite", () => {
             parseInt(response.body.wallet.id)
         );
         expect(createdWallet.description).toEqual("my1wallet");
-        expect(createdWallet.initial_value).toEqual(2000);
     });
 
     it("should create an wallet with 10000 initial value", async () => {
@@ -48,10 +47,9 @@ describe("POST /wallet test suite", () => {
             parseInt(response.body.wallet.id)
         );
         expect(createdWallet.description).toEqual("my2wallet");
-        expect(createdWallet.initial_value).toEqual(10000);
     });
 
-    it("should create an wallet with description mywallet5 and 20000 initial value", async () => {
+    it("should create an wallet with description mywallet5", async () => {
         const mockWallet = {
             description: "mywallet5",
             initial_value: 20000,
@@ -65,7 +63,6 @@ describe("POST /wallet test suite", () => {
             parseInt(response.body.wallet.id)
         );
         expect(createdWallet.description).toEqual("mywallet5");
-        expect(createdWallet.initial_value).toEqual(20000);
     });
 
     it("should create an wallet with description mywallet6 and 2500.5 initial value", async () => {
@@ -82,7 +79,6 @@ describe("POST /wallet test suite", () => {
             parseInt(response.body.wallet.id)
         );
         expect(createdWallet.description).toEqual("mywallet6");
-        expect(createdWallet.initial_value).toEqual(2500.5);
     });
 
     it("should fail validation without description", async () => {

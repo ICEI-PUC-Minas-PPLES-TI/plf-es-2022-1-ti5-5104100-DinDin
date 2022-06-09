@@ -23,10 +23,8 @@ module.exports = class WalletServices {
                 wallet_id,
             },
         });
-        const wallet = await Wallet.findByPk(wallet_id);
 
         return (
-            wallet.initial_value +
             (transactionsWalletBalance.dataValues.incoming ?? 0) -
             (transactionsWalletBalance.dataValues.outcoming ?? 0)
         );
