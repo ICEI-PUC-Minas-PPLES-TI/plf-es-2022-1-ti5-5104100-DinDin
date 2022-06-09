@@ -55,19 +55,18 @@ class CreateTransactionUseCase {
 
         const findWalletUseCase = new FindWalletUseCase();
         const wallet = await findWalletUseCase.find(wallet_id);
-        if(wallet.shared){
+        if (wallet.shared) {
             const listWalletUsersUseCase = new ListWalletUsersUseCase();
-            const members = await listWalletUsersUseCase.list(wallet_id)
-            members.users.forEach(async element => {
-                console.log(element.id, `New Transaction on ${wallet.description}`, `${element.name} added ${description} - $${value}`)
-                if(element.id != user_id) {
+            const members = await listWalletUsersUseCase.list(wallet_id);
+            members.users.forEach(async (element) => {
+                if (element.id != user_id) {
                     await firebaseServices.sendCloudMessage(
                         element.id,
                         `New Transaction on ${wallet.description}`,
                         `${element.name} added ${description} - $${value}`
                     );
-                }                
-            })
+                }
+            });
         }
 
         return { id: transaction.id };
