@@ -5,7 +5,7 @@
         @click:outside="$emit('input', false)"
         @keydown.esc="$emit('input', false)"
     >
-        <v-card v-if="wallets.length > 0" class="pa-2">
+        <v-card v-if="!walletLoad && wallets.length > 0" class="pa-2">
             <v-card-title class="text-h5 transactions-modal-title">
                 <h4>
                     <span> {{ title }}</span>
@@ -268,7 +268,7 @@
                 </v-row>
             </v-card-actions>
         </v-card>
-        <v-card v-else class="overflow-none">
+        <v-card v-else-if="!walletLoad" class="overflow-none">
             <v-card-title class="text-h5 d-block">
                 <h4 class="d-inline-block">You must create a wallet first!</h4>
                 <v-btn class="float-right" icon @click="$emit('input', false)">
@@ -293,6 +293,7 @@
                 </v-row>
             </v-card-actions>
         </v-card>
+        <v-card v-else> Carregando... </v-card>
     </v-dialog>
 </template>
 
@@ -320,18 +321,6 @@ export default {
                 day: null,
                 expired_at: null,
             },
-            // transactionRecurrency: {
-            //     category_id: "",
-            //     day: "",
-            //     description: "",
-            //     expired_at: null,
-            //     id: "",
-            //     interval: "",
-            //     updated_at: "",
-            //     user_id: "",
-            //     value: "",
-            //     wallet_id: "",
-            // },
             hintWarningDate: "",
             today: "",
             menu: false,
@@ -344,6 +333,7 @@ export default {
 
             searchWalletTxt: "",
             wallets: [],
+            walletLoad: true,
             searchCategoryTxt: "",
             categories: [],
             errors: [],
@@ -405,6 +395,11 @@ export default {
                 this.$emit("input", value);
             },
         },
+    },
+    async created() {
+        this.walletLoad = true;
+        await this.listWallets();
+        this.walletLoad = false;
     },
     methods: {
         setCurrentDate() {
