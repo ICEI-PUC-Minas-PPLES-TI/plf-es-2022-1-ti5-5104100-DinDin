@@ -60,7 +60,7 @@ describe("GET /wallet test suite", () => {
         expect(response.body).toHaveProperty("total");
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("wallets");
-        expect(response.body.wallets[0].id).not.toEqual("10");
+        expect(response.body.wallets[0].id).not.toEqual("12");
     });
 
     it("should list the wallets with desc order id", async () => {
