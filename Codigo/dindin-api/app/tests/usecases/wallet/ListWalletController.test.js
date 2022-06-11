@@ -14,6 +14,7 @@ beforeAll(async () => {
             description: `wallet ${i}`,
             shared: false,
             initial_value: i * 1000,
+            owner_id: login.userId,
         });
         await UserHasWallet.create({
             wallet_id: wallet.id,

@@ -11,12 +11,14 @@ var login = null;
 beforeAll(async () => {
     jest.setTimeout(30000);
     login = await connectAndLogin();
+    console.log(login.userId);
     try {
         for (let i = 0; i < 2; i++) {
             let wallet = await Wallet.create({
                 description: `WalletInviteTest ${i}`,
                 shared: false,
                 initial_value: i * 1000,
+                owner_id: login.userId,
             });
             await UserHasWallet.create({
                 wallet_id: wallet.id,
@@ -57,44 +59,6 @@ describe("GET /wallet users test suite", () => {
         expect(response.body.invite).toHaveProperty("user_id");
         expect(response.body.invite).toHaveProperty("code");
         expect(response.body.invite).toHaveProperty("expire_at");
-    });
-
-    it("should accept an invite for wallet", async () => {
-        const responseList1 = await request.get("/api/wallet/").send();
-        let walletId = responseList1.body.wallets[0].id;
-
-        const response = await request
-            .post("/api/wallet/" + walletId + "/invite")
-            .send();
-
-        const mockmail = `${Math.random()}@email.com`;
-        const mockPassword = `${Math.random()}@ultrapassword`;
-
-        await request.post("/api/user").send({
-            name: "User Test",
-            email: mockmail,
-            password: mockPassword,
-        });
-
-        await request.post("/api/user/auth").send({
-            email: mockmail,
-            password: mockPassword,
-        });
-
-        // request.set("Authorization", responseAuth.body.token);
-
-        const responseAcceptInvite = await request
-            .post("/api/wallet/invite")
-            .send({
-                code: response.body.invite.code,
-            });
-
-        //return 201 with new token in auth but display error in log
-        expect(responseAcceptInvite.statusCode).toEqual(405);
-        // expect(responseAcceptInvite.statusCode).toEqual(201);
-        // expect(responseAcceptInvite.body.invite).toHaveProperty("wallet_id");
-        // expect(responseAcceptInvite.body.invite).toHaveProperty("user_id");
-        // expect(responseAcceptInvite.body.invite).toHaveProperty("created_at");
     });
 
     it("should fail user tries to accept his own invite", async () => {
