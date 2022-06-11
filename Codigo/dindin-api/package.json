@@ -21,10 +21,14 @@
   },
   "jest": {
     "testEnvironment": "node",
+    "collectCoverage":true,
+    "coverageReporters":["lcov"],
     "coveragePathIgnorePatterns": [
       "node_modules",
       ".tmp",
-      ".cache"
+      ".cache",
+      "app/services",
+      "app/database"
     ],
     "roots": [
       "<rootDir>"
