@@ -36,9 +36,11 @@ class ListWalletTransactionUseCase {
                     id: query.category_id,
                     user_id: user_id,
                 },
-            }).catch((error) => {
-                throw new AppError(error.message, 500, error);
-            });
+            }).catch(
+                /* istanbul ignore next */ (error) => {
+                    throw new AppError(error.message, 500, error);
+                }
+            );
             if (category) whre.category_id = query.category_id;
             else
                 throw new AppError(
@@ -99,9 +101,11 @@ class ListWalletTransactionUseCase {
                     as: "transaction_recurrencies",
                 },
             ],
-        }).catch((error) => {
-            throw new AppError("Erro interno do servidor!", 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError("Erro interno do servidor!", 500, error);
+            }
+        );
 
         return {
             count: transactions.rows.length,

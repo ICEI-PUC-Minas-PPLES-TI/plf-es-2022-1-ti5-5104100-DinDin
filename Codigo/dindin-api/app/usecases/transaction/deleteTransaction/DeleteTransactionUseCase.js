@@ -6,9 +6,11 @@ class DeleteTransactionUseCase {
         const findTransactionUseCase = new FindTransactionUseCase();
         const transaction = await findTransactionUseCase.find(tid, wid);
 
-        await transaction.destroy().catch((error) => {
-            throw new AppError("Erro interno do servidor!", 500, error);
-        });
+        await transaction.destroy().catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError("Erro interno do servidor!", 500, error);
+            }
+        );
     }
 }
 

@@ -19,9 +19,11 @@ class ReportWalletBalanceTransactionUseCase {
                     user_id: user_id,
                     wallet_id: query.wallet_id,
                 },
-            }).catch((error) => {
-                throw new AppError(error.message, 500, error);
-            });
+            }).catch(
+                /* istanbul ignore next */ (error) => {
+                    throw new AppError(error.message, 500, error);
+                }
+            );
             if (user) whre.wallet_id = query.wallet_id;
             else
                 throw new AppError(
@@ -37,9 +39,11 @@ class ReportWalletBalanceTransactionUseCase {
                 where: {
                     user_id: user_id,
                 },
-            }).catch((error) => {
-                throw new AppError(error.message, 500, error);
-            });
+            }).catch(
+                /* istanbul ignore next */ (error) => {
+                    throw new AppError(error.message, 500, error);
+                }
+            );
             let wallet_ids = [];
             for (let index = 0; index < wallets.length; index++) {
                 wallet_ids.push(wallets[index].dataValues.wallet_id);
@@ -67,9 +71,11 @@ class ReportWalletBalanceTransactionUseCase {
                     id: query.category_id,
                     user_id: user_id,
                 },
-            }).catch((error) => {
-                throw new AppError(error.message, 500, error);
-            });
+            }).catch(
+                /* istanbul ignore next */ (error) => {
+                    throw new AppError(error.message, 500, error);
+                }
+            );
             if (category) whre.category_id = query.category_id;
             else
                 throw new AppError(
@@ -131,9 +137,11 @@ class ReportWalletBalanceTransactionUseCase {
                 ],
             ],
             raw: true,
-        }).catch((error) => {
-            throw new AppError("Erro interno do servidor!", 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError("Erro interno do servidor!", 500, error);
+            }
+        );
 
         const currentDate = new Date(await getCurrentDateFromDatabase());
         currentDate.setSeconds(currentDate.getSeconds() + 1);

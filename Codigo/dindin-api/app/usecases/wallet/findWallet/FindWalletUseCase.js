@@ -14,9 +14,11 @@ class FindWalletUseCase {
                     as: "owner_user",
                 },
             ],
-        }).catch((error) => {
-            throw new AppError(error.message, 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError(error.message, 500, error);
+            }
+        );
         if (wallet) return wallet;
         else throw new AppError("Wallet not found or already deleted!", 404);
     }

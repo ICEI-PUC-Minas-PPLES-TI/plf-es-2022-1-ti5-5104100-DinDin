@@ -9,9 +9,11 @@ const verifyCategoryBelongsWallet = async (request, response, next) => {
             id: category_id,
             wallet_id: request.params.id,
         },
-    }).catch((error) => {
-        throw new AppError(error.message, 500, error);
-    });
+    }).catch(
+        /* istanbul ignore next */ (error) => {
+            throw new AppError(error.message, 500, error);
+        }
+    );
     if (category) next();
     else
         throw new AppError(

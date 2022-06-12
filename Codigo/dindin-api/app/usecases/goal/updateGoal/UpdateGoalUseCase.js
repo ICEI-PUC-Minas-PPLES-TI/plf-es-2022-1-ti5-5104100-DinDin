@@ -34,9 +34,11 @@ class UpdateGoalUseCase {
                     where: { id: id },
                 }
             )
-            .catch((error) => {
-                throw new AppError(error.message, 500, error);
-            });
+            .catch(
+                /* istanbul ignore next */ (error) => {
+                    throw new AppError(error.message, 500, error);
+                }
+            );
 
         if (type === "A")
             new GoalService().updateAchievemetWalletGoals(goal.wallet_id);

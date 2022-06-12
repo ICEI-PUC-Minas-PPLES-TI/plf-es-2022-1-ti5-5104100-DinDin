@@ -68,9 +68,11 @@ const generateTransactions = cron.schedule(EVERY_DAY_03AM, async () => {
                 },
             ],
         },
-    }).catch((error) => {
-        console.log(error);
-    });
+    }).catch(
+        /* istanbul ignore next */ (error) => {
+            console.log(error);
+        }
+    );
 
     let transactionsToCreate = [];
     const walletWithNewTrasactionsSet = new Set(); // [ id ]
@@ -97,9 +99,11 @@ const generateTransactions = cron.schedule(EVERY_DAY_03AM, async () => {
         .then(function () {
             console.log("Transactions have been created by cronjob");
         })
-        .catch(function (error) {
-            console.log(error);
-        });
+        .catch(
+            /* istanbul ignore next */ function (error) {
+                console.log(error);
+            }
+        );
 
     const goalService = new GoalService();
 

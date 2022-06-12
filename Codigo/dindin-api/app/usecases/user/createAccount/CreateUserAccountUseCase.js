@@ -10,9 +10,11 @@ class CreateUserAccountUseCase {
             where: {
                 email: email,
             },
-        }).catch((error) => {
-            throw new AppError(error.message, 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError(error.message, 500, error);
+            }
+        );
         if (usedEmail) {
             throw new AppError("'email' already used", 409);
         }
@@ -22,9 +24,11 @@ class CreateUserAccountUseCase {
             name,
             email,
             password: bcryptPassword,
-        }).catch((error) => {
-            throw new AppError(error.message, 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError(error.message, 500, error);
+            }
+        );
         return { id: user.id };
     }
 }

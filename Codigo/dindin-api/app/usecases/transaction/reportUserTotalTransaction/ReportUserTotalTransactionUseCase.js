@@ -19,9 +19,11 @@ class ReportUserTotalTransactionUseCase {
                     user_id: user_id,
                     wallet_id: query.wallet_id,
                 },
-            }).catch((error) => {
-                throw new AppError(error.message, 500, error);
-            });
+            }).catch(
+                /* istanbul ignore next */ (error) => {
+                    throw new AppError(error.message, 500, error);
+                }
+            );
             if (user) whre.wallet_id = query.wallet_id;
             else
                 throw new AppError(
@@ -50,9 +52,11 @@ class ReportUserTotalTransactionUseCase {
                     id: query.category_id,
                     user_id: user_id,
                 },
-            }).catch((error) => {
-                throw new AppError(error.message, 500, error);
-            });
+            }).catch(
+                /* istanbul ignore next */ (error) => {
+                    throw new AppError(error.message, 500, error);
+                }
+            );
             if (category) whre.category_id = query.category_id;
             else
                 throw new AppError(
@@ -94,9 +98,11 @@ class ReportUserTotalTransactionUseCase {
         const transactionsUserTotal = await Transaction.sum("value", {
             where: whre,
             paranoid: sortPaginateOptions.paranoid,
-        }).catch((error) => {
-            throw new AppError("Erro interno do servidor!", 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError("Erro interno do servidor!", 500, error);
+            }
+        );
 
         return {
             total: transactionsUserTotal,

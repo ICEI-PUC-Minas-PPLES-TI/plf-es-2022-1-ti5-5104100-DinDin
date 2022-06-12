@@ -10,16 +10,20 @@ class CreateWalletUseCase {
             shared: false,
             owner_id: userID,
             initial_value,
-        }).catch((error) => {
-            throw new AppError(error.message, 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError(error.message, 500, error);
+            }
+        );
 
         await UserHasWallet.create({
             wallet_id: wallet.id,
             user_id: userID,
-        }).catch((error) => {
-            throw new AppError(error.message, 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError(error.message, 500, error);
+            }
+        );
 
         if (initial_value > 0) {
             const createTransactionUseCase = new CreateTransactionUseCase();

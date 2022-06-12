@@ -29,11 +29,13 @@ class AuthenticateUserAccountController {
             // se não conseguir, tenta validar para o login federado (google)
             await federatedLoginScheme
                 .validate(request.body, { abortEarly: false })
-                .catch(() => {
-                    // se não conseguir também, será lançado uma excessão correspondente ao
-                    // erro de validação do primeiro caso ( login normal )
-                    throw new AppError(error.name, 422, error.errors);
-                });
+                .catch(
+                    /* istanbul ignore next */ () => {
+                        // se não conseguir também, será lançado uma excessão correspondente ao
+                        // erro de validação do primeiro caso ( login normal )
+                        throw new AppError(error.name, 422, error.errors);
+                    }
+                );
         }
         let { email, password, firebaseToken } = request.body;
 

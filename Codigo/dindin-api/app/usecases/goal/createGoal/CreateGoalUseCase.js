@@ -11,9 +11,11 @@ class CreateGoalUseCase {
             type,
             expire_at,
             wallet_id,
-        }).catch((error) => {
-            throw new AppError(error.message, 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError(error.message, 500, error);
+            }
+        );
 
         if (type === "A")
             new GoalService().updateAchievemetWalletGoals(wallet_id);
