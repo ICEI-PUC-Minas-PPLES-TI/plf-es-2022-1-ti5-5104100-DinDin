@@ -28,7 +28,10 @@
       ".tmp",
       ".cache",
       "app/services",
-      "app/database"
+      "app/database",
+      "app/errors",
+      "app/helpers",
+      "app/middleware"
     ],
     "roots": [
       "<rootDir>"
