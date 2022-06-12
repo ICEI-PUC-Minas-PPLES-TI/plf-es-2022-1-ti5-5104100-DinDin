@@ -1,6 +1,5 @@
 const { Sequelize } = require("sequelize");
 const Transaction = require("../models/Transaction");
-const Wallet = require("../models/Wallet");
 
 module.exports = class WalletServices {
     async getWalletCurrentValue(wallet_id) {
