@@ -51,24 +51,34 @@ describe("DELETE /wallet/:id test suite", () => {
         expect(tryToFindWallet).toBeNull();
     });
 
-    it("should fail when trying to delete wallet with invalid id", async () => {
+    it("should fail when trying to delete wallet with invalid id 0", async () => {
         let invalidId = 0;
         let response = await request.delete("/api/wallet/" + invalidId).send();
 
         expect(response.statusCode).toEqual(403);
+    });
 
-        invalidId = -1;
-        response = await request.delete("/api/wallet/" + invalidId).send();
-
-        expect(response.statusCode).toEqual(403);
-
-        invalidId = null;
-        response = await request.delete("/api/wallet/" + invalidId).send();
+    it("should fail when trying to delete wallet with invalid id -1", async () => {
+        let invalidId = -1;
+        let response = await request.delete("/api/wallet/" + invalidId).send();
 
         expect(response.statusCode).toEqual(403);
+    });
 
-        invalidId = undefined;
-        response = await request.delete("/api/wallet/" + invalidId).send();
+    it("should fail when trying to delete wallet with invalid id null", async () => {
+        let invalidId = null;
+        const response = await request
+            .delete("/api/wallet/" + invalidId)
+            .send();
+
+        expect(response.statusCode).toEqual(403);
+    });
+
+    it("should fail when trying to delete wallet with invalid id undefined", async () => {
+        let invalidId = undefined;
+        const response = await request
+            .delete("/api/wallet/" + invalidId)
+            .send();
 
         expect(response.statusCode).toEqual(403);
     });
