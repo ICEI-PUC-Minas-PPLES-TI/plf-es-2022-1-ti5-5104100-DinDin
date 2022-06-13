@@ -11,7 +11,7 @@ beforeAll(async () => {
     await connectAndLogin();
 
     const response = await request.post("/api/wallet").send({
-        description: `wallet to goal delete test`,
+        description: `wallet to goal find test`,
         initial_value: 2000,
     });
     walletToCreate = response.body.wallet.id;
