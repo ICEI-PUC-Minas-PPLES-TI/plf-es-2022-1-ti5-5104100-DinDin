@@ -66,7 +66,7 @@ class ListUserTransactionUseCase {
             whre.date = { [Op.between]: [startDate, endDate] };
         }
 
-        const attributes = Object.keys(Transaction.getAttributes);
+        const attributes = Object.keys(Transaction.getAttributes());
         const transactionQuantity = await Transaction.count();
         const sortPaginateOptions = SortPaginate(
             query,

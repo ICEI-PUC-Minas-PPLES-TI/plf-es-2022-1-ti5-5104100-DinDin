@@ -63,7 +63,7 @@ class ListWalletTransactionUseCase {
             whre.date = { [Op.between]: [startDate, endDate] };
         }
 
-        const attributes = Object.keys(Transaction.getAttributes);
+        const attributes = Object.keys(Transaction.getAttributes());
         const walletQuantity = await Transaction.count();
         const sortPaginateOptions = SortPaginate(
             query,
