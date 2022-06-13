@@ -23,7 +23,7 @@ beforeAll(async () => {
         description: `mockup wallet test`,
         initial_value: 0,
     });
-    walletIdToSearch = response.body.wallet.id; 
+    walletIdToSearch = response.body.wallet.id;
     const responseINCategory = await request.post(url("/category/")).send({
         description: "category IN",
         type: "IN",
@@ -42,19 +42,19 @@ beforeAll(async () => {
 
         const mockTransaction = {
             description: "my transaction " + i,
-            value: 2000 * ( outcome ? -1 : 1 ),
+            value: 2000 * (outcome ? -1 : 1),
             date: "2021-10-10",
-            category_id: ( outcome ? OUTCategory : INCategory )
+            category_id: outcome ? OUTCategory : INCategory,
         };
 
-        const transactionResponse = await request    
-            .post(url("/transaction"))          
-            .send(mockTransaction);              
-            
+        const transactionResponse = await request
+            .post(url("/transaction"))
+            .send(mockTransaction);
+
         if (i === 2) {
             (toDeleteTransaction.wallet = response.body.wallet.id),
                 (toDeleteTransaction.transaction = transactionResponse.body.id);
-        }      
+        }
         mockTransactionIds.push(transactionResponse.body.id);
     }
     // dando update para filtro com updated_at
@@ -62,7 +62,9 @@ beforeAll(async () => {
         date: "2022-10-10",
     });
     // deletando um para filtro deleted_at
-    await request.delete(url("/transaction/") + toDeleteTransaction.transaction);
+    await request.delete(
+        url("/transaction/") + toDeleteTransaction.transaction
+    );
 });
 
 afterAll(async () => {
@@ -79,7 +81,7 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("transactions");
         expect(response.body.transactions.length).toBeGreaterThanOrEqual(1);
-        
+
         response.body.transactions.forEach((transaction) => {
             expect(mockTransactionIds).toContain(transaction.id);
         });
@@ -94,14 +96,16 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("transactions");
         expect(response.body.transactions.length).toBe(1);
-        
+
         response.body.transactions.forEach((transaction) => {
             expect(mockTransactionIds).toContain(transaction.id);
         });
     });
 
     it("should list transactions with pagination", async () => {
-        const response = await request.get(url("/transaction?page=2&limit=2")).send();
+        const response = await request
+            .get(url("/transaction?page=2&limit=2"))
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -109,14 +113,16 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("transactions");
         expect(response.body.transactions.length).toBeGreaterThanOrEqual(1);
-        
+
         response.body.transactions.forEach((transaction) => {
             expect(mockTransactionIds).toContain(transaction.id);
         });
     });
 
     it("should list transactions sorting by attribute 'description', in ASC order", async () => {
-        const response = await request.get(url("/transaction?attribute=description&order=ASC")).send();
+        const response = await request
+            .get(url("/transaction?attribute=description&order=ASC"))
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -124,14 +130,16 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("transactions");
         expect(response.body.transactions.length).toBeGreaterThanOrEqual(1);
-        expect(response.body.transactions[0].id).toBe(mockTransactionIds[0])
+        expect(response.body.transactions[0].id).toBe(mockTransactionIds[0]);
         response.body.transactions.forEach((transaction) => {
             expect(mockTransactionIds).toContain(transaction.id);
         });
     });
 
     it("should list transactions sorting by attribute 'description', in DESC order", async () => {
-        const response = await request.get(url("/transaction?attribute=description&order=DESC")).send();
+        const response = await request
+            .get(url("/transaction?attribute=description&order=DESC"))
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -139,15 +147,19 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("transactions");
         expect(response.body.transactions.length).toBeGreaterThanOrEqual(1);
-        
-        expect(response.body.transactions[0].id).toBe(mockTransactionIds[mockTransactionIds.length-1])
+
+        expect(response.body.transactions[0].id).toBe(
+            mockTransactionIds[mockTransactionIds.length - 1]
+        );
         response.body.transactions.forEach((transaction) => {
             expect(mockTransactionIds).toContain(transaction.id);
         });
     });
 
     it("should list transactions filtering by category", async () => {
-        const response = await request.get(url("/transaction?category_id=" + INCategory)).send();
+        const response = await request
+            .get(url("/transaction?category_id=" + INCategory))
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -155,14 +167,16 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("transactions");
         expect(response.body.transactions.length).toBeGreaterThanOrEqual(1);
-        
+
         response.body.transactions.forEach((transaction) => {
             expect(Number(transaction.category_id)).toBe(INCategory);
         });
     });
 
     it("should list transactions filtering by description", async () => {
-        const response = await request.get(url("/transaction?description=0")).send();
+        const response = await request
+            .get(url("/transaction?description=0"))
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -170,13 +184,14 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("transactions");
         expect(response.body.transactions.length).toBeGreaterThanOrEqual(1);
-        
-        expect(response.body.transactions[0].id).toBe(mockTransactionIds[0]);
 
+        expect(response.body.transactions[0].id).toBe(mockTransactionIds[0]);
     });
 
     it("should list transactions filtering by value", async () => {
-        const response = await request.get(url("/transaction?value=-2000")).send();
+        const response = await request
+            .get(url("/transaction?value=-2000"))
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -184,14 +199,16 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("transactions");
         expect(response.body.transactions.length).toBeGreaterThanOrEqual(1);
-        
+
         response.body.transactions.forEach((transaction) => {
             expect(mockTransactionIds).toContain(transaction.id);
         });
     });
 
     it("should list transactions filtering by date", async () => {
-        const response = await request.get(url("/transaction?date_start=2010-01-01&date_end=2099-01-01")).send();
+        const response = await request
+            .get(url("/transaction?date_start=2010-01-01&date_end=2099-01-01"))
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -199,14 +216,20 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("transactions");
         expect(response.body.transactions.length).toBeGreaterThanOrEqual(1);
-        
+
         response.body.transactions.forEach((transaction) => {
             expect(mockTransactionIds).toContain(transaction.id);
         });
     });
 
     it("should list transactions filtering by created_at", async () => {
-        const response = await request.get(url("/transaction?created_at_start=2010-01-01&created_at_end=2099-01-01")).send();
+        const response = await request
+            .get(
+                url(
+                    "/transaction?created_at_start=2010-01-01&created_at_end=2099-01-01"
+                )
+            )
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -214,14 +237,20 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("transactions");
         expect(response.body.transactions.length).toBeGreaterThanOrEqual(1);
-        
+
         response.body.transactions.forEach((transaction) => {
             expect(mockTransactionIds).toContain(transaction.id);
         });
     });
 
     it("should list transactions filtering by updated_at", async () => {
-        const response = await request.get(url("/transaction?updated_at_start=2010-01-01&updated_at_end=2099-01-01")).send();
+        const response = await request
+            .get(
+                url(
+                    "/transaction?updated_at_start=2010-01-01&updated_at_end=2099-01-01"
+                )
+            )
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -229,14 +258,20 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("transactions");
         expect(response.body.transactions.length).toBeGreaterThanOrEqual(1);
-        
+
         response.body.transactions.forEach((transaction) => {
             expect(mockTransactionIds).toContain(transaction.id);
         });
     });
 
     it("should list transactions filtering by deleted_at_start", async () => {
-        const response = await request.get(url("/transaction?deleted_at_start_start=2010-01-01&deleted_at_start_end=2099-01-01")).send();
+        const response = await request
+            .get(
+                url(
+                    "/transaction?deleted_at_start_start=2010-01-01&deleted_at_start_end=2099-01-01"
+                )
+            )
+            .send();
 
         expect(response.statusCode).toEqual(200);
         expect(response.body).toHaveProperty("count");
@@ -244,10 +279,9 @@ describe("GET /goal test suite", () => {
         expect(response.body).toHaveProperty("pages");
         expect(response.body).toHaveProperty("transactions");
         expect(response.body.transactions.length).toBeGreaterThanOrEqual(1);
-        
+
         response.body.transactions.forEach((transaction) => {
             expect(mockTransactionIds).toContain(transaction.id);
         });
     });
-
 });

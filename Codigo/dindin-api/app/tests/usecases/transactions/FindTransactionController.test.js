@@ -4,8 +4,6 @@ let { request, connectAndLogin } = require("../../helpers/AuthUtil");
 const { close } = require("../../../database");
 
 let walletToCreate;
-let INCategory;
-let OUTCategory;
 
 function url(url) {
     return `/api/wallet/${walletToCreate}${url}`;
@@ -20,18 +18,16 @@ beforeAll(async () => {
     });
     walletToCreate = response.body.wallet.id;
 
-    const responseINCategory = await request.post(url("/category/")).send({
+    await request.post(url("/category/")).send({
         description: "category IN",
         type: "IN",
         color: "FF0000",
     });
-    INCategory = responseINCategory.body.id;
-    const responseOUTCategory = await request.post(url("/category/")).send({
+    await request.post(url("/category/")).send({
         description: "category OUT",
         type: "OUT",
         color: "FF0000",
     });
-    OUTCategory = responseOUTCategory.body.id;
 });
 
 afterAll(async () => {
