@@ -69,9 +69,11 @@ class AuthenticateUserAccountUseCase {
                 name,
                 email,
                 firebaseId,
-            }).catch((error) => {
-                throw new AppError(error.message, 500, error);
-            });
+            }).catch(
+                /* istanbul ignore next */ (error) => {
+                    throw new AppError(error.message, 500, error);
+                }
+            );
         }
 
         // gerar jwt

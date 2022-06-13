@@ -15,9 +15,11 @@ class FindGoalUseCase {
                     required: true,
                 },
             ],
-        }).catch((error) => {
-            throw new AppError(error.message, 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError(error.message, 500, error);
+            }
+        );
         if (goal) return goal;
         else throw new AppError("Goal not found or already deleted!", 404);
     }

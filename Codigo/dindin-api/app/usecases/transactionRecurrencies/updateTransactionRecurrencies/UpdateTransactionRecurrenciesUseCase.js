@@ -68,9 +68,11 @@ class UpdateTransactionRecurrenciesUseCase {
                 category_id: category_id,
                 expired_at: expired_at,
             })
-            .catch((error) => {
-                throw new AppError(error.message, 500, error);
-            });
+            .catch(
+                /* istanbul ignore next */ (error) => {
+                    throw new AppError(error.message, 500, error);
+                }
+            );
 
         return transactionRecurrencies;
     }

@@ -9,9 +9,11 @@ class DeleteWalletUseCase {
         if (wallet.owner_id != userID)
             throw new AppError("You're not this wallet owner!", 403);
 
-        await wallet.destroy().catch((error) => {
-            throw new AppError("Erro interno do servidor!", 500, error);
-        });
+        await wallet.destroy().catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError("Erro interno do servidor!", 500, error);
+            }
+        );
     }
 }
 

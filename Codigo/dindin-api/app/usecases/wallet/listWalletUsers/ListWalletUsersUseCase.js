@@ -17,9 +17,11 @@ class ListWalletUsersUseCase {
                     },
                 },
             ],
-        }).catch((error) => {
-            throw new AppError("Erro interno do servidor!", 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError("Erro interno do servidor!", 500, error);
+            }
+        );
 
         return {
             count: limit,

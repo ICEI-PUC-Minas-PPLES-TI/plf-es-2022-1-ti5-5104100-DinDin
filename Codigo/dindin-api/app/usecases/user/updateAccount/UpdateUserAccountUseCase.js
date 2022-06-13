@@ -35,9 +35,11 @@ class UpdateUserAccountUseCase {
                 name,
                 password: bcryptPassword ? bcryptPassword : user.password,
             })
-            .catch((error) => {
-                throw new AppError(error.message, 500, error);
-            });
+            .catch(
+                /* istanbul ignore next */ (error) => {
+                    throw new AppError(error.message, 500, error);
+                }
+            );
         user = await User.findByPk(id);
         return user;
     }

@@ -12,9 +12,11 @@ const verifyCategoryBelongsUser = async (request, response, next) => {
             id: category_id,
             user_id: request.userId,
         },
-    }).catch((error) => {
-        throw new AppError(error.message, 500, error);
-    });
+    }).catch(
+        /* istanbul ignore next */ (error) => {
+            throw new AppError(error.message, 500, error);
+        }
+    );
     if (category) next();
     else
         throw new AppError(

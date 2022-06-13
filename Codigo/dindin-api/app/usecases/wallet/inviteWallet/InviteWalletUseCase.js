@@ -22,9 +22,11 @@ class InviteWalletUseCase {
             user_id: userID,
             code: this.makeid(8),
             expire_at: this.formatDate(dt2),
-        }).catch((error) => {
-            throw new AppError(error.message, 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError(error.message, 500, error);
+            }
+        );
 
         return invite;
     }
@@ -43,9 +45,11 @@ class InviteWalletUseCase {
                     [Op.gte]: this.formatDate(date),
                 },
             },
-        }).catch((error) => {
-            throw new AppError(error.message, 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError(error.message, 500, error);
+            }
+        );
 
         if (!invite)
             throw new AppError(
@@ -58,9 +62,11 @@ class InviteWalletUseCase {
             const userHasWallet = await UserHasWallet.create({
                 wallet_id: invite.wallet_id,
                 user_id: userId,
-            }).catch((error) => {
-                throw new AppError(error.message, 500, error);
-            });
+            }).catch(
+                /* istanbul ignore next */ (error) => {
+                    throw new AppError(error.message, 500, error);
+                }
+            );
             const updateWalletUseCase = new UpdateWalletUseCase();
             updateWalletUseCase.update(invite.wallet_id, null, true);
 

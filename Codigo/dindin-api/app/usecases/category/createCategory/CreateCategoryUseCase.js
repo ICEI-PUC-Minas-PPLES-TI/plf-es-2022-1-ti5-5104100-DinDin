@@ -17,9 +17,11 @@ class CreateCategoryUseCase {
             description,
             type,
             color,
-        }).catch((error) => {
-            throw new AppError(error.message, 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError(error.message, 500, error);
+            }
+        );
         return { id: category.id };
     }
 }

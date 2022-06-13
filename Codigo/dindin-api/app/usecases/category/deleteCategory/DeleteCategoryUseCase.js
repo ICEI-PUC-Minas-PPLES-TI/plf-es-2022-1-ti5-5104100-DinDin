@@ -5,9 +5,11 @@ class DeleteCategoryUseCase {
         const findCategoryUseCase = new FindCategoryUseCase();
         const category = await findCategoryUseCase.find(id);
 
-        return await category.destroy().catch((error) => {
-            throw new AppError("Erro interno do servidor!", 500, error);
-        });
+        return await category.destroy().catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError("Erro interno do servidor!", 500, error);
+            }
+        );
     }
 }
 

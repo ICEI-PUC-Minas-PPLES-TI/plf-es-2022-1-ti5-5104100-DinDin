@@ -18,9 +18,11 @@ class FindCategoryUseCase {
                 // !     as: "wallet",
                 // ! },
             ],
-        }).catch((error) => {
-            throw new AppError(error.message, 500, error);
-        });
+        }).catch(
+            /* istanbul ignore next */ (error) => {
+                throw new AppError(error.message, 500, error);
+            }
+        );
         if (category) return category;
         else throw new AppError("User not found!", 404);
     }
