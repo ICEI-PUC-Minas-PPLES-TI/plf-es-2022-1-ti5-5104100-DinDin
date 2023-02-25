@@ -1,31 +1,29 @@
-cff-version: 1.2.0
+cff-version: 1.0.1
+message: Please cite this software using these metadata.
 title: DinDin
-message: >-
-  If you use this software, please cite it using the
-  metadata from this file.
-type: software
 authors:
-  - given-names: Guilherme
-    family-names: Gabriel Silva
-  - given-names: Henrique
-    family-names: Penna Forte Monteiro
-  - given-names: Lucas
-    family-names: Ângelo Oliveira Martins Rocha
-  - given-names: Victor
-    family-names: Boaventura Goes Campos
-  - given-names: Vinicius
-    family-names: Marini Costa e Oliveira
+  - family-names: Gabriel Silva Pereira
+    given-names: Guilherme Gabriel
+  - family-names: Penna Forte Monteiro
+    given-names: Henrique
+  - family-names: Oliveira Martins Rocha
+    given-names: Lucas Ângelo
+  - family-names: Boaventura Goes Campos
+    given-names: Victor
+  - family-names: Marini Costa e Oliveira
+    given-names: Vinicius
   - name-suffix: Professor
-    given-names: Cleiton
+    affiliation: PUC Minas
     family-names: Silva Tavares
+    given-names: Cleiton
+  - name-suffix: Professor
     affiliation: PUC Minas
-  - family-names: Alves de Oliveira
+    family-names: Alves de Oliveira
     given-names: Pedro
-    name-suffix: Professor
-    affiliation: PUC Minas
-repository-code: >-
-  https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin
 keywords:
   - money
   - managment
+repository-code: https://github.com/ICEI-PUC-Minas-PPLES-TI/plf-es-2022-1-ti5-5104100-DinDin
 license: CC-BY-4.0
+version: 1.0.0
+date-released: 2022-06-13
